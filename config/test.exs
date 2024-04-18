@@ -6,7 +6,7 @@ import Config
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
 config :i_see_sea, ISeeSea.Repo,
-  username: "postgres",
+  username: "zhora",
   password: "postgres",
   hostname: "localhost",
   database: "i_see_sea_test#{System.get_env("MIX_TEST_PARTITION")}",

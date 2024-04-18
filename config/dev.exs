@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :i_see_sea, ISeeSea.Repo,
-  username: "postgres",
+  username: "zhora",
   password: "postgres",
   hostname: "localhost",
   database: "i_see_sea_dev",
@@ -28,6 +28,8 @@ config :i_see_sea, ISeeSeaWeb.Endpoint,
     esbuild: {Esbuild, :install_and_run, [:i_see_sea, ~w(--sourcemap=inline --watch)]},
     tailwind: {Tailwind, :install_and_run, [:i_see_sea, ~w(--watch)]}
   ]
+
+config :open_api_spex, :cache_adapter, OpenApiSpex.Plug.NoneCache
 
 # ## SSL Support
 #

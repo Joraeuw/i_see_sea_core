@@ -35,3 +35,6 @@ i_see_sea-*.tar
 npm-debug.log
 /assets/node_modules/
 
+# OpenAPI generated file
+openapi.json
+

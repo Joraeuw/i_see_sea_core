@@ -12,12 +12,20 @@ defmodule ISeeSeaWeb.Router do
 
   pipeline :api do
     plug :accepts, ["json"]
+    plug OpenApiSpex.Plug.PutApiSpec, module: ISeeSeaWeb.ApiSpec
   end
 
   scope "/", ISeeSeaWeb do
     pipe_through :browser
 
     get "/", PageController, :home
+  end
+
+  scope "/api" do
+    pipe_through :api
+
+    get "/spec/openapi", OpenApiSpex.Plug.RenderSpec, []
+    get "/doc", Redoc.Plug.RedocUI, spec_url: "/api/spec/openapi"
   end
 
   # Other scopes may use custom stacks.
