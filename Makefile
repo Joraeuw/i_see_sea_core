@@ -4,6 +4,9 @@
 
 # Project-wide
 
+repl.run:
+	iex -S mix phx.server
+
 setup:
 	make build \
 	&& make db.setup
@@ -63,9 +66,6 @@ db.reset:
 
 repl:
 	iex -S mix
-
-repl.run:
-	iex -S mix phx.server
 
 repl.test:
 	iex -S mix test.watch

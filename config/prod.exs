@@ -28,5 +28,7 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
     annotate_app_lifecycle: true
   ]
 
+config :phoenix, :logger, false
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

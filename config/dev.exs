@@ -33,7 +33,7 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
   manual_metrics_start_delay: :no_delay,
   drop_metrics_groups: [],
   grafana: [
-    host: System.get_env("GRAFANA_HOST", "http://grafana:3000"),
+    host: System.get_env("GRAFANA_HOST", "http://localhost:3000"),
     auth_token: System.get_env("GRAFANA_TOKEN", ""),
     upload_dashboards_on_start: true,
     folder_name: "My App Dashboards",

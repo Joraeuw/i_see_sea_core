@@ -61,6 +61,17 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Logger config for Grafana and Loki
+
+# config :logger, backends: [LoggerJSON]
+# config :i_see_sea, ISeeSea.Repo, loggers: [{LoggerJSON.Ecto, :log, [:info]}]
+
+# config :logger_json, :backend,
+#  metadata: [:file, :line, :function, :module, :application, :httpRequest, :query],
+#  formatter: LoggerJSON.Formatters.BasicLogger
+
+config :phoenix, :json_library, Jason
+
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"

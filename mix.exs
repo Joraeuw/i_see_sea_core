@@ -61,7 +61,8 @@ defmodule ISeeSea.MixProject do
       {:open_api_spex, "~> 3.18"},
       {:redoc_ui_plug, "~> 0.2.1"},
       {:prom_ex, "~> 1.9.0"},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:logger_json, "~> 5.1.4"}
     ]
   end
 
