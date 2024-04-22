@@ -59,7 +59,9 @@ defmodule ISeeSea.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
       {:open_api_spex, "~> 3.18"},
-      {:redoc_ui_plug, "~> 0.2.1"}
+      {:redoc_ui_plug, "~> 0.2.1"},
+      {:prom_ex, "~> 1.9.0"},
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
   end
 

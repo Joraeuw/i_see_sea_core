@@ -16,5 +16,17 @@ config :swoosh, local: false
 # Do not print debug messages in production
 config :logger, level: :info
 
+# Grafana setup
+config :i_see_sea, ISeeSeaWeb.PromEx,
+  manual_metrics_start_delay: :no_delay,
+  drop_metrics_groups: [],
+  grafana: [
+    host: System.get_env("GRAFANA_HOST"),
+    auth_token: System.get_env("GRAFANA_TOKEN"),
+    upload_dashboards_on_start: true,
+    folder_name: "My App Dashboards",
+    annotate_app_lifecycle: true
+  ]
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

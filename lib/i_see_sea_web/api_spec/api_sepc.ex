@@ -1,4 +1,6 @@
 defmodule ISeeSeaWeb.ApiSpec do
+  @moduledoc false
+
   alias OpenApiSpex.{Components, Info, OpenApi, Paths, SecurityScheme, Server}
   alias ISeeSeaWeb.{Endpoint, Router}
 
