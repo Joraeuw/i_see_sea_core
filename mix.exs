@@ -9,7 +9,8 @@ defmodule ISeeSea.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      test_coverage: [tool: ExCoveralls]
     ]
   end
 
@@ -63,7 +64,8 @@ defmodule ISeeSea.MixProject do
       {:prom_ex, "~> 1.9.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:logger_json, "~> 5.1.4"},
-      {:focus, "~> 0.4.0"}
+      {:focus, "~> 0.4.0"},
+      {:excoveralls, "~> 0.18.1", only: :test}
     ]
   end
 

@@ -22,7 +22,7 @@ run:
 check:
 	make lint \
 	&& make credo \
-	&& make test
+	&& make coveralls
 
 credo:
 	mix credo
@@ -38,6 +38,9 @@ test:
 
 test.watch:
 	mix test.watch
+
+coveralls:
+	 MIX_ENV=test mix coveralls
 
 # Database
 
