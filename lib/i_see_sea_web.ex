@@ -21,7 +21,7 @@ defmodule ISeeSeaWeb do
 
   def router do
     quote do
-      use Phoenix.Router, helpers: false
+      use Phoenix.Router, helpers: true
 
       # Import common connection and controller functions to use in pipelines
       import Plug.Conn
@@ -44,8 +44,17 @@ defmodule ISeeSeaWeb do
 
       import Plug.Conn
       import ISeeSeaWeb.Gettext
+      import ISeeSeaWeb.Responses
+
+      use ISeeSeaWeb.Utils.EnsureRequiredModules, __MODULE__
 
       unquote(verified_routes())
+    end
+  end
+
+  def param do
+    quote do
+      use Goal
     end
   end
 
@@ -89,6 +98,10 @@ defmodule ISeeSeaWeb do
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
+
+      import ISeeSeaWeb.Responses
+
+      alias ISeeSeaWeb.Utils.Validation
 
       # Routes generation with the ~p sigil
       unquote(verified_routes())

@@ -59,13 +59,17 @@ defmodule ISeeSea.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
+      {:bcrypt_elixir, "~> 3.1.0"},
+      {:guardian, "~> 2.3.2"},
+      {:guardian_db, "~> 3.0.0"},
       {:open_api_spex, "~> 3.18"},
       {:redoc_ui_plug, "~> 0.2.1"},
       {:prom_ex, "~> 1.9.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:logger_json, "~> 5.1.4"},
-      {:focus, "~> 0.4.0"},
-      {:excoveralls, "~> 0.18.1", only: :test}
+      {:excoveralls, "~> 0.18.1", only: :test},
+      {:goal, "~> 0.3.2"},
+      {:faker, "~> 0.18", only: :test}
     ]
   end
 

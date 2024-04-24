@@ -26,13 +26,29 @@ defmodule ISeeSeaWeb.ConnCase do
 
       # Import conveniences for testing with connections
       import Plug.Conn
+      import ISeeSea.Factory
       import Phoenix.ConnTest
       import ISeeSeaWeb.ConnCase
+      alias ISeeSeaWeb.Router.Helpers, as: Routes
     end
   end
 
   setup tags do
+    import ISeeSea.Factory
+
+    alias ISeeSea.Authentication.Tokenizer
+
     ISeeSea.DataCase.setup_sandbox(tags)
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+
+    api_spec = ISeeSeaWeb.ApiSpec.spec()
+
+    conn = Phoenix.ConnTest.build_conn()
+    user = insert!(:user)
+
+    {:ok, token, _claims} = Tokenizer.encode_and_sign(user, %{id: user.id})
+    conn_user = Plug.Conn.put_req_header(conn, "authorization", "bearer: " <> token)
+
+    {:ok,
+     conn: Phoenix.ConnTest.build_conn(), conn_user: conn_user, user: user, api_spec: api_spec}
   end
 end
