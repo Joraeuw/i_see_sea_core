@@ -15,6 +15,10 @@ defmodule ISeeSeaWeb.Router do
     plug OpenApiSpex.Plug.PutApiSpec, module: ISeeSeaWeb.ApiSpec
   end
 
+  pipeline :authenticated do
+    plug ISeeSeaWeb.Plug.EnsureAuthenticated
+  end
+
   scope "/", ISeeSeaWeb do
     pipe_through :browser
 
@@ -28,10 +32,15 @@ defmodule ISeeSeaWeb.Router do
     get "/doc", Redoc.Plug.RedocUI, spec_url: "/api/spec/openapi"
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", ISeeSeaWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ISeeSeaWeb do
+    post("/login", SessionController, :login)
+    post("/register", SessionController, :register)
+
+    scope "/" do
+      pipe_through :authenticated
+      get("/refresh", SessionController, :refresh)
+    end
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:i_see_sea, :dev_routes) do

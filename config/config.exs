@@ -31,6 +31,15 @@ config :i_see_sea, ISeeSeaWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :i_see_sea, ISeeSea.Mailer, adapter: Swoosh.Adapters.Local
 
+config :i_see_sea, ISeeSea.Authentication.Tokenizer,
+  issuer: "i_see_sea",
+  secret_key: "OH+s9QEzQ4V5lJk7t1XHbfwxqg41oKCV/nAREVpyzmLWh6R+ujXQE+EO9QzgVM2k"
+
+config :guardian, Guardian.DB,
+  repo: ISeeSea.Repo,
+  schema_name: "guardian_tokens",
+  sweep_interval: 10
+
 # Configure esbuild (the version is required)
 config :esbuild,
   version: "0.17.11",

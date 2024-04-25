@@ -1,6 +1,5 @@
 defmodule ISeeSeaWeb.PageController do
   use ISeeSeaWeb, :controller
-  use ISeeSeaWeb.ApiSpec.Operations.Page
 
   def home(conn, _params) do
     # The home page is often custom made,
