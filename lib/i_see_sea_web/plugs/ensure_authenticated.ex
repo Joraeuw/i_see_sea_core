@@ -8,4 +8,5 @@ defmodule ISeeSeaWeb.Plug.EnsureAuthenticated do
   plug(Guardian.Plug.VerifyHeader, scheme: "Bearer", claims: %{"typ" => "access"})
   plug(Guardian.Plug.EnsureAuthenticated)
   plug(Guardian.Plug.LoadResource)
+  plug(ISeeSeaWeb.Plug.AssignUser)
 end

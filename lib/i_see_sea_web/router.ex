@@ -23,6 +23,9 @@ defmodule ISeeSeaWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+
+    post("/login", SessionController, :login)
+    post("/register", SessionController, :register)
   end
 
   scope "/api" do
@@ -33,12 +36,13 @@ defmodule ISeeSeaWeb.Router do
   end
 
   scope "/api", ISeeSeaWeb do
-    post("/login", SessionController, :login)
-    post("/register", SessionController, :register)
+    pipe_through :authenticated
 
-    scope "/" do
-      pipe_through :authenticated
-      get("/refresh", SessionController, :refresh)
+    get("/refresh", SessionController, :refresh)
+
+    ## Report
+    scope "report" do
+      post("/create/:report_type", ReportController, :create_report)
     end
   end
 

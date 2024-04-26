@@ -84,8 +84,11 @@ defmodule ISeeSeaWeb.Responses do
   end
 
   defp unprocessable_entity(conn, message, errors) do
+    errors = Enum.sort(errors)
+
     reason =
-      Enum.map_join(errors, ", ", fn {k, {v, _}} -> Atom.to_string(k) <> " " <> v end) <> "."
+      (Enum.map_join(errors, ", ", fn {k, {v, _}} -> Atom.to_string(k) <> " " <> v end) <> ".")
+      |> String.capitalize()
 
     errors =
       for {k, {v, _}} <- errors do

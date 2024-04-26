@@ -1,6 +1,7 @@
 defmodule ISeeSea.DB.Models.User do
   @moduledoc false
 
+  alias ISeeSea.DB.Models.BaseReport
   use ISeeSea.DB.DefaultModel
 
   @derive {ISeeSeaWeb.Focus, attrs: [:first_name, :last_name, :email, :username, :phone_number]}
@@ -16,6 +17,8 @@ defmodule ISeeSea.DB.Models.User do
     field(:username, :string)
     field(:verified, :boolean, default: false)
     field(:phone_number, :string)
+
+    has_many(:reports, BaseReport)
 
     timestamps()
   end
