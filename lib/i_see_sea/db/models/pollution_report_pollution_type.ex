@@ -8,8 +8,7 @@ defmodule ISeeSea.DB.Models.PollutionReportPollutionType do
 
   schema "pollution_reports_pollution_types" do
     belongs_to(:pollution_report, PollutionReport, references: :report_id)
-    belongs_to(:pollution_type, PollutionType)
-
+    belongs_to(:pollution_type, PollutionType, references: :name, type: :string)
     timestamps()
   end
 

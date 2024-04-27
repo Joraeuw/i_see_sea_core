@@ -50,8 +50,8 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
          {:ok, pollution_report} <- PollutionReport.create(%{report_id: base_report_id}),
          :ok <-
            With.check(
-             attach_pollution_type(base_report_id, pollution_types),
-             :pollution_type_not_attached
+             attach_pollution_types(base_report_id, pollution_types),
+             :failed_to_attach_pollution_type
            ) do
       {:ok, pollution_report |> Repo.reload!() |> Repo.preload([:base_report, :pollution_types])}
     else
@@ -59,12 +59,12 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     end
   end
 
-  defp attach_pollution_type(report_id, pollution_types) do
+  defp attach_pollution_types(report_id, pollution_types) do
     Enum.all?(pollution_types, fn pollution_type_name ->
-      with {:ok, %{id: pt_id}} <- PollutionType.create(pollution_type_name),
+      with {:ok, %PollutionType{name: name}} <- PollutionType.get(pollution_type_name),
            {:ok, _} <-
              PollutionReportPollutionType.create(%{
-               pollution_type_id: pt_id,
+               pollution_type_id: name,
                pollution_report_id: report_id
              }) do
         true

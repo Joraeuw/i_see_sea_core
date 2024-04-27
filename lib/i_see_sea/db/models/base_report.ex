@@ -8,7 +8,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
 
   use ISeeSea.DB.DefaultModel
 
-  @derive {ISeeSeaWeb.Focus, attrs: [:name, :report_type, :report_date, :longitude, :latitude]}
+  @derive {ISeeSeaWeb.Focus,
+           attrs: [:name, :report_type, :report_date, :longitude, :latitude, :comment]}
 
   @required_attrs [:user_id, :name, :report_type, :report_date, :longitude, :latitude]
   @allowed_attrs [:comment | @required_attrs]

@@ -10,7 +10,11 @@ defmodule ISeeSeaWeb.ReportController do
          {:ok, report} <- ReportOperations.create(user, validated_base, params) do
       success(conn, report)
     else
-      error -> error(conn, error)
+      {:error, :failed_to_attach_pollution_type} ->
+        error(conn, {:error, :unprocessable_entity})
+
+      error ->
+        error(conn, error)
     end
   end
 end

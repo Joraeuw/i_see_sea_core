@@ -24,11 +24,14 @@ defmodule ISeeSeaWeb.Params.Report do
   end
 
   defparams :create_jellyfish_report do
-    required(:quantity, :integer, min: 0)
+    required(:quantity, :integer, min: 1)
     optional(:species, :string)
   end
 
   defparams :create_pollution_report do
     required(:pollution_types, {:array, :string}, min: 1)
+  end
+
+  defparams :create_meterological_report do
   end
 end

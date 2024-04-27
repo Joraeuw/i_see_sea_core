@@ -17,31 +17,39 @@ defmodule ISeeSea.Factory do
   end
 
   def build(:base_report) do
+    user = build(:user)
+
     %Models.BaseReport{
       name: Faker.Lorem.sentence(),
       report_type: "none",
+      user: user,
       report_date: Faker.DateTime.backward(5) |> DateTime.truncate(:second),
       longitude: Faker.Address.longitude(),
       latitude: Faker.Address.latitude(),
-      comment: Faker.Lorem.paragraph(1..2)
+      comment: Faker.Lorem.paragraph()
     }
   end
 
   def build(:jellyfish_report) do
+    base = build(:base_report)
+
     %Models.JellyfishReport{
       quantity: 10,
-      species: "unknown"
+      species: "unknown",
+      base_report: base
     }
   end
 
   def build(:pollution_report) do
-    %Models.PollutionReport{}
+    base = build(:base_report)
+
+    %Models.PollutionReport{
+      base_report: base
+    }
   end
 
   def build(:pollution_type) do
-    %Models.PollutionType{
-      name: "oil"
-    }
+    %Models.PollutionType{name: "oil"}
   end
 
   def build(:pollution_report_pollution_type) do

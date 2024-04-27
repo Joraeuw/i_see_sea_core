@@ -33,6 +33,10 @@ defmodule ISeeSeaWeb.Responses do
     unprocessable_entity(conn, @default_fail_msg, errors)
   end
 
+  def error(conn, {:error, :unprocessable_entity}) do
+    unprocessable_entity(conn, @default_fail_msg)
+  end
+
   def error(conn, {:error, :bad_request}) do
     bad_request(conn, @default_fail_msg)
   end
@@ -81,6 +85,12 @@ defmodule ISeeSeaWeb.Responses do
     conn
     |> Conn.put_status(400)
     |> error_response(message, reason)
+  end
+
+  defp unprocessable_entity(conn, message) do
+    conn
+    |> Conn.put_status(422)
+    |> error_response(message, "Something went wrong.")
   end
 
   defp unprocessable_entity(conn, message, errors) do

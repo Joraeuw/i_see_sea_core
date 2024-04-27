@@ -1,9 +1,10 @@
 defmodule ISeeSeaWeb.ReportControllerTest do
+  use ISeeSeaWeb.ConnCase, async: true
+
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.PollutionReportPollutionType
   alias ISeeSea.DB.Models.PollutionType
   alias ISeeSea.DB.Models.JellyfishReport
-  use ISeeSeaWeb.ConnCase, async: true
 
   alias ISeeSea.Constants.ReportType
 
@@ -37,6 +38,9 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "pollution report created successfully", %{conn_user: conn} do
+      insert!(:pollution_type, name: "oil")
+      insert!(:pollution_type, name: "plastic")
+
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
@@ -60,25 +64,25 @@ defmodule ISeeSeaWeb.ReportControllerTest do
              } = response
 
       assert {:ok, %PollutionReport{}} = PollutionReport.get_by(%{report_id: id})
-      assert 2 == PollutionType.all() |> elem(1) |> length()
       assert 2 == PollutionReportPollutionType.all() |> elem(1) |> length()
     end
 
-    test "pollution type is reused from existing entry", %{conn_user: conn, user: user} do
-      base = insert!(:base_report, user_id: user.id)
-      insert!(:pollution_report, report_id: base.id)
-      p_type = insert!(:pollution_type)
+    test "pollution type from another report is recognized", %{conn_user: conn, user: user} do
+      p_type = insert!(:pollution_type, name: "oil")
+
+      base = insert!(:base_report, user: user)
+      insert!(:pollution_report, base_report: base)
 
       insert!(:pollution_report_pollution_type,
         pollution_report_id: base.id,
-        pollution_type_id: p_type.id
+        pollution_type_id: p_type.name
       )
 
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil", "plastic"]
+        pollution_types: ["oil"]
       }
 
       response =
@@ -93,12 +97,31 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "name" => _,
                "report_date" => _,
                "report_type" => "pollution",
-               "pollution_types" => ["oil", "plastic"]
+               "pollution_types" => ["oil"]
              } = response
 
       assert {:ok, %PollutionReport{}} = PollutionReport.get_by(%{report_id: id})
-      assert 2 == PollutionType.all() |> elem(1) |> length()
-      assert 3 == PollutionReportPollutionType.all() |> elem(1) |> length()
+      assert 1 == PollutionType.all() |> elem(1) |> length()
+      assert 2 == PollutionReportPollutionType.all() |> elem(1) |> length()
+    end
+
+    test "pollution type isn't recognized", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        pollution_types: ["oil", "plastic"]
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.pollution()), params)
+        |> json_response(422)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "Something went wrong."
+             } == response
     end
 
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
@@ -119,6 +142,27 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                ],
                "message" => "The requested action has failed.",
                "reason" => "Latitude can't be blank, longitude can't be blank."
+             } == response
+    end
+
+    test "fail to create report due to missing report specific parameters", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude()
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.jellyfish()), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [
+                 %{"quantity" => "can't be blank"}
+               ],
+               "message" => "The requested action has failed.",
+               "reason" => "Quantity can't be blank."
              } == response
     end
   end
