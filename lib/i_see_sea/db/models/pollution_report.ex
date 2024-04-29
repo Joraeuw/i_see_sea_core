@@ -15,7 +15,7 @@ defmodule ISeeSea.DB.Models.PollutionReport do
 
     many_to_many(:pollution_types, PollutionType,
       join_through: PollutionReportPollutionType,
-      join_keys: [pollution_report_id: :report_id, pollution_type_id: :id]
+      join_keys: [pollution_report_id: :report_id, pollution_type_id: :name]
     )
   end
 

@@ -9,7 +9,7 @@ defmodule ISeeSea.Repo.Migrations.CreateBaseReportTable do
       add :report_date, :utc_datetime, null: false
       add :longitude, :float, null: false
       add :latitude, :float, null: false
-      add :comment, :string, null: true
+      add :comment, :text, null: true, default: ""
 
       timestamps()
     end
@@ -22,8 +22,8 @@ defmodule ISeeSea.Repo.Migrations.CreateBaseReportTable do
 
     execute "ALTER TABLE jellyfish_reports ADD PRIMARY KEY (report_id);"
 
-    create table("pollution_types") do
-      add :name, :string, null: false
+    create table("pollution_types", primary_key: false) do
+      add :name, :string, null: false, primary_key: true
 
       timestamps()
     end
@@ -38,27 +38,29 @@ defmodule ISeeSea.Repo.Migrations.CreateBaseReportTable do
 
     create table("pollution_reports_pollution_types") do
       add :pollution_report_id, references(:pollution_reports, column: :report_id), null: false
-      add :pollution_type_id, references(:pollution_types), null: false
+
+      add :pollution_type_id, references(:pollution_types, column: :name, type: :string),
+        null: false
 
       timestamps()
     end
 
-    create table("fog_types") do
-      add :name, :string, null: false
+    create table("fog_types", primary_key: false) do
+      add :name, :string, null: false, primary_key: true
       timestamps()
     end
 
     create unique_index(:fog_types, [:name])
 
-    create table("wind_types") do
-      add :name, :string, null: false
+    create table("wind_types", primary_key: false) do
+      add :name, :string, null: false, primary_key: true
       timestamps()
     end
 
     create unique_index(:wind_types, [:name])
 
-    create table("sea_swell_types") do
-      add :name, :string, null: false
+    create table("sea_swell_types", primary_key: false) do
+      add :name, :string, null: false, primary_key: true
       timestamps()
     end
 
@@ -66,9 +68,11 @@ defmodule ISeeSea.Repo.Migrations.CreateBaseReportTable do
 
     create table("meteorological_reports", primary_key: false) do
       add :report_id, references(:base_reports), null: false
-      add :fog_type_id, references(:fog_types), null: false
-      add :wind_type_id, references(:wind_types), null: false
-      add :sea_swell_type_id, references(:sea_swell_types), null: false
+      add :fog_type_id, references(:fog_types, column: :name, type: :string), null: false
+      add :wind_type_id, references(:wind_types, column: :name, type: :string), null: false
+
+      add :sea_swell_type_id, references(:sea_swell_types, column: :name, type: :string),
+        null: false
     end
 
     execute "ALTER TABLE meteorological_reports ADD PRIMARY KEY (report_id);"

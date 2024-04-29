@@ -1,4 +1,4 @@
-defmodule ISeeSea.DB.Models.PollutionType do
+defmodule ISeeSea.DB.Models.FogType do
   @moduledoc false
 
   use ISeeSea.DB.DefaultModel
@@ -8,7 +8,7 @@ defmodule ISeeSea.DB.Models.PollutionType do
   @attrs [:name]
 
   @primary_key {:name, :string, []}
-  schema "pollution_types" do
+  schema "fog_types" do
     timestamps()
   end
 

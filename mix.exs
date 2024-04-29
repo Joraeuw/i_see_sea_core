@@ -69,7 +69,7 @@ defmodule ISeeSea.MixProject do
       {:logger_json, "~> 5.1.4"},
       {:excoveralls, "~> 0.18.1", only: :test},
       {:goal, git: "git@github.com:Joraeuw/goal.git", branch: "main"},
-      {:faker, "~> 0.18", only: :test}
+      {:faker, "~> 0.18", only: [:dev, :test]}
     ]
   end
 

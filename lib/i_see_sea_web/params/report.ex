@@ -1,5 +1,6 @@
 defmodule ISeeSeaWeb.Params.Report do
   @moduledoc false
+
   alias ISeeSea.Constants.ReportType
 
   use ISeeSeaWeb, :param
@@ -24,11 +25,21 @@ defmodule ISeeSeaWeb.Params.Report do
   end
 
   defparams :create_jellyfish_report do
-    required(:quantity, :integer, min: 0)
+    required(:quantity, :integer, min: 1)
     optional(:species, :string)
   end
 
   defparams :create_pollution_report do
     required(:pollution_types, {:array, :string}, min: 1)
+  end
+
+  defparams :create_meteorological_report do
+    required(:fog_type, :string, values: ISeeSea.Constants.FogType.values())
+    required(:wind_type, :string, values: ISeeSea.Constants.WindType.values())
+    required(:sea_swell_type, :string, values: ISeeSea.Constants.SeaSwellType.values())
+  end
+
+  defparams :create_atypical_report do
+    required(:comment, :string)
   end
 end

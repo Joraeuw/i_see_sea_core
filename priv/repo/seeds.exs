@@ -9,3 +9,57 @@
 #
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
+
+Code.require_file("./test/support/factory.ex")
+
+defmodule ISeeSea.Seeder do
+  alias ISeeSea.Repo
+  alias ISeeSea.Factory
+
+  def seed do
+    Repo.transaction(fn ->
+      Factory.insert!(:user)
+      Factory.insert!(:user)
+
+      Factory.insert!(:jellyfish_report)
+      Factory.insert!(:jellyfish_report)
+      Factory.insert!(:jellyfish_report)
+
+      Factory.insert!(:pollution_type)
+      pollution_type = Factory.insert!(:pollution_type, name: "plastic")
+
+      Factory.insert!(:pollution_report)
+      pollution_report = Factory.insert!(:pollution_report)
+
+      Factory.insert!(:pollution_report_pollution_type, %{
+        pollution_report_id: pollution_report.report_id,
+        pollution_type_id: pollution_type.name
+      })
+
+      Factory.insert!(:wind_type, name: "hurricane")
+      strong_wind = Factory.insert!(:wind_type, name: "strong")
+      Factory.insert!(:wind_type, name: "moderate")
+      Factory.insert!(:wind_type, name: "weak")
+      Factory.insert!(:wind_type)
+
+      thick_fog = Factory.insert!(:fog_type, name: "very_thick")
+      Factory.insert!(:fog_type, name: "thick")
+      Factory.insert!(:fog_type, name: "moderate")
+      Factory.insert!(:fog_type, name: "light")
+      Factory.insert!(:fog_type)
+
+      Factory.insert!(:sea_swell_type, name: "strong")
+      Factory.insert!(:sea_swell_type, name: "moderate")
+      Factory.insert!(:sea_swell_type, name: "weak")
+      no_wave = Factory.insert!(:sea_swell_type)
+
+      Factory.insert!(:meteorological_report,
+        wind_type: strong_wind,
+        fog_type: thick_fog,
+        sea_swell_type: no_wave
+      )
+    end)
+  end
+end
+
+ISeeSea.Seeder.seed()
