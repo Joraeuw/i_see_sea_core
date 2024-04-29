@@ -23,6 +23,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.MeteorologicalReportParams do
           sea_swell_type: %Schema{type: :string, enum: SeaSwellType.values()}
         }
       }
-    ]
+    ],
+    required: [:fog_type, :wind_type, :sea_swell_type]
   })
 end

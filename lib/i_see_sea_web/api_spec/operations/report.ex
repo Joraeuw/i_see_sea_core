@@ -16,9 +16,9 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
 
       operation(:create_report,
         summary: "Create a report",
-        security: [%{"BearerAuth" => []}],
+        security: [%{"BearerAuth" => ["Token"]}],
         parameters: [
-          id: [in: :path, description: "Report Type", type: :string]
+          report_type: [in: :path, description: "Report Type", type: :string]
         ],
         request_body: {"Create Report Params", "application/json", CreateReportParams},
         responses: [

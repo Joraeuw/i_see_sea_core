@@ -53,7 +53,11 @@ defmodule ISeeSea.Seeder do
       Factory.insert!(:sea_swell_type, name: "weak")
       no_wave = Factory.insert!(:sea_swell_type)
 
-      Factory.insert!(:meteorological_report, wind_type: strong_wind, fog_type: thick_fog, sea_swell_type: no_wave)
+      Factory.insert!(:meteorological_report,
+        wind_type: strong_wind,
+        fog_type: thick_fog,
+        sea_swell_type: no_wave
+      )
     end)
   end
 end

@@ -13,6 +13,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.BaseReportParams do
       longitude: %Schema{type: :float},
       latitude: %Schema{type: :float},
       comment: %Schema{type: :string, required: false}
-    }
+    },
+    required: [:name, :longitude, :latitude]
   })
 end

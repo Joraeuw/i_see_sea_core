@@ -228,6 +228,49 @@ defmodule ISeeSeaWeb.ReportControllerTest do
              } == response
     end
 
+    test "atypical report created successfully", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        comment: Faker.Lorem.paragraph()
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.atypical()), params)
+        |> json_response(200)
+
+      assert %{
+               "report_type" => "atypical",
+               "comment" => _,
+               "latitude" => _,
+               "longitude" => _,
+               "name" => _,
+               "report_date" => _,
+               "report_id" => _
+             } = response
+    end
+
+    test "fail to create atypical report when no comment is provided", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude()
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.atypical()), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"comment" => "can't be blank"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Comment can't be blank."
+             } == response
+    end
+
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),

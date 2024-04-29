@@ -1,7 +1,12 @@
 defmodule ISeeSea.Constants.SeaSwellType do
   @moduledoc false
 
-  @values ["strong", "moderate", "weak", "no_waves"]
+  @strong "strong"
+  @moderate "moderate"
+  @weak "weak"
+  @no_waves "no_waves"
+
+  @values [@strong, @moderate, @weak, @no_waves]
 
   def values do
     @values

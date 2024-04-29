@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportParams do
 
   require OpenApiSpex
 
+  alias ISeeSeaWeb.ApiSpec.Schemas.AtypicalReportParams
   alias ISeeSeaWeb.ApiSpec.Schemas.MeteorologicalReportParams
   alias ISeeSeaWeb.ApiSpec.Schemas.PollutionReportParams
   alias ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams
@@ -13,7 +14,8 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportParams do
     oneOf: [
       JellyfishReportParams,
       PollutionReportParams,
-      MeteorologicalReportParams
+      MeteorologicalReportParams,
+      AtypicalReportParams
     ]
   })
 end

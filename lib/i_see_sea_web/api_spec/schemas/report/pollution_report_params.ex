@@ -17,6 +17,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.PollutionReportParams do
           pollution_types: %Schema{type: :array, items: %Schema{type: :string}}
         }
       }
-    ]
+    ],
+    required: [:pollution_types]
   })
 end

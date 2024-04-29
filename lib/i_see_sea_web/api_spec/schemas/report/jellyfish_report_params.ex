@@ -18,6 +18,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams do
           species: %Schema{type: :string, required: false}
         }
       }
-    ]
+    ],
+    required: [:quantity]
   })
 end

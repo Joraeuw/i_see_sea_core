@@ -61,5 +61,21 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
 
       assert_schema(json, "CreateReportResponse", api_spec)
     end
+
+    test "create atypical report", %{conn_user: conn, api_spec: api_spec} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        comment: Faker.Lorem.paragraph()
+      }
+
+      json =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.atypical()), params)
+        |> json_response(200)
+
+      assert_schema(json, "CreateReportResponse", api_spec)
+    end
   end
 end

@@ -1,9 +1,6 @@
 defmodule ISeeSeaWeb.Params.Report do
   @moduledoc false
 
-  alias ISeeSea.Constants.SeaSwellType
-  alias ISeeSea.Constants.WindType
-  alias ISeeSea.Constants.FogType
   alias ISeeSea.Constants.ReportType
 
   use ISeeSeaWeb, :param
@@ -37,8 +34,12 @@ defmodule ISeeSeaWeb.Params.Report do
   end
 
   defparams :create_meteorological_report do
-    required(:fog_type, :string, values: FogType.values())
-    required(:wind_type, :string, values: WindType.values())
-    required(:sea_swell_type, :string, values: SeaSwellType.values())
+    required(:fog_type, :string, values: ISeeSea.Constants.FogType.values())
+    required(:wind_type, :string, values: ISeeSea.Constants.WindType.values())
+    required(:sea_swell_type, :string, values: ISeeSea.Constants.SeaSwellType.values())
+  end
+
+  defparams :create_atypical_report do
+    required(:comment, :string)
   end
 end

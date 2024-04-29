@@ -39,7 +39,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Session do
 
       operation(:refresh,
         summary: "Refresh the JWT Token",
-        security: [%{"BearerAuth" => ["token"]}],
+        security: [%{"BearerAuth" => ["Token"]}],
         responses: [
           ok: {"Response", "application/json", SessionResponse},
           unauthorized: {"Unauthorized", "application/json", UnauthorizedErrorResponse}
