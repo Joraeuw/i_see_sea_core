@@ -95,6 +95,11 @@ defmodule ISeeSea.DB.DefaultModel do
           entry -> Repo.delete(entry)
         end
       end
+
+      defoverridable(
+        create: 2,
+        create: 1
+      )
     end
   end
 end

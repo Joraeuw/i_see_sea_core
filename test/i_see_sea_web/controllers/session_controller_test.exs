@@ -31,12 +31,12 @@ defmodule ISeeSeaWeb.SessionControllerTest do
       assert response == %{
                "message" => "The requested action has failed.",
                "errors" => [
-                 %{"last_name" => "can't be blank"},
                  %{"first_name" => "can't be blank"},
+                 %{"last_name" => "can't be blank"},
                  %{"username" => "can't be blank"}
                ],
                "reason" =>
-                 "last_name can't be blank, first_name can't be blank, username can't be blank."
+                 "First_name can't be blank, last_name can't be blank, username can't be blank."
              }
     end
   end
@@ -84,7 +84,7 @@ defmodule ISeeSeaWeb.SessionControllerTest do
       assert %{
                "message" => "The requested action has failed.",
                "errors" => [%{"password" => "can't be blank"}],
-               "reason" => "password can't be blank."
+               "reason" => "Password can't be blank."
              } == response
     end
   end

@@ -5,7 +5,7 @@ defmodule ISeeSea.MixProject do
     [
       app: :i_see_sea,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -68,8 +68,8 @@ defmodule ISeeSea.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:logger_json, "~> 5.1.4"},
       {:excoveralls, "~> 0.18.1", only: :test},
-      {:goal, "~> 0.3.2"},
-      {:faker, "~> 0.18", only: :test}
+      {:goal, git: "git@github.com:Joraeuw/goal.git", branch: "main"},
+      {:faker, "~> 0.18", only: [:dev, :test]}
     ]
   end
 

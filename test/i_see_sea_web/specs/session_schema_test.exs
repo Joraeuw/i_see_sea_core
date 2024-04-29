@@ -3,7 +3,7 @@ defmodule ISeeSeaWeb.Specs.SessionSchemaTest do
   use ISeeSeaWeb.ConnCase, async: true
   import OpenApiSpex.TestAssertions
 
-  describe "Session schema tests" do
+  describe "session schema" do
     test "login", %{conn_user: conn, api_spec: api_spec, user: user} do
       params = %{
         "email" => user.email,

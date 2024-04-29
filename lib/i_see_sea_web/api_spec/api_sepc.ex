@@ -18,7 +18,7 @@ defmodule ISeeSeaWeb.ApiSpec do
       },
       paths: Paths.from_router(Router),
       components: %Components{
-        securitySchemes: %{"authorization" => %SecurityScheme{type: "https", scheme: "bearer"}}
+        securitySchemes: %{"BearerAuth" => %SecurityScheme{type: "https", scheme: "bearer"}}
       }
     }
     |> OpenApiSpex.resolve_schema_modules()

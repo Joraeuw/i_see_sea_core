@@ -11,6 +11,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.LoginParams do
     properties: %{
       email: %Schema{type: :string, format: :email},
       password: %Schema{type: :string}
-    }
+    },
+    required: [:email, :password]
   })
 end
