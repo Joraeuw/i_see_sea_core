@@ -75,4 +75,4 @@ repl.test:
 
 # Generate OpenAPI Spec
 spec:
-	mix openapi.spec.json --spec ISeeSeaWeb.ApiSpec
+	mix spec

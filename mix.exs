@@ -81,7 +81,7 @@ defmodule ISeeSea.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build", "spec"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
@@ -91,7 +91,8 @@ defmodule ISeeSea.MixProject do
         "tailwind i_see_sea --minify",
         "esbuild i_see_sea --minify",
         "phx.digest"
-      ]
+      ],
+      spec: ["openapi.spec.json --spec ISeeSeaWeb.ApiSpec"]
     ]
   end
 end
