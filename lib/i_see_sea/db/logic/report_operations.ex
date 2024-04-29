@@ -1,13 +1,15 @@
 defmodule ISeeSea.DB.Logic.ReportOperations do
   @moduledoc false
 
+  alias ISeeSea.DB.Models.MeteorologicalReport
   alias ISeeSea.DB.Models.PollutionReportPollutionType
-  alias ISeeSea.Helpers.With
   alias ISeeSea.DB.Models.PollutionType
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.JellyfishReport
   alias ISeeSea.DB.Models.BaseReport
+
   alias ISeeSea.Repo
+  alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Report
 
   def create(user, validated_base, params) do
@@ -35,9 +37,22 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     end
   end
 
-  # defp create_specific_report(report_type, params) when report_type == "meteorological" do
-
-  # end
+  defp create_specific_report(base_report_id, report_type, params)
+       when report_type == "meteorological" do
+    with {:ok, %{fog_type: fog_type, sea_swell_type: sea_swell_type, wind_type: wind_type}} <-
+           Report.validate(:create_meteorological_report, params),
+         {:ok, report} <-
+           MeteorologicalReport.create(%{
+             report_id: base_report_id,
+             fog_type_id: fog_type,
+             sea_swell_type_id: sea_swell_type,
+             wind_type_id: wind_type
+           }) do
+      {:ok, report}
+    else
+      {:error, error} -> Repo.rollback(error)
+    end
+  end
 
   # defp create_specific_report(report_type, params) when report_type == "atypical" do
 

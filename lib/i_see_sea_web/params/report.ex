@@ -1,5 +1,9 @@
 defmodule ISeeSeaWeb.Params.Report do
   @moduledoc false
+
+  alias ISeeSea.Constants.SeaSwellType
+  alias ISeeSea.Constants.WindType
+  alias ISeeSea.Constants.FogType
   alias ISeeSea.Constants.ReportType
 
   use ISeeSeaWeb, :param
@@ -32,6 +36,9 @@ defmodule ISeeSeaWeb.Params.Report do
     required(:pollution_types, {:array, :string}, min: 1)
   end
 
-  defparams :create_meterological_report do
+  defparams :create_meteorological_report do
+    required(:fog_type, :string, values: FogType.values())
+    required(:wind_type, :string, values: WindType.values())
+    required(:sea_swell_type, :string, values: SeaSwellType.values())
   end
 end

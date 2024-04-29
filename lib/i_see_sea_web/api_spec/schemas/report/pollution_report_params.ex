@@ -1,16 +1,16 @@
-defmodule ISeeSeaWeb.ApiSpec.Schemas.PollutionReport do
+defmodule ISeeSeaWeb.ApiSpec.Schemas.PollutionReportParams do
   @moduledoc false
 
   require OpenApiSpex
 
-  alias ISeeSeaWeb.ApiSpec.Schemas.BaseReport
+  alias ISeeSeaWeb.ApiSpec.Schemas.BaseReportParams
   alias OpenApiSpex.Schema
 
   OpenApiSpex.schema(%{
-    title: "PollutionReport",
+    title: "PollutionReportParams",
     type: :object,
     allOf: [
-      BaseReport,
+      BaseReportParams,
       %Schema{
         type: :object,
         properties: %{

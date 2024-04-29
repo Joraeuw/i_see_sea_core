@@ -1,16 +1,16 @@
-defmodule ISeeSeaWeb.ApiSpec.Schemas.JellyfishReport do
+defmodule ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams do
   @moduledoc false
 
   require OpenApiSpex
 
-  alias ISeeSeaWeb.ApiSpec.Schemas.BaseReport
+  alias ISeeSeaWeb.ApiSpec.Schemas.BaseReportParams
   alias OpenApiSpex.Schema
 
   OpenApiSpex.schema(%{
-    title: "JellyfishReport",
+    title: "JellyfishReportParams",
     type: :object,
     allOf: [
-      BaseReport,
+      BaseReportParams,
       %Schema{
         type: :object,
         properties: %{

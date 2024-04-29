@@ -3,15 +3,17 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportParams do
 
   require OpenApiSpex
 
-  alias ISeeSeaWeb.ApiSpec.Schemas.PollutionReport
-  alias ISeeSeaWeb.ApiSpec.Schemas.JellyfishReport
+  alias ISeeSeaWeb.ApiSpec.Schemas.MeteorologicalReportParams
+  alias ISeeSeaWeb.ApiSpec.Schemas.PollutionReportParams
+  alias ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams
 
   OpenApiSpex.schema(%{
     title: "CreateReportParams",
     type: :object,
     oneOf: [
-      JellyfishReport,
-      PollutionReport
+      JellyfishReportParams,
+      PollutionReportParams,
+      MeteorologicalReportParams
     ]
   })
 end

@@ -1,6 +1,7 @@
 defmodule ISeeSea.DB.Models.BaseReport do
   @moduledoc false
 
+  alias ISeeSea.DB.Models.MeteorologicalReport
   alias ISeeSea.Constants.ReportType
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.JellyfishReport
@@ -26,6 +27,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
 
     has_one(:jellyfish_report, JellyfishReport, foreign_key: :report_id)
     has_one(:pollution_report, PollutionReport, foreign_key: :report_id)
+    has_one(:meteorological_report, MeteorologicalReport, foreign_key: :report_id)
 
     timestamps()
   end

@@ -124,6 +124,110 @@ defmodule ISeeSeaWeb.ReportControllerTest do
              } == response
     end
 
+    test "meteorological report created successfully", %{conn_user: conn} do
+      insert!(:wind_type, name: "strong")
+      insert!(:fog_type, name: "thick")
+      insert!(:sea_swell_type, name: "strong")
+
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        fog_type: "thick",
+        wind_type: "strong",
+        sea_swell_type: "strong"
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.meteorological()), params)
+        |> json_response(200)
+
+      assert %{
+               "report_type" => "meteorological",
+               "fog_type" => "thick",
+               "sea_swell_type" => "strong",
+               "wind_type" => "strong",
+               "comment" => "",
+               "latitude" => _,
+               "longitude" => _,
+               "name" => _,
+               "report_date" => _,
+               "report_id" => _
+             } = response
+    end
+
+    test "fog type isn't recognized", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        fog_type: "thick",
+        wind_type: "strong",
+        sea_swell_type: "strong"
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.meteorological()), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"fog_type" => "does not exist"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Fog_type does not exist."
+             } == response
+    end
+
+    test "wind type isn't recognized", %{conn_user: conn} do
+      insert!(:fog_type, name: "thick")
+
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        fog_type: "thick",
+        wind_type: "strong",
+        sea_swell_type: "strong"
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.meteorological()), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"wind_type" => "does not exist"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Wind_type does not exist."
+             } == response
+    end
+
+    test "sea swell type isn't recognized", %{conn_user: conn} do
+      insert!(:fog_type, name: "thick")
+      insert!(:wind_type, name: "strong")
+
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        fog_type: "thick",
+        wind_type: "strong",
+        sea_swell_type: "strong"
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.meteorological()), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"sea_swell_type" => "does not exist"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Sea_swell_type does not exist."
+             } == response
+    end
+
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),

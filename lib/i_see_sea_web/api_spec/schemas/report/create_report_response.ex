@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportResponse do
 
   require OpenApiSpex
 
+  alias ISeeSeaWeb.ApiSpec.Schemas.MeteorologicalReportResponse
   alias ISeeSeaWeb.ApiSpec.Schemas.PollutionReportResponse
   alias ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportResponse
 
@@ -11,7 +12,8 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportResponse do
     type: :object,
     anyOf: [
       JellyfishReportResponse,
-      PollutionReportResponse
+      PollutionReportResponse,
+      MeteorologicalReportResponse
     ]
   })
 end

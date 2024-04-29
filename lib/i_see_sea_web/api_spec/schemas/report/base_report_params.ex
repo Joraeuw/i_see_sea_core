@@ -1,4 +1,4 @@
-defmodule ISeeSeaWeb.ApiSpec.Schemas.BaseReport do
+defmodule ISeeSeaWeb.ApiSpec.Schemas.BaseReportParams do
   @moduledoc false
 
   require OpenApiSpex
@@ -6,7 +6,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.BaseReport do
   alias OpenApiSpex.Schema
 
   OpenApiSpex.schema(%{
-    title: "BaseReport",
+    title: "BaseReportParams",
     type: :object,
     properties: %{
       name: %Schema{type: :string},

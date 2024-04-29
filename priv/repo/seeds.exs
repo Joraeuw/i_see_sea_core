@@ -26,7 +26,7 @@ defmodule ISeeSea.Seeder do
       Factory.insert!(:jellyfish_report)
 
       Factory.insert!(:pollution_type)
-      pollution_type = Factory.insert!(:pollution_type, %{name: "plastic"})
+      pollution_type = Factory.insert!(:pollution_type, name: "plastic")
 
       Factory.insert!(:pollution_report)
       pollution_report = Factory.insert!(:pollution_report)
@@ -35,6 +35,25 @@ defmodule ISeeSea.Seeder do
         pollution_report_id: pollution_report.report_id,
         pollution_type_id: pollution_type.name
       })
+
+      Factory.insert!(:wind_type, name: "hurricane")
+      strong_wind = Factory.insert!(:wind_type, name: "strong")
+      Factory.insert!(:wind_type, name: "moderate")
+      Factory.insert!(:wind_type, name: "weak")
+      Factory.insert!(:wind_type)
+
+      thick_fog = Factory.insert!(:fog_type, name: "very_thick")
+      Factory.insert!(:fog_type, name: "thick")
+      Factory.insert!(:fog_type, name: "moderate")
+      Factory.insert!(:fog_type, name: "light")
+      Factory.insert!(:fog_type)
+
+      Factory.insert!(:sea_swell_type, name: "strong")
+      Factory.insert!(:sea_swell_type, name: "moderate")
+      Factory.insert!(:sea_swell_type, name: "weak")
+      no_wave = Factory.insert!(:sea_swell_type)
+
+      Factory.insert!(:meteorological_report, wind_type: strong_wind, fog_type: thick_fog, sea_swell_type: no_wave)
     end)
   end
 end

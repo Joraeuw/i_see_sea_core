@@ -1,10 +1,10 @@
-defmodule ISeeSeaWeb.Specs.PollutionSchemaTest do
+defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
   @moduledoc false
   alias ISeeSea.Constants.ReportType
   use ISeeSeaWeb.ConnCase, async: true
   import OpenApiSpex.TestAssertions
 
-  describe "pollution schema" do
+  describe "report schema" do
     test "create jellyfish report", %{conn_user: conn, api_spec: api_spec} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
@@ -35,6 +35,28 @@ defmodule ISeeSeaWeb.Specs.PollutionSchemaTest do
       json =
         conn
         |> post(Routes.report_path(conn, :create_report, ReportType.pollution()), params)
+        |> json_response(200)
+
+      assert_schema(json, "CreateReportResponse", api_spec)
+    end
+
+    test "create meteorological report", %{conn_user: conn, api_spec: api_spec} do
+      insert!(:wind_type, name: "strong")
+      insert!(:fog_type, name: "thick")
+      insert!(:sea_swell_type, name: "strong")
+
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        fog_type: "thick",
+        wind_type: "strong",
+        sea_swell_type: "strong"
+      }
+
+      json =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.meteorological()), params)
         |> json_response(200)
 
       assert_schema(json, "CreateReportResponse", api_spec)

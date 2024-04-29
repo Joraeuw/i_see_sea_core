@@ -56,6 +56,33 @@ defmodule ISeeSea.Factory do
     %Models.PollutionReportPollutionType{}
   end
 
+  def build(:wind_type) do
+    %Models.WindType{
+      name: "no_wind"
+    }
+  end
+
+  def build(:fog_type) do
+    %Models.FogType{
+      name: "no_fog"
+    }
+  end
+
+  def build(:sea_swell_type) do
+    %Models.SeaSwellType{
+      name: "no_waves"
+    }
+  end
+
+  def build(:meteorological_report) do
+    %Models.MeteorologicalReport{
+      base_report: build(:base_report),
+      fog_type: build(:fog_type),
+      wind_type: build(:wind_type),
+      sea_swell_type: build(:sea_swell_type)
+    }
+  end
+
   def build(factory_name, attributes) do
     factory_name |> build() |> struct!(attributes)
   end
