@@ -3,6 +3,8 @@ defmodule ISeeSeaWeb.ReportController do
 
   use ISeeSeaWeb, :controller
 
+  alias ISeeSeaWeb.Params.Filter
+  alias ISeeSea.DB.Models.BaseReport
   alias ISeeSea.DB.Logic.ReportOperations
 
   def create_report(%{assigns: %{user: user}} = conn, params) do
@@ -13,6 +15,23 @@ defmodule ISeeSeaWeb.ReportController do
       {:error, :failed_to_attach_pollution_type} ->
         error(conn, {:error, :unprocessable_entity})
 
+      error ->
+        error(conn, error)
+    end
+  end
+
+  def index(conn, params) do
+    with {:ok, %{report_type: report_type}} <- validate(:index, params),
+         {:ok, filter_params} <- Filter.validate(:filter, params),
+         {:ok, pagination_params} <- Filter.validate(:pagination, params),
+         {:ok, entries, pagination} <-
+           BaseReport.get_filtered_paginated_reports(
+             report_type,
+             filter_params,
+             pagination_params
+           ) do
+      success_paginated(conn, entries, pagination)
+    else
       error ->
         error(conn, error)
     end

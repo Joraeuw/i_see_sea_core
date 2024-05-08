@@ -238,11 +238,11 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
       response =
         conn
-        |> post(Routes.report_path(conn, :create_report, ReportType.atypical()), params)
+        |> post(Routes.report_path(conn, :create_report, ReportType.atypical_activity()), params)
         |> json_response(200)
 
       assert %{
-               "report_type" => "atypical",
+               "report_type" => "atypical_activity",
                "comment" => _,
                "latitude" => _,
                "longitude" => _,
@@ -261,7 +261,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
       response =
         conn
-        |> post(Routes.report_path(conn, :create_report, ReportType.atypical()), params)
+        |> post(Routes.report_path(conn, :create_report, ReportType.atypical_activity()), params)
         |> json_response(422)
 
       assert %{
@@ -310,6 +310,230 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                ],
                "message" => "The requested action has failed.",
                "reason" => "Quantity can't be blank."
+             } == response
+    end
+  end
+
+  describe "index/2" do
+    test "successfully retrieve report data", %{conn: conn} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+      insert!(:atypical_activity_report)
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all"))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 4}} = response
+    end
+
+    test "successfully retrieve jellyfish reports with filters", %{conn: conn} do
+      insert!(:jellyfish_report)
+      insert!(:jellyfish_report, species: "red")
+      insert!(:jellyfish_report, species: "red")
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :species, value: "red"}
+          ]),
+        order_by: [:id],
+        order_direction: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "jellyfish"), params)
+        |> json_response(200)
+
+      assert %{
+               "entries" => [
+                 %{
+                   "comment" => _,
+                   "latitude" => _,
+                   "longitude" => _,
+                   "name" => _,
+                   "quantity" => 10,
+                   "report_date" => _,
+                   "report_id" => _,
+                   "report_type" => "jellyfish",
+                   "species" => "red"
+                 },
+                 %{
+                   "comment" => _,
+                   "latitude" => _,
+                   "longitude" => _,
+                   "name" => _,
+                   "quantity" => 10,
+                   "report_date" => _,
+                   "report_id" => _,
+                   "report_type" => "jellyfish",
+                   "species" => "red"
+                 }
+               ],
+               "pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 2}
+             } = response
+    end
+
+    test "successfully retrieve pollution reports with filters", %{conn: conn} do
+      insert!(:pollution_type)
+      pollution_type = insert!(:pollution_type, name: "plastic")
+
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      pollution_report = insert!(:pollution_report)
+
+      insert!(:pollution_report_pollution_type, %{
+        pollution_report_id: pollution_report.report_id,
+        pollution_type_id: pollution_type.name
+      })
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :pollution_types, value: ["plastic"], op: :in}
+          ])
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "pollution"), params)
+        |> json_response(200)
+
+      assert %{
+               "entries" => [
+                 %{
+                   "comment" => _,
+                   "latitude" => _,
+                   "longitude" => _,
+                   "name" => _,
+                   "report_date" => _,
+                   "report_id" => _,
+                   "report_type" => "pollution",
+                   "pollution_types" => ["plastic"]
+                 }
+               ],
+               "pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 1}
+             } = response
+    end
+
+    test "successfully retrieve meteorological reports with filters", %{conn: conn} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+
+      insert!(:meteorological_report,
+        fog_type: build(:fog_type, name: "thick"),
+        wind_type: build(:wind_type, name: "strong"),
+        sea_swell_type: build(:sea_swell_type, name: "strong")
+      )
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :fog_type, value: ["thick", "no_fog"], op: :in},
+            %{field: :wind_type, value: "strong", op: :==}
+          ])
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "meteorological"), params)
+        |> json_response(200)
+
+      assert %{
+               "entries" => [
+                 %{
+                   "comment" => _,
+                   "latitude" => _,
+                   "longitude" => _,
+                   "name" => _,
+                   "report_date" => _,
+                   "report_id" => _,
+                   "fog_type" => "thick",
+                   "wind_type" => "strong"
+                 }
+               ],
+               "pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 1}
+             } = response
+    end
+
+    test "successfully retrieve atypical_activity reports with filters", %{conn: conn} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+      insert!(:atypical_activity_report)
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "atypical_activity"))
+        |> json_response(200)
+
+      assert %{
+               "entries" => [
+                 %{
+                   "comment" => _,
+                   "latitude" => _,
+                   "longitude" => _,
+                   "name" => _,
+                   "report_date" => _,
+                   "report_id" => _,
+                   "report_type" => "atypical_activity"
+                 }
+               ],
+               "pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 1}
+             } = response
+    end
+
+    test "fail when trying to filter by an unavailable parameter", %{conn: conn} do
+      insert!(:jellyfish_report)
+      insert!(:jellyfish_report, species: "red")
+      insert!(:jellyfish_report, species: "red")
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :random_parameter, value: "red"}
+          ]),
+        order_by: [:id],
+        order_direction: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "jellyfish"), params)
+        |> json_response(400)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "Malformed request syntax."
+             } == response
+    end
+
+    test "fail when trying to filter by a parameter of another report", %{conn: conn} do
+      insert!(:jellyfish_report)
+      insert!(:jellyfish_report, species: "red")
+      insert!(:jellyfish_report, species: "red")
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :fog_type, value: "thick"}
+          ]),
+        order_by: [:id],
+        order_direction: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "jellyfish"), params)
+        |> json_response(400)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "Malformed request syntax."
              } == response
     end
   end

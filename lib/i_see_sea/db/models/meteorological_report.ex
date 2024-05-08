@@ -55,5 +55,23 @@ defmodule ISeeSea.DB.Models.MeteorologicalReport do
         sea_swell_type: sea_swell_type
       })
     end
+
+    def view(
+          %{
+            fog_type_id: fog_type,
+            wind_type_id: wind_type,
+            sea_swell_type_id: sea_swell_type
+          } = pollution_report,
+          %Lens{view: Lens.from_base()}
+        ) do
+      pollution_report
+      |> Map.from_struct()
+      |> Map.take([:report_id])
+      |> Map.merge(%{
+        fog_type: fog_type,
+        wind_type: wind_type,
+        sea_swell_type: sea_swell_type
+      })
+    end
   end
 end

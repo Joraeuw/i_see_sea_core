@@ -28,5 +28,11 @@ defmodule ISeeSea.DB.Models.AtypicalActivityReport do
       |> Map.take([:report_id])
       |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
+
+    def view(atypical_activity_report, %Lens{view: Lens.from_base()}) do
+      atypical_activity_report
+      |> Map.from_struct()
+      |> Map.take([:report_id])
+    end
   end
 end

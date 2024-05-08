@@ -72,10 +72,24 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
 
       json =
         conn
-        |> post(Routes.report_path(conn, :create_report, ReportType.atypical()), params)
+        |> post(Routes.report_path(conn, :create_report, ReportType.atypical_activity()), params)
         |> json_response(200)
 
       assert_schema(json, "CreateReportResponse", api_spec)
+    end
+
+    test "index reports", %{conn: conn, api_spec: api_spec} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+      insert!(:atypical_activity_report)
+
+      json =
+        conn
+        |> get(Routes.report_path(conn, :index, "all"))
+        |> json_response(200)
+
+      assert_schema(json, "IndexReportResponse", api_spec)
     end
   end
 end

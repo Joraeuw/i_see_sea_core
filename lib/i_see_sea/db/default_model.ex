@@ -10,6 +10,8 @@ defmodule ISeeSea.DB.DefaultModel do
       import Ecto.Query, warn: false
       alias ISeeSea.Repo
 
+      @default_preloads unquote(default_preloads)
+
       def get(id, preloads \\ unquote(default_preloads)) do
         case Repo.get(__MODULE__, id) |> Repo.preload(preloads) do
           entry when not is_nil(entry) -> {:ok, entry}
@@ -60,6 +62,29 @@ defmodule ISeeSea.DB.DefaultModel do
         end
       end
 
+      def get_with_filter(
+            params,
+            bindings,
+            pagination,
+            preloads \\ unquote(default_preloads)
+          ) do
+        pagination = Map.merge(%{page: 1, page_size: 10}, pagination)
+        params = Map.put(params, :filters, Map.get(params, :filters, "{}") |> Jason.decode!())
+
+        bindings
+        |> Enum.reduce(__MODULE__, &process_binding/2)
+        |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
+        |> case do
+          {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->
+            {:ok, Repo.preload(entries, preloads), Map.put(pagination, :total_count, total_count)}
+
+          {:error, %Flop.Meta{}} ->
+            {:error, :bad_request}
+        end
+      rescue
+        _ in Ecto.QueryError -> {:error, :bad_request}
+      end
+
       def where_clause(search_terms) do
         where_match_clause = fn {k, v}, conditions ->
           dynamic([q], field(q, ^k) == ^v and ^conditions)
@@ -94,6 +119,12 @@ defmodule ISeeSea.DB.DefaultModel do
           nil -> {:error, :not_found, __MODULE__}
           entry -> Repo.delete(entry)
         end
+      end
+
+      defp process_binding(current_binding, q) do
+        join(q, :left, [current_binding], entity in assoc(current_binding, ^current_binding),
+          as: ^current_binding
+        )
       end
 
       defoverridable(

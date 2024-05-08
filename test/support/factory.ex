@@ -3,6 +3,7 @@ defmodule ISeeSea.Factory do
   Data and Entity generator.
   """
 
+  alias ISeeSea.Constants.ReportType
   alias ISeeSea.Repo
   alias ISeeSea.DB.Models
 
@@ -31,7 +32,7 @@ defmodule ISeeSea.Factory do
   end
 
   def build(:jellyfish_report) do
-    base = build(:base_report)
+    base = build(:base_report, report_type: ReportType.jellyfish())
 
     %Models.JellyfishReport{
       quantity: 10,
@@ -41,9 +42,17 @@ defmodule ISeeSea.Factory do
   end
 
   def build(:pollution_report) do
-    base = build(:base_report)
+    base = build(:base_report, report_type: ReportType.pollution())
 
     %Models.PollutionReport{
+      base_report: base
+    }
+  end
+
+  def build(:atypical_activity_report) do
+    base = build(:base_report, report_type: ReportType.atypical_activity())
+
+    %Models.AtypicalActivityReport{
       base_report: base
     }
   end
@@ -76,7 +85,7 @@ defmodule ISeeSea.Factory do
 
   def build(:meteorological_report) do
     %Models.MeteorologicalReport{
-      base_report: build(:base_report),
+      base_report: build(:base_report, report_type: ReportType.meteorological()),
       fog_type: build(:fog_type),
       wind_type: build(:wind_type),
       sea_swell_type: build(:sea_swell_type)

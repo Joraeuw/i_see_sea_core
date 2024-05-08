@@ -44,5 +44,24 @@ defmodule ISeeSea.DB.Models.PollutionReport do
           |> Enum.map(fn %{name: name} -> name end)
       })
     end
+
+    def view(
+          %{pollution_types: pollution_types} = pollution_report,
+          %Lens{view: Lens.from_base()} = lens
+        ) do
+      pollution_report
+      |> Map.from_struct()
+      |> Map.take([:pollution_types, :report_id])
+      |> Map.merge(%{
+        pollution_types:
+          pollution_types
+          |> ISeeSeaWeb.Focus.view(lens)
+          |> override_nil()
+          |> Enum.map(fn %{name: name} -> name end)
+      })
+    end
+
+    defp override_nil(nil), do: []
+    defp override_nil(entities), do: entities
   end
 end

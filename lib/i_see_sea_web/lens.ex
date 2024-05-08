@@ -16,4 +16,10 @@ defmodule ISeeSeaWeb.Lens do
       :simplified
     end
   end
+
+  defmacro from_base do
+    quote do
+      :from_base
+    end
+  end
 end
