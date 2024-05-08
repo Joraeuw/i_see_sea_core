@@ -113,15 +113,31 @@ defmodule ISeeSea.DB.Models.BaseReport do
     |> validate_inclusion(:report_type, ReportType.values())
   end
 
-  def get_filtered_paginated_reports("all", params, pagination_params) do
-    get_with_filter(params, @default_preloads, pagination_params)
+  def get_user_filtered_paginated_reports(report_type, params, pagination_params, user_id) do
+    get_filtered_paginated_reports(
+      report_type,
+      params,
+      pagination_params,
+      from(br in __MODULE__, where: br.user_id == ^user_id)
+    )
   end
 
-  def get_filtered_paginated_reports(report_type, params, pagination_params) do
+  def get_filtered_paginated_reports(
+        report_type,
+        params,
+        pagination_params,
+        initial_from \\ __MODULE__
+      )
+
+  def get_filtered_paginated_reports("all", params, pagination_params, initial_from) do
+    get_with_filter(params, @default_preloads, pagination_params, initial_from)
+  end
+
+  def get_filtered_paginated_reports(report_type, params, pagination_params, initial_from) do
     pagination = Map.merge(%{page: 1, page_size: 10}, pagination_params)
     params = Map.put(params, :filters, Map.get(params, :filters, "{}") |> Jason.decode!())
 
-    {query, preloads} = determine_query(report_type)
+    {query, preloads} = determine_query(initial_from, report_type)
 
     query
     |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
@@ -136,26 +152,26 @@ defmodule ISeeSea.DB.Models.BaseReport do
     _ in Ecto.QueryError -> {:error, :bad_request}
   end
 
-  defp determine_query("jellyfish") do
+  defp determine_query(initial_from, "jellyfish") do
     q =
-      from(br in __MODULE__)
+      initial_from
       |> join(:inner, [br], jr in assoc(br, :jellyfish_report), as: :jellyfish_report)
 
     {q, [:jellyfish_report]}
   end
 
-  defp determine_query("pollution") do
+  defp determine_query(initial_from, "pollution") do
     q =
-      from(br in __MODULE__)
+      initial_from
       |> join(:inner, [br], pr in assoc(br, :pollution_report), as: :pollution_report)
       |> join(:left, [br, pr], rt in assoc(pr, :pollution_types), as: :pollution_types)
 
     {q, [pollution_report: :pollution_types]}
   end
 
-  defp determine_query("atypical_activity") do
+  defp determine_query(initial_from, "atypical_activity") do
     q =
-      from(br in __MODULE__)
+      initial_from
       |> join(:inner, [br], aar in assoc(br, :atypical_activity_report),
         as: :atypical_activity_report
       )
@@ -163,9 +179,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
     {q, [:atypical_activity_report]}
   end
 
-  defp determine_query("meteorological") do
+  defp determine_query(initial_from, "meteorological") do
     q =
-      from(br in __MODULE__)
+      initial_from
       |> join(:inner, [br], mr in assoc(br, :meteorological_report), as: :meteorological_report)
       |> join(:inner, [br, mr], ft in assoc(mr, :fog_type), as: :fog_type)
       |> join(:inner, [br, mr], sst in assoc(mr, :sea_swell_type), as: :sea_swell_type)

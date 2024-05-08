@@ -1,4 +1,4 @@
-defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
+defmodule ISeeSeaWeb.ApiSpec.Operations.User do
   @moduledoc false
 
   alias ISeeSeaWeb.ApiSpec.Schemas.IndexReportResponse
@@ -7,8 +7,6 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
   alias ISeeSeaWeb.ApiSpec.QueryHelpers
   alias ISeeSeaWeb.ApiSpec.Schemas.UnauthorizedErrorResponse
   alias ISeeSeaWeb.ApiSpec.Schemas.UnprocessableEntityErrorResponse
-  alias ISeeSeaWeb.ApiSpec.Schemas.CreateReportResponse
-  alias ISeeSeaWeb.ApiSpec.Schemas.CreateReportParams
 
   defmacro __using__(_) do
     quote do
@@ -17,30 +15,12 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
 
       alias OpenApiSpex.Schema
 
-      tags(["Report"])
+      tags(["Users"])
 
-      operation(:create_report,
-        summary: "Create a report",
-        security: [%{"BearerAuth" => ["Token"]}],
-        parameters: [
-          report_type: [
-            in: :path,
-            description: "Report Type",
-            schema: %Schema{type: :string, enum: ReportType.values()}
-          ]
-        ],
-        request_body: {"Create Report Params", "application/json", CreateReportParams},
-        responses: [
-          ok: {"Response", "application/json", CreateReportResponse},
-          unprocessable_entity:
-            {"Unprocessable Entity", "application/json", UnprocessableEntityErrorResponse},
-          unauthorized: {"Unauthorized", "application/json", UnauthorizedErrorResponse}
-        ]
-      )
-
-      operation(:index,
+      operation(:list_reports,
         summary: "List reports",
-        description: "Lists all reports. Filters are applicable.",
+        description: "Lists user related reports. Can apply filters",
+        security: [%{"BearerAuth" => ["Token"]}],
         parameters:
           QueryHelpers.flop(
             [
@@ -72,7 +52,8 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
           ok: {"Response", "application/json", IndexReportResponse},
           bad_request: {"Bad Request", "application/json", BadRequestErrorResponse},
           unprocessable_entity:
-            {"Unprocessable Entity", "application/json", UnprocessableEntityErrorResponse}
+            {"Unprocessable Entity", "application/json", UnprocessableEntityErrorResponse},
+          unauthorized: {"Unauthorized", "application/json", UnauthorizedErrorResponse}
         ]
       )
     end

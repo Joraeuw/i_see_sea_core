@@ -45,6 +45,11 @@ defmodule ISeeSeaWeb.Router do
 
     get "/refresh", SessionController, :refresh
 
+    ## Users
+    scope "/users" do
+      get "/reports/:report_type", UserController, :list_reports
+    end
+
     ## Reports
     scope "/reports" do
       post "/create/:report_type", ReportController, :create_report

@@ -66,13 +66,14 @@ defmodule ISeeSea.DB.DefaultModel do
             params,
             bindings,
             pagination,
+            initial_from \\ unquote(__MODULE__),
             preloads \\ unquote(default_preloads)
           ) do
         pagination = Map.merge(%{page: 1, page_size: 10}, pagination)
         params = Map.put(params, :filters, Map.get(params, :filters, "{}") |> Jason.decode!())
 
         bindings
-        |> Enum.reduce(__MODULE__, &process_binding/2)
+        |> Enum.reduce(initial_from, &process_binding/2)
         |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
         |> case do
           {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->
