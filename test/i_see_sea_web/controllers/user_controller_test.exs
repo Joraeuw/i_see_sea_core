@@ -28,9 +28,9 @@ defmodule ISeeSeaWeb.UserControllerTest do
         |> json_response(401)
 
       assert %{
-        "message" => "The requested action has failed.",
-        "reason" => "Authentication credentials were missing or incorrect."
-      } == response
+               "message" => "The requested action has failed.",
+               "reason" => "Authentication credentials were missing or incorrect."
+             } == response
     end
   end
 end
