@@ -18,7 +18,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.User do
       tags(["Users"])
 
       operation(:list_reports,
-        summary: "List reports",
+        summary: "List User Reports",
         description: "Lists user related reports. Can apply filters",
         security: [%{"BearerAuth" => ["Token"]}],
         parameters:

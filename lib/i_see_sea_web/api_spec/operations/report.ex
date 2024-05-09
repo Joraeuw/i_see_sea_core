@@ -20,7 +20,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
       tags(["Report"])
 
       operation(:create_report,
-        summary: "Create a report",
+        summary: "Create Report",
         security: [%{"BearerAuth" => ["Token"]}],
         parameters: [
           report_type: [
@@ -39,7 +39,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
       )
 
       operation(:index,
-        summary: "List reports",
+        summary: "List Reports",
         description: "Lists all reports. Filters are applicable.",
         parameters:
           QueryHelpers.flop(
