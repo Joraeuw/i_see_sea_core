@@ -3,17 +3,21 @@ defmodule ISeeSea.Factory do
   Data and Entity generator.
   """
 
+  alias ISeeSea.DB.Models.Role
   alias ISeeSea.Constants.ReportType
   alias ISeeSea.Repo
   alias ISeeSea.DB.Models
 
   def build(:user) do
+    {:ok, %{id: end_user_id}} = Role.get(:end_user)
+
     %Models.User{
       first_name: Faker.Person.first_name(),
       last_name: Faker.Person.last_name(),
       email: Faker.Internet.email(),
       username: Faker.Internet.user_name(),
-      password: Bcrypt.hash_pwd_salt("A123456")
+      password: Bcrypt.hash_pwd_salt("A123456"),
+      role_id: end_user_id
     }
   end
 

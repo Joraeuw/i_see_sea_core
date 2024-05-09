@@ -8,7 +8,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
   alias ISeeSea.Constants.ReportType
 
-  describe "create_report/2" do
+  describe "create/2" do
     test "jellyfish report created successfully", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
