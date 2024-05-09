@@ -11,6 +11,6 @@ defmodule ISeeSeaWeb.Params.Filter do
 
   defparams :pagination do
     optional(:page, :integer)
-    optional(:page_sze, :integer)
+    optional(:page_size, :integer)
   end
 end

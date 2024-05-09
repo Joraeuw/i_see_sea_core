@@ -28,6 +28,13 @@ defmodule ISeeSeaWeb.Router do
   scope "/api" do
     pipe_through :api
 
+    get "/spec/openapi", OpenApiSpex.Plug.RenderSpec, []
+    get "/doc", Redoc.Plug.RedocUI, spec_url: "/api/spec/openapi"
+  end
+
+  scope "/api", ISeeSeaWeb do
+    pipe_through :api
+
     post "/login", SessionController, :login
     post "/register", SessionController, :register
 
@@ -35,9 +42,6 @@ defmodule ISeeSeaWeb.Router do
     scope "/reports" do
       get "/:report_type", ReportController, :index
     end
-
-    get "/spec/openapi", OpenApiSpex.Plug.RenderSpec, []
-    get "/doc", Redoc.Plug.RedocUI, spec_url: "/api/spec/openapi"
   end
 
   scope "/api", ISeeSeaWeb do
