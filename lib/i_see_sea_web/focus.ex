@@ -8,6 +8,10 @@ defimpl ISeeSeaWeb.Focus,
   def view(value, _), do: value
 end
 
+defimpl ISeeSeaWeb.Focus, for: Ecto.Association.NotLoaded do
+  def view(_, _), do: nil
+end
+
 defimpl ISeeSeaWeb.Focus, for: Map do
   def view(entity, lens) do
     entity

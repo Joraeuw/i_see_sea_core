@@ -31,5 +31,11 @@ defmodule ISeeSea.DB.Models.JellyfishReport do
       |> Map.take([:quantity, :species, :report_id])
       |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
+
+    def view(jellyfish_report, %Lens{view: Lens.from_base()}) do
+      jellyfish_report
+      |> Map.from_struct()
+      |> Map.take([:quantity, :species, :report_id])
+    end
   end
 end

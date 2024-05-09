@@ -21,6 +21,10 @@ defmodule ISeeSeaWeb.Params.Report do
         required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
         optional(:comment, :string)
       end
+
+      defparams :index do
+        required(:report_type, :string, values: ["all" | ReportType.values()])
+      end
     end
   end
 
@@ -39,7 +43,7 @@ defmodule ISeeSeaWeb.Params.Report do
     required(:sea_swell_type, :string, values: ISeeSea.Constants.SeaSwellType.values())
   end
 
-  defparams :create_atypical_report do
+  defparams :create_atypical_activity_report do
     required(:comment, :string)
   end
 end

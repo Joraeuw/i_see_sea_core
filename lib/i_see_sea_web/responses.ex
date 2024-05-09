@@ -17,6 +17,18 @@ defmodule ISeeSeaWeb.Responses do
     |> Controller.json(Focus.view(payload, %Lens{view: view}))
   end
 
+  def success_paginated(%Plug.Conn{} = conn, data, pagination, view \\ :expanded)
+      when is_list(data) do
+    payload = %{
+      entries: data,
+      pagination: pagination
+    }
+
+    conn
+    |> Conn.put_status(200)
+    |> Controller.json(Focus.view(payload, %Lens{view: view}))
+  end
+
   def success_create(%Plug.Conn{} = conn, payload, view \\ :expanded) do
     conn
     |> Conn.put_status(201)

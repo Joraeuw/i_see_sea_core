@@ -72,9 +72,9 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   end
 
   defp create_specific_report(base_report_id, report_type, params)
-       when report_type == "atypical" do
-    # create_atypical_report validation Ensures that `comment` was attached to base report
-    with {:ok, _} <- Report.validate(:create_atypical_report, params),
+       when report_type == "atypical_activity" do
+    # create_atypical_activity_report validation Ensures that `comment` was attached to base report
+    with {:ok, _} <- Report.validate(:create_atypical_activity_report, params),
          {:ok, report} <-
            AtypicalActivityReport.create(%{
              report_id: base_report_id

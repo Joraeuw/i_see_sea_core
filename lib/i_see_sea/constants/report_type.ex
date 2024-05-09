@@ -5,10 +5,10 @@ defmodule ISeeSea.Constants.ReportType do
 
   @jellyfish "jellyfish"
   @meteorological "meteorological"
-  @atypical "atypical"
+  @atypical_activity "atypical_activity"
   @pollution "pollution"
 
-  @values [@jellyfish, @meteorological, @atypical, @pollution]
+  @values [@jellyfish, @meteorological, @atypical_activity, @pollution]
 
   def values do
     @values
