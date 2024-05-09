@@ -1,3 +1,7 @@
 {
-  "skip_files": ["lib/i_see_sea_web/components"]
+  "skip_files": [
+    "lib/i_see_sea_web/components",
+    "lib/i_see_sea_web/api_spec",
+    "test/support"
+  ]
 }

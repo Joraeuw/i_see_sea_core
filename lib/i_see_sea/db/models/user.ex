@@ -28,6 +28,8 @@ defmodule ISeeSea.DB.Models.User do
     |> cast(attrs, @allowed_attrs)
     |> validate_required(@required_attrs)
     |> put_password_hash()
+    |> unique_constraint(:username)
+    |> unique_constraint(:email)
   end
 
   defp put_password_hash(

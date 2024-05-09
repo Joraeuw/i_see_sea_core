@@ -17,6 +17,52 @@ defmodule ISeeSeaWeb.SessionControllerTest do
                |> json_response(200)
     end
 
+    test "fail to create due to email taken", %{conn: conn} do
+      insert!(:user, email: "email@gmail.com")
+
+      params = %{
+        first_name: "Sam",
+        last_name: "Blue",
+        email: "email@gmail.com",
+        password: "A123456",
+        username: "Dobby"
+      }
+
+      response =
+        conn
+        |> post(Routes.session_path(conn, :register), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"email" => "has already been taken"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Email has already been taken."
+             } == response
+    end
+
+    test "fail to create due to username taken", %{conn: conn} do
+      insert!(:user, username: "Dobby")
+
+      params = %{
+        first_name: "Sam",
+        last_name: "Blue",
+        email: "email@gmail.com",
+        password: "A123456",
+        username: "Dobby"
+      }
+
+      response =
+        conn
+        |> post(Routes.session_path(conn, :register), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"username" => "has already been taken"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Username has already been taken."
+             } == response
+    end
+
     test "fail to create a user due to invalid params", %{conn: conn} do
       params = %{
         email: "email@gmail.com",
