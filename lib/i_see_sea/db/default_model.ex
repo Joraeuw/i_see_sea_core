@@ -130,7 +130,9 @@ defmodule ISeeSea.DB.DefaultModel do
 
       defoverridable(
         create: 2,
-        create: 1
+        create: 1,
+        get: 2,
+        get: 1
       )
     end
   end

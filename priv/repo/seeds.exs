@@ -13,13 +13,19 @@
 Code.require_file("./test/support/factory.ex")
 
 defmodule ISeeSea.Seeder do
+  alias ISeeSea.DB.Models.Role
   alias ISeeSea.Repo
   alias ISeeSea.Factory
 
   def seed do
     Repo.transaction(fn ->
-      Factory.insert!(:user)
-      Factory.insert!(:user)
+      {:ok, %{id: admin_id}} = Role.get(:admin)
+
+      Factory.insert!(:user,
+        email: "i_see_sea@gmail.com",
+        username: "i_sea_sea",
+        role_id: admin_id
+      )
 
       Factory.insert!(:jellyfish_report)
       Factory.insert!(:jellyfish_report)

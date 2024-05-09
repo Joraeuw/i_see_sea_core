@@ -7,6 +7,11 @@ defmodule ISeeSeaWeb.ReportController do
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSea.DB.Logic.ReportOperations
 
+  @permission_scope "i_see_sea:reports"
+  plug(AssertPermissions, ["#{@permission_scope}:create"] when action == :create_report)
+  plug(AssertPermissions, [] when action == :index)
+  plug(EnsurePermitted)
+
   def create_report(%{assigns: %{user: user}} = conn, params) do
     with {:ok, validated_base} <- validate(:create_base_report, params),
          {:ok, report} <- ReportOperations.create(user, validated_base, params) do

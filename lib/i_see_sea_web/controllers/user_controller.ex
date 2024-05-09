@@ -6,6 +6,10 @@ defmodule ISeeSeaWeb.UserController do
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.Params.Filter
 
+  @permission_scope "i_see_sea:users"
+  plug(AssertPermissions, ["#{@permission_scope}:list_reports"] when action == :list_reports)
+  plug(EnsurePermitted)
+
   def list_reports(%{assigns: %{user: user}} = conn, params) do
     with {:ok, %{report_type: report_type}} <- validate(:list_reports, params),
          {:ok, filter_params} <- Filter.validate(:filter, params),

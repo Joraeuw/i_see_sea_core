@@ -48,6 +48,9 @@ defmodule ISeeSeaWeb do
 
       use ISeeSeaWeb.Utils.EnsureRequiredModules, __MODULE__
 
+      alias ISeeSeaWeb.Plug.AssertPermissions
+      alias ISeeSeaWeb.Plug.EnsurePermitted
+
       unquote(verified_routes())
     end
   end

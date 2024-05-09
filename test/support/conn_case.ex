@@ -17,6 +17,8 @@ defmodule ISeeSeaWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias ISeeSea.DB.Models.Role
+
   using do
     quote do
       # The default endpoint for testing
@@ -44,11 +46,23 @@ defmodule ISeeSeaWeb.ConnCase do
 
     conn = Phoenix.ConnTest.build_conn()
     user = insert!(:user)
+    {:ok, %Role{id: admin_role_id}} = Role.get(:admin)
+    admin = insert!(:user, role_id: admin_role_id)
 
     {:ok, token, _claims} = Tokenizer.encode_and_sign(user, %{id: user.id})
     conn_user = Plug.Conn.put_req_header(conn, "authorization", "bearer: " <> token)
 
+    {:ok, token, _claims} = Tokenizer.encode_and_sign(admin, %{id: admin.id})
+    conn_admin = Plug.Conn.put_req_header(conn, "authorization", "bearer: " <> token)
+
     {:ok,
-     conn: Phoenix.ConnTest.build_conn(), conn_user: conn_user, user: user, api_spec: api_spec}
+     conn: Phoenix.ConnTest.build_conn(),
+     conn_user: conn_user,
+     conn_end_user: conn_user,
+     user: user,
+     admin: admin,
+     conn_admin: conn_admin,
+     end_user: user,
+     api_spec: api_spec}
   end
 end

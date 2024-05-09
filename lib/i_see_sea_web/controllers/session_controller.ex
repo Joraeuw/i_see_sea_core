@@ -5,6 +5,11 @@ defmodule ISeeSeaWeb.SessionController do
   alias ISeeSea.Authentication.Auth
   alias ISeeSea.DB.Models.User
 
+  @permission_scope "i_see_sea:sessions"
+  plug(AssertPermissions, ["#{@permission_scope}:refresh"] when action == :refresh)
+  plug(AssertPermissions, [] when action in [:register, :login])
+  plug(EnsurePermitted)
+
   def register(conn, params) do
     with {:ok, %{password: password} = validated_params} <- validate(:register, params),
          {:ok, %User{email: email}} <- User.create(validated_params),
