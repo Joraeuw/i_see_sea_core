@@ -4,6 +4,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.BaseReportResponse do
   require OpenApiSpex
 
   alias ISeeSea.Constants.ReportType
+  alias ISeeSea.Helpers.Environment
   alias OpenApiSpex.Schema
 
   OpenApiSpex.schema(%{
@@ -15,7 +16,11 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.BaseReportResponse do
       report_date: %Schema{type: :string, format: :"date-time"},
       longitude: %Schema{type: :number},
       latitude: %Schema{type: :number},
-      comment: %Schema{type: :string}
+      comment: %Schema{type: :string},
+      pictures: %Schema{
+        type: :array,
+        items: %Schema{type: :string, example: Environment.backend_url() <> "/api/pictures/1"}
+      }
     }
   })
 end

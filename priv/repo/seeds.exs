@@ -27,15 +27,18 @@ defmodule ISeeSea.Seeder do
         role_id: admin_id
       )
 
+      j_r = Factory.insert!(:jellyfish_report)
       Factory.insert!(:jellyfish_report)
       Factory.insert!(:jellyfish_report)
-      Factory.insert!(:jellyfish_report)
+
+      Factory.insert!(:picture, base_report: j_r.base_report)
 
       Factory.insert!(:pollution_type)
       pollution_type = Factory.insert!(:pollution_type, name: "plastic")
 
       Factory.insert!(:pollution_report)
       pollution_report = Factory.insert!(:pollution_report)
+      Factory.insert!(:picture, base_report: pollution_report.base_report)
 
       Factory.insert!(:pollution_report_pollution_type, %{
         pollution_report_id: pollution_report.report_id,

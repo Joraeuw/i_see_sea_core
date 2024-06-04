@@ -1,7 +1,7 @@
 defmodule ISeeSea.DB.Models.PollutionReport do
   @moduledoc false
 
-  use ISeeSea.DB.DefaultModel, default_preloads: [:base_report, :pollution_types]
+  use ISeeSea.DB.DefaultModel, default_preloads: [:pollution_types, base_report: :pictures]
 
   alias ISeeSea.DB.Models.PollutionReportPollutionType
   alias ISeeSea.DB.Models.PollutionType

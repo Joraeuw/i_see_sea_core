@@ -20,6 +20,13 @@ defmodule ISeeSeaWeb.ReportController do
       {:error, :failed_to_attach_pollution_type} ->
         error(conn, {:error, :unprocessable_entity})
 
+      {:error, :image_not_uploaded} ->
+        error(
+          conn,
+          {:error, :bad_request,
+           "At least one of your image types is unsupported! Supported image types are: jpg, png and webp."}
+        )
+
       error ->
         error(conn, error)
     end

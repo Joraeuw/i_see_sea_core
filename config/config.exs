@@ -11,6 +11,8 @@ config :i_see_sea,
   ecto_repos: [ISeeSea.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :i_see_sea, backend_url: "localhost:4000"
+
 # Configures the endpoint
 config :i_see_sea, ISeeSeaWeb.Endpoint,
   url: [host: "localhost"],
