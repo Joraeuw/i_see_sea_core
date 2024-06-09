@@ -1,14 +1,21 @@
 import Config
 
 # Configure your database
-config :i_see_sea, ISeeSea.Repo,
-  username: "zhora",
-  password: "postgres",
-  hostname: "localhost",
-  database: "i_see_sea_dev",
-  stacktrace: true,
-  show_sensitive_data_on_connection_error: true,
-  pool_size: 10
+if is_nil(System.get_env("DATABASE_URL")) do
+  config :i_see_sea, ISeeSea.Repo,
+    username: "zhora",
+    password: "postgres",
+    hostname: "localhost",
+    database: "i_see_sea_dev",
+    stacktrace: true,
+    show_sensitive_data_on_connection_error: true,
+    pool_size: 10
+else
+  config :i_see_sea, ISeeSea.Repo,
+    url: System.get_env("DATABASE_URL"),
+    pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
+    socket_options: []
+end
 
 # For development, we disable any cache and enable
 # debugging and code reloading.
