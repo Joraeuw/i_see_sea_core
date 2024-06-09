@@ -3,8 +3,11 @@ defmodule ISeeSeaWeb.RolesRouteAccessTest do
   Tests that check each and every route for correct access rights
   """
 
+  require ISeeSea.Constants.PictureTypes
+
   use ISeeSeaWeb.ConnCase, async: true
 
+  alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.Constants.ReportType
 
   describe "users:list_reports" do
@@ -93,7 +96,14 @@ defmodule ISeeSeaWeb.RolesRouteAccessTest do
           name: Faker.Lorem.sentence(3..4),
           longitude: Faker.Address.longitude(),
           latitude: Faker.Address.latitude(),
-          quantity: 50
+          quantity: 50,
+          pictures: [
+            %Plug.Upload{
+              path: "./priv/example_images/sea_1.jpg",
+              content_type: PictureTypes.jpg(),
+              filename: "sea_1.jpg"
+            }
+          ]
         }
 
         assert conn
@@ -114,6 +124,26 @@ defmodule ISeeSeaWeb.RolesRouteAccessTest do
         assert conn
                |> get(Routes.report_path(conn, :index, "all"))
                |> json_response(unquote(status))
+      end
+    end
+  end
+
+  describe "pictures:show" do
+    setup do
+      picture = insert!(:picture)
+      %{picture_id: picture.id}
+    end
+
+    for {role, status} <- [
+          {"end_user", 200},
+          {"admin", 200}
+        ] do
+      test role, test_setup_params do
+        conn = Map.get(test_setup_params, String.to_atom("conn_#{unquote(role)}"))
+
+        assert conn
+               |> get(Routes.picture_path(conn, :show, test_setup_params.picture_id))
+               |> response(unquote(status))
       end
     end
   end

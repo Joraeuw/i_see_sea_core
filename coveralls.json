@@ -1,7 +1,9 @@
 {
   "skip_files": [
+    "lib/i_see_sea/constants",
     "lib/i_see_sea_web/components",
     "lib/i_see_sea_web/api_spec",
+    "lib/i_see_sea_web/focus.ex",
     "test/support"
   ]
 }

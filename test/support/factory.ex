@@ -3,6 +3,9 @@ defmodule ISeeSea.Factory do
   Data and Entity generator.
   """
 
+  require ISeeSea.Constants.PictureTypes
+
+  alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.DB.Models.Role
   alias ISeeSea.Constants.ReportType
   alias ISeeSea.Repo
@@ -42,6 +45,25 @@ defmodule ISeeSea.Factory do
       quantity: 10,
       species: "unknown",
       base_report: base
+    }
+  end
+
+  def build(:picture) do
+    base = build(:base_report, report_type: ReportType.jellyfish())
+
+    {:ok, img} = Image.open("./priv/example_images/sea_1.jpg")
+    {width, height, _} = Image.shape(img)
+
+    {:ok, img_binary} =
+      Image.write(img, :memory, suffix: PictureTypes.jpg_suffix(), minimize_file_size: true)
+
+    %Models.Picture{
+      base_report: base,
+      file_size: byte_size(img_binary),
+      content_type: PictureTypes.jpg(),
+      image_data: img_binary,
+      width: width,
+      height: height
     }
   end
 

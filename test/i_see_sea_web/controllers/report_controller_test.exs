@@ -1,4 +1,8 @@
 defmodule ISeeSeaWeb.ReportControllerTest do
+  require ISeeSea.Constants.PictureTypes
+  alias ISeeSea.DB.Models.Picture
+  alias ISeeSea.Helpers.Environment
+  alias ISeeSea.Constants.PictureTypes
   use ISeeSeaWeb.ConnCase, async: true
 
   alias ISeeSea.DB.Models.PollutionReport
@@ -14,13 +18,24 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50
+        quantity: 50,
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
         conn
         |> post(Routes.report_path(conn, :create_report, ReportType.jellyfish()), params)
         |> json_response(200)
+
+      {:ok, %{id: picture_id}} = Picture.get_by(%{report_id: Map.get(response, "report_id")})
+
+      picture_url = Environment.backend_url() <> "/api/pictures/" <> Integer.to_string(picture_id)
 
       assert %{
                "report_id" => id,
@@ -30,11 +45,77 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "quantity" => 50,
                "report_date" => _,
                "report_type" => "jellyfish",
-               "species" => ""
+               "species" => "",
+               "pictures" => [^picture_url]
              } =
                response
 
       assert {:ok, %JellyfishReport{}} = JellyfishReport.get_by(%{report_id: id})
+    end
+
+    test "jellyfish report with a few images created successfully", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        quantity: 50,
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          },
+          %Plug.Upload{
+            path: "./priv/example_images/sea_2.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_2.jpg"
+          }
+        ]
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.jellyfish()), params)
+        |> json_response(200)
+
+      {:ok, pictures} = Picture.get_all_by(%{report_id: Map.get(response, "report_id")})
+      assert Enum.count(pictures) == 2
+
+      assert %{
+               "report_id" => id,
+               "latitude" => _,
+               "longitude" => _,
+               "name" => _,
+               "quantity" => 50,
+               "report_date" => _,
+               "report_type" => "jellyfish",
+               "species" => "",
+               "pictures" => [_, _]
+             } =
+               response
+
+      assert {:ok, %JellyfishReport{}} = JellyfishReport.get_by(%{report_id: id})
+    end
+
+    test "jellyfish report fails when no image is provided", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        quantity: 50,
+        pictures: []
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.jellyfish()), params)
+        |> json_response(422)
+
+      assert response == %{
+               "errors" => [%{"pictures" => "should have at least %{count} item(s)"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Pictures should have at least %{count} item(s)."
+             }
     end
 
     test "pollution report created successfully", %{conn_user: conn} do
@@ -45,7 +126,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil", "plastic"]
+        pollution_types: ["oil", "plastic"],
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -67,6 +155,36 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       assert 2 == PollutionReportPollutionType.all() |> elem(1) |> length()
     end
 
+    test "pollution report not created when invalid image type is provided", %{conn_user: conn} do
+      insert!(:pollution_type, name: "oil")
+      insert!(:pollution_type, name: "plastic")
+
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        pollution_types: ["oil", "plastic"],
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/file.txt",
+            content_type: "text/html; charset=utf-8",
+            filename: "file.txt"
+          }
+        ]
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.pollution()), params)
+        |> json_response(400)
+
+      assert response == %{
+               "message" => "The requested action has failed.",
+               "reason" =>
+                 "At least one of your image types is unsupported! Supported image types are: jpg, png and webp."
+             }
+    end
+
     test "pollution type from another report is recognized", %{conn_user: conn, user: user} do
       p_type = insert!(:pollution_type, name: "oil")
 
@@ -82,7 +200,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil"]
+        pollution_types: ["oil"],
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -110,7 +235,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil", "plastic"]
+        pollution_types: ["oil", "plastic"],
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -135,7 +267,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
         wind_type: "strong",
-        sea_swell_type: "strong"
+        sea_swell_type: "strong",
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -164,7 +303,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
         wind_type: "strong",
-        sea_swell_type: "strong"
+        sea_swell_type: "strong",
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -188,7 +334,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
         wind_type: "strong",
-        sea_swell_type: "strong"
+        sea_swell_type: "strong",
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -213,7 +366,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
         wind_type: "strong",
-        sea_swell_type: "strong"
+        sea_swell_type: "strong",
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -233,7 +393,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        comment: Faker.Lorem.paragraph()
+        comment: Faker.Lorem.paragraph(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -256,7 +423,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
-        latitude: Faker.Address.latitude()
+        latitude: Faker.Address.latitude(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -274,7 +448,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
-        quantity: 50
+        quantity: 50,
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =
@@ -296,7 +477,14 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
-        latitude: Faker.Address.latitude()
+        latitude: Faker.Address.latitude(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       response =

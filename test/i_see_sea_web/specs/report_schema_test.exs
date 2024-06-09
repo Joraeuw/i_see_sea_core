@@ -1,5 +1,7 @@
 defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
   @moduledoc false
+  require ISeeSea.Constants.PictureTypes
+  alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.Constants.ReportType
   use ISeeSeaWeb.ConnCase, async: true
   import OpenApiSpex.TestAssertions
@@ -10,7 +12,14 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50
+        quantity: 50,
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       json =
@@ -29,7 +38,14 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil", "plastic"]
+        pollution_types: ["oil", "plastic"],
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       json =
@@ -51,7 +67,14 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
         wind_type: "strong",
-        sea_swell_type: "strong"
+        sea_swell_type: "strong",
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       json =
@@ -67,7 +90,14 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        comment: Faker.Lorem.paragraph()
+        comment: Faker.Lorem.paragraph(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
       }
 
       json =

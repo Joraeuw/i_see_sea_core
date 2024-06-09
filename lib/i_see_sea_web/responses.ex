@@ -35,6 +35,12 @@ defmodule ISeeSeaWeb.Responses do
     |> Controller.json(Focus.view(payload, %Lens{view: view}))
   end
 
+  def success_binary(conn, binary, content_type) do
+    conn
+    |> Conn.put_resp_content_type(content_type)
+    |> Conn.resp(200, binary)
+  end
+
   def success_empty(conn) do
     conn
     |> Conn.put_status(204)
@@ -71,6 +77,10 @@ defmodule ISeeSeaWeb.Responses do
 
   def error(conn, {:error, :not_found}) do
     not_found(conn, @default_fail_msg)
+  end
+
+  def error(conn, {:error, :not_found, reason}) when is_atom(reason) do
+    not_found(conn, @default_fail_msg, "Entity not found!")
   end
 
   def error(conn, {:error, :not_found, reason}) do

@@ -2,7 +2,7 @@ defmodule ISeeSea.DB.Models.JellyfishReport do
   @moduledoc false
 
   alias ISeeSea.DB.Models.BaseReport
-  use ISeeSea.DB.DefaultModel, default_preloads: [:base_report]
+  use ISeeSea.DB.DefaultModel, default_preloads: [base_report: :pictures]
 
   @required_attrs [:report_id, :quantity]
   @allowed_attrs [:species | @required_attrs]

@@ -1,6 +1,8 @@
 defmodule ISeeSea.DB.Logic.ReportOperations do
   @moduledoc false
 
+  alias ISeeSea.Constants.PictureTypes
+  alias ISeeSea.DB.Models.Picture
   alias ISeeSea.DB.Models.AtypicalActivityReport
   alias ISeeSea.DB.Models.MeteorologicalReport
   alias ISeeSea.DB.Models.PollutionReportPollutionType
@@ -13,12 +15,13 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Report
 
-  def create(user, validated_base, params) do
+  def create(user, %{pictures: pictures} = validated_base, params) do
     Repo.transaction(fn ->
       with {:ok, %BaseReport{id: id, report_type: report_type}} <-
              BaseReport.create(
                Map.merge(validated_base, %{user_id: user.id, report_date: DateTime.utc_now()})
              ),
+           :ok <- attach_pictures(id, pictures),
            {:ok, report} <- create_specific_report(id, report_type, params) do
         report
       else
@@ -65,7 +68,10 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
              attach_pollution_types(base_report_id, pollution_types),
              :failed_to_attach_pollution_type
            ) do
-      {:ok, pollution_report |> Repo.reload!() |> Repo.preload([:base_report, :pollution_types])}
+      {:ok,
+       pollution_report
+       |> Repo.reload!()
+       |> Repo.preload([:pollution_types, base_report: :pictures])}
     else
       {:error, error} -> Repo.rollback(error)
     end
@@ -98,5 +104,33 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
         _ -> false
       end
     end)
+  end
+
+  defp attach_pictures(report_id, pictures) do
+    Enum.all?(pictures, fn %Plug.Upload{content_type: content_type, path: path} ->
+      with {:ok, image} <- Image.open(path),
+           {width, height, _} <- Image.shape(image),
+           {:ok, suffix} <- PictureTypes.get_suffix(content_type),
+           {:ok, img_binary} <-
+             Image.write(image, :memory, suffix: suffix, minimize_file_size: true),
+           {:ok, _} <-
+             Picture.create(%{
+               report_id: report_id,
+               file_size: byte_size(img_binary),
+               content_type: content_type,
+               image_data: img_binary,
+               width: width,
+               height: height
+             }) do
+        true
+      else
+        _ -> false
+      end
+    end)
+    |> if do
+      :ok
+    else
+      {:error, :image_not_uploaded}
+    end
   end
 end

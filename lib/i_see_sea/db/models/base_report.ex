@@ -1,6 +1,7 @@
 defmodule ISeeSea.DB.Models.BaseReport do
   @moduledoc false
 
+  alias ISeeSea.DB.Models.Picture
   alias ISeeSea.Repo
   alias ISeeSea.DB.Models.AtypicalActivityReport
   alias ISeeSea.DB.Models.MeteorologicalReport
@@ -15,7 +16,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
       :jellyfish_report,
       :pollution_report,
       :meteorological_report,
-      :atypical_activity_report
+      :atypical_activity_report,
+      :pictures
     ]
 
   @derive {Flop.Schema,
@@ -103,6 +105,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
     has_one(:meteorological_report, MeteorologicalReport, foreign_key: :report_id)
     has_one(:atypical_activity_report, AtypicalActivityReport, foreign_key: :report_id)
 
+    has_many(:pictures, Picture, foreign_key: :report_id)
+
     timestamps()
   end
 
@@ -143,7 +147,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
     |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
     |> case do
       {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->
-        {:ok, Repo.preload(entries, preloads), Map.put(pagination, :total_count, total_count)}
+        {:ok, Repo.preload(entries, preloads ++ [:pictures]),
+         Map.put(pagination, :total_count, total_count)}
 
       {:error, %Flop.Meta{}} ->
         {:error, :bad_request}
@@ -199,7 +204,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
             jellyfish_report: jr,
             pollution_report: pr,
             meteorological_report: mr,
-            atypical_activity_report: aar
+            atypical_activity_report: aar,
+            pictures: pictures
           } = base,
           %Lens{view: Lens.expanded()} = lens
         ) do
@@ -208,6 +214,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
       base
       |> Map.from_struct()
       |> Map.take([:name, :report_type, :report_date, :longitude, :latitude, :comment])
+      |> Map.merge(%{
+        pictures: Enum.map(pictures, &Picture.get_uri!/1)
+      })
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(jr, lens)))
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(pr, lens)))
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(mr, lens)))

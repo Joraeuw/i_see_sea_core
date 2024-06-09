@@ -15,6 +15,13 @@ defmodule ISeeSeaWeb.Router do
     plug OpenApiSpex.Plug.PutApiSpec, module: ISeeSeaWeb.ApiSpec
   end
 
+  pipeline :image_uploading do
+    plug Plug.Parsers,
+      parsers: [:json, :multipart],
+      pass: ["*/*"],
+      json_decoder: Phoenix.json_library()
+  end
+
   pipeline :authenticated do
     plug ISeeSeaWeb.Plug.EnsureAuthenticated
   end
@@ -42,6 +49,10 @@ defmodule ISeeSeaWeb.Router do
     scope "/reports" do
       get "/:report_type", ReportController, :index
     end
+
+    scope "/pictures" do
+      get "/:picture_id", PictureController, :show
+    end
   end
 
   scope "/api", ISeeSeaWeb do
@@ -56,6 +67,8 @@ defmodule ISeeSeaWeb.Router do
 
     ## Reports
     scope "/reports" do
+      pipe_through :image_uploading
+
       post "/create/:report_type", ReportController, :create_report
     end
   end
