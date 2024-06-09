@@ -32,7 +32,7 @@ jobs:
           --health-retries 5
 
     env:
-      MIX_ENV: dev
+      MIX_ENV: test
       DATABASE_URL: postgres://postgres:postgres@localhost:5432/i_see_sea
 
     name: Build and test
