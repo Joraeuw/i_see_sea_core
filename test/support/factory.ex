@@ -43,7 +43,7 @@ defmodule ISeeSea.Factory do
     base = build(:base_report, report_type: ReportType.jellyfish())
 
     %Models.JellyfishReport{
-      quantity: JellyfishQuantityRange."2 to 5"(),
+      quantity: JellyfishQuantityRange.from_2_to_5(),
       species_id: "other",
       base_report: base
     }

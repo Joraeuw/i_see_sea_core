@@ -16,7 +16,7 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: JellyfishQuantityRange."100+"(),
+        quantity: JellyfishQuantityRange."from_100+"(),
         species: "dont_know",
         pictures: [
           %Plug.Upload{

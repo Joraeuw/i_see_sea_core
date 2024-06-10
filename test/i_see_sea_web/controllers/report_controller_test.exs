@@ -22,7 +22,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: JellyfishQuantityRange."11 to 99"(),
+        quantity: JellyfishQuantityRange.from_11_to_99(),
         species: "dont_know",
         pictures: [
           %Plug.Upload{
@@ -63,7 +63,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: JellyfishQuantityRange."1"(),
+        quantity: JellyfishQuantityRange.from_1(),
         species: "other",
         pictures: [
           %Plug.Upload{
@@ -108,7 +108,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: JellyfishQuantityRange."2 to 5"(),
+        quantity: JellyfishQuantityRange.from_2_to_5(),
         pictures: [],
         species: "dont_know"
       }
@@ -455,7 +455,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
-        quantity: JellyfishQuantityRange."6 to 10"(),
+        quantity: JellyfishQuantityRange.from_6_to_10(),
         species: "aurelia_aurita",
         pictures: [
           %Plug.Upload{

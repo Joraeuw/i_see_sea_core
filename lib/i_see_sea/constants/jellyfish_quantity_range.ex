@@ -12,6 +12,6 @@ defmodule ISeeSea.Constants.JellyfishQuantityRange do
   def values, do: @values
 
   Enum.each(@values, fn value ->
-    def unquote(:"#{value}")(), do: unquote(value)
+    def unquote(:"#{"from_" <> String.replace(value, " ", "_")}")(), do: unquote(value)
   end)
 end
