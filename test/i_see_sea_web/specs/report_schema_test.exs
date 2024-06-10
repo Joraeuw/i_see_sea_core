@@ -13,6 +13,7 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
         quantity: 50,
+        species: "dont_know",
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",

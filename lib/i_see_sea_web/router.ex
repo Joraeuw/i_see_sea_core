@@ -48,6 +48,8 @@ defmodule ISeeSeaWeb.Router do
     ## Reports
     scope "/reports" do
       get "/:report_type", ReportController, :index
+
+      get "/jellyfish/species", ReportController, :jellyfish_species
     end
 
     scope "/pictures" do

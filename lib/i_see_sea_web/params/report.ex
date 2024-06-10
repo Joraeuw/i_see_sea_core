@@ -31,7 +31,7 @@ defmodule ISeeSeaWeb.Params.Report do
 
   defparams :create_jellyfish_report do
     required(:quantity, :integer, min: 1)
-    optional(:species, :string)
+    required(:species, :string, values: ISeeSea.DB.Models.JellyfishSpecies.values())
   end
 
   defparams :create_pollution_report do

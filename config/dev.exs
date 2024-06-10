@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :i_see_sea, ISeeSea.Repo,
-  username: "zhora",
+  username: "postgres",
   password: "postgres",
   hostname: "localhost",
   database: "i_see_sea_dev",

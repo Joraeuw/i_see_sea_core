@@ -32,9 +32,12 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
 
   defp create_specific_report(base_report_id, report_type, params)
        when report_type == "jellyfish" do
-    with {:ok, validated_prams} <- Report.validate(:create_jellyfish_report, params),
+    with {:ok, %{species: species} = validated_prams} <-
+           Report.validate(:create_jellyfish_report, params),
          {:ok, jellyfish_report} <-
-           JellyfishReport.create(Map.merge(validated_prams, %{report_id: base_report_id})) do
+           JellyfishReport.create(
+             Map.merge(validated_prams, %{report_id: base_report_id, species_id: species})
+           ) do
       {:ok, jellyfish_report}
     else
       {:error, error} -> Repo.rollback(error)

@@ -43,7 +43,7 @@ defmodule ISeeSea.Factory do
 
     %Models.JellyfishReport{
       quantity: 10,
-      species: "unknown",
+      species_id: "other",
       base_report: base
     }
   end
