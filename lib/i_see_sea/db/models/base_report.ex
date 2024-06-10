@@ -50,7 +50,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
        quantity: [
          binding: :jellyfish_report,
          field: :quantity,
-         ecto_type: :integer
+         ecto_type: :string
        ],
        species: [
          binding: :species,

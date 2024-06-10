@@ -5,6 +5,7 @@ defmodule ISeeSea.Factory do
 
   require ISeeSea.Constants.PictureTypes
 
+  alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.DB.Models.Role
   alias ISeeSea.Constants.ReportType
@@ -42,7 +43,7 @@ defmodule ISeeSea.Factory do
     base = build(:base_report, report_type: ReportType.jellyfish())
 
     %Models.JellyfishReport{
-      quantity: 10,
+      quantity: JellyfishQuantityRange."2 to 5"(),
       species_id: "other",
       base_report: base
     }

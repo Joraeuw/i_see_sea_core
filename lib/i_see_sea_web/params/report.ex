@@ -30,7 +30,7 @@ defmodule ISeeSeaWeb.Params.Report do
   end
 
   defparams :create_jellyfish_report do
-    required(:quantity, :integer, min: 1)
+    required(:quantity, :string, values: ISeeSea.Constants.JellyfishQuantityRange.values())
     required(:species, :string, values: ISeeSea.DB.Models.JellyfishSpecies.values())
   end
 

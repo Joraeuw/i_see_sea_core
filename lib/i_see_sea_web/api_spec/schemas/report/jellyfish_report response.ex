@@ -15,7 +15,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportResponse do
         type: :object,
         properties: %{
           report_id: %Schema{type: :integer, format: :id},
-          quantity: %Schema{type: :integer},
+          quantity: %Schema{type: :string},
           species: %Schema{type: :string}
         }
       }

@@ -96,7 +96,7 @@ defmodule ISeeSeaWeb.RolesRouteAccessTest do
           name: Faker.Lorem.sentence(3..4),
           longitude: Faker.Address.longitude(),
           latitude: Faker.Address.latitude(),
-          quantity: 50,
+          quantity: "1",
           species: "dont_know",
           pictures: [
             %Plug.Upload{

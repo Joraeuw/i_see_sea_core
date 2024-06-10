@@ -1,10 +1,14 @@
 defmodule ISeeSeaWeb.ReportControllerTest do
-  require ISeeSea.Constants.PictureTypes
-  alias ISeeSea.DB.Models.Picture
-  alias ISeeSea.Helpers.Environment
-  alias ISeeSea.Constants.PictureTypes
   use ISeeSeaWeb.ConnCase, async: true
 
+  require ISeeSea.Constants.PictureTypes
+
+  alias ISeeSea.Helpers.Environment
+
+  alias ISeeSea.Constants.JellyfishQuantityRange
+  alias ISeeSea.Constants.PictureTypes
+
+  alias ISeeSea.DB.Models.Picture
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.PollutionReportPollutionType
   alias ISeeSea.DB.Models.PollutionType
@@ -18,7 +22,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
+        quantity: JellyfishQuantityRange."11 to 99"(),
         species: "dont_know",
         pictures: [
           %Plug.Upload{
@@ -43,7 +47,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "latitude" => _,
                "longitude" => _,
                "name" => _,
-               "quantity" => 50,
+               "quantity" => "11 to 99",
                "report_date" => _,
                "report_type" => "jellyfish",
                "species" => "dont_know",
@@ -59,7 +63,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
+        quantity: JellyfishQuantityRange."1"(),
         species: "other",
         pictures: [
           %Plug.Upload{
@@ -88,7 +92,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "latitude" => _,
                "longitude" => _,
                "name" => _,
-               "quantity" => 50,
+               "quantity" => "1",
                "report_date" => _,
                "report_type" => "jellyfish",
                "species" => "other",
@@ -104,7 +108,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
+        quantity: JellyfishQuantityRange."2 to 5"(),
         pictures: [],
         species: "dont_know"
       }
@@ -451,7 +455,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
-        quantity: 50,
+        quantity: JellyfishQuantityRange."6 to 10"(),
         species: "aurelia_aurita",
         pictures: [
           %Plug.Upload{
@@ -548,7 +552,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                    "latitude" => _,
                    "longitude" => _,
                    "name" => _,
-                   "quantity" => 10,
+                   "quantity" => "2 to 5",
                    "report_date" => _,
                    "report_id" => _,
                    "report_type" => "jellyfish",
@@ -559,7 +563,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                    "latitude" => _,
                    "longitude" => _,
                    "name" => _,
-                   "quantity" => 10,
+                   "quantity" => "2 to 5",
                    "report_date" => _,
                    "report_id" => _,
                    "report_type" => "jellyfish",

@@ -11,7 +11,7 @@ defmodule ISeeSea.DB.Models.JellyfishReport do
 
   @primary_key false
   schema "jellyfish_reports" do
-    field(:quantity, :integer)
+    field(:quantity, :string)
 
     belongs_to(:species, JellyfishSpecies, references: :name, type: :string)
 

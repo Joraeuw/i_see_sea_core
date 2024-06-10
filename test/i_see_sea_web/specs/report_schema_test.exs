@@ -1,10 +1,14 @@
 defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
   @moduledoc false
+  use ISeeSeaWeb.ConnCase, async: true
+
+  import OpenApiSpex.TestAssertions
+
   require ISeeSea.Constants.PictureTypes
+
+  alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.Constants.ReportType
-  use ISeeSeaWeb.ConnCase, async: true
-  import OpenApiSpex.TestAssertions
 
   describe "report schema" do
     test "create jellyfish report", %{conn_user: conn, api_spec: api_spec} do
@@ -12,7 +16,7 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
+        quantity: JellyfishQuantityRange."100+"(),
         species: "dont_know",
         pictures: [
           %Plug.Upload{
