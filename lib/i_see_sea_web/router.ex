@@ -45,6 +45,18 @@ defmodule ISeeSeaWeb.Router do
     post "/login", SessionController, :login
     post "/register", SessionController, :register
 
+    ## Constants
+    scope "/constants" do
+      get("/picture_type", ConstantsController, :picture_type)
+      get("/jellyfish_quantity", ConstantsController, :jellyfish_quantity)
+      get("/jellyfish_species", ConstantsController, :jellyfish_species)
+      get("/pollution_type", ConstantsController, :pollution_type)
+      get("/report_type", ConstantsController, :report_type)
+      get("/fog_type", ConstantsController, :fog_type)
+      get("/sea_swell_type", ConstantsController, :sea_swell_type)
+      get("/wind_type", ConstantsController, :wind_type)
+    end
+
     ## Reports
     scope "/reports" do
       get "/:report_type", ReportController, :index
