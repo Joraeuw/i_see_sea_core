@@ -17,4 +17,9 @@ defmodule ISeeSea.DB.Models.PollutionType do
     |> cast(attrs, @attrs)
     |> validate_required(@attrs)
   end
+
+  def values do
+    __MODULE__.all!()
+    |> Enum.map(fn %__MODULE__{name: name} -> name end)
+  end
 end

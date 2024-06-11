@@ -19,7 +19,7 @@ defmodule ISeeSea.DB.Models.JellyfishSpecies do
   end
 
   def values do
-    __MODULE__.all()
+    __MODULE__.all!()
     |> Enum.map(fn %__MODULE__{name: name} -> name end)
   end
 end

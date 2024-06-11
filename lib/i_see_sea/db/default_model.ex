@@ -95,9 +95,13 @@ defmodule ISeeSea.DB.DefaultModel do
       end
 
       def all(preloads \\ unquote(default_preloads)) do
-        {:ok,
-         Repo.all(__MODULE__)
-         |> Repo.preload(preloads)}
+        {:ok, all!(preloads)}
+      end
+
+      def all!(preloads \\ unquote(default_preloads)) do
+        __MODULE__
+        |> Repo.all()
+        |> Repo.preload(preloads)
       end
 
       def update(id, attrs, preloads \\ unquote(default_preloads)) do
