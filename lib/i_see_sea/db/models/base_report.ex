@@ -50,12 +50,13 @@ defmodule ISeeSea.DB.Models.BaseReport do
        quantity: [
          binding: :jellyfish_report,
          field: :quantity,
-         ecto_type: :integer
+         ecto_type: :string
        ],
        species: [
-         binding: :jellyfish_report,
-         field: :species,
-         ecto_type: :string
+         binding: :species,
+         field: :name,
+         ecto_type: :string,
+         path: [:jellyfish_report, :species]
        ],
        # Pollution fields
        pollution_types: [
@@ -161,8 +162,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
     q =
       initial_from
       |> join(:inner, [br], jr in assoc(br, :jellyfish_report), as: :jellyfish_report)
+      |> join(:left, [br, jr], s in assoc(jr, :species), as: :species)
 
-    {q, [:jellyfish_report]}
+    {q, [jellyfish_report: :species]}
   end
 
   defp determine_query(initial_from, "pollution") do

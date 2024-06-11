@@ -1,10 +1,14 @@
 defmodule ISeeSeaWeb.ReportControllerTest do
-  require ISeeSea.Constants.PictureTypes
-  alias ISeeSea.DB.Models.Picture
-  alias ISeeSea.Helpers.Environment
-  alias ISeeSea.Constants.PictureTypes
   use ISeeSeaWeb.ConnCase, async: true
 
+  require ISeeSea.Constants.PictureTypes
+
+  alias ISeeSea.Helpers.Environment
+
+  alias ISeeSea.Constants.JellyfishQuantityRange
+  alias ISeeSea.Constants.PictureTypes
+
+  alias ISeeSea.DB.Models.Picture
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.PollutionReportPollutionType
   alias ISeeSea.DB.Models.PollutionType
@@ -18,7 +22,8 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
+        quantity: JellyfishQuantityRange.from_11_to_99(),
+        species: "dont_know",
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -42,10 +47,10 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "latitude" => _,
                "longitude" => _,
                "name" => _,
-               "quantity" => 50,
+               "quantity" => "11 to 99",
                "report_date" => _,
                "report_type" => "jellyfish",
-               "species" => "",
+               "species" => "dont_know",
                "pictures" => [^picture_url]
              } =
                response
@@ -58,7 +63,8 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
+        quantity: JellyfishQuantityRange.from_1(),
+        species: "other",
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -86,10 +92,10 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "latitude" => _,
                "longitude" => _,
                "name" => _,
-               "quantity" => 50,
+               "quantity" => "1",
                "report_date" => _,
                "report_type" => "jellyfish",
-               "species" => "",
+               "species" => "other",
                "pictures" => [_, _]
              } =
                response
@@ -102,8 +108,9 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        quantity: 50,
-        pictures: []
+        quantity: JellyfishQuantityRange.from_2_to_5(),
+        pictures: [],
+        species: "dont_know"
       }
 
       response =
@@ -448,7 +455,8 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     test "fail to create report due to missing base report parameters", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
-        quantity: 50,
+        quantity: JellyfishQuantityRange.from_6_to_10(),
+        species: "aurelia_aurita",
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -478,6 +486,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
+        species: "salp",
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -519,13 +528,13 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
     test "successfully retrieve jellyfish reports with filters", %{conn: conn} do
       insert!(:jellyfish_report)
-      insert!(:jellyfish_report, species: "red")
-      insert!(:jellyfish_report, species: "red")
+      insert!(:jellyfish_report, species_id: "beroe_ovata")
+      insert!(:jellyfish_report, species_id: "beroe_ovata")
 
       params = %{
         filters:
           Jason.encode!([
-            %{field: :species, value: "red"}
+            %{field: :species, value: "beroe_ovata"}
           ]),
         order_by: [:id],
         order_direction: [:desc]
@@ -543,22 +552,22 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                    "latitude" => _,
                    "longitude" => _,
                    "name" => _,
-                   "quantity" => 10,
+                   "quantity" => "2 to 5",
                    "report_date" => _,
                    "report_id" => _,
                    "report_type" => "jellyfish",
-                   "species" => "red"
+                   "species" => "beroe_ovata"
                  },
                  %{
                    "comment" => _,
                    "latitude" => _,
                    "longitude" => _,
                    "name" => _,
-                   "quantity" => 10,
+                   "quantity" => "2 to 5",
                    "report_date" => _,
                    "report_id" => _,
                    "report_type" => "jellyfish",
-                   "species" => "red"
+                   "species" => "beroe_ovata"
                  }
                ],
                "pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 2}
@@ -677,13 +686,13 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
     test "fail when trying to filter by an unavailable parameter", %{conn: conn} do
       insert!(:jellyfish_report)
-      insert!(:jellyfish_report, species: "red")
-      insert!(:jellyfish_report, species: "red")
+      insert!(:jellyfish_report, species_id: "cassiopea_andromeda")
+      insert!(:jellyfish_report, species_id: "cassiopea_andromeda")
 
       params = %{
         filters:
           Jason.encode!([
-            %{field: :random_parameter, value: "red"}
+            %{field: :random_parameter, value: "cassiopea_andromeda"}
           ]),
         order_by: [:id],
         order_direction: [:desc]
@@ -702,8 +711,8 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
     test "fail when trying to filter by a parameter of another report", %{conn: conn} do
       insert!(:jellyfish_report)
-      insert!(:jellyfish_report, species: "red")
-      insert!(:jellyfish_report, species: "red")
+      insert!(:jellyfish_report, species_id: "chrysaora_pseudoocellata")
+      insert!(:jellyfish_report, species_id: "chrysaora_pseudoocellata")
 
       params = %{
         filters:

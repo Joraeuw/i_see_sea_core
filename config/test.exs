@@ -7,7 +7,7 @@ import Config
 # Run `mix help test` for more information.
 if is_nil(System.get_env("DATABASE_URL")) do
   config :i_see_sea, ISeeSea.Repo,
-    username: "zhora",
+    username: "postgres",
     password: "postgres",
     hostname: "localhost",
     database: "i_see_sea_test#{System.get_env("MIX_TEST_PARTITION")}",

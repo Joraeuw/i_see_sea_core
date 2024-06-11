@@ -6,6 +6,8 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams do
   alias ISeeSeaWeb.ApiSpec.Schemas.BaseReportParams
   alias OpenApiSpex.Schema
 
+  alias ISeeSea.Constants.JellyfishQuantityRange
+
   OpenApiSpex.schema(%{
     title: "JellyfishReportParams",
     type: :object,
@@ -14,11 +16,11 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams do
       %Schema{
         type: :object,
         properties: %{
-          quantity: %Schema{type: :integer},
-          species: %Schema{type: :string, required: false}
+          quantity: %Schema{type: :string, enum: JellyfishQuantityRange.values()},
+          species: %Schema{type: :string}
         }
       }
     ],
-    required: [:quantity]
+    required: [:quantity, :species]
   })
 end
