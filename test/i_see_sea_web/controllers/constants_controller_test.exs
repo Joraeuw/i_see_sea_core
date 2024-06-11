@@ -117,7 +117,7 @@ defmodule ISeeSeaWeb.ConstantsControllerTest do
         |> json_response(200)
 
       assert response == %{
-               "values" => []
+               "values" => ["oil", "plastic", "biological"]
              }
     end
   end

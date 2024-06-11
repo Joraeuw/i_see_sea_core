@@ -126,9 +126,6 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "pollution report created successfully", %{conn_user: conn} do
-      insert!(:pollution_type, name: "oil")
-      insert!(:pollution_type, name: "plastic")
-
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
@@ -163,9 +160,6 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "pollution report not created when invalid image type is provided", %{conn_user: conn} do
-      insert!(:pollution_type, name: "oil")
-      insert!(:pollution_type, name: "plastic")
-
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
@@ -193,7 +187,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "pollution type from another report is recognized", %{conn_user: conn, user: user} do
-      p_type = insert!(:pollution_type, name: "oil")
+      p_type = insert!(:pollution_type, name: "other")
 
       base = insert!(:base_report, user: user)
       insert!(:pollution_report, base_report: base)
@@ -207,7 +201,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil"],
+        pollution_types: ["other"],
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -229,11 +223,11 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "name" => _,
                "report_date" => _,
                "report_type" => "pollution",
-               "pollution_types" => ["oil"]
+               "pollution_types" => ["other"]
              } = response
 
       assert {:ok, %PollutionReport{}} = PollutionReport.get_by(%{report_id: id})
-      assert 1 == PollutionType.all() |> elem(1) |> length()
+      assert 4 == PollutionType.all() |> elem(1) |> length()
       assert 2 == PollutionReportPollutionType.all() |> elem(1) |> length()
     end
 
@@ -242,7 +236,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        pollution_types: ["oil", "plastic"],
+        pollution_types: ["invalid_1", "invalid_2"],
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -575,8 +569,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "successfully retrieve pollution reports with filters", %{conn: conn} do
-      insert!(:pollution_type)
-      pollution_type = insert!(:pollution_type, name: "plastic")
+      pollution_type = insert!(:pollution_type, name: "poly")
 
       insert!(:pollution_report)
       insert!(:jellyfish_report)
@@ -590,7 +583,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       params = %{
         filters:
           Jason.encode!([
-            %{field: :pollution_types, value: ["plastic"], op: :in}
+            %{field: :pollution_types, value: ["poly"], op: :in}
           ])
       }
 
@@ -609,7 +602,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                    "report_date" => _,
                    "report_id" => _,
                    "report_type" => "pollution",
-                   "pollution_types" => ["plastic"]
+                   "pollution_types" => ["poly"]
                  }
                ],
                "pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 1}

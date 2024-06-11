@@ -33,9 +33,8 @@ defmodule ISeeSea.Seeder do
 
       Factory.insert!(:picture, base_report: j_r.base_report)
 
-      Factory.insert!(:pollution_type)
-      pollution_type = Factory.insert!(:pollution_type, name: "plastic")
-      pollution_type = Factory.insert!(:pollution_type, name: "biological")
+      pollution_type = Factory.insert!(:pollution_type, name: "new")
+      pollution_type = Factory.insert!(:pollution_type, name: "new_2")
 
       Factory.insert!(:pollution_report)
       pollution_report = Factory.insert!(:pollution_report)

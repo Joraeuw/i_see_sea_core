@@ -36,9 +36,6 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
     end
 
     test "create pollution report", %{conn_user: conn, api_spec: api_spec} do
-      insert!(:pollution_type, name: "oil")
-      insert!(:pollution_type, name: "plastic")
-
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
