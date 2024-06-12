@@ -1,6 +1,7 @@
 defmodule ISeeSea.DB.Models.JellyfishReport do
   @moduledoc false
 
+  alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.DB.Models.JellyfishSpecies
   alias ISeeSea.DB.Models.BaseReport
 
@@ -22,6 +23,8 @@ defmodule ISeeSea.DB.Models.JellyfishReport do
     struct
     |> cast(attrs, @allowed_attrs)
     |> validate_required(@required_attrs)
+    |> foreign_key_constraint(:species, name: :jellyfish_reports_species_id_fkey)
+    |> validate_inclusion(:quantity, JellyfishQuantityRange.values())
   end
 
   defimpl ISeeSeaWeb.Focus, for: __MODULE__ do
