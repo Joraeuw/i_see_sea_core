@@ -16,5 +16,8 @@ defmodule ISeeSea.DB.Models.PollutionReportPollutionType do
     struct
     |> cast(attrs, [:pollution_report_id, :pollution_type_id])
     |> validate_required([:pollution_report_id, :pollution_type_id])
+    |> unique_constraint(:pollution_type_id,
+      name: :pollution_reports_pollution_types_pollution_report_id_pollution
+    )
   end
 end
