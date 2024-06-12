@@ -1,6 +1,10 @@
 # The directory Mix will write compiled artifacts to.
 /_build/
 
+# Ingore stress testing page
+/stress_tests/report
+/stress_tests/jmeter.log
+
 # If you run "mix test --cover", coverage assets end up here.
 /cover/
 
