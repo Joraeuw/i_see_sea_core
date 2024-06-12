@@ -11,6 +11,9 @@ defmodule ISeeSea.Repo.Migrations.CreateUniquePollutionTypeConstraint do
     )
     """)
 
-    create unique_index(:pollution_reports_pollution_types, [:pollution_report_id, :pollution_type_id])
+    create unique_index(:pollution_reports_pollution_types, [
+             :pollution_report_id,
+             :pollution_type_id
+           ])
   end
 end
