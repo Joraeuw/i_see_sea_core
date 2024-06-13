@@ -13,6 +13,8 @@
 Code.require_file("./test/support/factory.ex")
 
 defmodule ISeeSea.Seeder do
+
+  alias ISeeSea.Constants
   alias ISeeSea.DB.Models.Role
   alias ISeeSea.Repo
   alias ISeeSea.Factory
@@ -45,27 +47,10 @@ defmodule ISeeSea.Seeder do
         pollution_type_id: pollution_type.name
       })
 
-      Factory.insert!(:wind_type, name: "hurricane")
-      strong_wind = Factory.insert!(:wind_type, name: "strong")
-      Factory.insert!(:wind_type, name: "moderate")
-      Factory.insert!(:wind_type, name: "weak")
-      Factory.insert!(:wind_type)
-
-      thick_fog = Factory.insert!(:fog_type, name: "very_thick")
-      Factory.insert!(:fog_type, name: "thick")
-      Factory.insert!(:fog_type, name: "moderate")
-      Factory.insert!(:fog_type, name: "light")
-      Factory.insert!(:fog_type)
-
-      Factory.insert!(:sea_swell_type, name: "strong")
-      Factory.insert!(:sea_swell_type, name: "moderate")
-      Factory.insert!(:sea_swell_type, name: "weak")
-      no_wave = Factory.insert!(:sea_swell_type)
-
       Factory.insert!(:meteorological_report,
-        wind_type: strong_wind,
-        fog_type: thick_fog,
-        sea_swell_type: no_wave
+        wind_type: Constants.WindType.strong_wind(),
+        fog_type: Constants.FogType.thick_fog(),
+        sea_swell_type: Constants.SeaSwellType.no_wave()
       )
     end)
   end
