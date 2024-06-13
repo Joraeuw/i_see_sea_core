@@ -48,9 +48,9 @@ defmodule ISeeSea.Seeder do
       })
 
       Factory.insert!(:meteorological_report,
-        wind_type: Constants.WindType.strong_wind(),
-        fog_type: Constants.FogType.thick_fog(),
-        sea_swell_type: Constants.SeaSwellType.no_wave()
+        wind_type_id: Constants.WindType.strong(),
+        fog_type_id: Constants.FogType.thick(),
+        sea_swell_type_id: Constants.SeaSwellType.no_waves()
       )
     end)
   end

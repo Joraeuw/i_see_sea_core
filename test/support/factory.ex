@@ -5,6 +5,7 @@ defmodule ISeeSea.Factory do
 
   require ISeeSea.Constants.PictureTypes
 
+  alias ISeeSea.Constants
   alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.DB.Models.Role
@@ -92,30 +93,12 @@ defmodule ISeeSea.Factory do
     %Models.PollutionReportPollutionType{}
   end
 
-  def build(:wind_type) do
-    %Models.WindType{
-      name: "no_wind"
-    }
-  end
-
-  def build(:fog_type) do
-    %Models.FogType{
-      name: "no_fog"
-    }
-  end
-
-  def build(:sea_swell_type) do
-    %Models.SeaSwellType{
-      name: "no_waves"
-    }
-  end
-
   def build(:meteorological_report) do
     %Models.MeteorologicalReport{
       base_report: build(:base_report, report_type: ReportType.meteorological()),
-      fog_type: build(:fog_type),
-      wind_type: build(:wind_type),
-      sea_swell_type: build(:sea_swell_type)
+      fog_type_id: Constants.FogType.light(),
+      wind_type_id: Constants.WindType.hurricane(),
+      sea_swell_type_id: Constants.SeaSwellType.no_waves()
     }
   end
 
