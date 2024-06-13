@@ -298,7 +298,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
-        fog_type: "thick",
+        fog_type: "sparrow",
         wind_type: "strong",
         sea_swell_type: "strong",
         pictures: [
@@ -328,7 +328,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
-        wind_type: "strong",
+        wind_type: "shallow",
         sea_swell_type: "strong",
         pictures: [
           %Plug.Upload{
@@ -358,7 +358,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         latitude: Faker.Address.latitude(),
         fog_type: "thick",
         wind_type: "strong",
-        sea_swell_type: "strong",
+        sea_swell_type: "dune",
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -606,9 +606,9 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       insert!(:meteorological_report)
 
       insert!(:meteorological_report,
-        fog_type: build(:fog_type, name: "thick"),
-        wind_type: build(:wind_type, name: "strong"),
-        sea_swell_type: build(:sea_swell_type, name: "strong")
+        fog_type_id: "thick",
+        wind_type_id: "strong",
+        sea_swell_type_id: "strong"
       )
 
       params = %{

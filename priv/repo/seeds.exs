@@ -13,7 +13,6 @@
 Code.require_file("./test/support/factory.ex")
 
 defmodule ISeeSea.Seeder do
-
   alias ISeeSea.Constants
   alias ISeeSea.DB.Models.Role
   alias ISeeSea.Repo
