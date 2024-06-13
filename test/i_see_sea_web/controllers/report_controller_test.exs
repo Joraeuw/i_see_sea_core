@@ -258,10 +258,6 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "meteorological report created successfully", %{conn_user: conn} do
-      insert!(:wind_type, name: "strong")
-      insert!(:fog_type, name: "thick")
-      insert!(:sea_swell_type, name: "strong")
-
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
@@ -327,8 +323,6 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "wind type isn't recognized", %{conn_user: conn} do
-      insert!(:fog_type, name: "thick")
-
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
@@ -358,9 +352,6 @@ defmodule ISeeSeaWeb.ReportControllerTest do
     end
 
     test "sea swell type isn't recognized", %{conn_user: conn} do
-      insert!(:fog_type, name: "thick")
-      insert!(:wind_type, name: "strong")
-
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),

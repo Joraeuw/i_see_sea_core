@@ -72,6 +72,10 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
+# Goal regex config
+config :goal,
+  phone_regex: ~r/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
+
 # Logger config for Grafana and Loki
 
 # config :logger, backends: [LoggerJSON]

@@ -30,5 +30,7 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
 
 config :phoenix, :logger, false
 
+config :i_see_sea, backend_url: "https://i-see-sea.fly.dev"
+
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.
