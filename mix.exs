@@ -72,7 +72,8 @@ defmodule ISeeSea.MixProject do
       {:faker, "~> 0.18", only: [:dev, :test]},
       {:flop, "~> 0.25.0"},
       {:image, "~> 0.46.0"},
-      {:loki_logger, "~> 0.3.0"}
+      {:loki_logger, "~> 0.3.0"},
+      {:cors_plug, "~> 3.0"}
     ]
   end
 
