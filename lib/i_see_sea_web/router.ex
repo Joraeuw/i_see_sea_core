@@ -79,6 +79,8 @@ defmodule ISeeSeaWeb.Router do
 
     ## Reports
     scope "/reports" do
+      delete "/delete/:report_id", ReportController, :delete_report
+
       pipe_through :image_uploading
 
       post "/create/:report_type", ReportController, :create_report

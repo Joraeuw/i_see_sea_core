@@ -28,7 +28,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
      :pollution_types,
      :fog_type,
      :wind_type,
-     :sea_swell_type
+     :sea_swell_type,
+     :deleted
    ],
    sortable: [
      :id,
@@ -89,7 +90,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
    ]}
 
   @required_attrs [:user_id, :name, :report_type, :report_date, :longitude, :latitude]
-  @allowed_attrs [:comment | @required_attrs]
+  @allowed_attrs [:comment, :deleted | @required_attrs]
 
   schema "base_reports" do
     field(:name, :string)
@@ -98,6 +99,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
     field(:longitude, :float)
     field(:latitude, :float)
     field(:comment, :string)
+    field(:deleted, :boolean, default: false)
 
     belongs_to(:user, User)
 
@@ -140,8 +142,6 @@ defmodule ISeeSea.DB.Models.BaseReport do
 
   def get_filtered_paginated_reports(report_type, params, pagination_params, initial_from) do
     pagination = Map.merge(%{page: 1, page_size: 10}, pagination_params)
-    params = Map.put(params, :filters, Map.get(params, :filters, "{}") |> Jason.decode!())
-
     {query, preloads} = determine_query(initial_from, report_type)
 
     query
