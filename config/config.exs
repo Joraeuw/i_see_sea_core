@@ -31,7 +31,12 @@ config :i_see_sea, ISeeSeaWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :i_see_sea, ISeeSea.Mailer, adapter: Swoosh.Adapters.Local
+config :i_see_sea, email: "iliad.support@tu-varna.bg"
+
+config :i_see_sea, Oban,
+  repo: ISeeSea.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [user_email_verification: 10]
 
 config :i_see_sea, ISeeSea.Authentication.Tokenizer,
   issuer: "i_see_sea",

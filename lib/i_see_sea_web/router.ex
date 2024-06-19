@@ -44,6 +44,7 @@ defmodule ISeeSeaWeb.Router do
 
     post "/login", SessionController, :login
     post "/register", SessionController, :register
+    get "/verify-email/:token", UserController, :verify_email
 
     ## Constants
     scope "/constants" do

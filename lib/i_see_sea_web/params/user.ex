@@ -10,6 +10,10 @@ defmodule ISeeSeaWeb.Params.User do
       defparams :list_reports do
         required(:report_type, :string, values: ["all" | ReportType.values()])
       end
+
+      defparams :very_email do
+        required(:token, :string)
+      end
     end
   end
 end

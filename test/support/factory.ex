@@ -22,7 +22,8 @@ defmodule ISeeSea.Factory do
       email: Faker.Internet.email(),
       username: Faker.Internet.user_name(),
       password: Bcrypt.hash_pwd_salt("A123456"),
-      role_id: end_user_id
+      role_id: end_user_id,
+      verified: true
     }
   end
 

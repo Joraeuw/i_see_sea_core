@@ -15,6 +15,7 @@ kill_signal = 'SIGTERM'
 [env]
   PHX_HOST = 'i-see-sea.fly.dev'
   PORT = '8080'
+  SMTP_PASSWORD = '123456Iliad'
 
 [http_service]
   internal_port = 8080

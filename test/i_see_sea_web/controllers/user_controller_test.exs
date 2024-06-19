@@ -1,5 +1,7 @@
 defmodule ISeeSeaWeb.UserControllerTest do
   @moduledoc false
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.Events.UserEmailVerification
   use ISeeSeaWeb.ConnCase, async: true
 
   describe "list_reports/2" do
@@ -31,6 +33,39 @@ defmodule ISeeSeaWeb.UserControllerTest do
                "message" => "The requested action has failed.",
                "reason" => "Authentication credentials were missing or incorrect."
              } == response
+    end
+  end
+
+  describe "verify_email/2" do
+    test "successfully verify user email", %{conn: conn} do
+      %{id: user_id, verified: false} = insert!(:user, verified: false)
+      token = UUID.uuid4()
+      UserEmailVerification.start_tracker(user_id, token)
+
+      conn
+      |> get(Routes.user_path(conn, :verify_email, token))
+      |> response(204)
+
+      assert {:ok, %{verified: true}} = User.get(user_id)
+      assert {:error, :not_found} = UserEmailVerification.get_scheduled(token)
+    end
+
+    test "fail to verify user email when token is invalid", %{conn: conn} do
+      %{id: user_id} = insert!(:user, verified: false)
+      token = UUID.uuid4()
+      UserEmailVerification.start_tracker(user_id, token)
+
+      response =
+        conn
+        |> get(Routes.user_path(conn, :verify_email, "invalid_token"))
+        |> json_response(404)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "The resource could not be found."
+             } == response
+
+      assert {:ok, %{verified: false}} = User.get(user_id)
     end
   end
 end

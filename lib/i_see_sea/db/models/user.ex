@@ -9,7 +9,7 @@ defmodule ISeeSea.DB.Models.User do
   @derive {ISeeSeaWeb.Focus, attrs: [:first_name, :last_name, :email, :username, :phone_number]}
 
   @required_attrs [:first_name, :last_name, :email, :password, :username]
-  @allowed_attrs [:phone_number, :role_id | @required_attrs]
+  @allowed_attrs [:phone_number, :role_id, :verified | @required_attrs]
 
   schema "users" do
     field(:first_name, :string)
