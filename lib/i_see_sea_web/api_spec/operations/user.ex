@@ -56,6 +56,8 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.User do
           unauthorized: {"Unauthorized", "application/json", UnauthorizedErrorResponse}
         ]
       )
+
+      operation(:verify_email, false)
     end
   end
 end

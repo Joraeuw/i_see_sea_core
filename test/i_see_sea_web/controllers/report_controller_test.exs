@@ -8,6 +8,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
   alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
 
+  alias ISeeSea.DB.Models.BaseReport
   alias ISeeSea.DB.Models.Picture
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.PollutionReportPollutionType
@@ -511,6 +512,45 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 4}} = response
     end
 
+    test "successfully ignore deleted reports", %{conn: conn} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+      insert!(:atypical_activity_report)
+      insert!(:pollution_report, base_report: build(:base_report, deleted: true))
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all"))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 4}} = response
+    end
+
+    test "successfully retrieve deleted reports", %{conn: conn} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+      insert!(:atypical_activity_report)
+      insert!(:pollution_report, base_report: build(:base_report, deleted: true))
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :deleted, value: true}
+          ]),
+        order_by: [:id],
+        order_direction: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all"), params)
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 1}} = response
+    end
+
     test "successfully retrieve jellyfish reports with filters", %{conn: conn} do
       insert!(:jellyfish_report)
       insert!(:jellyfish_report, species_id: "beroe_ovata")
@@ -716,6 +756,64 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "message" => "The requested action has failed.",
                "reason" => "Malformed request syntax."
              } == response
+    end
+  end
+
+  describe "delete_report/2" do
+    setup %{end_user: user} do
+      %{report_id: report_id_1} =
+        insert!(:pollution_report, base_report: build(:base_report, user: user))
+
+      %{report_id: report_id_2} =
+        insert!(:jellyfish_report, base_report: build(:base_report, user: user))
+
+      %{report_id: report_id_3} =
+        insert!(:meteorological_report, base_report: build(:base_report, user: user))
+
+      %{report_id: report_id_4} =
+        insert!(:atypical_activity_report, base_report: build(:base_report, user: user))
+
+      %{
+        report_id_1: report_id_1,
+        report_id_2: report_id_2,
+        report_id_3: report_id_3,
+        report_id_4: report_id_4
+      }
+    end
+
+    test "successfully delete a report", %{conn_end_user: conn, report_id_1: report_id_1} do
+      conn
+      |> delete(Routes.report_path(conn, :delete_report, report_id_1))
+      |> response(204)
+
+      {:ok, %{deleted: true}} = BaseReport.get(report_id_1)
+    end
+
+    test "successfully delete a non owned report when admin", %{
+      conn_admin: conn,
+      report_id_1: report_id_1
+    } do
+      conn
+      |> delete(Routes.report_path(conn, :delete_report, report_id_1))
+      |> response(204)
+
+      {:ok, %{deleted: true}} = BaseReport.get(report_id_1)
+    end
+
+    test "fail to delete a report when not owner", %{conn_end_user: conn} do
+      %{report_id: report_id} = insert!(:pollution_report)
+
+      response =
+        conn
+        |> delete(Routes.report_path(conn, :delete_report, report_id))
+        |> json_response(403)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "No access rights to fullfil the requested action."
+             } == response
+
+      {:ok, %{deleted: false}} = BaseReport.get(report_id)
     end
   end
 end

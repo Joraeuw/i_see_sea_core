@@ -26,6 +26,10 @@ defmodule ISeeSeaWeb.Params.Report do
       defparams :index do
         required(:report_type, :string, values: ["all" | ReportType.values()])
       end
+
+      defparams :delete_report do
+        required(:report_id, :string)
+      end
     end
   end
 

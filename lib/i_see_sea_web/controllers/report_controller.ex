@@ -3,13 +3,15 @@ defmodule ISeeSeaWeb.ReportController do
 
   use ISeeSeaWeb, :controller
 
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Filter
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSea.DB.Logic.ReportOperations
 
   @permission_scope "i_see_sea:reports"
   plug(AssertPermissions, ["#{@permission_scope}:create"] when action == :create_report)
-  plug(AssertPermissions, [] when action == :index)
+  plug(AssertPermissions, [] when action in [:index, :delete_report])
   plug(EnsurePermitted)
 
   def create_report(%{assigns: %{user: user}} = conn, params) do
@@ -39,7 +41,7 @@ defmodule ISeeSeaWeb.ReportController do
          {:ok, entries, pagination} <-
            BaseReport.get_filtered_paginated_reports(
              report_type,
-             filter_params,
+             Filter.parse(filter_params),
              pagination_params
            ) do
       success_paginated(conn, entries, pagination)
@@ -48,4 +50,23 @@ defmodule ISeeSeaWeb.ReportController do
         error(conn, error)
     end
   end
+
+  def delete_report(%{assigns: %{user: user}} = conn, params) do
+    with {:ok, %{report_id: report_id}} <- validate(:delete_report, params),
+         {:ok, %{user_id: user_id} = report} <- BaseReport.get(report_id),
+         :ok <- With.check(allow_action?(user, user_id), :forbidden),
+         {:ok, _} <- BaseReport.soft_delete(report) do
+      success_empty(conn)
+    else
+      {:error, :forbidden} ->
+        error(conn, {:error, :forbidden})
+
+      error ->
+        error(conn, error)
+    end
+  end
+
+  defp allow_action?(%User{role: %{name: "admin"}}, _), do: true
+  defp allow_action?(%User{id: user_id}, user_id), do: true
+  defp allow_action?(_, _), do: false
 end

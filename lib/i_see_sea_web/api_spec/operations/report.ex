@@ -1,10 +1,15 @@
 defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
   @moduledoc false
 
-  alias ISeeSeaWeb.ApiSpec.Schemas.IndexReportResponse
-  alias AveratoWeb.Specs.Schemas.BadRequestErrorResponse
   alias ISeeSea.Constants.ReportType
+
+  alias AveratoWeb.Specs.Schemas.BadRequestErrorResponse
+  alias AveratoWeb.Specs.Schemas.NotFoundErrorResponse
+  alias AveratoWeb.Specs.Schemas.ForbiddenErrorResponse
+
   alias ISeeSeaWeb.ApiSpec.QueryHelpers
+
+  alias ISeeSeaWeb.ApiSpec.Schemas.IndexReportResponse
   alias ISeeSeaWeb.ApiSpec.Schemas.UnauthorizedErrorResponse
   alias ISeeSeaWeb.ApiSpec.Schemas.UnprocessableEntityErrorResponse
   alias ISeeSeaWeb.ApiSpec.Schemas.CreateReportResponse
@@ -73,6 +78,24 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
           bad_request: {"Bad Request", "application/json", BadRequestErrorResponse},
           unprocessable_entity:
             {"Unprocessable Entity", "application/json", UnprocessableEntityErrorResponse}
+        ]
+      )
+
+      operation(:delete_report,
+        summary: "Delete Report",
+        security: [%{"BearerAuth" => ["Token"]}],
+        parameters: [
+          report_id: [
+            in: :path,
+            description: "Report id",
+            schema: %Schema{type: :string}
+          ]
+        ],
+        responses: [
+          ok: {"Response", "application/json", %Schema{}},
+          unauthorized: {"Unauthorized", "application/json", UnauthorizedErrorResponse},
+          forbidden: {"Forbidden", "application/json", ForbiddenErrorResponse},
+          not_found: {"Not Found", "application/json", NotFoundErrorResponse}
         ]
       )
     end

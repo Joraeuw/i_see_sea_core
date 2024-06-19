@@ -70,7 +70,6 @@ defmodule ISeeSea.DB.DefaultModel do
             preloads \\ unquote(default_preloads)
           ) do
         pagination = Map.merge(%{page: 1, page_size: 10}, pagination)
-        params = Map.put(params, :filters, Map.get(params, :filters, "{}") |> Jason.decode!())
 
         bindings
         |> Enum.reduce(initial_from, &process_binding/2)
@@ -123,6 +122,15 @@ defmodule ISeeSea.DB.DefaultModel do
         case Repo.get(__MODULE__, id) do
           nil -> {:error, :not_found, __MODULE__}
           entry -> Repo.delete(entry)
+        end
+      end
+
+      def soft_delete(entry) do
+        changeset = changeset(entry, %{deleted: true})
+
+        case Repo.update(changeset) do
+          {:ok, entry} -> {:ok, entry}
+          {:error, changeset} -> {:error, changeset}
         end
       end
 
