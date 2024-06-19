@@ -1,20 +1,36 @@
 defmodule ISeeSeaWeb.SessionControllerTest do
   use ISeeSeaWeb.ConnCase, async: true
+  use Oban.Testing, repo: ISeeSea.Repo
+
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.Events.UserEmailVerification
 
   describe "register/2" do
     test "successfully create a user", %{conn: conn} do
       params = %{
         first_name: "Sam",
         last_name: "Blue",
-        email: "email@gmail.com",
+        email: "joraeuw@gmail.com",
         password: "A123456",
         username: "Dobby"
       }
 
-      assert %{"token" => _} =
+      assert %{
+               "token" => _,
+               "user" => %{
+                 "first_name" => "Sam",
+                 "last_name" => "Blue",
+                 "email" => "some@gmail.com",
+                 "username" => "Dobby"
+               }
+             } =
                conn
                |> post(Routes.session_path(conn, :register), params)
                |> json_response(200)
+
+      {:ok, %{id: user_id}} = User.get_by(%{email: "some@gmail.com"})
+
+      assert_enqueued(worker: UserEmailVerification, args: %{user_id: user_id})
     end
 
     test "fail to create due to email taken", %{conn: conn} do

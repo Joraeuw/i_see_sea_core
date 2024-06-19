@@ -14,6 +14,7 @@ defmodule ISeeSea.Application do
       {Phoenix.PubSub, name: ISeeSea.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: ISeeSea.Finch},
+      {Oban, Application.fetch_env!(:i_see_sea, Oban)},
       # Start a worker by calling: ISeeSea.Worker.start_link(arg)
       # {ISeeSea.Worker, arg},
       # Start to serve requests, typically the last entry

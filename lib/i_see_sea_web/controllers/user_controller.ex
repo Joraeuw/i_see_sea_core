@@ -3,11 +3,14 @@ defmodule ISeeSeaWeb.UserController do
 
   use ISeeSeaWeb, :controller
 
+  alias ISeeSea.Events.UserEmailVerification
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.Params.Filter
 
   @permission_scope "i_see_sea:users"
   plug(AssertPermissions, ["#{@permission_scope}:list_reports"] when action == :list_reports)
+  plug(AssertPermissions, [] when action == :verify_email)
+
   plug(EnsurePermitted)
 
   def list_reports(%{assigns: %{user: user}} = conn, params) do
@@ -22,6 +25,16 @@ defmodule ISeeSeaWeb.UserController do
              user.id
            ) do
       success_paginated(conn, entries, pagination)
+    else
+      error ->
+        error(conn, error)
+    end
+  end
+
+  def verify_email(conn, params) do
+    with {:ok, %{token: token}} <- validate(:very_email, params),
+         :ok <- UserEmailVerification.verify_email(token) do
+      success_empty(conn)
     else
       error ->
         error(conn, error)

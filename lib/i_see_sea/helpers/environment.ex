@@ -9,6 +9,10 @@ defmodule ISeeSea.Helpers.Environment do
     get(:backend_url, [:i_see_sea, :backend_url])
   end
 
+  def i_see_sea_mail do
+    get(:username, [:i_see_sea, ISeeSea.Mailer, :username])[:username]
+  end
+
   defp get(name, level) do
     :persistent_term.get(name, @not_found_val)
     |> case do
