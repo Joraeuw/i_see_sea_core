@@ -29,7 +29,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
      :fog_type,
      :wind_type,
      :sea_swell_type,
-     :deleted
+     :deleted,
+     :inserted_at
    ],
    sortable: [
      :id,
@@ -39,7 +40,8 @@ defmodule ISeeSea.DB.Models.BaseReport do
      :species,
      :fog_type,
      :wind_type,
-     :sea_swell_type
+     :sea_swell_type,
+     :inserted_at
    ],
    default_order: %{
      order_by: [:id],
@@ -215,7 +217,15 @@ defmodule ISeeSea.DB.Models.BaseReport do
 
       base
       |> Map.from_struct()
-      |> Map.take([:name, :report_type, :report_date, :longitude, :latitude, :comment])
+      |> Map.take([
+        :name,
+        :report_type,
+        :report_date,
+        :longitude,
+        :latitude,
+        :comment,
+        :inserted_at
+      ])
       |> Map.merge(%{
         pictures: Enum.map(pictures, &Picture.get_uri!/1)
       })

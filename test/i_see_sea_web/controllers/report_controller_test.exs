@@ -512,6 +512,192 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 4}} = response
     end
 
+    test "successfully filter reports by date", %{conn: conn} do
+      from_date = "2024-01-01T00:00:00Z"
+      to_date = "2024-12-31T23:59:59Z"
+
+      insert!(:pollution_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-01-10 12:00:00Z])
+      )
+
+      insert!(:jellyfish_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-02-15 12:00:00Z])
+      )
+
+      insert!(:meteorological_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-03-20 12:00:00Z])
+      )
+
+      # Outside range
+      insert!(:atypical_activity_report,
+        base_report: build(:base_report, inserted_at: ~N[2025-04-25 12:00:00Z])
+      )
+
+      # Outside range
+      insert!(:pollution_report,
+        base_report: build(:base_report, inserted_at: ~N[2023-12-31 12:00:00Z])
+      )
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :from_date, value: from_date},
+            %{field: :to_date, value: to_date}
+          ]),
+        order_by: [:id],
+        order_directions: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all", params))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 3}} = response
+    end
+
+    test "successfully sort reports by date", %{conn: conn} do
+      from_date = "2024-01-01T00:00:00Z"
+      to_date = "2024-12-31T23:59:59Z"
+
+      insert!(:pollution_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-01-10 12:00:00Z])
+      )
+
+      insert!(:jellyfish_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-02-15 12:00:00Z])
+      )
+
+      insert!(:meteorological_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-03-20 12:00:00Z])
+      )
+
+      # Outside range
+      insert!(:atypical_activity_report,
+        base_report: build(:base_report, inserted_at: ~N[2025-04-25 12:00:00Z])
+      )
+
+      # Outside range
+      insert!(:pollution_report,
+        base_report: build(:base_report, inserted_at: ~N[2023-12-31 12:00:00Z])
+      )
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :from_date, value: from_date},
+            %{field: :to_date, value: to_date}
+          ]),
+        order_by: [:inserted_at],
+        order_directions: [:asc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all", params))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 3}} = response
+
+      assert [
+               %{"inserted_at" => "2024-01-10T12:00:00"},
+               %{"inserted_at" => "2024-02-15T12:00:00"},
+               %{"inserted_at" => "2024-03-20T12:00:00"}
+             ] = response["entries"]
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :from_date, value: from_date},
+            %{field: :to_date, value: to_date}
+          ]),
+        order_by: [:inserted_at],
+        order_directions: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all", params))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 3}} = response
+
+      assert [
+               %{"inserted_at" => "2024-03-20T12:00:00"},
+               %{"inserted_at" => "2024-02-15T12:00:00"},
+               %{"inserted_at" => "2024-01-10T12:00:00"}
+             ] = response["entries"]
+    end
+
+    test "returns no reports outside the date range", %{conn: conn} do
+      from_date = "2025-01-01T00:00:00Z"
+      to_date = "2025-12-31T23:59:59Z"
+
+      insert!(:pollution_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-01-10 12:00:00Z])
+      )
+
+      insert!(:jellyfish_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-02-15 12:00:00Z])
+      )
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :from_date, value: from_date},
+            %{field: :to_date, value: to_date}
+          ]),
+        order_by: [:id],
+        order_directions: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all", params))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 0}} = response
+    end
+
+    test "filters reports with overlapping date ranges", %{conn: conn} do
+      from_date = "2024-01-01T00:00:00Z"
+      to_date = "2024-03-31T23:59:59Z"
+
+      insert!(:pollution_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-01-10 12:00:00Z])
+      )
+
+      insert!(:jellyfish_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-02-15 12:00:00Z])
+      )
+
+      # Outside range
+      insert!(:meteorological_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-04-20 12:00:00Z])
+      )
+
+      insert!(:atypical_activity_report,
+        base_report: build(:base_report, inserted_at: ~N[2024-03-25 12:00:00Z])
+      )
+
+      params = %{
+        filters:
+          Jason.encode!([
+            %{field: :from_date, value: from_date},
+            %{field: :to_date, value: to_date}
+          ]),
+        order_by: [:id],
+        order_directions: [:desc]
+      }
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "all", params))
+        |> json_response(200)
+
+      assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 3}} = response
+    end
+
     test "successfully ignore deleted reports", %{conn: conn} do
       insert!(:pollution_report)
       insert!(:jellyfish_report)
@@ -540,7 +726,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
             %{field: :deleted, value: true}
           ]),
         order_by: [:id],
-        order_direction: [:desc]
+        order_directions: [:desc]
       }
 
       response =
@@ -562,7 +748,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
             %{field: :species, value: "beroe_ovata"}
           ]),
         order_by: [:id],
-        order_direction: [:desc]
+        order_directions: [:desc]
       }
 
       response =
@@ -719,7 +905,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
             %{field: :random_parameter, value: "cassiopea_andromeda"}
           ]),
         order_by: [:id],
-        order_direction: [:desc]
+        order_directions: [:desc]
       }
 
       response =
@@ -744,7 +930,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
             %{field: :fog_type, value: "thick"}
           ]),
         order_by: [:id],
-        order_direction: [:desc]
+        order_directions: [:desc]
       }
 
       response =

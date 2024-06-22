@@ -55,7 +55,10 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
               "pollution_types",
               "fog_type",
               "wind_type",
-              "sea_swell_type"
+              "sea_swell_type",
+              "inserted_at",
+              "from_date",
+              "to_date"
             ],
             [
               "id",
@@ -65,7 +68,8 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
               "species",
               "fog_type",
               "wind_type",
-              "sea_swell_type"
+              "sea_swell_type",
+              "inserted_at"
             ],
             report_type: [
               in: :path,

@@ -10,7 +10,7 @@ defmodule ISeeSeaWeb.SessionControllerTest do
       params = %{
         first_name: "Sam",
         last_name: "Blue",
-        email: "joraeuw@gmail.com",
+        email: "some@gmail.com",
         password: "A123456",
         username: "Dobby"
       }
@@ -110,7 +110,15 @@ defmodule ISeeSeaWeb.SessionControllerTest do
         password: "A123456"
       }
 
-      assert %{"token" => _} =
+      assert %{
+               "token" => _,
+               "user" => %{
+                 "first_name" => _,
+                 "last_name" => _,
+                 "email" => _,
+                 "username" => _
+               }
+             } =
                conn
                |> post(Routes.session_path(conn, :login), params)
                |> json_response(200)
