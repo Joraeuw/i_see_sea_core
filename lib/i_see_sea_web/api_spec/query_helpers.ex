@@ -7,7 +7,7 @@ defmodule ISeeSeaWeb.ApiSpec.QueryHelpers do
     [
       filters: [in: :query, schema: filters(filter_fields)],
       order_by: [in: :query, schema: order_by(order_fields)],
-      order_direction: [in: :query, schema: order_direction()],
+      order_directions: [in: :query, schema: order_directions()],
       page: [in: :query, schema: %Schema{type: :number, default: 1}],
       page_size: [in: :query, schema: %Schema{type: :number, default: 10}]
     ] ++
@@ -39,7 +39,7 @@ defmodule ISeeSeaWeb.ApiSpec.QueryHelpers do
     }
   end
 
-  def order_direction do
+  def order_directions do
     %Schema{
       type: :array,
       items: %Schema{type: :string, enum: ["asc", "desc"]}
