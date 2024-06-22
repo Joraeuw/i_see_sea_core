@@ -19,6 +19,6 @@ defmodule ISeeSea.Emails do
   end
 
   defp confirmation_url(token) do
-    "#{Environment.backend_url()}/confirm/#{token}"
+    "#{Environment.backend_url()}/api/verify-email/#{token}"
   end
 end

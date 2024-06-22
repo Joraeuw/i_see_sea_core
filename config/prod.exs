@@ -26,19 +26,5 @@ config :phoenix, :logger, false
 
 config :i_see_sea, backend_url: "https://i-see-sea.fly.dev"
 
-config :i_see_sea, ISeeSea.Mailer,
-  adapter: Swoosh.Adapters.SMTP,
-  relay: "mail.tu-varna.bg",
-  port: 587,
-  username: "iliad.support@tu-varna.bg",
-  password: System.get_env("SMTP_PASSWORD"),
-  ssl: false,
-  tls: :always,
-  auth: :always,
-  tls_options: [
-    verify: :verify_none,
-    versions: [:"tlsv1.2"]
-  ]
-
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

@@ -65,6 +65,8 @@ if config_env() == :prod do
     ],
     secret_key_base: secret_key_base
 
+  config :i_see_sea, ISeeSea.Mailer, password: System.get_env("SMTP_PASSWORD")
+
   # ## SSL Support
   #
   # To get SSL working, you will need to add the `https` key

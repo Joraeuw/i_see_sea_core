@@ -81,6 +81,20 @@ config :phoenix, :json_library, Jason
 config :goal,
   phone_regex: ~r/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
 
+config :i_see_sea, ISeeSea.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: "mail.tu-varna.bg",
+  port: 587,
+  username: "iliad.support@tu-varna.bg",
+  password: System.get_env("SMTP_PASSWORD"),
+  ssl: false,
+  tls: :always,
+  auth: :always,
+  tls_options: [
+    verify: :verify_none,
+    versions: [:"tlsv1.2"]
+  ]
+
 # Logger config for Grafana and Loki
 
 # config :logger, backends: [LoggerJSON]
