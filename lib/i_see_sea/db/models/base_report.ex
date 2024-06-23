@@ -207,10 +207,10 @@ defmodule ISeeSea.DB.Models.BaseReport do
   defp determine_query(initial_from, "other") do
     q =
       initial_from
-      |> join(:inner, [br], o in assoc(br, :other), as: :other)
+      |> join(:inner, [br], o in assoc(br, :other_report), as: :other_report)
       |> distinct(true)
 
-    {q, [:other]}
+    {q, [:other_report]}
   end
 
   defp determine_query(initial_from, "meteorological") do
