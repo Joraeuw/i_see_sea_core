@@ -7,6 +7,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
   alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
+  alias ISeeSea.Constants.StormType
 
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSea.DB.Models.Picture
@@ -387,6 +388,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
         comment: Faker.Lorem.paragraph(),
+        storm_type: StormType.hailstorm(),
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -403,6 +405,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
 
       assert %{
                "report_type" => "atypical_activity",
+               "storm_type" => _,
                "comment" => _,
                "latitude" => _,
                "longitude" => _,
@@ -410,6 +413,64 @@ defmodule ISeeSeaWeb.ReportControllerTest do
                "report_date" => _,
                "report_id" => _
              } = response
+    end
+
+    test "other report created successfully", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        comment: Faker.Lorem.paragraph(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.other()), params)
+        |> json_response(200)
+
+      assert %{
+               "report_type" => "other",
+               "comment" => _,
+               "latitude" => _,
+               "longitude" => _,
+               "name" => _,
+               "report_date" => _,
+               "report_id" => _
+             } = response
+    end
+
+    test "fail when report type is unknown", %{conn_user: conn} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        comment: Faker.Lorem.paragraph(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
+      }
+
+      response =
+        conn
+        |> post(Routes.report_path(conn, :create_report, "invalid_report_type"), params)
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"report_type" => "is invalid"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Report_type is invalid."
+             } == response
     end
 
     test "fail to create atypical report when no comment is provided", %{conn_user: conn} do
@@ -432,9 +493,9 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         |> json_response(422)
 
       assert %{
-               "errors" => [%{"comment" => "can't be blank"}],
+               "errors" => [%{"comment" => "can't be blank"}, %{"storm_type" => "can't be blank"}],
                "message" => "The requested action has failed.",
-               "reason" => "Comment can't be blank."
+               "reason" => "Comment can't be blank, storm_type can't be blank."
              } == response
     end
 
@@ -510,6 +571,24 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         |> json_response(200)
 
       assert %{"pagination" => %{"page" => 1, "page_size" => 10, "total_count" => 4}} = response
+    end
+
+    test "fail to index unknown report type", %{conn: conn} do
+      insert!(:pollution_report)
+      insert!(:jellyfish_report)
+      insert!(:meteorological_report)
+      insert!(:atypical_activity_report)
+
+      response =
+        conn
+        |> get(Routes.report_path(conn, :index, "invalid_report_type"))
+        |> json_response(422)
+
+      assert %{
+               "errors" => [%{"report_type" => "is invalid"}],
+               "message" => "The requested action has failed.",
+               "reason" => "Report_type is invalid."
+             } == response
     end
 
     test "successfully filter reports by date", %{conn: conn} do

@@ -5,6 +5,7 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportParams do
 
   alias ISeeSeaWeb.ApiSpec.Schemas.AtypicalReportParams
   alias ISeeSeaWeb.ApiSpec.Schemas.MeteorologicalReportParams
+  alias ISeeSeaWeb.ApiSpec.Schemas.OtherReportParams
   alias ISeeSeaWeb.ApiSpec.Schemas.PollutionReportParams
   alias ISeeSeaWeb.ApiSpec.Schemas.JellyfishReportParams
 
@@ -15,7 +16,8 @@ defmodule ISeeSeaWeb.ApiSpec.Schemas.CreateReportParams do
       JellyfishReportParams,
       PollutionReportParams,
       MeteorologicalReportParams,
-      AtypicalReportParams
+      AtypicalReportParams,
+      OtherReportParams
     ]
   })
 end

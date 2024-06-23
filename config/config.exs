@@ -11,7 +11,7 @@ config :i_see_sea,
   ecto_repos: [ISeeSea.Repo],
   generators: [timestamp_type: :utc_datetime]
 
-config :i_see_sea, backend_url: "localhost:4000"
+config :i_see_sea, backend_url: "http://127.0.0.1:4000"
 
 # Configures the endpoint
 config :i_see_sea, ISeeSeaWeb.Endpoint,
@@ -94,8 +94,6 @@ config :i_see_sea, ISeeSea.Mailer,
     verify: :verify_none,
     versions: [:"tlsv1.2"]
   ]
-
-# Logger config for Grafana and Loki
 
 # config :logger, backends: [LoggerJSON]
 # config :i_see_sea, ISeeSea.Repo, loggers: [{LoggerJSON.Ecto, :log, [:info]}]

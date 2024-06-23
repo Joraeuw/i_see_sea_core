@@ -56,6 +56,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
               "fog_type",
               "wind_type",
               "sea_swell_type",
+              "storm_type",
               "inserted_at",
               "from_date",
               "to_date"

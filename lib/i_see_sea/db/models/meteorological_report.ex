@@ -2,7 +2,7 @@ defmodule ISeeSea.DB.Models.MeteorologicalReport do
   @moduledoc false
 
   use ISeeSea.DB.DefaultModel,
-    default_preloads: [:fog_type, :wind_type, :sea_swell_type, base_report: :pictures]
+    default_preloads: [:fog_type, :wind_type, :sea_swell_type, base_report: [:pictures, :user]]
 
   alias ISeeSea.DB.Models.SeaSwellType
   alias ISeeSea.DB.Models.WindType

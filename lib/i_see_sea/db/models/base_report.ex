@@ -1,6 +1,7 @@
 defmodule ISeeSea.DB.Models.BaseReport do
   @moduledoc false
 
+  alias ISeeSea.DB.Models.OtherReport
   alias ISeeSea.DB.Models.Picture
   alias ISeeSea.Repo
   alias ISeeSea.DB.Models.AtypicalActivityReport
@@ -17,7 +18,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
       :pollution_report,
       :meteorological_report,
       :atypical_activity_report,
-      :pictures
+      :other_report,
+      :pictures,
+      :user
     ]
 
   @derive {Flop.Schema,
@@ -29,6 +32,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
      :fog_type,
      :wind_type,
      :sea_swell_type,
+     :wind_type,
      :deleted,
      :inserted_at
    ],
@@ -86,8 +90,15 @@ defmodule ISeeSea.DB.Models.BaseReport do
          field: :name,
          ecto_type: :string,
          path: [:meteorological_reports, :sea_swell_type]
-       ]
+       ],
        #  Atypical fields
+       wind_type: [
+         binding: :wind_type,
+         field: :name,
+         ecto_type: :string,
+         path: [:atypical_activity_reports, :wind_type]
+       ]
+       #  Other fields
      ]
    ]}
 
@@ -109,6 +120,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
     has_one(:pollution_report, PollutionReport, foreign_key: :report_id)
     has_one(:meteorological_report, MeteorologicalReport, foreign_key: :report_id)
     has_one(:atypical_activity_report, AtypicalActivityReport, foreign_key: :report_id)
+    has_one(:other_report, OtherReport, foreign_key: :report_id)
 
     has_many(:pictures, Picture, foreign_key: :report_id)
 
@@ -150,7 +162,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
     |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
     |> case do
       {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->
-        {:ok, Repo.preload(entries, preloads ++ [:pictures]),
+        {:ok, Repo.preload(entries, preloads ++ [:pictures, :user]),
          Map.put(pagination, :total_count, total_count)}
 
       {:error, %Flop.Meta{}} ->
@@ -165,6 +177,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
       initial_from
       |> join(:inner, [br], jr in assoc(br, :jellyfish_report), as: :jellyfish_report)
       |> join(:left, [br, jr], s in assoc(jr, :species), as: :species)
+      |> distinct(true)
 
     {q, [jellyfish_report: :species]}
   end
@@ -174,6 +187,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
       initial_from
       |> join(:inner, [br], pr in assoc(br, :pollution_report), as: :pollution_report)
       |> join(:left, [br, pr], rt in assoc(pr, :pollution_types), as: :pollution_types)
+      |> distinct(true)
 
     {q, [pollution_report: :pollution_types]}
   end
@@ -184,8 +198,19 @@ defmodule ISeeSea.DB.Models.BaseReport do
       |> join(:inner, [br], aar in assoc(br, :atypical_activity_report),
         as: :atypical_activity_report
       )
+      |> join(:inner, [br, aar], ft in assoc(aar, :storm_type), as: :storm_type)
+      |> distinct(true)
 
-    {q, [:atypical_activity_report]}
+    {q, [atypical_activity_report: :storm_type]}
+  end
+
+  defp determine_query(initial_from, "other") do
+    q =
+      initial_from
+      |> join(:inner, [br], o in assoc(br, :other), as: :other)
+      |> distinct(true)
+
+    {q, [:other]}
   end
 
   defp determine_query(initial_from, "meteorological") do
@@ -195,6 +220,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
       |> join(:inner, [br, mr], ft in assoc(mr, :fog_type), as: :fog_type)
       |> join(:inner, [br, mr], sst in assoc(mr, :sea_swell_type), as: :sea_swell_type)
       |> join(:inner, [br, mr], wt in assoc(mr, :wind_type), as: :wind_type)
+      |> distinct(true)
 
     {q, [meteorological_report: [:fog_type, :sea_swell_type, :wind_type]]}
   end
@@ -209,7 +235,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
             pollution_report: pr,
             meteorological_report: mr,
             atypical_activity_report: aar,
-            pictures: pictures
+            other_report: o,
+            pictures: pictures,
+            user: %User{email: email}
           } = base,
           %Lens{view: Lens.expanded()} = lens
         ) do
@@ -227,12 +255,14 @@ defmodule ISeeSea.DB.Models.BaseReport do
         :inserted_at
       ])
       |> Map.merge(%{
-        pictures: Enum.map(pictures, &Picture.get_uri!/1)
+        pictures: Enum.map(pictures, &Picture.get_uri!/1),
+        user_email: email
       })
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(jr, lens)))
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(pr, lens)))
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(mr, lens)))
       |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(aar, lens)))
+      |> Map.merge(override_nil(ISeeSeaWeb.Focus.view(o, lens)))
     end
 
     defp override_nil(nil), do: %{}

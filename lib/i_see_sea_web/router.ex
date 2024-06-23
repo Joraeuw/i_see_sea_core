@@ -56,6 +56,7 @@ defmodule ISeeSeaWeb.Router do
       get("/fog_type", ConstantsController, :fog_type)
       get("/sea_swell_type", ConstantsController, :sea_swell_type)
       get("/wind_type", ConstantsController, :wind_type)
+      get("/storm_type", ConstantsController, :storm_type)
     end
 
     ## Reports
