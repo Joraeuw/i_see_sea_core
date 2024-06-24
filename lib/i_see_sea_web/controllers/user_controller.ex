@@ -34,7 +34,24 @@ defmodule ISeeSeaWeb.UserController do
   def verify_email(conn, params) do
     with {:ok, %{token: token}} <- validate(:very_email, params),
          :ok <- UserEmailVerification.verify_email(token) do
-      success_empty(conn)
+      conn
+      |> put_resp_content_type("text/html")
+      |> send_resp(200, """
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <title>Email Verification</title>
+          <script type="text/javascript">
+            setTimeout(function() {
+              window.close();
+            }, 3000); // Close the tab after 3 seconds
+          </script>
+        </head>
+        <body>
+          <p>Verification successful! This tab will close automatically in 3 seconds.</p>
+        </body>
+        </html>
+      """)
     else
       error ->
         error(conn, error)
