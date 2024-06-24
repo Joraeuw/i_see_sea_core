@@ -8,7 +8,8 @@ defmodule ISeeSeaWeb.Plug.AssignUser do
 
   def call(conn, _opts) do
     case Guardian.Plug.current_resource(conn) do
-      %User{verified: true} = user ->
+      #TODO: REVERT
+      %User{verified: _} = user ->
         Plug.Conn.merge_assigns(conn, user: user)
 
       _error ->

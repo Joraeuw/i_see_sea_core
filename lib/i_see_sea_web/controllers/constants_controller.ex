@@ -36,6 +36,10 @@ defmodule ISeeSeaWeb.ConstantsController do
     success(conn, %{values: Constants.WindType.values()})
   end
 
+  def storm_type(conn, _params) do
+    success(conn, %{values: Constants.StormType.values()})
+  end
+
   # Dynamic Types
   def jellyfish_species(conn, _params) do
     success(conn, %{values: JellyfishSpecies.values()})

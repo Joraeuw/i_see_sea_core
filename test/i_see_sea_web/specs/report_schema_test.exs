@@ -9,6 +9,7 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
   alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.Constants.ReportType
+  alias ISeeSea.Constants.StormType
 
   describe "report schema" do
     test "create jellyfish report", %{conn_user: conn, api_spec: api_spec} do
@@ -89,6 +90,7 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
         longitude: Faker.Address.longitude(),
         latitude: Faker.Address.latitude(),
         comment: Faker.Lorem.paragraph(),
+        storm_type: StormType.hailstorm(),
         pictures: [
           %Plug.Upload{
             path: "./priv/example_images/sea_1.jpg",
@@ -101,6 +103,29 @@ defmodule ISeeSeaWeb.Specs.ReportSchemaTest do
       json =
         conn
         |> post(Routes.report_path(conn, :create_report, ReportType.atypical_activity()), params)
+        |> json_response(200)
+
+      assert_schema(json, "CreateReportResponse", api_spec)
+    end
+
+    test "create other report", %{conn_user: conn, api_spec: api_spec} do
+      params = %{
+        name: Faker.Lorem.sentence(3..4),
+        longitude: Faker.Address.longitude(),
+        latitude: Faker.Address.latitude(),
+        comment: Faker.Lorem.paragraph(),
+        pictures: [
+          %Plug.Upload{
+            path: "./priv/example_images/sea_1.jpg",
+            content_type: PictureTypes.jpg(),
+            filename: "sea_1.jpg"
+          }
+        ]
+      }
+
+      json =
+        conn
+        |> post(Routes.report_path(conn, :create_report, ReportType.other()), params)
         |> json_response(200)
 
       assert_schema(json, "CreateReportResponse", api_spec)

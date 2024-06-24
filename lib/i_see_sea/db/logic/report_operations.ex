@@ -1,6 +1,7 @@
 defmodule ISeeSea.DB.Logic.ReportOperations do
   @moduledoc false
 
+  alias ISeeSea.DB.Models.OtherReport
   alias ISeeSea.Constants.PictureTypes
   alias ISeeSea.DB.Models.Picture
   alias ISeeSea.DB.Models.AtypicalActivityReport
@@ -74,7 +75,7 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
       {:ok,
        pollution_report
        |> Repo.reload!()
-       |> Repo.preload([:pollution_types, base_report: :pictures])}
+       |> Repo.preload([:pollution_types, base_report: [:pictures, :user]])}
     else
       {:error, error} -> Repo.rollback(error)
     end
@@ -83,9 +84,25 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   defp create_specific_report(base_report_id, report_type, params)
        when report_type == "atypical_activity" do
     # create_atypical_activity_report validation Ensures that `comment` was attached to base report
-    with {:ok, _} <- Report.validate(:create_atypical_activity_report, params),
+    with {:ok, %{storm_type: storm_type}} <-
+           Report.validate(:create_atypical_activity_report, params),
          {:ok, report} <-
            AtypicalActivityReport.create(%{
+             report_id: base_report_id,
+             storm_type_id: storm_type
+           }) do
+      {:ok, report}
+    else
+      {:error, error} -> Repo.rollback(error)
+    end
+  end
+
+  defp create_specific_report(base_report_id, report_type, params)
+       when report_type == "other" do
+    # create_other_report validation Ensures that `comment` was attached to base report
+    with {:ok, _} <- Report.validate(:create_other_report, params),
+         {:ok, report} <-
+           OtherReport.create(%{
              report_id: base_report_id
            }) do
       {:ok, report}

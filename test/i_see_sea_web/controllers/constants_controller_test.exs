@@ -38,7 +38,13 @@ defmodule ISeeSeaWeb.ConstantsControllerTest do
         |> json_response(200)
 
       assert response == %{
-               "values" => ["jellyfish", "meteorological", "atypical_activity", "pollution"]
+               "values" => [
+                 "jellyfish",
+                 "meteorological",
+                 "atypical_activity",
+                 "pollution",
+                 "other"
+               ]
              }
     end
   end
@@ -77,6 +83,19 @@ defmodule ISeeSeaWeb.ConstantsControllerTest do
         |> json_response(200)
 
       assert response == %{"values" => ["hurricane", "strong", "moderate", "weak", "no_wind"]}
+    end
+  end
+
+  describe "storm_type/2" do
+    test "successfully retrieve constants", %{conn: conn} do
+      response =
+        conn
+        |> get(Routes.constants_path(conn, :storm_type))
+        |> json_response(200)
+
+      assert response == %{
+               "values" => ["thunderstorm", "rain", "hailstorm", "no_storm"]
+             }
     end
   end
 

@@ -11,13 +11,13 @@ defmodule ISeeSeaWeb.Responses do
 
   def success(conn, payload, view \\ :expanded)
 
-  def success(%Plug.Conn{} = conn, payload, view) do
+  def success(%Plug.Conn{assigns: assigns} = conn, payload, view) do
     conn
     |> Conn.put_status(200)
-    |> Controller.json(Focus.view(payload, %Lens{view: view}))
+    |> Controller.json(Focus.view(payload, %Lens{view: view, user: assigns[:user]}))
   end
 
-  def success_paginated(%Plug.Conn{} = conn, data, pagination, view \\ :expanded)
+  def success_paginated(%Plug.Conn{assigns: assigns} = conn, data, pagination, view \\ :expanded)
       when is_list(data) do
     payload = %{
       entries: data,
@@ -26,13 +26,13 @@ defmodule ISeeSeaWeb.Responses do
 
     conn
     |> Conn.put_status(200)
-    |> Controller.json(Focus.view(payload, %Lens{view: view}))
+    |> Controller.json(Focus.view(payload, %Lens{view: view, user: assigns[:user]}))
   end
 
-  def success_create(%Plug.Conn{} = conn, payload, view \\ :expanded) do
+  def success_create(%Plug.Conn{assigns: assigns} = conn, payload, view \\ :expanded) do
     conn
     |> Conn.put_status(201)
-    |> Controller.json(Focus.view(payload, %Lens{view: view}))
+    |> Controller.json(Focus.view(payload, %Lens{view: view, user: assigns[:user]}))
   end
 
   def success_binary(conn, binary, content_type) do

@@ -126,6 +126,20 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Constants do
              }}
         ]
       )
+
+      operation(:storm_type,
+        summary: "Storm Types",
+        responses: [
+          ok:
+            {"Success", "application/json",
+             %Schema{
+               type: :object,
+               properties: %{
+                 values: %Schema{type: :string, enum: Constants.StormType.values()}
+               }
+             }}
+        ]
+      )
     end
   end
 end

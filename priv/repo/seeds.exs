@@ -51,6 +51,10 @@ defmodule ISeeSea.Seeder do
         fog_type_id: Constants.FogType.thick(),
         sea_swell_type_id: Constants.SeaSwellType.no_waves()
       )
+
+      Factory.insert!(:other_report)
+      Factory.insert!(:other_report)
+      Factory.insert!(:other_report)
     end)
   end
 end

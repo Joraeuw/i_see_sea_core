@@ -8,10 +8,13 @@ defmodule ISeeSea.Factory do
   alias ISeeSea.Constants
   alias ISeeSea.Constants.JellyfishQuantityRange
   alias ISeeSea.Constants.PictureTypes
-  alias ISeeSea.DB.Models.Role
   alias ISeeSea.Constants.ReportType
+  alias ISeeSea.Constants.StormType
+
   alias ISeeSea.Repo
+
   alias ISeeSea.DB.Models
+  alias ISeeSea.DB.Models.Role
 
   def build(:user) do
     {:ok, %{id: end_user_id}} = Role.get(:end_user)
@@ -82,6 +85,15 @@ defmodule ISeeSea.Factory do
     base = build(:base_report, report_type: ReportType.atypical_activity())
 
     %Models.AtypicalActivityReport{
+      base_report: base,
+      storm_type_id: StormType.hailstorm()
+    }
+  end
+
+  def build(:other_report) do
+    base = build(:base_report, report_type: ReportType.other())
+
+    %Models.OtherReport{
       base_report: base
     }
   end
