@@ -44,7 +44,7 @@ defmodule ISeeSeaWeb.UserControllerTest do
 
       conn
       |> get(Routes.user_path(conn, :verify_email, token))
-      |> response(204)
+      |> response(200)
 
       assert {:ok, %{verified: true}} = User.get(user_id)
       assert {:error, :not_found} = UserEmailVerification.get_scheduled(token)
