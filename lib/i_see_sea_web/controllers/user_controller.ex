@@ -20,7 +20,7 @@ defmodule ISeeSeaWeb.UserController do
          {:ok, entries, pagination} <-
            BaseReport.get_user_filtered_paginated_reports(
              report_type,
-             filter_params,
+             Filter.parse(filter_params),
              pagination_params,
              user.id
            ) do
