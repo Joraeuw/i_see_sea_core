@@ -28,7 +28,13 @@ defmodule ISeeSea.DB.Models.User do
 
   def changeset(struct, attrs \\ %{}) do
     {:ok, %{id: end_user_id}} = Role.get(:end_user)
-    attrs = Map.put_new(attrs, :role_id, end_user_id)
+
+    attrs =
+      if struct.id do
+        attrs
+      else
+        Map.put_new(attrs, :role_id, end_user_id)
+      end
 
     struct
     |> cast(attrs, @allowed_attrs)

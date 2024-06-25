@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.UserControllerTest do
   use ISeeSeaWeb.ConnCase, async: true
   use Oban.Testing, repo: ISeeSea.Repo
 
+  alias ISeeSea.DB.Models.Role
   alias ISeeSea.DB.Models.User
   alias ISeeSea.Events.PasswordResetWorker
   alias ISeeSea.Events.UserEmailVerification
@@ -136,6 +137,30 @@ defmodule ISeeSeaWeb.UserControllerTest do
       assert response(conn, 200)
 
       {:ok, %{password: hashed_new_password}} = User.get(user_id)
+
+      assert Bcrypt.verify_pass(new_password, hashed_new_password)
+    end
+
+    test "successfully reset password when admin", %{conn: conn} do
+      {:ok, %Role{id: role_id}} = Role.get_by(%{name: "admin"})
+
+      %{id: user_id} = insert!(:user, role_id: role_id)
+
+      token = UUID.uuid4()
+      new_password = "new_password123"
+
+      PasswordResetWorker.start_tracker(user_id, token)
+      assert {:ok, %{"user_id" => _, "token" => _}} = PasswordResetWorker.get_scheduled(token)
+
+      conn =
+        conn
+        |> post(Routes.user_path(conn, :reset_password, token), %{
+          "new_password" => new_password
+        })
+
+      assert response(conn, 200)
+
+      {:ok, %{password: hashed_new_password, role_id: ^role_id}} = User.get(user_id)
 
       assert Bcrypt.verify_pass(new_password, hashed_new_password)
     end
