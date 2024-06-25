@@ -97,7 +97,49 @@ defmodule ISeeSea.Emails do
     |> Mailer.deliver()
   end
 
+  def password_reset_email(user, token) do
+    reset_url = password_reset_url(token)
+
+    new()
+    |> to(user.email)
+    |> from("no-reply@example.com")
+    |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
+    |> html_body("""
+    <p>Здравейте #{user.username},</p>
+    <p>Можете да нулирате паролата си, като кликнете <a href="#{reset_url}">тук</a>.</p>
+    <p>Ако не сте заявили това, моля игнорирайте този имейл.</p>
+
+    <hr>
+
+    <p>Hello #{user.username},</p>
+    <p>You can reset your password by clicking <a href="#{reset_url}">here</a>.</p>
+    <p>If you did not request this, please ignore this email.</p>
+    """)
+    |> text_body("""
+    Здравейте #{user.username},
+
+    Можете да нулирате паролата си, като кликнете на следния линк:
+    #{reset_url}
+
+    Ако не сте заявили това, моля игнорирайте този имейл.
+
+    ----------------------------------------
+
+    Hello #{user.username},
+
+    You can reset your password by clicking the link below:
+    #{reset_url}
+
+    If you did not request this, please ignore this email.
+    """)
+    |> Mailer.deliver()
+  end
+
   defp confirmation_url(token) do
     "#{Environment.backend_url()}/api/verify-email/#{token}"
+  end
+
+  defp password_reset_url(token) do
+    "#{Environment.frontend_url()}/change-password/?t=#{token}"
   end
 end

@@ -58,6 +58,11 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.User do
       )
 
       operation(:verify_email, false)
+
+      # TODO: Add Api Doc for these
+      operation(:user_info, false)
+      operation(:reset_password, false)
+      operation(:forgot_password, false)
     end
   end
 end

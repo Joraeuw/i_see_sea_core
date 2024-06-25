@@ -46,6 +46,11 @@ defmodule ISeeSeaWeb.Router do
     post "/register", SessionController, :register
     get "/verify-email/:token", UserController, :verify_email
 
+    scope "/users" do
+      post "/forgot-password", UserController, :forgot_password
+      post "/reset-password/:token", UserController, :reset_password
+    end
+
     ## Constants
     scope "/constants" do
       get("/picture_type", ConstantsController, :picture_type)
@@ -76,6 +81,7 @@ defmodule ISeeSeaWeb.Router do
 
     ## Users
     scope "/users" do
+      get "/me", UserController, :user_info
       get "/reports/:report_type", UserController, :list_reports
     end
 
