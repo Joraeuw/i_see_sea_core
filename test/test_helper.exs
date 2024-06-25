@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(ISeeSea.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.start_owner!(ISeeSea.Repo, shared: false)
