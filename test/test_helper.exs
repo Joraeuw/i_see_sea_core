@@ -1,2 +1,2 @@
 ExUnit.start()
-Ecto.Adapters.SQL.Sandbox.mode(ISeeSea.Repo, {:shared, self()})
+Ecto.Adapters.SQL.Sandbox.mode(ISeeSea.Repo, :manual)
