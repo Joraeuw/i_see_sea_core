@@ -11,7 +11,9 @@ config :i_see_sea,
   ecto_repos: [ISeeSea.Repo],
   generators: [timestamp_type: :utc_datetime]
 
-config :i_see_sea, backend_url: "http://127.0.0.1:4000"
+config :i_see_sea,
+  backend_url: "http://127.0.0.1:4000",
+  frontend_url: "http://127.0.0.1:3000"
 
 # Configures the endpoint
 config :i_see_sea, ISeeSeaWeb.Endpoint,
@@ -36,7 +38,7 @@ config :i_see_sea, email: "iliad.support@tu-varna.bg"
 config :i_see_sea, Oban,
   repo: ISeeSea.Repo,
   plugins: [Oban.Plugins.Pruner],
-  queues: [user_email_verification: 10]
+  queues: [user_email_verification: 3, password_reset_worker: 3]
 
 config :i_see_sea, ISeeSea.Authentication.Tokenizer,
   issuer: "i_see_sea",

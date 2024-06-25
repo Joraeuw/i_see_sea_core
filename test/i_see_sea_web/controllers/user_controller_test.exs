@@ -1,8 +1,11 @@
 defmodule ISeeSeaWeb.UserControllerTest do
   @moduledoc false
-  alias ISeeSea.DB.Models.User
-  alias ISeeSea.Events.UserEmailVerification
   use ISeeSeaWeb.ConnCase, async: true
+  use Oban.Testing, repo: ISeeSea.Repo
+
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.Events.PasswordResetWorker
+  alias ISeeSea.Events.UserEmailVerification
 
   describe "list_reports/2" do
     test "successfully retrieve report data", %{conn_user: conn, user: user} do
@@ -66,6 +69,108 @@ defmodule ISeeSeaWeb.UserControllerTest do
              } == response
 
       assert {:ok, %{verified: false}} = User.get(user_id)
+    end
+  end
+
+  describe "forgot_password/2" do
+    test "successfully send password reset email", %{conn: conn} do
+      %{id: user_id, email: email} = insert!(:user)
+
+      conn =
+        conn
+        |> post(Routes.user_path(conn, :forgot_password), %{"email" => email})
+
+      assert response(conn, 204)
+
+      assert_received {:email,
+                       %Swoosh.Email{
+                         to: [{_, ^email}],
+                         subject: "Инструкции за нулиране на парола / Reset Password Instructions"
+                       }}
+
+      assert_enqueued(worker: PasswordResetWorker, args: %{user_id: user_id})
+    end
+
+    test "fail to send password reset email when email is not found", %{conn: conn} do
+      response =
+        conn
+        |> post(Routes.user_path(conn, :forgot_password), %{"email" => "nonexistent@example.com"})
+        |> json_response(404)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "Entity not found!"
+             } == response
+    end
+
+    test "fail to send password reset email when params are invalid", %{conn: conn} do
+      response =
+        conn
+        |> post(Routes.user_path(conn, :forgot_password), %{"invalid_param" => "value"})
+        |> json_response(422)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "Email can't be blank.",
+               "errors" => [%{"email" => "can't be blank"}]
+             } ==
+               response
+    end
+  end
+
+  describe "reset_password/2" do
+    test "successfully reset password", %{conn: conn} do
+      %{id: user_id} = insert!(:user)
+      token = UUID.uuid4()
+      new_password = "new_password123"
+
+      PasswordResetWorker.start_tracker(user_id, token)
+      assert {:ok, %{"user_id" => _, "token" => _}} = PasswordResetWorker.get_scheduled(token)
+
+      conn =
+        conn
+        |> post(Routes.user_path(conn, :reset_password, token), %{
+          "new_password" => new_password
+        })
+
+      assert response(conn, 200)
+
+      {:ok, %{password: hashed_new_password}} = User.get(user_id)
+
+      assert Bcrypt.verify_pass(new_password, hashed_new_password)
+    end
+
+    test "fail to reset password when token is invalid", %{conn: conn} do
+      new_password = "new_password123"
+
+      response =
+        conn
+        |> post(Routes.user_path(conn, :reset_password, "invalid_token"), %{
+          "new_password" => new_password
+        })
+        |> json_response(404)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "The resource could not be found."
+             } ==
+               response
+
+      assert {:error, :not_found} = PasswordResetWorker.get_scheduled("invalid_token")
+    end
+
+    test "fail to reset password when params are invalid", %{conn: conn} do
+      response =
+        conn
+        |> post(Routes.user_path(conn, :reset_password, "token"), %{"invalid_param" => "value"})
+        |> json_response(422)
+
+      assert %{
+               "message" => "The requested action has failed.",
+               "reason" => "New_password can't be blank.",
+               "errors" => [%{"new_password" => "can't be blank"}]
+             } ==
+               response
     end
   end
 end

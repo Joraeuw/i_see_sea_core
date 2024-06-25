@@ -3,13 +3,20 @@ defmodule ISeeSeaWeb.UserController do
 
   use ISeeSeaWeb, :controller
 
+  alias ISeeSea.Emails
+  alias ISeeSea.Events.PasswordResetWorker
+  alias ISeeSea.DB.Models.User
   alias ISeeSea.Events.UserEmailVerification
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.Params.Filter
 
   @permission_scope "i_see_sea:users"
   plug(AssertPermissions, ["#{@permission_scope}:list_reports"] when action == :list_reports)
-  plug(AssertPermissions, [] when action == :verify_email)
+
+  plug(
+    AssertPermissions,
+    [] when action in [:verify_email, :user_info, :forgot_password, :reset_password]
+  )
 
   plug(EnsurePermitted)
 
@@ -52,6 +59,32 @@ defmodule ISeeSeaWeb.UserController do
         </body>
         </html>
       """)
+    else
+      error ->
+        error(conn, error)
+    end
+  end
+
+  def user_info(%{assigns: %{user: user}} = conn, _params) do
+    success(conn, user)
+  end
+
+  def forgot_password(conn, params) do
+    with {:ok, %{email: email}} <- validate(:forgot_password, params),
+         {:ok, %{id: user_id} = user} <- User.get_by(%{email: email}),
+         token <- UUID.uuid4(),
+         {:ok, _} <- Emails.password_reset_email(user, token),
+         {:ok, _} <- PasswordResetWorker.start_tracker(user_id, token) do
+      success_empty(conn)
+    else
+      error -> error(conn, error)
+    end
+  end
+
+  def reset_password(conn, params) do
+    with {:ok, %{token: token, new_password: new_password}} <- validate(:reset_password, params),
+         :ok <- PasswordResetWorker.reset_password(token, new_password) do
+      success_binary(conn, "Password Reset Successfully", "text")
     else
       error ->
         error(conn, error)

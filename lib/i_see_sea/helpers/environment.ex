@@ -9,6 +9,10 @@ defmodule ISeeSea.Helpers.Environment do
     get(:backend_url, [:i_see_sea, :backend_url])
   end
 
+  def frontend_url do
+    get(:frontend_url, [:i_see_sea, :frontend_url])
+  end
+
   def i_see_sea_mail do
     get(:username, [:i_see_sea, ISeeSea.Mailer, :username])[:username]
   end
