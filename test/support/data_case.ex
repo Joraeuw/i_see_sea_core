@@ -29,6 +29,7 @@ defmodule ISeeSea.DataCase do
 
   setup tags do
     ISeeSea.DataCase.setup_sandbox(tags)
+    :ok
   end
 
   def setup_sandbox(tags) do

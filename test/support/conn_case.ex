@@ -35,11 +35,12 @@ defmodule ISeeSeaWeb.ConnCase do
     end
   end
 
-  setup _tags do
+  setup tags do
     import ISeeSea.Factory
 
     alias ISeeSea.Authentication.Tokenizer
 
+    ISeeSea.DataCase.setup_sandbox(tags)
     # :ok = Ecto.Adapters.SQL.Sandbox.checkout(ISeeSea.Repo)
 
     api_spec = ISeeSeaWeb.ApiSpec.spec()
