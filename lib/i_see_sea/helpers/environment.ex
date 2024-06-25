@@ -13,6 +13,10 @@ defmodule ISeeSea.Helpers.Environment do
     get(:frontend_url, [:i_see_sea, :frontend_url])
   end
 
+  def allowed_origins do
+    get(:allowed_origins, [:i_see_sea, :allowed_origins])
+  end
+
   def i_see_sea_mail do
     get(:username, [:i_see_sea, ISeeSea.Mailer, :username])[:username]
   end
