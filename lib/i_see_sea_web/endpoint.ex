@@ -1,7 +1,9 @@
 defmodule ISeeSeaWeb.Endpoint do
   use Phoenix.Endpoint, otp_app: :i_see_sea
 
-  plug CORSPlug, origin: ["http://localhost:3000", "http://127.0.0.1:3000"]
+  alias ISeeSea.Helpers.Environment
+
+  plug CORSPlug, origin: Environment.allowed_origins()
 
   # The session will be stored in the cookie and signed,
   # this means its contents can be read but not tampered with.

@@ -13,7 +13,11 @@ config :i_see_sea,
 
 config :i_see_sea,
   backend_url: "http://127.0.0.1:4000",
-  frontend_url: "http://127.0.0.1:3000"
+  frontend_url: "http://127.0.0.1:3000",
+  allowed_origins: [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ]
 
 # Configures the endpoint
 config :i_see_sea, ISeeSeaWeb.Endpoint,
