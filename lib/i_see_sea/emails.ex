@@ -102,7 +102,7 @@ defmodule ISeeSea.Emails do
 
     new()
     |> to(user.email)
-    |> from("no-reply@example.com")
+    |> from(Environment.i_see_sea_mail())
     |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
     |> html_body("""
     <p>Здравейте #{user.username},</p>
