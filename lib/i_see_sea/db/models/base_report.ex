@@ -49,7 +49,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
    ],
    default_order: %{
      order_by: [:id],
-     order_directions: [:asc]
+     order_directions: [:desc]
    },
    adapter_opts: [
      join_fields: [

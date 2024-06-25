@@ -27,22 +27,19 @@ defmodule ISeeSea.DB.Models.AtypicalActivityReport do
     alias ISeeSeaWeb.Lens
 
     def view(
-          %{base_report: base, storm_type_id: storm_type} = atypical_activity_report,
+          %{base_report: base} = atypical_activity_report,
           %Lens{view: Lens.expanded()} = lens
         ) do
       atypical_activity_report
       |> Map.from_struct()
-      |> Map.take([:report_id])
+      |> Map.take([:report_id, :storm_type_id])
       |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
-      |> Map.merge(%{
-        storm_type: storm_type
-      })
     end
 
     def view(atypical_activity_report, %Lens{view: Lens.from_base()}) do
       atypical_activity_report
       |> Map.from_struct()
-      |> Map.take([:report_id])
+      |> Map.take([:report_id, :storm_type_id])
     end
   end
 end
