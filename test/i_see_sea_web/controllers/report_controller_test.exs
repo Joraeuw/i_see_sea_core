@@ -493,9 +493,9 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         |> json_response(422)
 
       assert %{
-               "errors" => [%{"comment" => "can't be blank"}, %{"storm_type" => "can't be blank"}],
+               "errors" => [%{"storm_type" => "can't be blank"}],
                "message" => "The requested action has failed.",
-               "reason" => "Comment can't be blank, storm_type can't be blank."
+               "reason" => "Storm_type can't be blank."
              } == response
     end
 

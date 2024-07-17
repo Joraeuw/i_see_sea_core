@@ -35,7 +35,7 @@ defmodule ISeeSeaWeb.ConnCase do
     end
   end
 
-  setup tags do
+  setup _tags do
     import ISeeSea.Factory
 
     alias ISeeSea.Authentication.Tokenizer
