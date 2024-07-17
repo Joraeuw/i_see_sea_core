@@ -50,7 +50,7 @@ defmodule ISeeSeaWeb.Params.Report do
 
   defparams :create_atypical_activity_report do
     required(:storm_type, :string, values: ISeeSea.Constants.StormType.values())
-    required(:comment, :string)
+    optional(:comment, :string)
   end
 
   defparams :create_other_report do

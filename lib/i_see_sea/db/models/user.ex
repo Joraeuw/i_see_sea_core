@@ -6,7 +6,7 @@ defmodule ISeeSea.DB.Models.User do
   alias ISeeSea.DB.Models.Role
   alias ISeeSea.DB.Models.BaseReport
 
-  @derive {ISeeSeaWeb.Focus, attrs: [:first_name, :last_name, :email, :username, :phone_number]}
+  @derive {ISeeSeaWeb.Focus, attrs: [:first_name, :last_name, :email, :username, :phone_number, :verified]}
 
   @required_attrs [:first_name, :last_name, :email, :password, :username]
   @allowed_attrs [:phone_number, :role_id, :verified | @required_attrs]
