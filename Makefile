@@ -1,6 +1,6 @@
 .PHONY: setup build run lint fmt test test.watch \
  db.setup db.create db.migrate db.seed db.drop \
- db.reset repl repl.run repl.test check credo
+ db.reset repl repl.run repl.test check credo spec
 
 # Project-wide
 
@@ -72,3 +72,7 @@ repl:
 
 repl.test:
 	iex -S mix test.watch
+
+# Generate OpenAPI Spec
+spec:
+	mix spec

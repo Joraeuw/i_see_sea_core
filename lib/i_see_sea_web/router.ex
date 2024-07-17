@@ -15,6 +15,17 @@ defmodule ISeeSeaWeb.Router do
     plug OpenApiSpex.Plug.PutApiSpec, module: ISeeSeaWeb.ApiSpec
   end
 
+  pipeline :image_uploading do
+    plug Plug.Parsers,
+      parsers: [:json, :multipart],
+      pass: ["*/*"],
+      json_decoder: Phoenix.json_library()
+  end
+
+  pipeline :authenticated do
+    plug ISeeSeaWeb.Plug.EnsureAuthenticated
+  end
+
   scope "/", ISeeSeaWeb do
     pipe_through :browser
 
@@ -28,10 +39,61 @@ defmodule ISeeSeaWeb.Router do
     get "/doc", Redoc.Plug.RedocUI, spec_url: "/api/spec/openapi"
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", ISeeSeaWeb do
-  #   pipe_through :api
-  # end
+  scope "/api", ISeeSeaWeb do
+    pipe_through :api
+
+    post "/login", SessionController, :login
+    post "/register", SessionController, :register
+    get "/verify-email/:token", UserController, :verify_email
+
+    scope "/users" do
+      post "/forgot-password", UserController, :forgot_password
+      post "/reset-password/:token", UserController, :reset_password
+    end
+
+    ## Constants
+    scope "/constants" do
+      get("/picture_type", ConstantsController, :picture_type)
+      get("/jellyfish_quantity", ConstantsController, :jellyfish_quantity)
+      get("/jellyfish_species", ConstantsController, :jellyfish_species)
+      get("/pollution_type", ConstantsController, :pollution_type)
+      get("/report_type", ConstantsController, :report_type)
+      get("/fog_type", ConstantsController, :fog_type)
+      get("/sea_swell_type", ConstantsController, :sea_swell_type)
+      get("/wind_type", ConstantsController, :wind_type)
+      get("/storm_type", ConstantsController, :storm_type)
+    end
+
+    ## Reports
+    scope "/reports" do
+      get "/:report_type", ReportController, :index
+    end
+
+    scope "/pictures" do
+      get "/:picture_id", PictureController, :show
+    end
+  end
+
+  scope "/api", ISeeSeaWeb do
+    pipe_through :authenticated
+
+    get "/refresh", SessionController, :refresh
+
+    ## Users
+    scope "/users" do
+      get "/me", UserController, :user_info
+      get "/reports/:report_type", UserController, :list_reports
+    end
+
+    ## Reports
+    scope "/reports" do
+      delete "/delete/:report_id", ReportController, :delete_report
+
+      pipe_through :image_uploading
+
+      post "/create/:report_type", ReportController, :create_report
+    end
+  end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:i_see_sea, :dev_routes) do

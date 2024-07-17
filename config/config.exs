@@ -11,6 +11,14 @@ config :i_see_sea,
   ecto_repos: [ISeeSea.Repo],
   generators: [timestamp_type: :utc_datetime]
 
+config :i_see_sea,
+  backend_url: "http://127.0.0.1:4000",
+  frontend_url: "http://127.0.0.1:3000",
+  allowed_origins: [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000"
+  ]
+
 # Configures the endpoint
 config :i_see_sea, ISeeSeaWeb.Endpoint,
   url: [host: "localhost"],
@@ -29,7 +37,21 @@ config :i_see_sea, ISeeSeaWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :i_see_sea, ISeeSea.Mailer, adapter: Swoosh.Adapters.Local
+config :i_see_sea, email: "iliad.support@tu-varna.bg"
+
+config :i_see_sea, Oban,
+  repo: ISeeSea.Repo,
+  plugins: [Oban.Plugins.Pruner],
+  queues: [user_email_verification: 3, password_reset_worker: 3]
+
+config :i_see_sea, ISeeSea.Authentication.Tokenizer,
+  issuer: "i_see_sea",
+  secret_key: "OH+s9QEzQ4V5lJk7t1XHbfwxqg41oKCV/nAREVpyzmLWh6R+ujXQE+EO9QzgVM2k"
+
+config :guardian, Guardian.DB,
+  repo: ISeeSea.Repo,
+  schema_name: "guardian_tokens",
+  sweep_interval: 10
 
 # Configure esbuild (the version is required)
 config :esbuild,
@@ -61,7 +83,23 @@ config :logger, :console,
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
-# Logger config for Grafana and Loki
+# Goal regex config
+config :goal,
+  phone_regex: ~r/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
+
+config :i_see_sea, ISeeSea.Mailer,
+  adapter: Swoosh.Adapters.SMTP,
+  relay: "mail.tu-varna.bg",
+  port: 587,
+  username: "iliad.support@tu-varna.bg",
+  password: System.get_env("SMTP_PASSWORD"),
+  ssl: false,
+  tls: :always,
+  auth: :always,
+  tls_options: [
+    verify: :verify_none,
+    versions: [:"tlsv1.2"]
+  ]
 
 # config :logger, backends: [LoggerJSON]
 # config :i_see_sea, ISeeSea.Repo, loggers: [{LoggerJSON.Ecto, :log, [:info]}]
@@ -69,8 +107,6 @@ config :phoenix, :json_library, Jason
 # config :logger_json, :backend,
 #  metadata: [:file, :line, :function, :module, :application, :httpRequest, :query],
 #  formatter: LoggerJSON.Formatters.BasicLogger
-
-config :phoenix, :json_library, Jason
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

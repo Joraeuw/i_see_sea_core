@@ -7,12 +7,6 @@ import Config
 # before starting your production server.
 config :i_see_sea, ISeeSeaWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
-# Configures Swoosh API Client
-config :swoosh, api_client: Swoosh.ApiClient.Finch, finch_name: ISeeSea.Finch
-
-# Disable Swoosh Local Memory Storage
-config :swoosh, local: false
-
 # Do not print debug messages in production
 config :logger, level: :info
 
@@ -29,6 +23,13 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
   ]
 
 config :phoenix, :logger, false
+
+config :i_see_sea,
+  backend_url: "https://i-see-sea.fly.dev",
+  frontend_url: "https://i-see-sea-frontend.fly.dev",
+  allowed_origins: [
+    "https://i-see-sea-frontend.fly.dev"
+  ]
 
 # Runtime production configuration, including reading
 # of environment variables, is done on config/runtime.exs.

@@ -10,6 +10,8 @@ defmodule ISeeSea.DB.DefaultModel do
       import Ecto.Query, warn: false
       alias ISeeSea.Repo
 
+      @default_preloads unquote(default_preloads)
+
       def get(id, preloads \\ unquote(default_preloads)) do
         case Repo.get(__MODULE__, id) |> Repo.preload(preloads) do
           entry when not is_nil(entry) -> {:ok, entry}
@@ -60,6 +62,29 @@ defmodule ISeeSea.DB.DefaultModel do
         end
       end
 
+      def get_with_filter(
+            params,
+            bindings,
+            pagination,
+            initial_from \\ unquote(__MODULE__),
+            preloads \\ unquote(default_preloads)
+          ) do
+        pagination = Map.merge(%{page: 1, page_size: 10}, pagination)
+
+        bindings
+        |> Enum.reduce(initial_from, &process_binding/2)
+        |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
+        |> case do
+          {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->
+            {:ok, Repo.preload(entries, preloads), Map.put(pagination, :total_count, total_count)}
+
+          {:error, %Flop.Meta{}} ->
+            {:error, :bad_request}
+        end
+      rescue
+        _ in Ecto.QueryError -> {:error, :bad_request}
+      end
+
       def where_clause(search_terms) do
         where_match_clause = fn {k, v}, conditions ->
           dynamic([q], field(q, ^k) == ^v and ^conditions)
@@ -69,9 +94,13 @@ defmodule ISeeSea.DB.DefaultModel do
       end
 
       def all(preloads \\ unquote(default_preloads)) do
-        {:ok,
-         Repo.all(__MODULE__)
-         |> Repo.preload(preloads)}
+        {:ok, all!(preloads)}
+      end
+
+      def all!(preloads \\ unquote(default_preloads)) do
+        __MODULE__
+        |> Repo.all()
+        |> Repo.preload(preloads)
       end
 
       def update(id, attrs, preloads \\ unquote(default_preloads)) do
@@ -95,6 +124,28 @@ defmodule ISeeSea.DB.DefaultModel do
           entry -> Repo.delete(entry)
         end
       end
+
+      def soft_delete(entry) do
+        changeset = changeset(entry, %{deleted: true})
+
+        case Repo.update(changeset) do
+          {:ok, entry} -> {:ok, entry}
+          {:error, changeset} -> {:error, changeset}
+        end
+      end
+
+      defp process_binding(current_binding, q) do
+        join(q, :left, [current_binding], entity in assoc(current_binding, ^current_binding),
+          as: ^current_binding
+        )
+      end
+
+      defoverridable(
+        create: 2,
+        create: 1,
+        get: 2,
+        get: 1
+      )
     end
   end
 end

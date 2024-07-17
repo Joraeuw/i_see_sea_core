@@ -5,7 +5,7 @@ defmodule ISeeSea.MixProject do
     [
       app: :i_see_sea,
       version: "0.1.0",
-      elixir: "~> 1.14",
+      elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
@@ -59,13 +59,24 @@ defmodule ISeeSea.MixProject do
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.2"},
+      {:bcrypt_elixir, "~> 3.1.0"},
+      {:guardian, "~> 2.3.2"},
+      {:guardian_db, "~> 3.0.0"},
       {:open_api_spex, "~> 3.18"},
       {:redoc_ui_plug, "~> 0.2.1"},
       {:prom_ex, "~> 1.9.0"},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:logger_json, "~> 5.1.4"},
-      {:focus, "~> 0.4.0"},
-      {:excoveralls, "~> 0.18.1", only: :test}
+      {:excoveralls, "~> 0.18.1", only: :test},
+      {:goal, "~> 0.3.3"},
+      {:faker, "~> 0.18", only: [:dev, :test]},
+      {:flop, "~> 0.25.0"},
+      {:image, "~> 0.46.0"},
+      {:cors_plug, "~> 3.0"},
+      {:uuid, "~> 1.1.8"},
+      {:oban, "~> 2.17.10"},
+      {:timex, "~> 3.7.11"},
+      {:gen_smtp, "~> 1.0"}
     ]
   end
 
@@ -77,7 +88,7 @@ defmodule ISeeSea.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build"],
+      setup: ["deps.get", "ecto.setup", "assets.setup", "assets.build", "spec"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
@@ -87,7 +98,8 @@ defmodule ISeeSea.MixProject do
         "tailwind i_see_sea --minify",
         "esbuild i_see_sea --minify",
         "phx.digest"
-      ]
+      ],
+      spec: ["openapi.spec.json --spec ISeeSeaWeb.ApiSpec"]
     ]
   end
 end

@@ -2,7 +2,7 @@ import Config
 
 # Configure your database
 config :i_see_sea, ISeeSea.Repo,
-  username: "zhora",
+  username: "postgres",
   password: "postgres",
   hostname: "localhost",
   database: "i_see_sea_dev",
@@ -92,4 +92,4 @@ config :phoenix, :plug_init_mode, :runtime
 config :phoenix_live_view, :debug_heex_annotations, true
 
 # Disable swoosh api client as it is only required for production adapters.
-config :swoosh, :api_client, false
+config :i_see_sea, ISeeSea.Mailer, adapter: Swoosh.Adapters.Local
