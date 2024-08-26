@@ -16,13 +16,13 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Report
 
-  def create(user, %{pictures: pictures} = validated_base, params) do
+  def create(user, validated_base, params) do
     Repo.transaction(fn ->
       with {:ok, %BaseReport{id: id, report_type: report_type}} <-
              BaseReport.create(
                Map.merge(validated_base, %{user_id: user.id, report_date: DateTime.utc_now()})
              ),
-           :ok <- attach_pictures(id, pictures),
+           :ok <- attach_pictures(id, validated_base),
            {:ok, report} <- create_specific_report(id, report_type, params) do
         report
       else
@@ -126,7 +126,7 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     end)
   end
 
-  defp attach_pictures(report_id, pictures) do
+  defp attach_pictures(report_id, %{pictures: pictures}) do
     Enum.all?(pictures, fn %Plug.Upload{content_type: content_type, path: path} ->
       with {:ok, image} <- Image.open(path),
            {width, height, _} <- Image.shape(image),
@@ -153,4 +153,6 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
       {:error, :image_not_uploaded}
     end
   end
+
+  defp attach_pictures(_, _), do: :ok
 end

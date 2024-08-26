@@ -2,6 +2,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.User do
   @moduledoc false
 
   alias ISeeSeaWeb.ApiSpec.Schemas.IndexReportResponse
+  alias ISeeSeaWeb.ApiSpec.Schemas.UserInfo
   alias AveratoWeb.Specs.Schemas.BadRequestErrorResponse
   alias ISeeSea.Constants.ReportType
   alias ISeeSeaWeb.ApiSpec.QueryHelpers
@@ -57,10 +58,15 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.User do
         ]
       )
 
-      operation(:verify_email, false)
+      operation(:user_info,
+        summary: "User Info",
+        responses: [
+          ok: {"Response", "application/json", UserInfo},
+          unauthorized: {"Unauthorized", "application/json", UnauthorizedErrorResponse}
+        ]
+      )
 
-      # TODO: Add Api Doc for these
-      operation(:user_info, false)
+      operation(:verify_email, false)
       operation(:reset_password, false)
       operation(:forgot_password, false)
     end

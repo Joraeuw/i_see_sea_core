@@ -12,7 +12,7 @@ defmodule ISeeSeaWeb.Params.Report do
       defparams :create_base_report do
         required(:report_type, :string, values: ReportType.values())
         required(:name, :string)
-        required(:pictures, {:array, :map}, min: 1)
+        optional(:pictures, {:array, :map})
 
         required(:longitude, :float,
           greater_than_or_equal_to: -180.0,
