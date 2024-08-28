@@ -105,7 +105,7 @@ defmodule ISeeSeaWeb.ReportControllerTest do
       assert {:ok, %JellyfishReport{}} = JellyfishReport.get_by(%{report_id: id})
     end
 
-    test "jellyfish report fails when no image is provided", %{conn_user: conn} do
+    test "jellyfish report succeeds when no image is provided", %{conn_user: conn} do
       params = %{
         name: Faker.Lorem.sentence(3..4),
         longitude: Faker.Address.longitude(),
@@ -115,16 +115,9 @@ defmodule ISeeSeaWeb.ReportControllerTest do
         species: "dont_know"
       }
 
-      response =
-        conn
-        |> post(Routes.report_path(conn, :create_report, ReportType.jellyfish()), params)
-        |> json_response(422)
-
-      assert response == %{
-               "errors" => [%{"pictures" => "should have at least %{count} item(s)"}],
-               "message" => "The requested action has failed.",
-               "reason" => "Pictures should have at least %{count} item(s)."
-             }
+      assert conn
+             |> post(Routes.report_path(conn, :create_report, ReportType.jellyfish()), params)
+             |> json_response(200)
     end
 
     test "pollution report created successfully", %{conn_user: conn} do

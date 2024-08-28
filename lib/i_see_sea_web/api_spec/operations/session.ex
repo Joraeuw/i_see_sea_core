@@ -28,7 +28,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Session do
 
       operation(:login,
         summary: "Login",
-        request_body: {"Register params", "application/json", LoginParams},
+        request_body: {"Login params", "application/json", LoginParams},
         responses: [
           ok: {"Response", "application/json", SessionResponse},
           unprocessable_entity:
