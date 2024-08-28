@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.ReportController do
 
   use ISeeSeaWeb, :controller
 
+  alias ISeeSea.Helpers.Broadcaster
   alias ISeeSea.DB.Models.User
   alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Filter
@@ -19,6 +20,7 @@ defmodule ISeeSeaWeb.ReportController do
   def create_report(%{assigns: %{user: user}} = conn, params) do
     with {:ok, validated_base} <- validate(:create_base_report, params),
          {:ok, report} <- ReportOperations.create(user, validated_base, params) do
+      Broadcaster.broadcast!("reports:updates", "add_marker", report)
       success(conn, report)
     else
       {:error, :failed_to_attach_pollution_type} ->
@@ -76,7 +78,8 @@ defmodule ISeeSeaWeb.ReportController do
     with {:ok, %{report_id: report_id}} <- validate(:delete_report, params),
          {:ok, %{user_id: user_id} = report} <- BaseReport.get(report_id),
          :ok <- With.check(allow_action?(user, user_id), :forbidden),
-         {:ok, _} <- BaseReport.soft_delete(report) do
+         {:ok, %{report_id: report_id}} <- BaseReport.soft_delete(report) do
+      Broadcaster.broadcast!("reports:updates", "delete_marker", %{report_id: report_id})
       success_empty(conn)
     else
       {:error, :forbidden} ->

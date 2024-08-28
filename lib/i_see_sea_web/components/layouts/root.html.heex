@@ -12,6 +12,37 @@
     </script>
   </head>
   <body class="bg-white antialiased">
+    <nav class="bg-gray-800 p-4 flex justify-between items-center">
+      <div class="text-white text-2xl font-bold">
+        Sea Report
+      </div>
+      <ul class="flex space-x-4">
+        <li>
+          <a
+            href="/"
+            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+          >
+            Home
+          </a>
+        </li>
+        <li>
+          <a
+            href="/about"
+            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+          >
+            About
+          </a>
+        </li>
+        <li>
+          <a
+            href="/contact"
+            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
+          >
+            Contact
+          </a>
+        </li>
+      </ul>
+    </nav>
     <%= @inner_content %>
   </body>
 </html>

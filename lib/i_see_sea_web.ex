@@ -33,6 +33,11 @@ defmodule ISeeSeaWeb do
   def channel do
     quote do
       use Phoenix.Channel
+
+      require ISeeSeaWeb.Lens
+      alias ISeeSeaWeb.Focus
+      alias ISeeSeaWeb.Lens
+
     end
   end
 
@@ -65,6 +70,10 @@ defmodule ISeeSeaWeb do
     quote do
       use Phoenix.LiveView,
         layout: {ISeeSeaWeb.Layouts, :app}
+
+      require ISeeSeaWeb.Lens
+      alias ISeeSeaWeb.Focus
+      alias ISeeSeaWeb.Lens
 
       unquote(html_helpers())
     end
@@ -106,6 +115,7 @@ defmodule ISeeSeaWeb do
 
       alias ISeeSeaWeb.Utils.Validation
 
+      alias ISeeSeaWeb.Router.Helpers, as: Routes
       # Routes generation with the ~p sigil
       unquote(verified_routes())
     end

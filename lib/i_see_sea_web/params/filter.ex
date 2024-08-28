@@ -16,10 +16,15 @@ defmodule ISeeSeaWeb.Params.Filter do
     optional(:page_size, :integer)
   end
 
-  def parse(%{filters: filters_string} = filter) do
+  def parse(%{filters: filters_string} = filter) when is_binary(filters_string) do
+    filter
+    |> Map.put(:filters, Jason.decode!(filters_string))
+    |> parse()
+  end
+
+  def parse(%{filters: filters} = filter) do
     parsed_filters =
-      filters_string
-      |> Jason.decode!()
+      filters
       |> parse_data_ranges()
       |> ensure_defaults()
 
@@ -38,7 +43,7 @@ defmodule ISeeSeaWeb.Params.Filter do
     end)
   end
 
-  defp parse_data_ranges(filters) do
+  def parse_data_ranges(filters) do
     from_date_filter = Enum.find(filters, fn f -> f["field"] == "from_date" end)
     to_date_filter = Enum.find(filters, fn f -> f["field"] == "to_date" end)
 

@@ -64,15 +64,15 @@ defmodule ISeeSea.DB.DefaultModel do
 
       def get_with_filter(
             params,
-            bindings,
+            bindings \\ unquote(default_preloads),
             pagination,
-            initial_from \\ unquote(__MODULE__),
+            initial_from \\ __MODULE__,
             preloads \\ unquote(default_preloads)
           ) do
         pagination = Map.merge(%{page: 1, page_size: 10}, pagination)
 
         bindings
-        |> Enum.reduce(initial_from, &process_binding/2)
+        |> Enum.reduce(distinct(initial_from, true), &process_binding/2)
         |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
         |> case do
           {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->

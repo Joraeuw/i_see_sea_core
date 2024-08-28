@@ -29,7 +29,9 @@ defmodule ISeeSeaWeb.Router do
   scope "/", ISeeSeaWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", HomeLive, :index
+
+    # live "/", HomePageLive
   end
 
   scope "/api" do
