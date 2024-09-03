@@ -8,40 +8,37 @@
       <%= assigns[:page_title] || "ISeeSea" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet">
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
   <body class="bg-white antialiased">
-    <nav class="bg-gray-800 p-4 flex justify-between items-center">
-      <div class="text-white text-2xl font-bold">
-        Sea Report
+  <nav class="navbar">
+      <div class="logo">
+        <img id="logo_image" src="/images/Assetss/ICC-logo.png" />
       </div>
-      <ul class="flex space-x-4">
-        <li>
-          <a
-            href="/"
-            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-          >
-            Home
-          </a>
-        </li>
-        <li>
-          <a
-            href="/about"
-            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-          >
-            About
-          </a>
-        </li>
-        <li>
-          <a
-            href="/contact"
-            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-          >
-            Contact
-          </a>
-        </li>
-      </ul>
+      
+      <div class="items">
+        <button class="buttons_nav">Home</button> <button class="buttons_nav">Profile</button>
+        <button class="buttons_nav">Reports</button>
+        <button class="buttons_nav">Our purpose</button><button class="buttons_nav">About us</button>
+      </div>
+      
+      <div class="lang_log">
+        <button class="log">
+          <img src="images/Assetss/zname1.jpg"/>
+        </button>
+        <button class="lang">
+          <img src="images/Assetss/login.png"/>
+        </button>
+       
+        
+      </div>
     </nav>
     <%= @inner_content %>
   </body>

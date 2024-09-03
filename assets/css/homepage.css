@@ -1,0 +1,201 @@
+
+.Page{
+    height: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    
+}
+
+.Reports {
+  position: relative;
+  height: 600px;
+  width: 200px;
+  border-radius: 1%;
+  box-shadow: 2px 2px 5px rgba(104, 103, 103, 0.6);
+  display: flex;             
+  flex-direction: column;     
+  justify-content: space-around;    
+  align-items: center; 
+  overflow: hidden;
+  /*background-color: rgb(220,255,255);*/
+  background-color: rgb(54,135,154);
+
+}
+.square-dark-m {
+  position: absolute;
+  top: 110px;
+  left: 130px;
+  width: 105px;
+  height: 105px;
+  background-color: #189ab4;
+  transform: rotate(132deg);
+  border-radius: 13px;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(49, 49, 49, .1), 0 3px 16px 0 rgba(0, 0, 0, .2);
+}
+.square-dark-m1 {
+  position: absolute;
+  top: 310px;
+  left: 150px;
+  width: 125px;
+  height: 125px;
+  background-color: #189ab4;
+  transform: rotate(132deg);
+  border-radius: 13px;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(49, 49, 49, .1), 0 3px 16px 0 rgba(0, 0, 0, .2);
+}
+.square-dark-m2 {
+  position: absolute;
+  top: 210px;
+  left: -70px;
+  width: 125px;
+  height: 125px;
+  background-color: #189ab4;
+  transform: rotate(132deg);
+  border-radius: 13px;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(49, 49, 49, .1), 0 3px 16px 0 rgba(0, 0, 0, .2);
+}
+.square-light-bottm-m {
+  position: absolute;
+  top: 10px;
+  bottom: -50px;
+  right: 75%;
+  width: 80px;
+  height: 80px;
+  background-color: #d4f1f4;
+  transform: rotate(135deg);
+  border-radius: 13px;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(49, 49, 49, .1), 0 3px 16px 0 rgba(0, 0, 0, .2);
+}
+.square-light-bottm-m1 {
+  position: absolute;
+  top: 410px;
+  right: 75%;
+  width: 100px;
+  height: 100px;
+  background-color: #d4f1f4;
+  transform: rotate(135deg);
+  border-radius: 13px;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(49, 49, 49, .1), 0 3px 16px 0 rgba(0, 0, 0, .2);
+}
+.square-light-bottm-m2 {
+  position: absolute;
+  top: 510px;
+  right: -35%;
+  width: 80px;
+  height: 80px;
+  background-color: #d4f1f4;
+  transform: rotate(135deg);
+  border-radius: 13px;
+  z-index: 1;
+  box-shadow: 0 2px 4px 0 rgba(49, 49, 49, .1), 0 3px 16px 0 rgba(0, 0, 0, .2);
+}
+  .ReportButton{
+    position: relative;
+    width: 100px;  
+    height: 100px; 
+    display: flex; 
+    align-items: center;
+    overflow: hidden; 
+    border-radius: 25%;
+    box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6),
+    -5px -5px 9px rgba(250, 249, 249, 0.6);
+    z-index: 10;
+  }
+
+
+  #jelly:active{
+    transform: translateY(5px); 
+    box-shadow: 0px 0px;
+  }
+  #umbrella:active{
+    transform: translateY(5px); 
+    box-shadow: 0px 0px;
+  }
+  #pollution:active{
+    transform: translateY(5px); 
+    box-shadow: 0px 0px;
+  }
+
+  #storm:active{
+    transform: translateY(5px); 
+    box-shadow: 0px 0px;
+  }
+  #oil:active{
+    transform: translateY(5px); 
+    box-shadow: 0px 0px;
+  }
+  .Map{
+    
+    width: 850px;
+    height: 500px;
+    border-radius: 1%;
+    box-shadow: 2px 2px 5px rgba(104, 103, 103, 0.6);
+  }
+
+  .Conteiner{
+    display:flex;
+    flex-direction: row;
+  }
+  .MapInfo{
+    width:100%;
+  }
+  .Info{
+    width: 850px;
+    height: 100px;
+    background-color: rgb(233, 224, 224);
+    border-radius: 1%;
+    box-shadow: 2px 2px 5px rgba(104, 103, 103, 0.6);
+   
+  }
+  .Right-info{
+    display: flex;              /* Make the Reports div a flex container */
+    flex-direction: column;     /* Stack children vertically */
+    justify-content: space-around;    /* Center children vertically */
+    align-items: center;        /* Center children horizontally */
+    height:600px;  
+    border-radius: 1%;
+    box-shadow: 2px 2px 5px rgba(104, 103, 103, 0.6);
+    
+  }
+  .Reports, .MapInfo, .Right-info {
+    flex: 1; /* Allow items to grow equally */
+  }
+  .proba{
+    font-family: "Lobster", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: large;
+  }
+  All_reports, .users {
+    position: relative; /* Make the container a positioned element */
+    height: 100px;
+    width: 100px;
+    border-radius: 50%; /* Ensure the div itself is round */
+    border: 2px solid black;
+    overflow: hidden; /* Ensure the image does not overflow the div */
+}
+
+.All_reports img, .users img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Ensure the image covers the entire div without distorting */
+    border-radius: 50%; /* Make the image round as well */
+}
+
+.text-overlay {
+    position: absolute; /* Position the text absolutely within the parent */
+    top: 50%; /* Position in the middle vertically */
+    left: 50%; /* Position in the middle horizontally */
+    transform: translate(-50%, -50%); /* Center the text */
+    color: white; /* Make the text color white for visibility */
+    font-size: 14px; /* Adjust the font size */
+    font-weight: bold; /* Make the text bold for emphasis */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6); /* Add a shadow for better visibility */
+    text-align: center; /* Center the text horizontally */
+}
