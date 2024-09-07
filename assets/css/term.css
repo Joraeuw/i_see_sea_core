@@ -1,0 +1,22 @@
+.header{
+    font-weight: 600;
+    color:#189ab4;
+    font-size: 1.5em;
+}
+.bold_blue{
+    color:#189ab4;
+    font-weight: 600;
+    margin: 10px 0px;
+    font-size: 1.2em;
+}
+.nor_blue{
+    color:#189ab4;
+}
+.ul1 {
+    list-style-type: disc; /* Ensures bullet points are shown */
+    margin-left: 20px; /* Adds indentation for the list */
+}
+.ul1 li {
+    color:#189ab4;
+    margin-bottom: 10px; /* Adds space between list items */
+}
