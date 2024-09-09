@@ -1,0 +1,141 @@
+.login_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100vh; /* Full viewport height */
+    padding: 20px; /* Padding around the container */
+}
+
+/* Register form styling */
+.login {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure items are spaced properly */
+    align-items: center;
+    max-width: 600px;
+    max-height: 800px;
+    height: 700px;
+    width: 600px;
+    width: 90%; /* Use percentage to be responsive */
+    height: auto; /* Flexible height */
+    border-radius: 8px;
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, .35);
+    background-image: url(/images/Assetss/media/waveLightBlue.3148e9d0.svg);
+    background-repeat: no-repeat;
+    background-size: cover; /* Ensure the background covers the area */
+    background-position: bottom center; /* Position background at the bottom */
+}
+
+/* Form field styling */
+.username, .password {
+    display: flex;
+    flex-direction: column;
+    width: 90%; /* Responsive width */
+    margin-bottom: 20px; /* Add space between fields */
+}
+
+/* Label and span styling */
+.login_header {
+    color: #189ab4;
+    font-size: 1.5em;
+    font-weight: 500;
+    margin-bottom: 20px; /* Space below header */
+}
+
+.login_p {
+    color: #189ab4;
+    text-align: center; /* Center align text */
+}
+
+.login_p a:hover {
+    text-decoration: underline;
+    font-weight: 500;
+}
+.forgot{
+    color: #189ab4;
+}
+.forgot:hover{
+    text-decoration: underline;
+    font-weight: 500;
+    
+}
+.login_span {
+    margin-top: 5px;
+    color: #189ab4;
+    display: block; /* Ensure it takes full width */
+}
+
+/* Required character indicator styling */
+.required-ch {
+    color: #f77070;
+    position: relative;
+    display: inline-block; /* Keep it inline with the text */
+}
+
+/* Button styling */
+.login_button {
+    height: 60px;
+    width: 120px;
+    border-radius: 15px;
+    margin-top: 15px;
+    border: 1px solid #189ab4;
+    color: #189ab4;
+    font-weight: 600;
+    background-color: #e7f5f7;
+    cursor: pointer; /* Pointer cursor for button */
+}
+
+.login_button:hover {
+    background-color: rgb(17, 68, 75);
+}
+
+/* Input field styling */
+.input_type {
+    border: none; /* Remove borders */
+    border-bottom: 2px solid #189ab4; /* Bottom border */
+    width: 100%;
+    margin-top: .5rem;
+    background-color: initial;
+    transition: border-bottom-color 0.3s ease-in-out; /* Smooth transition */
+}
+
+.input_type:focus {
+    outline: none; /* Remove default outline */
+    border-bottom: 2px solid #495057; /* Change bottom border color on focus */
+}
+
+/* Media queries for responsiveness */
+@media (max-width: 768px) {
+    .login {
+        width: 90%; /* Adjust width for smaller screens */
+    }
+
+    .login_button {
+        width: 100px; /* Adjust button width */
+    }
+}
+
+@media (max-width: 480px) {
+    .login {
+        width: 100%; /* Full width on very small screens */
+        padding: 10px; /* Add some padding */
+    }
+
+    .login_header {
+        font-size: 1.2em; /* Smaller font size */
+    }
+
+    .input_type {
+        font-size: 0.9em; /* Smaller font size */
+    }
+
+    .login_button {
+        width: 80px; /* Adjust button width */
+        height: 50px; /* Adjust button height */
+    }
+
+    .username, .password {
+        margin-bottom: 15px; /* Ensure proper spacing */
+    }
+}

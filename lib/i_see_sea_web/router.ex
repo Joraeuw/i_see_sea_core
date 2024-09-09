@@ -30,7 +30,7 @@ defmodule ISeeSeaWeb.Router do
     pipe_through :browser
 
     live "/", HomeLive, :index
-
+    live "/login", LoginLive, :index
     # live "/", HomePageLive
   end
 
