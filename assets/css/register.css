@@ -46,6 +46,13 @@
     color: #189ab4;
     text-align: center; /* Center align text */
 }
+.form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Ensure items are spaced properly */
+    align-items: center;
+    width: 90%;
+}
 
 .register_p a:hover {
     text-decoration: underline;
@@ -96,6 +103,23 @@
     outline: none; /* Remove default outline */
     border-bottom: 2px solid #495057; /* Change bottom border color on focus */
 }
+.error_div {
+    color: red;
+  }
+
+  
+  /* To show the popup */
+  .show-popup, .popup {
+    display: block;
+    
+    color: red;
+    padding: 10px;
+    border-radius: 5px;
+   
+    bottom: 20px;
+    left: 20px;
+  }
+  
 
 /* Media queries for responsiveness */
 @media (max-width: 768px) {

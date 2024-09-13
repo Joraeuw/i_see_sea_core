@@ -28,6 +28,7 @@ defmodule ISeeSeaWeb.Router do
 
   scope "/", ISeeSeaWeb do
     pipe_through :browser
+    get "/register1", RegisterController, :new
 
     live "/", HomeLive, :index
     live "/register", RegisterLive, :index
