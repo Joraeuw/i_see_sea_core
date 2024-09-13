@@ -7,7 +7,7 @@
     padding: 20px; /* Padding around the container */
 }
 
-/* Register form styling */
+
 .login {
     display: flex;
     flex-direction: column;
@@ -27,7 +27,7 @@
     background-position: bottom center; /* Position background at the bottom */
 }
 
-/* Form field styling */
+
 .username, .password {
     display: flex;
     flex-direction: column;
@@ -65,6 +65,11 @@
     color: #189ab4;
     display: block; /* Ensure it takes full width */
 }
+.forgot_password{
+    display: flex;
+    justify-content:end ;
+    width: 100%;
+}
 
 /* Required character indicator styling */
 .required-ch {
@@ -72,6 +77,10 @@
     position: relative;
     display: inline-block; /* Keep it inline with the text */
 }
+.error_div {
+    color: red;
+    margin-top: 5px;
+  }
 
 /* Button styling */
 .login_button {
@@ -89,6 +98,23 @@
 .login_button:hover {
     background-color: rgb(17, 68, 75);
 }
+.form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+.general_error {
+    text-align: center;
+    margin-bottom: 10px;
+  }
+  
+  .error_div {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
 
 /* Input field styling */
 .input_type {

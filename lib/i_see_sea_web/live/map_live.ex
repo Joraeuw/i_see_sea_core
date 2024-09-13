@@ -31,7 +31,7 @@ defmodule ISeeSeaWeb.MapLive do
     with {:ok, reports, _} <-
            BaseReport.get_with_filter(%{filters: filters}, %{page_size: 9999, page: 1}),
          parsed_reports <- Focus.view(reports, %Lens{view: Lens.expanded()}) do
-          IO.inspect(parsed_reports |> hd())
+
       {:ok, assign(socket, :reports, parsed_reports)}
     end
   end
