@@ -8,19 +8,25 @@ defmodule ISeeSeaWeb.RegisterLive do
 
     {:ok, socket}
   end
-
   @impl true
   def handle_event("submit", %{"register" => params}, socket) do
-    errors = validate_params(params)
+    {errors, trimmed_params} = validate_params(params)
 
-
-    socket =socket
+    socket =
+      socket
       |> assign(:errors, errors)
-      |> assign(:form_data, params)
+      |> assign(:form_data, trimmed_params)
 
     if errors == %{} do
 
-      {:noreply, socket}
+      case ISeeSeaWeb.SessionController.register(socket.assigns.conn, trimmed_params) do
+        {:ok, %{user: _user, token: _token}} ->
+          {:noreply, push_navigate(socket, to: "/")}
+
+        {:error, error} ->
+          {:noreply, assign(socket, :errors, %{registration_error: "Registration failed: #{error}"})}
+      end
+
     else
       {:noreply, socket}
     end
@@ -28,40 +34,43 @@ defmodule ISeeSeaWeb.RegisterLive do
 
 
 
+
   defp validate_params(params) do
+
+    trimmed_params = Enum.into(params, %{}, fn {key, value} -> {key, String.trim(value)} end)
     errors = %{}
 
     errors =
-      if params["fullName"] == "" do
+      if trimmed_params["fullName"] == "" do
         Map.put(errors, :full_name, "Fullname is required.")
       else
         errors
       end
 
     errors =
-      if params["username"] == "" do
+      if trimmed_params["username"] == "" do
         Map.put(errors, :username, "Username is required.")
       else
-        if String.length(params["username"]) < 5 do
+        if String.length(trimmed_params["username"]) < 5 do
           Map.put(errors, :username, "Username must be at least 5 characters long.")
         else
           errors
         end
       end
 
-    email_regex = ISeeSea.Helpers.Environment.email_regex()
+    email_regex = ~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i
     errors =
-      if params["email"] == "" do
+      if trimmed_params["email"] == "" do
         Map.put(errors, :email, "Email is required.")
       else
-        if !Regex.match?(email_regex, params["email"]) do
+        if !Regex.match?(email_regex, trimmed_params["email"]) do
           Map.put(errors, :email, "Please enter a valid email address.")
         else
           errors
         end
       end
 
-    password = params["password"] || ""
+    password = trimmed_params["password"] || ""
     password_regex = ~r/^(?=.*[a-z])(?=.*[0-9]).{8,30}$/
     errors =
       cond do
@@ -75,8 +84,9 @@ defmodule ISeeSeaWeb.RegisterLive do
           errors
       end
 
-    errors
+    {errors, trimmed_params}
   end
+
 
 
 
