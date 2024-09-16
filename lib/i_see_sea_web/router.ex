@@ -31,6 +31,7 @@ defmodule ISeeSeaWeb.Router do
 
     live "/", HomeLive, :index
     live "/login", LoginLive, :index
+    live "/forgot_password", ForgotLive, :index
     # live "/", HomePageLive
   end
 
