@@ -672,4 +672,31 @@ defmodule ISeeSeaWeb.CoreComponents do
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
+
+  attr :options, :list, required: true
+  attr :display_text, :string, required: true
+
+  def selection(assigns) do
+    ~H"""
+    <select class="select w-full max-w-xs">
+      <option disabled selected><%= @display_text %></option>
+      <%= for option <- @options do %>
+        <option><%= option %></option>
+      <% end %>
+    </select>
+    """
+  end
+
+  attr :text, :string, required: true
+
+  def checkbox(assigns) do
+    ~H"""
+    <div class="form-control">
+      <label class="cursor-pointer label">
+        <span class="label-text mr-2"><%= @text %></span>
+        <input type="checkbox" checked="checked" class="checkbox checkbox-secondary" />
+      </label>
+    </div>
+    """
+  end
 end

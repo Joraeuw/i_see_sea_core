@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html data-theme="base" lang="en" class="[scrollbar-gutter:stable]">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -8,41 +8,90 @@
       <%= assigns[:page_title] || "ISeeSea" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap"
+      rel="stylesheet"
+    />
+    <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"
+    rel="stylesheet"
+  />
+  <link
+    href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"
+    rel="stylesheet"
+  />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-white antialiased">
-    <nav class="bg-gray-800 p-4 flex justify-between items-center">
-      <div class="text-white text-2xl font-bold">
-        Sea Report
+  <body class="bg-white h-screen w-screen">
+    <nav class="relative pb-0.5 w-full shadow-md">
+<svg class="absolute" width="100%" height="180px" viewBox="0 0 100 25" preserveAspectRatio="none">
+  <g transform="scale(-1, 1) translate(-100, 0)">
+    <path d="M0 0 V10
+      Q13 15 50 8
+      Q14 15 50 8
+      Q15 15 50 8
+      Q16 15 50 8
+      Q17 15 50 8
+      Q18 15 50 8
+      Q19 15 50 8
+      Q20 15 50 8
+      T100 8.5 V0z" fill="rgb(212, 241, 244)" opacity="1" />
+    <path d="M0 0 V10
+      Q18 13 53 6.5 
+      Q19 13 53 6.5 
+      Q20 13 53 6.5 
+      Q21 13 53 6.5 
+      Q22 13 53 6.5 
+      Q23 13 53 6.5 
+      Q24 13 53 6.5 
+      Q25 13 53 6.5 
+      T100 6 V0z" fill="rgb(117, 230, 218)" opacity="0.4" />
+    <path d="M0 0 V9 
+      Q16 12 45 6 
+      Q9 12 45 6 
+      Q10 12 45 6 
+      Q11 12 45 6 
+      Q12 12 45 6 
+      Q13 12 45 6 
+      Q14 12 45 6 
+      Q15 12 45 6 
+      T100 4 V0z" fill="rgb(24, 154, 180)" opacity="0.9" />
+  </g>
+</svg>
+      
+      <div class="relative w-28 top-5 left-20">
+        <img class="z-10" src="/images/Assetss/ICC-logo.png" />
       </div>
-      <ul class="flex space-x-4">
-        <li>
-          <a
-            href="/"
-            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-          >
-            Home
-          </a>
-        </li>
-        <li>
-          <a
-            href="/about"
-            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-          >
-            About
-          </a>
-        </li>
-        <li>
-          <a
-            href="/contact"
-            class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700"
-          >
-            Contact
-          </a>
-        </li>
-      </ul>
+
+      <div class="px-30 w-11/12">
+        <div class="flex w-full justify-between items-center self-end">
+          <div class="flex justify-center z-20">
+            <button class="btn btn-secondary-100">Home</button>
+            <button class="btn btn-secondary-300">Profile</button>
+            <button class="btn btn-secondary-400">Reports</button>
+            <button class="btn btn-secondary-500">Our purpose</button>
+            <button class="btn btn-secondary-600">About us</button>
+          </div>
+        
+          <div class="flex justify-end items-center space-x-3 w-1/12">
+            <button>
+              <img src="images/Assetss/zname1.jpg" />
+            </button>
+            <button>
+              <img src="images/Assetss/login.png" />
+            </button>
+          </div>
+        </div>
+      </div>
     </nav>
-    <%= @inner_content %>
+    <div class="relative w-full h-4/6">
+      <%= @inner_content %>
+    </div>
   </body>
 </html>

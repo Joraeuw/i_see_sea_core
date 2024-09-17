@@ -8,14 +8,14 @@ defmodule ISeeSeaWeb.NavMenuLive do
 
   @impl true
   def render(assigns) do
-    ~L"""
+    ~H"""
     <nav class="bg-gray-800 p-4 flex justify-between items-center">
       <div class="text-white text-2xl font-bold">
         Sea Report
       </div>
       <ul class="flex space-x-4">
-        <li><a href="<%= Routes.home_path(@socket, :index) %>" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Home</a></li>
-        <li><a href="" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">About</a></li>
+        <%!-- <li><a href="<%= Routes.home_path(@socket, :index) %>" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">Home</a></li> --%>
+        <%!-- <li><a href="" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:bg-gray-700">About</a></li> --%>
       </ul>
     </nav>
     """
