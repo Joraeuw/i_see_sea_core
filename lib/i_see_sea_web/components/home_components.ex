@@ -1,5 +1,10 @@
 defmodule ISeeSeaWeb.HomeComponents do
   @moduledoc false
+  alias ISeeSea.Constants
+  alias ISeeSea.Constants.StormType
+  alias ISeeSea.Constants.JellyfishQuantityRange
+  alias ISeeSea.DB.Models.JellyfishSpecies
+  alias ISeeSeaWeb.CoreComponents
 
   use Phoenix.Component
 
@@ -48,8 +53,8 @@ defmodule ISeeSeaWeb.HomeComponents do
         id="create-report-panel"
         phx-hook="DetectClick"
         class={[
-          "z-50 bg-white self-center",
-          "md:h-11/12 md:w-1/3 md:m-2 md:self-start",
+          "z-50 bg-white self-center flex flex-col items-center space-y-3 space-x-5",
+          "md:h-11/12 md:max-w-1/3 md:m-2 md:self-start p-3 rounded-md",
           if(not @create_report_toolbox_is_open, do: "hidden")
         ]}
       >
@@ -64,50 +69,56 @@ defmodule ISeeSeaWeb.HomeComponents do
   def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
     ~H"""
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <textarea
-      class="w-full h-40 p-2 border border-gray-300 rounded-md focus:outline-none"
-      placeholder="Describe the jaja sighting..."
-    ></textarea>
+    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <CoreComponents.selection display_text="Select Species" options={JellyfishSpecies.values()} />
+    <CoreComponents.selection display_text="Select Range" options={JellyfishQuantityRange.values()} />
+    <textarea class="textarea" placeholder="Comment..."></textarea>
+    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
   def create_report_window(%{report_type: ReportType.atypical_activity()} = assigns) do
     ~H"""
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <textarea
-      class="w-full h-40 p-2 border border-gray-300 rounded-md focus:outline-none"
-      placeholder="Describe the jaja sighting..."
-    ></textarea>
+    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <CoreComponents.selection display_text="Storm Type" options={StormType.values()} />
+    <textarea class="textarea" placeholder="Comment..."></textarea>
+    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
   def create_report_window(%{report_type: ReportType.meteorological()} = assigns) do
     ~H"""
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <textarea
-      class="w-full h-40 p-2 border border-gray-300 rounded-md focus:outline-none"
-      placeholder="Describe the jaja sighting..."
-    ></textarea>
+    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <CoreComponents.selection display_text="Fog Type" options={Constants.FogType.values()} />
+    <CoreComponents.selection display_text="Wind Type" options={Constants.WindType.values()} />
+    <CoreComponents.selection display_text="Sea Swell Type" options={Constants.SeaSwellType.values()} />
+    <textarea class="textarea" placeholder="Comment..."></textarea>
+    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
   def create_report_window(%{report_type: ReportType.pollution()} = assigns) do
     ~H"""
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <textarea
-      class="w-full h-40 p-2 border border-gray-300 rounded-md focus:outline-none"
-      placeholder="Describe the jaja sighting..."
-    ></textarea>
+    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <div class="flex flex-row space-x-3">
+      <CoreComponents.checkbox text="oil" />
+      <CoreComponents.checkbox text="plastic" />
+      <CoreComponents.checkbox text="biological" />
+    </div>
+    <textarea class="textarea" placeholder="Comment..."></textarea>
+    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
   def create_report_window(%{report_type: ReportType.other()} = assigns) do
     ~H"""
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <textarea
-      class="w-full h-40 p-2 border border-gray-300 rounded-md focus:outline-none"
-      placeholder="Describe the jaja sighting..."
-    ></textarea>
+    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <textarea class="textarea" placeholder="Comment..."></textarea>
+    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
