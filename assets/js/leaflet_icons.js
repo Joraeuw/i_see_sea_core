@@ -9,4 +9,12 @@ const markerIconByReportType = (report_type) =>
     popupAnchor: [0, -46], // point from which the popup should open relative to the iconAnchor
   });
 
-export { markerIconByReportType };
+const userLocationMarkerIcon = L.icon({
+  iconUrl: `/images/marker-icons/user_location_icon.png`,
+
+  iconSize: [40, 40],
+  iconAnchor: [40 / 2, 40],
+  popupAnchor: [0, -37],
+});
+
+export { markerIconByReportType, userLocationMarkerIcon };

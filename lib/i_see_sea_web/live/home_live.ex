@@ -1,70 +1,139 @@
 defmodule ISeeSeaWeb.HomeLive do
   use ISeeSeaWeb, :live_view
 
+  alias ISeeSea.DB.Models.BaseReport
+  alias ISeeSeaWeb.HomeComponents
+
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    supports_touch =
+      if connected?(socket) do
+        socket
+        |> get_connect_params()
+        |> Map.get("supports_touch", false)
+      else
+        false
+      end
+
+    map_filters = [
+      %{
+        "field" => "inserted_at",
+        "op" => ">=",
+        "value" => Timex.shift(DateTime.utc_now(), days: -1)
+      },
+      %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
+    ]
+
+    reports_pagination = %{page_size: 100, page: 1}
+
+    create_report_images = [
+      {"jellyfish", "/images/create-report/jellyfish.jpeg"},
+      {"meteorological", "/images/create-report/storm.jpeg"},
+      {"atypical_activity", "/images/create-report/atypical_wether.jpeg"},
+      {"pollution", "/images/create-report/pollution.jpeg"},
+      {"other", "/images/create-report/pollution.jpeg"}
+    ]
+
+    {:ok, reports} = get_reports(map_filters, reports_pagination)
+
+    new_socket =
+      assign(socket,
+        supports_touch: supports_touch,
+        create_report_images: create_report_images,
+        map_filters: map_filters,
+        reports_pagination: reports_pagination,
+        reports: reports,
+        create_report_toolbox_is_open: false,
+        create_report_type: nil,
+        sidebar_open: true,
+        form_data: %{username: nil}
+      )
+
+    {:ok, new_socket}
   end
 
   @impl true
   def render(assigns) do
-    ~L"""
+    ~H"""
+    <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-full h-full">
+      <div
+        id="map"
+        class="absolute flex items-center h-full w-full z-0 rounded-md shadow-md"
+        phx-hook="LeafletMap"
+        phx-update="ignore"
+        data-reports={Jason.encode!(@reports)}
+      />
 
-
-<div class="Page">
-<div class="Conteiner">
-  <div class="Reports">
-    <div class="square-dark-m"></div>
-    <div class="square-light-bottm-m"></div>
-    <div class="square-light-bottm-m1"></div>
-    <div class="square-light-bottm-m2"></div>
-    <div class="square-dark-m1"></div>
-    <div class="square-dark-m2"></div>
-    <button class="ReportButton" id="jelly">
-      <img id="jelly_img" src="/images/Assetss/medusa1.jpeg"/>
-    </button>
-    <button class="ReportButton" id="storm">
-    <img src="/images/Assetss/weather.jpeg"/></button>
-    <button class="ReportButton" id="umbrella">
-      <img src="/images/Assetss/umbrella.jpeg"/>
-    </button>
-    <button class="ReportButton" id="pollution">
-    <img src="/images/Assetss/pollution1.jpeg"/>
-    </button>
-    <button class="ReportButton" id="oil">
-    <img src="/images/Assetss/oil.jpeg"/></button>
-  </div>
-
-  <div class="MapInfo">
-    <div class="Map">
-      <%= live_render(@socket, ISeeSeaWeb.MapLive, id: "map-live") %>
+      <%!-- Desktop Design --%>
+      <HomeComponents.report_toolbox
+        create_report_toolbox_is_open={@create_report_toolbox_is_open}
+        create_report_images={@create_report_images}
+        create_report_type={@create_report_type}
+        supports_touch={@supports_touch}
+      />
+      <%!-- <div id="sidebar" class="sidebar closed">
+        <button class="closebtn" phx-click="toggle_sidebar">Close &#10005;</button>
+        <p>Sidebar content goes here.</p>
+      </div> --%>
     </div>
-
-    <div class="Info">
-
-    </div>
-  </div>
-  <div class="Right-info">
-
-    <button class="filter">
-    Filters
-    </button>
-    <div class="All_reports">
-    <div class="text-overlay">Report</div>
-    <img src="/images/Assetss/proba1.jpg"/>
-</div>
-
-<div class="users">
-    <div class="text-overlay">User</div>
-    <img src="/images/Assetss/proba1.jpg"/>
-</div>
-
-
-
-  </div>
-</div>
-</div>
-
     """
+  end
+
+  defp get_reports(filters, pagination) do
+    with {:ok, reports, _} <-
+           BaseReport.get_with_filter(%{filters: filters}, pagination),
+         parsed_reports <- Focus.view(reports, %Lens{view: Lens.expanded()}) do
+      {:ok, parsed_reports}
+    end
+  end
+
+  @impl true
+  def handle_event("toggle_sidebar", _params, socket) do
+    new_state = !socket.assigns.sidebar_open
+    {:noreply, assign(socket, sidebar_open: new_state)}
+  end
+
+  @impl true
+  def handle_event("toggle_report", %{"type" => report_type}, socket) do
+    cond do
+      socket.assigns.create_report_type == report_type &&
+          socket.assigns.create_report_toolbox_is_open ->
+        {:noreply, assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
+
+      socket.assigns.create_report_type != report_type &&
+          socket.assigns.create_report_toolbox_is_open ->
+        {:noreply,
+         assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+
+      not socket.assigns.create_report_toolbox_is_open ->
+        {:noreply,
+         assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+    end
+  end
+
+  @impl true
+  def handle_event("stop_creating_report", %{"element_id" => element_id}, socket) do
+    if(
+      element_id in [
+        "jellyfish_create_report_button",
+        "pollution_create_report_button",
+        "meteorological_create_report_button",
+        "atypical_activity_create_report_button",
+        "other_create_report_button"
+      ]
+    ) do
+      {:noreply, socket}
+    else
+      {:noreply, assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
+    end
+  end
+
+  @impl true
+  def handle_event("set_touch_support", %{"supports_touch" => supports_touch}, socket) do
+    {:noreply, assign(socket, :supports_touch, supports_touch)}
+  end
+
+  def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon}, socket) do
+    {:noreply, assign(socket, :user_selected_location, %{lat: lat, lon: lon})}
   end
 end

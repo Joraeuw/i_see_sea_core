@@ -10,20 +10,94 @@ module.exports = {
     "./js/**/*.js",
     "../lib/i_see_sea_web.ex",
     "../lib/i_see_sea_web/**/*.*ex",
+    "./css/**/*.css",
   ],
   theme: {
     extend: {
       colors: {
-        brand: "#FD4F00",
-        primary: "#0077B6",
-        light_blue: "#00B4D8",
-        accentBlue: "#90E0EF",
-        backgroundBlue: "#CAF0F8",
-        darkBlue: "#023E8A",
+        primary: {
+          DEFAULT: "#5fa8d3", // Primary Color (Picton Blue)
+          100: "#0d2330",
+          200: "#1a4760",
+          300: "#276a90",
+          400: "#358dc0",
+          500: "#5fa8d3",
+          600: "#7fbadc",
+          700: "#9fcbe5",
+          800: "#bfdced",
+          900: "#dfeef6",
+        },
+        secondary: {
+          DEFAULT: "#62b6cb", // Secondary Color (Moonstone)
+          100: "#0f272d",
+          200: "#1e4e5a",
+          300: "#2d7587",
+          400: "#3c9cb5",
+          500: "#62b6cb",
+          600: "#82c4d5",
+          700: "#a1d3e0",
+          800: "#c0e2ea",
+          900: "#e0f0f5",
+        },
+        accent: {
+          DEFAULT: "#bee9e8", // Accent Color (Mint Green)
+          100: "#163f3e",
+          200: "#2b7e7d",
+          300: "#41bdbb",
+          400: "#7fd3d2",
+          500: "#bee9e8",
+          600: "#cbeded",
+          700: "#d8f2f1",
+          800: "#e5f6f6",
+          900: "#f2fbfa",
+        },
+        background: {
+          DEFAULT: "#cae9ff", // Background Color (Columbia Blue)
+          100: "#00365c",
+          200: "#006bb8",
+          300: "#149dff",
+          400: "#70c3ff",
+          500: "#cae9ff",
+          600: "#d6eeff",
+          700: "#e0f2ff",
+          800: "#ebf7ff",
+          900: "#f5fbff",
+        },
+        text: {
+          DEFAULT: "#1b4965", // Text Color (Indigo Dye)
+          100: "#050e14",
+          200: "#0b1d28",
+          300: "#102b3c",
+          400: "#153a51",
+          500: "#1b4965",
+          600: "#2b74a1",
+          700: "#4a9ccf",
+          800: "#86bddf",
+          900: "#c3deef",
+        },
       },
     },
   },
+  daisyui: {
+    themes: [
+      {
+        base: {
+          primary: "rgb(24, 154, 180)",
+          secondary: "rgb(117, 230, 218)",
+          accent: "rgb(212, 241, 244)",
+          neutral: "#189ab4",
+          "base-100": "#d4f1f4",
+          info: "#00ffff",
+          success: "#00ff00",
+          warning: "#ffd700",
+          error: "#ff0000",
+        },
+      },
+      "aqua",
+    ],
+  },
   plugins: [
+    require("daisyui"),
     require("@tailwindcss/forms"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:

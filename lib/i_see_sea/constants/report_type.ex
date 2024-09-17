@@ -16,6 +16,6 @@ defmodule ISeeSea.Constants.ReportType do
   end
 
   Enum.each(@values, fn value ->
-    def unquote(:"#{value}")(), do: unquote(value)
+    defmacro unquote(:"#{value}")(), do: unquote(value)
   end)
 end

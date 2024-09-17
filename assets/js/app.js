@@ -24,14 +24,58 @@ import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 import Hooks from "./hooks";
 
+// // Select all the buttons
+// const buttons = document.querySelectorAll(".create_report_button");
+
+// buttons.forEach((button) => {
+//   button.addEventListener("click", (e) => {
+//     console.log("CLICKED");
+//     // Get the index of the clicked button
+//     const index = e.currentTarget.getAttribute("data-index");
+
+//     // Toggle the corresponding expand panel
+//     const expandPanel = document.getElementById(`expand-panel-${index}`);
+
+//     if (expandPanel.classList.contains("hidden")) {
+//       expandPanel.classList.remove("hidden");
+//       expandPanel.classList.add("block");
+//     } else {
+//       expandPanel.classList.add("hidden");
+//       expandPanel.classList.remove("block");
+//     }
+//   });
+// });
+
+Hooks.DetectClick = {
+  mounted() {
+    document.addEventListener("click", this.handleOutsideClick.bind(this));
+  },
+
+  destroyed() {
+    document.removeEventListener("click", this.handleOutsideClick.bind(this));
+  },
+
+  handleOutsideClick(event) {
+    const clickedElement = event.target;
+    if (!this.el.contains(clickedElement)) {
+      const elementId = clickedElement.id || "unknown";
+      this.pushEvent("stop_creating_report", { element_id: elementId });
+    }
+  },
+};
+
+function isTouchDevice() {
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+}
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
+
 let liveSocket = new LiveSocket("/live", Socket, {
   hooks: Hooks,
   longPollFallbackMs: 2500,
-  params: { _csrf_token: csrfToken },
+  params: { _csrf_token: csrfToken, supports_touch: isTouchDevice() },
 });
 
 // Show progress bar on live navigation and form submits

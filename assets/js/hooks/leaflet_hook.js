@@ -1,20 +1,22 @@
 import L from "leaflet";
 import "leaflet.markercluster";
 
-import { markerIconByReportType } from "../leaflet_icons";
+import {
+  markerIconByReportType,
+  userLocationMarkerIcon,
+} from "../leaflet_icons";
 import { getMarkerContent } from "../leaflet_markers";
 
 const LeafletMap = {
   mounted() {
-    this.map = L.map("map").setView([42, 42], 13);
+    this.map = L.map("map", { zoomControl: false, zoom: 13 }).setView([
+      43.2041, 27.8788,
+    ]);
 
-    L.tileLayer(
-      "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-      {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }
-    ).addTo(this.map);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution:
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    }).addTo(this.map);
 
     this.markerClusterGroup = L.markerClusterGroup();
     this.map.addLayer(this.markerClusterGroup);
@@ -32,6 +34,12 @@ const LeafletMap = {
     this.handleEvent("delete_marker", (marker) => {
       this.deleteMarker(marker.report_id);
     });
+
+    this.detectUserLocation();
+
+    setTimeout(() => {
+      this.map.invalidateSize();
+    }, 100);
   },
 
   addMarker(markerData) {
@@ -62,6 +70,43 @@ const LeafletMap = {
       }).bindPopup(getMarkerContent(markerData));
       this.markerClusterGroup.addLayer(marker);
       this.markers[report_id] = marker;
+    });
+  },
+
+  detectUserLocation() {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          L.marker([latitude, longitude], {
+            icon: userLocationMarkerIcon,
+          }).addTo(this.map);
+
+          this.pushEvent("user_selected_location", { latitude, longitude });
+        },
+        (error) => {
+          console.error("Geolocation error: ", error);
+          this.enableManualLocationSelection();
+        }
+      );
+    } else {
+      this.enableManualLocationSelection();
+    }
+  },
+
+  enableManualLocationSelection() {
+    this.map.on("click", (e) => {
+      const { lat, lng } = e.latlng;
+      L.marker([lat, lng], { icon: userLocationMarkerIcon })
+        .addTo(this.map)
+        .bindPopup("You selected this location.")
+        .openPopup();
+
+      // Optionally send the selected location to Phoenix LiveView
+      this.pushEvent("user_selected_location", {
+        latitude: lat,
+        longitude: lng,
+      });
     });
   },
 };

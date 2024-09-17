@@ -37,7 +37,6 @@ defmodule ISeeSeaWeb do
       require ISeeSeaWeb.Lens
       alias ISeeSeaWeb.Focus
       alias ISeeSeaWeb.Lens
-
     end
   end
 
