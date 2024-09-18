@@ -29,69 +29,192 @@
     </script>
   </head>
   <body class="bg-white h-screen w-screen">
-    <nav class="relative pb-0.5 w-full shadow-md">
-<svg class="absolute" width="100%" height="180px" viewBox="0 0 100 25" preserveAspectRatio="none">
-  <g transform="scale(-1, 1) translate(-100, 0)">
-    <path d="M0 0 V10
-      Q13 15 50 8
-      Q14 15 50 8
-      Q15 15 50 8
-      Q16 15 50 8
-      Q17 15 50 8
-      Q18 15 50 8
-      Q19 15 50 8
-      Q20 15 50 8
-      T100 8.5 V0z" fill="rgb(212, 241, 244)" opacity="1" />
-    <path d="M0 0 V10
-      Q18 13 53 6.5 
-      Q19 13 53 6.5 
-      Q20 13 53 6.5 
-      Q21 13 53 6.5 
-      Q22 13 53 6.5 
-      Q23 13 53 6.5 
-      Q24 13 53 6.5 
-      Q25 13 53 6.5 
-      T100 6 V0z" fill="rgb(117, 230, 218)" opacity="0.4" />
-    <path d="M0 0 V9 
-      Q16 12 45 6 
-      Q9 12 45 6 
-      Q10 12 45 6 
-      Q11 12 45 6 
-      Q12 12 45 6 
-      Q13 12 45 6 
-      Q14 12 45 6 
-      Q15 12 45 6 
-      T100 4 V0z" fill="rgb(24, 154, 180)" opacity="0.9" />
-  </g>
-</svg>
+<nav class="relative pb-0.5 w-full shadow-md">
+  <!-- SVG for wave background -->
+  <svg class="absolute z-0" width="100%" height="180px" viewBox="0 0 100 25" preserveAspectRatio="none">
+    <g transform="scale(-1, 1) translate(-100, 0)">
+      <path d="M0 0 V10
+        Q13 15 50 8
+        Q14 15 50 8
+        Q15 15 50 8
+        Q16 15 50 8
+        Q17 15 50 8
+        Q18 15 50 8
+        Q19 15 50 8
+        Q20 15 50 8
+        T100 8.5 V0z" fill="rgb(212, 241, 244)" opacity="1" />
+      <path d="M0 0 V10
+        Q18 13 53 6.5 
+        Q19 13 53 6.5 
+        Q20 13 53 6.5 
+        Q21 13 53 6.5 
+        Q22 13 53 6.5 
+        Q23 13 53 6.5 
+        Q24 13 53 6.5 
+        Q25 13 53 6.5 
+        T100 6 V0z" fill="rgb(117, 230, 218)" opacity="0.4" />
+      <path d="M0 0 V9 
+        Q16 12 45 6 
+        Q9 12 45 6 
+        Q10 12 45 6 
+        Q11 12 45 6 
+        Q12 12 45 6 
+        Q13 12 45 6 
+        Q14 12 45 6 
+        Q15 12 45 6 
+        T100 4 V0z" fill="rgb(24, 154, 180)" opacity="0.9" />
+    </g>
+  </svg>
+  
+  <!-- Navigation bar content -->
+  <div class="px-30 w-11/12">
+    <div class="flex w-full justify-between items-baseline">
+      <!-- Logo -->
+      <div class="relative w-28 top-2 left-2 sm:w-16 md:w-24 lg:w-28">
+  <img class="z-10 w-full h-auto" src="/images/Assetss/ICC-logo.png" />
+    </div>
       
-      <div class="relative w-28 top-5 left-20">
-        <img class="z-10" src="/images/Assetss/ICC-logo.png" />
-      </div>
+   <div class="flex w-4/5 justify-around mb-2">
+  <!-- Buttons for larger screens -->
+ <div class="hidden sm:flex w-full justify-around space-x-1">
+              <button class="btn">
+                Home
+              </button>
+              <button class="btn">
+                Profile
+              </button>
+              <button class="btn">
+                Reports
+              </button>
+              <button class="btn">
+                Our purpose
+              </button>
+              <button class="btn">
+                About us
+              </button>
+            </div>
 
-      <div class="px-30 w-11/12">
-        <div class="flex w-full justify-between items-center self-end">
-          <div class="flex justify-center z-20">
-            <button class="btn btn-secondary-100">Home</button>
-            <button class="btn btn-secondary-300">Profile</button>
-            <button class="btn btn-secondary-400">Reports</button>
-            <button class="btn btn-secondary-500">Our purpose</button>
-            <button class="btn btn-secondary-600">About us</button>
-          </div>
-        
-          <div class="flex justify-end items-center space-x-3 w-1/12">
-            <button>
-              <img src="images/Assetss/zname1.jpg" />
-            </button>
-            <button>
-              <img src="images/Assetss/login.png" />
-            </button>
-          </div>
-        </div>
-      </div>
-    </nav>
+            <!-- Mobile Menu Button -->
+            <div class="flex w-4/5 justify-center mr-4 sm:hidden">
+             <div class="slider-container">
+  <!-- Left arrow -->
+  <button class="arrow-left hidden">
+  <svg width="12pt" height="12pt" version="1.1" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+ <path d="m740.25 1183.1c-23.199 21.09-59.051 21.09-82.25 0l-542-542c-10.543-10.543-16.871-23.199-16.871-37.961v-6.3281c0-14.762 6.3281-27.418 16.871-37.961l542-542c23.199-23.199 59.051-23.199 82.25 0 21.09 23.199 21.09 59.051 0 80.141l-501.93 501.93 501.93 501.93c21.09 23.199 21.09 59.051 0 82.25z" fill-rule="evenodd"/>
+ <path d="m1084 1183.1c-23.199 21.09-59.051 21.09-82.25 0l-542-542c-10.543-10.543-14.762-23.199-16.871-37.961v-6.3281c2.1094-14.762 6.3281-27.418 16.871-37.961l542-542c23.199-23.199 59.051-23.199 82.25 0 21.09 23.199 21.09 59.051 0 80.141l-501.93 501.93 501.93 501.93c21.09 23.199 21.09 59.051 0 82.25z" fill-rule="evenodd"/>
+ 
+</svg>
+</button>
+  
+  <!-- The slider itself -->
+  <div class="slider-wrapper">
+    <button class="slider-item">Home</button>
+    <button class="slider-item">Profile</button>
+    <button class="slider-item">Reports</button>
+    <button class="slider-item">Our purpose</button>
+    <button class="slider-item">About us</button>
+  </div>
+  
+  <!-- Right arrow -->
+  <button class="arrow-right"><svg width="12pt" transform="matrix(-1,0,0,1,0,0)" height="12pt" version="1.1" viewBox="0 0 1200 1200" xmlns="http://www.w3.org/2000/svg">
+ <path d="m740.25 1183.1c-23.199 21.09-59.051 21.09-82.25 0l-542-542c-10.543-10.543-16.871-23.199-16.871-37.961v-6.3281c0-14.762 6.3281-27.418 16.871-37.961l542-542c23.199-23.199 59.051-23.199 82.25 0 21.09 23.199 21.09 59.051 0 80.141l-501.93 501.93 501.93 501.93c21.09 23.199 21.09 59.051 0 82.25z" fill-rule="evenodd"/>
+ <path d="m1084 1183.1c-23.199 21.09-59.051 21.09-82.25 0l-542-542c-10.543-10.543-14.762-23.199-16.871-37.961v-6.3281c2.1094-14.762 6.3281-27.418 16.871-37.961l542-542c23.199-23.199 59.051-23.199 82.25 0 21.09 23.199 21.09 59.051 0 80.141l-501.93 501.93 501.93 501.93c21.09 23.199 21.09 59.051 0 82.25z" fill-rule="evenodd"/>
+ 
+</svg></button>
+</div>
+            </div>
+</div>     
+
+
+
+      
+      <!-- User and login images -->
+   <div class="flex justify-end items-center space-x-2 w-1/12 sm:w-auto sm:justify-end">
+  <button class="z-20">
+    <img src="images/Assetss/zname1.jpg" class="w-6 h-6 sm:w-8 sm:h-8" />
+  </button>
+  <button class="z-20 mt-1">
+    <img src="images/Assetss/login.png" class="w-6 h-6 sm:w-8 sm:h-8" />
+  </button>
+  </div>
+    </div>
+  </div>
+</nav>
     <div class="relative w-full h-4/6">
       <%= @inner_content %>
     </div>
+    <script>
+  document.addEventListener('DOMContentLoaded', function() {
+  const wrapper = document.querySelector('.slider-wrapper');
+  const items = document.querySelectorAll('.slider-item');
+  const leftArrow = document.querySelector('.arrow-left');
+  const rightArrow = document.querySelector('.arrow-right');
+  let currentIndex = 0;
+
+  function showItem(index) {
+    const offset = -index * 100; // Calculate the offset for the current item
+    wrapper.style.transform = `translateX(${offset}%)`;
+    updateArrows(); // Update arrow visibility
+  }
+
+  // Left arrow click (swipe right)
+  leftArrow.addEventListener('click', () => {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showItem(currentIndex);
+    }
+  });
+
+  // Right arrow click (swipe left)
+  rightArrow.addEventListener('click', () => {
+    if (currentIndex < items.length - 1) {
+      currentIndex++;
+      showItem(currentIndex);
+    }
+  });
+
+  // Handle swipe gestures for touchscreens
+  let touchStartX = 0;
+  let touchEndX = 0;
+
+  wrapper.addEventListener('touchstart', e => {
+    touchStartX = e.changedTouches[0].screenX;
+  });
+
+  wrapper.addEventListener('touchend', e => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSwipe();
+  });
+
+  function handleSwipe() {
+    if (touchEndX < touchStartX && currentIndex < items.length - 1) {
+      currentIndex++;
+      showItem(currentIndex);
+    } else if (touchEndX > touchStartX && currentIndex > 0) {
+      currentIndex--;
+      showItem(currentIndex);
+    }
+  }
+
+  // Show/hide the left and right arrows based on the current item
+  function updateArrows() {
+    if (currentIndex === 0) {
+      leftArrow.classList.add('hidden');
+    } else {
+      leftArrow.classList.remove('hidden');
+    }
+
+    if (currentIndex === items.length - 1) {
+      rightArrow.classList.add('hidden');
+    } else {
+      rightArrow.classList.remove('hidden');
+    }
+  }
+
+  showItem(currentIndex); // Initialize
+});
+
+</script>
+
   </body>
 </html>
