@@ -87,8 +87,8 @@ module.exports = {
       {
         base: {
           primary: "rgb(24, 154, 180)",
-          secondary: "rgb(117, 230, 218)",
-          accent: "rgb(212, 241, 244)",
+          secondary: "rgb(212, 241, 244)",
+          accent: "rgb(117, 230, 218)",
           neutral: "#189ab4",
           "base-100": "#d4f1f4",
           info: "#00ffff",

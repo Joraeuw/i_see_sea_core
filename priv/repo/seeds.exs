@@ -20,8 +20,6 @@ defmodule ISeeSea.Seeder do
 
   require Constants.SeaSwellType
 
-
-
   def seed do
     Repo.transaction(fn ->
       {:ok, %{id: admin_id}} = Role.get(:admin)

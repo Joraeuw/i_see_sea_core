@@ -126,4 +126,195 @@ defmodule ISeeSeaWeb.HomeComponents do
     ~H"""
     """
   end
+
+  attr :stats_panel_is_open, :boolean, required: true
+  attr :selected_filter, :list, required: true
+
+  def pop_up_filters(assigns) do
+    ~H"""
+    <div
+      id="stats-panel"
+      class="hidden md:flex flex-col absolute justify-between top-3 right-52 bg-white w-3/12 h-8/12 shadow-lg p-4 z-50"
+    >
+      <%= if length(@selected_filters) > 0 do %>
+        <div class="border-dotted border-2 border-gray-400 p-2 mb-2">
+          <h2 class="font-bold">Selected Filters:</h2>
+          <ul>
+            <%= for filter <- @selected_filters do %>
+              <li class="flex items-center mb-1">
+                <span><%= filter %></span>
+                <button
+                  class="ml-2 text-red-500 hover:text-red-700"
+                  phx-click="remove_filter"
+                  phx-value-filter={filter}
+                >
+                  &times;
+                </button>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="dropdown">
+        <div tabindex="0" role="button" class="btn m-1">Add filter</div>
+        <ul
+          tabindex="0"
+          class="dropdown-content menu bg-base-100 rounded-box z-30 w-52 p-2 shadow max-h-48 overflow-y-auto"
+        >
+          <div class="font-bold">
+            <h1>Report type</h1>
+          </div>
+          <li><a phx-click="add_filter" phx-value-filter="jellyfish">Jellyfish</a></li>
+          <li><a phx-click="add_filter" phx-value-filter="meteorological">Meteorological</a></li>
+          <li><a phx-click="add_filter" phx-value-filter="pollution">Pollution</a></li>
+          <li><a phx-click="add_filter" phx-value-filter="atypical">Atypical</a></li>
+          <li><a phx-click="add_filter" phx-value-filter="other">Other</a></li>
+
+          <div class="font-bold">
+            <h1>Filter by:</h1>
+          </div>
+          <li><a>name</a></li>
+          <li><a>quantity</a></li>
+          <li><a>species</a></li>
+          <li><a>pollution_types</a></li>
+          <li><a>fog_type</a></li>
+          <li><a>wind_type</a></li>
+          <li><a>sea_swell_type</a></li>
+          <li><a>deleted</a></li>
+          <li><a>inserted_at</a></li>
+
+          <div class="font-bold">
+            <h1>Sortable</h1>
+          </div>
+          <li><a>id</a></li>
+          <li><a>name</a></li>
+          <li><a>report_date</a></li>
+          <li><a>quantity</a></li>
+          <li><a>species</a></li>
+          <li><a>fog_type</a></li>
+          <li><a>wind_type</a></li>
+          <li><a>sea_swell_type</a></li>
+          <li><a>inserted_at</a></li>
+        </ul>
+      </div>
+
+      <button class="btn btn-secondary mt-4" phx-click="toggle_stats_panel">Close</button>
+    </div>
+    """
+  end
+
+  attr :stats_panel_is_open, :boolean, required: true
+  attr :selected_filter, :list, required: true
+
+  def pop_up_mobile(assigns) do
+    ~H"""
+    <button class="btn" onclick="my_modal_2.showModal()">open modal</button>
+    <dialog id="my_modal_2" class="modal h-11/12">
+      <div class="modal-box">
+        <%= if length(@selected_filters) > 0 do %>
+          <div class="border-dotted border-2 border-gray-400 p-2 mb-2">
+            <h2 class="font-bold">Selected Filters:</h2>
+            <ul>
+              <%= for filter <- @selected_filters do %>
+                <li class="flex items-center mb-1">
+                  <span><%= filter %></span>
+                  <button
+                    class="ml-2 text-red-500 hover:text-red-700"
+                    phx-click="remove_filter"
+                    phx-value-filter={filter}
+                  >
+                    &times;
+                  </button>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn m-1">Add filter</div>
+          <ul
+            tabindex="0"
+            class="dropdown-content menu bg-base-100 rounded-box z-30 w-52 p-2 shadow max-h-48 overflow-y-auto"
+          >
+            <div class="font-bold">
+              <h1>Report type</h1>
+            </div>
+            <li><a phx-click="add_filter" phx-value-filter="jellyfish">Jellyfish</a></li>
+            <li><a phx-click="add_filter" phx-value-filter="meteorological">Meteorological</a></li>
+            <li><a phx-click="add_filter" phx-value-filter="pollution">Pollution</a></li>
+            <li><a phx-click="add_filter" phx-value-filter="atypical">Atypical</a></li>
+            <li><a phx-click="add_filter" phx-value-filter="other">Other</a></li>
+
+            <div class="font-bold">
+              <h1>Filter by:</h1>
+            </div>
+            <li><a>name</a></li>
+            <li><a>quantity</a></li>
+            <li><a>species</a></li>
+            <li><a>pollution_types</a></li>
+            <li><a>fog_type</a></li>
+            <li><a>wind_type</a></li>
+            <li><a>sea_swell_type</a></li>
+            <li><a>deleted</a></li>
+            <li><a>inserted_at</a></li>
+
+            <div class="font-bold">
+              <h1>Sortable</h1>
+            </div>
+            <li><a>id</a></li>
+            <li><a>name</a></li>
+            <li><a>report_date</a></li>
+            <li><a>quantity</a></li>
+            <li><a>species</a></li>
+            <li><a>fog_type</a></li>
+            <li><a>wind_type</a></li>
+            <li><a>sea_swell_type</a></li>
+            <li><a>inserted_at</a></li>
+          </ul>
+          <button class="btn btn-secondary mt-4" phx-click="toggle_stats_panel">Close</button>
+        </div>
+      </div>
+      <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+      </form>
+    </dialog>
+    """
+  end
+
+  attr :stats_panel_is_open, :boolean, required: true
+  attr :selected_filters, :list, required: true
+  attr :supports_touch, :boolean, required: true
+
+  def stat_home(assigns) do
+    ~H"""
+    <div class="stats stats-vertical shadow mt-2">
+      <div class="stat">
+        <button class="btn" phx-click="toggle_stats_panel">Filters</button>
+        <%= if @supports_touch do %>
+          <.pop_up_filters :if={@stats_panel_is_open} selected_filters={@selected_filters} />
+        <% else %>
+          <.pop_up_mobile :if={@stats_panel_is_open} selected_filters={@selected_filters} />
+        <% end %>
+      </div>
+      <div class="stat">
+        <div class="stat-title">Downloads</div>
+        <div class="stat-value">31K</div>
+        <div class="stat-desc">Jan 1st - Feb 1st</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-title">New Users</div>
+        <div class="stat-value">4,200</div>
+        <div class="stat-desc">↗︎ 400 (22%)</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-title">New Registers</div>
+        <div class="stat-value">1,200</div>
+        <div class="stat-desc">↘︎ 90 (14%)</div>
+      </div>
+    </div>
+    """
+  end
 end

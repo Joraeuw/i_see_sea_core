@@ -66,12 +66,14 @@ defmodule ISeeSeaWeb.HomeLive do
         create_report_type: nil,
         sidebar_open: true,
         form_data: %{username: nil},
-        current_view: my_profile_view(),
+        current_view: main_view(),
         profile_subview: my_profile_subview(),
         is_profile_edit_mode: false,
         user_reports: BaseReport.all!(),
         current_page: 1,
-        total_pages: 50
+        total_pages: 50,
+        stats_panel_is_open: false,
+        selected_filters: []
       )
 
     {:ok, new_socket}
@@ -80,7 +82,7 @@ defmodule ISeeSeaWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-full h-full">
+    <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-7/12 h-full">
       <div
         :if={@current_view === main_view()}
         id="map"
@@ -122,6 +124,12 @@ defmodule ISeeSeaWeb.HomeLive do
         <p>Sidebar content goes here.</p>
       </div> --%>
     </div>
+
+    <HomeComponents.stat_home
+      supports_touch={@supports_touch}
+      stats_panel_is_open={@stats_panel_is_open}
+      selected_filters={@selected_filters}
+    />
     """
   end
 
@@ -141,6 +149,8 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("navigate", %{"view" => new_view}, socket) do
+    IO.inspect(new_view)
+
     if new_view in views() do
       {:noreply, assign(socket, current_view: new_view)}
     else
@@ -210,5 +220,41 @@ defmodule ISeeSeaWeb.HomeLive do
 
   def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon}, socket) do
     {:noreply, assign(socket, :user_selected_location, %{lat: lat, lon: lon})}
+  end
+
+  @impl true
+  def handle_event("toggle_stats_panel", _params, socket) do
+    new_state = !socket.assigns.stats_panel_is_open
+    {:noreply, assign(socket, stats_panel_is_open: new_state)}
+  end
+
+  @impl true
+  def handle_event("add_filter", %{"filter" => filter}, socket) do
+    selected_filters =
+      if filter in socket.assigns.selected_filters do
+        socket.assigns.selected_filters
+      else
+        [filter | socket.assigns.selected_filters]
+      end
+
+    {:noreply, assign(socket, selected_filters: selected_filters)}
+  end
+
+  @impl true
+  def handle_event("remove_filter", %{"filter" => filter}, socket) do
+    selected_filters =
+      socket.assigns.selected_filters
+      |> Enum.reject(fn f -> f == filter end)
+
+    {:noreply, assign(socket, selected_filters: selected_filters)}
+  end
+
+  @impl true
+  def handle_event("remove_filter", %{"filter" => filter}, socket) do
+    selected_filters =
+      socket.assigns.selected_filters
+      |> Enum.reject(fn f -> f == filter end)
+
+    {:noreply, assign(socket, selected_filters: selected_filters)}
   end
 end
