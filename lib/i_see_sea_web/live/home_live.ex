@@ -1,8 +1,27 @@
 defmodule ISeeSeaWeb.HomeLive do
+  alias ISeeSea.DB.Logic.ReportOperations
+  alias ISeeSeaWeb.ProfileComponents
   use ISeeSeaWeb, :live_view
 
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.HomeComponents
+
+  defmacro main_view, do: "main_view"
+  defmacro my_profile_view, do: "my_profile_view"
+
+  defmacro my_profile_subview, do: "my_profile_subview"
+  defmacro my_reports_subview, do: "my_reports_subview"
+
+  defmacro profile_view_mode, do: "view"
+  defmacro profile_edit_mode, do: "edit"
+
+  def views do
+    [main_view(), my_profile_view()]
+  end
+
+  def profile_subviews do
+    [my_profile_subview(), my_reports_subview()]
+  end
 
   @impl true
   def mount(_params, _session, socket) do
@@ -46,7 +65,13 @@ defmodule ISeeSeaWeb.HomeLive do
         create_report_toolbox_is_open: false,
         create_report_type: nil,
         sidebar_open: true,
-        form_data: %{username: nil}
+        form_data: %{username: nil},
+        current_view: my_profile_view(),
+        profile_subview: my_profile_subview(),
+        is_profile_edit_mode: false,
+        user_reports: BaseReport.all!(),
+        current_page: 1,
+        total_pages: 50
       )
 
     {:ok, new_socket}
@@ -57,6 +82,7 @@ defmodule ISeeSeaWeb.HomeLive do
     ~H"""
     <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-full h-full">
       <div
+        :if={@current_view === main_view()}
         id="map"
         class="absolute flex items-center h-full w-full z-0 rounded-md shadow-md"
         phx-hook="LeafletMap"
@@ -66,10 +92,30 @@ defmodule ISeeSeaWeb.HomeLive do
 
       <%!-- Desktop Design --%>
       <HomeComponents.report_toolbox
+        :if={@current_view === main_view()}
         create_report_toolbox_is_open={@create_report_toolbox_is_open}
         create_report_images={@create_report_images}
         create_report_type={@create_report_type}
         supports_touch={@supports_touch}
+      />
+
+      <ProfileComponents.index
+        :if={@current_view === my_profile_view()}
+        current_page={@current_page}
+        total_pages={@total_pages}
+        subview={@profile_subview}
+        is_edit_mode={@is_profile_edit_mode}
+        email="myemail@abv.bg"
+        username="My Username"
+        user_report_summary={[
+          {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
+          {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
+          {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
+          {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
+          {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
+          {"jellyfish", "/images/create-report/jellyfish.jpeg", 2}
+        ]}
+        user_reports={@user_reports}
       />
       <%!-- <div id="sidebar" class="sidebar closed">
         <button class="closebtn" phx-click="toggle_sidebar">Close &#10005;</button>
@@ -85,6 +131,35 @@ defmodule ISeeSeaWeb.HomeLive do
          parsed_reports <- Focus.view(reports, %Lens{view: Lens.expanded()}) do
       {:ok, parsed_reports}
     end
+  end
+
+  @impl true
+  def handle_event("change_page", %{"page" => page}, socket) do
+    page = String.to_integer(page)
+    {:noreply, assign(socket, :current_page, page)}
+  end
+
+  @impl true
+  def handle_event("navigate", %{"view" => new_view}, socket) do
+    if new_view in views() do
+      {:noreply, assign(socket, current_view: new_view)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("toggle_profile_subview", %{"subview" => subview}, socket) do
+    if subview in profile_subviews() do
+      {:noreply, assign(socket, profile_subview: subview)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("edit_profile", _params, socket) do
+    new_state = !socket.assigns.is_profile_edit_mode
+    {:noreply, assign(socket, is_profile_edit_mode: new_state)}
   end
 
   @impl true

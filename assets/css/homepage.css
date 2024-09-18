@@ -39,13 +39,6 @@
   width: 300px;
   height: 30px;
 }
-.information {
-  margin: 0 20px;
-  margin-top: 30px;
-  max-width: 200px;
-  height: 80px;
-  flex-grow: 1;
-}
 .edit {
   margin: 0 20px;
 
@@ -119,94 +112,4 @@
   height: auto;
   background-color: rgb(24, 158, 180);
   box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6);
-}
-
-.type_reports {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  border: 1px solid black;
-  width: 230px;
-  height: 200px;
-  margin: 10px 20px;
-  border-radius: 7px;
-  background-color: rgb(212, 241, 244);
-  box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6);
-}
-.type_reports img {
-  width: 80px;
-  height: 100px;
-}
-
-.last_report {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  border: 1px solid black;
-  width: 230px;
-  height: 200px;
-  margin: 10px 40px;
-  border-radius: 7px;
-  background-color: white;
-  box-shadow: 5px 5px 7px rgba(0, 0, 0, 0.6);
-}
-
-@media (max-width: 800px) {
-  .Reports {
-    grid-template-columns: repeat(
-      2,
-      1fr
-    ); /* Force 2 items per row on small screens */
-  }
-}
-
-@media (max-width: 500px) {
-  .Reports {
-    grid-template-columns: repeat(
-      1,
-      1fr
-    ); /* Force 1 item per row on very small screens */
-  }
-}
-@media (max-width: 800px) {
-  .profile_info {
-    flex-direction: column; /* Stack elements vertically */
-    align-items: center;
-    padding: 10px;
-  }
-
-  .information {
-    width: 100%; /* Take full width */
-    margin: 10px 0;
-  }
-
-  .edit {
-    width: 100%;
-    justify-content: center; /* Center the edit button */
-    margin-bottom: 20px;
-  }
-
-  .prolife_img {
-    width: 100px;
-    height: 100px;
-    margin-bottom: 10px;
-  }
-}
-
-@media (max-width: 500px) {
-  .profile_info {
-    padding: 5px;
-  }
-
-  .information,
-  .edit {
-    width: 100%; /* Full width on small screens */
-  }
-
-  .prolife_img {
-    width: 80px;
-    height: 80px;
-  }
 }

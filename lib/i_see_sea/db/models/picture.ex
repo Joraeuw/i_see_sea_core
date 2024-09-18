@@ -29,6 +29,8 @@ defmodule ISeeSea.DB.Models.Picture do
     |> validate_inclusion(:content_type, PictureTypes.content_types())
   end
 
+  def get_uri!(:not_provided), do: "/images/no_image_provided.svg"
+
   def get_uri!(%__MODULE__{id: id}) do
     Environment.backend_url() <> "/api/pictures/" <> Integer.to_string(id)
   end

@@ -4,6 +4,8 @@
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "daisyui": "^4.12.10",
     "leaflet": "1.9.4",
     "leaflet.markercluster": "1.5.3",
     "swiper": "^11.1.5",

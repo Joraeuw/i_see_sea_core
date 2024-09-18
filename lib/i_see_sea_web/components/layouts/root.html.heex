@@ -28,7 +28,7 @@
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-white h-screen w-screen">
+  <body class="h-screen w-screen">
     <nav class="relative pb-0.5 w-full shadow-md">
 <svg class="absolute" width="100%" height="180px" viewBox="0 0 100 25" preserveAspectRatio="none">
   <g transform="scale(-1, 1) translate(-100, 0)">
@@ -72,11 +72,11 @@
       <div class="px-30 w-11/12">
         <div class="flex w-full justify-between items-center self-end">
           <div class="flex justify-center z-20">
-            <button class="btn btn-secondary-100">Home</button>
-            <button class="btn btn-secondary-300">Profile</button>
-            <button class="btn btn-secondary-400">Reports</button>
-            <button class="btn btn-secondary-500">Our purpose</button>
-            <button class="btn btn-secondary-600">About us</button>
+            <button phx-click="navigate" phx-value-view="main_view" class="btn btn-secondary-100">Home</button>
+            <button phx-click="navigate" phx-value-view="my_profile_view" class="btn btn-secondary-300">Profile</button>
+            <button phx-click="navigate" phx-value-view="reports_view" class="btn btn-secondary-400">Reports</button>
+            <button phx-click="navigate" phx-value-view="purpose_view" class="btn btn-secondary-500">Our purpose</button>
+            <button phx-click="navigate" phx-value-view="about_us_view" class="btn btn-secondary-600">About us</button>
           </div>
         
           <div class="flex justify-end items-center space-x-3 w-1/12">

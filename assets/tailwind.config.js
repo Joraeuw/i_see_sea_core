@@ -14,6 +14,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      perspective: {
+        8: "800px",
+        10: "1000px",
+      },
       colors: {
         primary: {
           DEFAULT: "#5fa8d3", // Primary Color (Picton Blue)
@@ -99,11 +103,28 @@ module.exports = {
   plugins: [
     require("daisyui"),
     require("@tailwindcss/forms"),
+    require("@tailwindcss/line-clamp"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //
     //     <div class="phx-click-loading:animate-ping">
     //
+    plugin(function ({ addUtilities }) {
+      addUtilities({
+        ".backface-visible": {
+          "backface-visibility": "visible",
+          "-moz-backface-visibility": "visible",
+          "-webkit-backface-visibility": "visible",
+          "-ms-backface-visibility": "visible",
+        },
+        ".backface-hidden": {
+          "backface-visibility": "hidden",
+          "-moz-backface-visibility": "hidden",
+          "-webkit-backface-visibility": "hidden",
+          "-ms-backface-visibility": "hidden",
+        },
+      });
+    }),
     plugin(({ addVariant }) =>
       addVariant("phx-no-feedback", [".phx-no-feedback&", ".phx-no-feedback &"])
     ),

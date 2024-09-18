@@ -31,7 +31,6 @@ defmodule ISeeSeaWeb.Router do
 
     live "/", HomeLive, :index
     live "/profile", ProfileLive, :index
-    # live "/", HomePageLive
   end
 
   scope "/api" do
