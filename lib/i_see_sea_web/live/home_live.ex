@@ -69,7 +69,16 @@ defmodule ISeeSeaWeb.HomeLive do
         current_view: main_view(),
         profile_subview: my_profile_subview(),
         is_profile_edit_mode: false,
-        user_reports: BaseReport.all!(),
+        user_reports:
+          BaseReport.all!([
+            :jellyfish_report,
+            :meteorological_report,
+            :atypical_activity_report,
+            :other_report,
+            :pictures,
+            :user,
+            pollution_report: :pollution_types
+          ]),
         current_page: 1,
         total_pages: 50,
         stats_panel_is_open: false,
@@ -124,12 +133,6 @@ defmodule ISeeSeaWeb.HomeLive do
         <p>Sidebar content goes here.</p>
       </div> --%>
     </div>
-
-    <HomeComponents.stat_home
-      supports_touch={@supports_touch}
-      stats_panel_is_open={@stats_panel_is_open}
-      selected_filters={@selected_filters}
-    />
     """
   end
 

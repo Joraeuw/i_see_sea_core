@@ -2,14 +2,22 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
   use ISeeSeaWeb, :live_component
 
   alias ISeeSea.DB.Models.Picture
+  alias ISeeSea.DB.Models.BaseReport
+  alias ISeeSea.DB.Models.JellyfishReport
+  alias ISeeSea.DB.Models.AtypicalActivityReport
+  alias ISeeSea.DB.Models.PollutionReport
+  alias ISeeSea.DB.Models.OtherReport
+  alias ISeeSea.DB.Models.MeteorologicalReport
+  alias ISeeSea.DB.Models.PollutionType
+  import Timex
 
   @impl true
 
   def render(assigns) do
     ~H"""
-    <div class="relative w-80 h-96 hover:scale-105">
+    <div class="relative w-80 h-96 transform transition-transform duration-50s hover:scale-105">
       <div class={[
-        "relative transition-transform duration-[0.5] ease-[ease-in-out] transform-style-preserve-3d",
+        "relative transition-transform duration-[0.5] ease-[ease-in-out] transform-style-preserve-3d will-change-transform",
         if(@is_back, do: "rotate-y-180")
       ]}>
         <!-- Front of the card -->
@@ -39,14 +47,11 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
           phx-click="toggle_flip"
           phx-target={@myself}
           class={[
-            "card absolute bg-base-100 shadow-sm left-0 top-0 rotate-y-180 backface-hidden",
+            "flex felx-col card absolute bg-base-100 shadow-sm left-0 top-0 rotate-y-180 backface-hidden h-full w-full",
             if(@is_back, do: "shadow-md")
           ]}
         >
-          <div class="card-body shadow-md rounded-md justify-center items-center flex">
-            <h2 class="card-title">Back of the Card</h2>
-            <p>Additional information about the report.</p>
-          </div>
+          <.back_of_report report={@report} />
         </div>
       </div>
     </div>
@@ -61,5 +66,187 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
   @impl true
   def handle_event("toggle_flip", _params, socket) do
     {:noreply, assign(socket, :is_back, !socket.assigns.is_back)}
+  end
+
+  attr :report, :map, required: true
+
+  defp back_of_report(
+         %{
+           report: %BaseReport{
+             comment: comment,
+             report_date: report_date,
+             jellyfish_report: %JellyfishReport{quantity: quantity, species_id: species}
+           }
+         } = assigns
+       ) do
+    formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
+
+    ~H"""
+    <div class="flex flex-col justify-around align-middle  h-full w-full">
+      <div class="flex flex-row justify-center text-center card-title">Details:</div>
+      <div class="flex flex-row align-middle w-11/12 p-3 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/quintity_icon.svg" />
+        <p><%= quantity %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/jelly_icon.svg" />
+        <p><%= species %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-1/2">
+          <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
+        </div>
+        <p class="line-clamp-3"><%= comment %></p>
+      </div>
+      <div class="flex justify-end p-3 w-11/12 mb-[10px] "><%= formatted_date %></div>
+    </div>
+    """
+  end
+
+  defp back_of_report(
+         %{
+           report: %BaseReport{
+             comment: comment,
+             report_date: report_date,
+             atypical_activity_report: %AtypicalActivityReport{storm_type_id: storm_type}
+           }
+         } = assigns
+       ) do
+    formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
+
+    ~H"""
+    <div class="flex flex-col justify-around align-middle h-full w-full">
+      <div class="flex flex-row justify-center text-center card-title">Details:</div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/strorm_type.svg" />
+        <p><%= storm_type %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-1/2">
+          <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
+        </div>
+        <p class="line-clamp-3"><%= comment %></p>
+      </div>
+      <div class="flex justify-end p-3 w-11/12 mb-[10px]"><%= formatted_date %></div>
+    </div>
+    """
+  end
+
+  defp back_of_report(
+         %{
+           report: %BaseReport{
+             comment: comment,
+             report_date: report_date,
+             meteorological_report: %MeteorologicalReport{
+               fog_type_id: fog_type,
+               wind_type_id: wind_type,
+               sea_swell_type_id: sea_swell_type
+             }
+           }
+         } = assigns
+       ) do
+    formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
+
+    ~H"""
+    <div class="flex flex-col justify-around align-middle h-full w-full">
+      <div class="flex flex-row justify-center text-center card-title">Details:</div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/fog_type.svg" />
+        <p><%= fog_type %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/wind_type.svg" />
+        <p><%= wind_type %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/sea_swell.svg" />
+        <p><%= sea_swell_type %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-1/2">
+          <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
+        </div>
+        <p class="line-clamp-3"><%= comment %></p>
+      </div>
+
+      <div class="flex justify-end p-3 w-11/12 mb-[10px]"><%= formatted_date %></div>
+    </div>
+    """
+  end
+
+  defp back_of_report(
+         %{
+           report: %BaseReport{
+             comment: comment,
+             report_date: report_date,
+             pollution_report: %PollutionReport{pollution_types: pollution_types}
+           }
+         } = assigns
+       ) do
+    IO.inspect(pollution_types)
+    has_oil = Enum.member?(pollution_types, fn %PollutionType{name: name} -> name === "oil" end)
+
+    has_plastic =
+      Enum.member?(pollution_types, fn %PollutionType{name: name} -> name === "plastic" end)
+
+    has_biological =
+      Enum.member?(pollution_types, fn %PollutionType{name: name} -> name === "biological" end)
+
+    formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
+
+    ~H"""
+    <div class="flex flex-col justify-around align-middle h-full w-full">
+      <div class="flex flex-row justify-center text-center card-title">Details:</div>
+      <div class="tooltip" data-tip="Oil">
+        <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+          <img src="/images/report_icons/oil_icon.svg" />
+
+          <p><%= if has_oil, do: "Yes", else: "No" %></p>
+        </div>
+      </div>
+
+      <div class="flex flex-row align-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[5px] bg-cover" src="/images/report_icons/plastic_icon.svg" />
+        <p><%= if has_plastic, do: "Yes", else: "No" %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[10px]" src="/images/report_icons/biological_icon.svg" />
+        <p><%= if has_biological, do: "Yes", else: "No" %></p>
+      </div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-1/2">
+          <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
+        </div>
+        <p class="line-clamp-3"><%= comment %></p>
+      </div>
+
+      <div class="flex justify-end p-3 w-11/12 mb-[10px]"><%= formatted_date %></div>
+    </div>
+    """
+  end
+
+  defp back_of_report(
+         %{
+           report: %BaseReport{
+             comment: comment,
+             report_date: report_date,
+             other_report: %OtherReport{}
+           }
+         } = assigns
+       ) do
+    formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
+
+    ~H"""
+    <div class="flex flex-col justify-around align-middle h-full w-full">
+      <div class="flex flex-row justify-center text-center card-title">Details:</div>
+      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-1/2">
+          <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
+        </div>
+        <p class="line-clamp-6"><%= comment %></p>
+      </div>
+      <div class="flex justify-end w-11/12 mb-[10px]"><%= formatted_date %></div>
+    </div>
+    """
   end
 end

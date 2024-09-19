@@ -1,4 +1,5 @@
 defmodule ISeeSeaWeb.CommonComponents do
+  alias ISeeSeaWeb.HomeComponents
   use Phoenix.Component
 
   attr :current_page, :integer, required: true
@@ -46,6 +47,27 @@ defmodule ISeeSeaWeb.CommonComponents do
       >
         »
       </button>
+    </div>
+    """
+  end
+
+  def filters_button(assigns) do
+    ~H"""
+    <div class="stats stats-vertical shadow mt-2">
+      <div class="stat">
+        <button class="btn" phx-click="toggle_stats_panel">Filters</button>
+        <%= if @supports_touch do %>
+          <HomeComponents.pop_up_filters
+            :if={@stats_panel_is_open}
+            selected_filters={@selected_filters}
+          />
+        <% else %>
+          <HomeComponents.pop_up_mobile
+            :if={@stats_panel_is_open}
+            selected_filters={@selected_filters}
+          />
+        <% end %>
+      </div>
     </div>
     """
   end
