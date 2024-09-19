@@ -2,7 +2,6 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import "leaflet/dist/leaflet.css";
-
 @import "homepage.css";
 @import "navbar.css";
 /* This file is for your main application CSS */
@@ -36,4 +35,25 @@
 
 .btn {
   @apply flex-1 z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(24,158,180)] transition duration-100 hover:bg-[rgb(117,230,218)] active:translate-y-1 active:shadow-none;
+}
+
+.conteiner {
+  display: block;
+  height: auto;
+  width: auto;
+}
+
+.bolded_blue {
+  font-weight: 600;
+  color: #189ab4;
+  font-size: 1.5em;
+  text-align: center;
+}
+.normal_blue {
+  color: #189ab4;
+}
+.less_blue {
+  text-align: center;
+  color: #189ab4;
+  font-weight: 600;
 }
