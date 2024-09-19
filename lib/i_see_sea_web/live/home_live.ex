@@ -34,14 +34,14 @@ defmodule ISeeSeaWeb.HomeLive do
         false
       end
 
-    map_filters = [
-      %{
+    current_filters = %{
+      start_date: %{
         "field" => "inserted_at",
         "op" => ">=",
         "value" => Timex.shift(DateTime.utc_now(), days: -1)
       },
-      %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
-    ]
+      end_date: %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
+    }
 
     reports_pagination = %{page_size: 100, page: 1}
 
@@ -53,13 +53,13 @@ defmodule ISeeSeaWeb.HomeLive do
       {"other", "/images/create-report/pollution.jpeg"}
     ]
 
-    {:ok, reports} = get_reports(map_filters, reports_pagination)
+    {:ok, reports} = get_reports(Map.values(current_filters), reports_pagination)
 
     new_socket =
       assign(socket,
         supports_touch: supports_touch,
         create_report_images: create_report_images,
-        map_filters: map_filters,
+        current_filters: to_form(current_filters) |> IO.inspect(),
         reports_pagination: reports_pagination,
         reports: reports,
         create_report_toolbox_is_open: false,
@@ -72,8 +72,8 @@ defmodule ISeeSeaWeb.HomeLive do
         user_reports: BaseReport.all!(),
         current_page: 1,
         total_pages: 50,
-        stats_panel_is_open: false,
-        selected_filters: []
+        stats_panel_is_open: not supports_touch,
+        filter_menu_is_open: false
       )
 
     {:ok, new_socket}
@@ -124,12 +124,20 @@ defmodule ISeeSeaWeb.HomeLive do
         <p>Sidebar content goes here.</p>
       </div> --%>
     </div>
-
-    <HomeComponents.stat_home
-      supports_touch={@supports_touch}
-      stats_panel_is_open={@stats_panel_is_open}
-      selected_filters={@selected_filters}
-    />
+    <div class="relative">
+      <!-- Stats Panel -->
+      <div class={[
+        "z-40 fixed top-1/5 right-0 bg-transparent shadow-lg transition-transform duration-500 ease-in-out",
+        if(@stats_panel_is_open, do: "translate-x-0", else: "translate-x-full")
+      ]}>
+        <HomeComponents.stat_home
+          supports_touch={@supports_touch}
+          filter_menu_is_open={@filter_menu_is_open}
+          current_filters={@current_filters}
+          stats_panel_is_open={@stats_panel_is_open}
+        />
+      </div>
+    </div>
     """
   end
 
@@ -156,6 +164,15 @@ defmodule ISeeSeaWeb.HomeLive do
     else
       {:noreply, socket}
     end
+  end
+
+  def handle_event("toggle_stats_panel", _params, socket) do
+    {:noreply, assign(socket, :stats_panel_is_open, !socket.assigns.stats_panel_is_open)}
+  end
+
+  def handle_event("toggle_filters", _params, socket) do
+    IO.inspect(!socket.assigns.filter_menu_is_open)
+    {:noreply, assign(socket, :filter_menu_is_open, !socket.assigns.filter_menu_is_open)}
   end
 
   def handle_event("toggle_profile_subview", %{"subview" => subview}, socket) do
@@ -196,8 +213,7 @@ defmodule ISeeSeaWeb.HomeLive do
     end
   end
 
-  @impl true
-  def handle_event("stop_creating_report", %{"element_id" => element_id}, socket) do
+  def handle_event("exit_dialog", %{"element_id" => element_id}, socket) do
     if(
       element_id in [
         "jellyfish_create_report_button",
@@ -230,31 +246,22 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("add_filter", %{"filter" => filter}, socket) do
-    selected_filters =
-      if filter in socket.assigns.selected_filters do
-        socket.assigns.selected_filters
+    current_filters =
+      if filter in socket.assigns.current_filters do
+        socket.assigns.current_filters
       else
-        [filter | socket.assigns.selected_filters]
+        [filter | socket.assigns.current_filters]
       end
 
-    {:noreply, assign(socket, selected_filters: selected_filters)}
+    {:noreply, assign(socket, current_filters: current_filters)}
   end
 
   @impl true
   def handle_event("remove_filter", %{"filter" => filter}, socket) do
-    selected_filters =
-      socket.assigns.selected_filters
+    current_filters =
+      socket.assigns.current_filters
       |> Enum.reject(fn f -> f == filter end)
 
-    {:noreply, assign(socket, selected_filters: selected_filters)}
-  end
-
-  @impl true
-  def handle_event("remove_filter", %{"filter" => filter}, socket) do
-    selected_filters =
-      socket.assigns.selected_filters
-      |> Enum.reject(fn f -> f == filter end)
-
-    {:noreply, assign(socket, selected_filters: selected_filters)}
+    {:noreply, assign(socket, current_filters: current_filters)}
   end
 end

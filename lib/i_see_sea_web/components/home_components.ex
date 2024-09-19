@@ -1,5 +1,7 @@
 defmodule ISeeSeaWeb.HomeComponents do
   @moduledoc false
+  alias ISeeSeaWeb.CommonComponents
+  alias ISeeSea.DB.Models.PollutionType
   alias ISeeSea.Constants
   alias ISeeSea.Constants.StormType
   alias ISeeSea.Constants.JellyfishQuantityRange
@@ -51,6 +53,7 @@ defmodule ISeeSeaWeb.HomeComponents do
       <!-- Create Report Panel -->
       <div
         id="create-report-panel"
+        data-is-open={@create_report_toolbox_is_open}
         phx-hook="DetectClick"
         class={[
           "z-50 bg-white self-center flex flex-col items-center space-y-3 space-x-5",
@@ -59,6 +62,9 @@ defmodule ISeeSeaWeb.HomeComponents do
         ]}
       >
         <.create_report_window report_type={@create_report_type} />
+        <textarea class="textarea max-h-40" placeholder="Comment..."></textarea>
+        <input type="file" class="file-input w-full max-w-xs" />
+        <button class="btn w-full">Submit</button>
       </div>
     </div>
     """
@@ -72,8 +78,6 @@ defmodule ISeeSeaWeb.HomeComponents do
     <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
     <CoreComponents.selection display_text="Select Species" options={JellyfishSpecies.values()} />
     <CoreComponents.selection display_text="Select Range" options={JellyfishQuantityRange.values()} />
-    <textarea class="textarea" placeholder="Comment..."></textarea>
-    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
@@ -82,8 +86,6 @@ defmodule ISeeSeaWeb.HomeComponents do
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
     <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
     <CoreComponents.selection display_text="Storm Type" options={StormType.values()} />
-    <textarea class="textarea" placeholder="Comment..."></textarea>
-    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
@@ -94,8 +96,6 @@ defmodule ISeeSeaWeb.HomeComponents do
     <CoreComponents.selection display_text="Fog Type" options={Constants.FogType.values()} />
     <CoreComponents.selection display_text="Wind Type" options={Constants.WindType.values()} />
     <CoreComponents.selection display_text="Sea Swell Type" options={Constants.SeaSwellType.values()} />
-    <textarea class="textarea" placeholder="Comment..."></textarea>
-    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
@@ -108,8 +108,6 @@ defmodule ISeeSeaWeb.HomeComponents do
       <CoreComponents.checkbox text="plastic" />
       <CoreComponents.checkbox text="biological" />
     </div>
-    <textarea class="textarea" placeholder="Comment..."></textarea>
-    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
@@ -117,8 +115,6 @@ defmodule ISeeSeaWeb.HomeComponents do
     ~H"""
     <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
     <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
-    <textarea class="textarea" placeholder="Comment..."></textarea>
-    <input type="file" class="file-input w-full max-w-xs" />
     """
   end
 
@@ -127,96 +123,93 @@ defmodule ISeeSeaWeb.HomeComponents do
     """
   end
 
-  attr :stats_panel_is_open, :boolean, required: true
-  attr :selected_filter, :list, required: true
+  # def pop_up_filters(assigns) do
+  #   ~H"""
+  #   <div
+  #     id="stats-panel"
+  #     class="md:flex flex-col absolute justify-between top-3 right-52 bg-white w-3/12 h-8/12 shadow-lg p-4 z-50"
+  #   >
+  #     <%= if length(@current_filters) > 0 do %>
+  #       <div class="border-dotted border-2 border-gray-400 p-2 mb-2">
+  #         <h2 class="font-bold">Selected Filters:</h2>
+  #         <ul>
+  #           <%= for filter <- @current_filters do %>
+  #             <li class="flex items-center mb-1">
+  #               <span><%= filter %></span>
+  #               <button
+  #                 class="ml-2 text-red-500 hover:text-red-700"
+  #                 phx-click="remove_filter"
+  #                 phx-value-filter={filter}
+  #               >
+  #                 &times;
+  #               </button>
+  #             </li>
+  #           <% end %>
+  #         </ul>
+  #       </div>
+  #     <% end %>
 
-  def pop_up_filters(assigns) do
-    ~H"""
-    <div
-      id="stats-panel"
-      class="hidden md:flex flex-col absolute justify-between top-3 right-52 bg-white w-3/12 h-8/12 shadow-lg p-4 z-50"
-    >
-      <%= if length(@selected_filters) > 0 do %>
-        <div class="border-dotted border-2 border-gray-400 p-2 mb-2">
-          <h2 class="font-bold">Selected Filters:</h2>
-          <ul>
-            <%= for filter <- @selected_filters do %>
-              <li class="flex items-center mb-1">
-                <span><%= filter %></span>
-                <button
-                  class="ml-2 text-red-500 hover:text-red-700"
-                  phx-click="remove_filter"
-                  phx-value-filter={filter}
-                >
-                  &times;
-                </button>
-              </li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
+  #     <div class="dropdown">
+  #       <div tabindex="0" role="button" class="btn m-1">Add filter</div>
+  #       <ul
+  #         tabindex="0"
+  #         class="dropdown-content menu bg-base-100 rounded-box z-30 w-52 p-2 shadow max-h-48 overflow-y-auto"
+  #       >
+  #         <div class="font-bold">
+  #           <h1>Report type</h1>
+  #         </div>
+  #         <li><a phx-click="add_filter" phx-value-filter="jellyfish">Jellyfish</a></li>
+  #         <li><a phx-click="add_filter" phx-value-filter="meteorological">Meteorological</a></li>
+  #         <li><a phx-click="add_filter" phx-value-filter="pollution">Pollution</a></li>
+  #         <li><a phx-click="add_filter" phx-value-filter="atypical">Atypical</a></li>
+  #         <li><a phx-click="add_filter" phx-value-filter="other">Other</a></li>
 
-      <div class="dropdown">
-        <div tabindex="0" role="button" class="btn m-1">Add filter</div>
-        <ul
-          tabindex="0"
-          class="dropdown-content menu bg-base-100 rounded-box z-30 w-52 p-2 shadow max-h-48 overflow-y-auto"
-        >
-          <div class="font-bold">
-            <h1>Report type</h1>
-          </div>
-          <li><a phx-click="add_filter" phx-value-filter="jellyfish">Jellyfish</a></li>
-          <li><a phx-click="add_filter" phx-value-filter="meteorological">Meteorological</a></li>
-          <li><a phx-click="add_filter" phx-value-filter="pollution">Pollution</a></li>
-          <li><a phx-click="add_filter" phx-value-filter="atypical">Atypical</a></li>
-          <li><a phx-click="add_filter" phx-value-filter="other">Other</a></li>
+  #         <div class="font-bold">
+  #           <h1>Filter by:</h1>
+  #         </div>
+  #         <li><a>name</a></li>
+  #         <li><a>quantity</a></li>
+  #         <li><a>species</a></li>
+  #         <li><a>pollution_types</a></li>
+  #         <li><a>fog_type</a></li>
+  #         <li><a>wind_type</a></li>
+  #         <li><a>sea_swell_type</a></li>
+  #         <li><a>deleted</a></li>
+  #         <li><a>inserted_at</a></li>
 
-          <div class="font-bold">
-            <h1>Filter by:</h1>
-          </div>
-          <li><a>name</a></li>
-          <li><a>quantity</a></li>
-          <li><a>species</a></li>
-          <li><a>pollution_types</a></li>
-          <li><a>fog_type</a></li>
-          <li><a>wind_type</a></li>
-          <li><a>sea_swell_type</a></li>
-          <li><a>deleted</a></li>
-          <li><a>inserted_at</a></li>
+  #         <div class="font-bold">
+  #           <h1>Sortable</h1>
+  #         </div>
+  #         <li><a>id</a></li>
+  #         <li><a>name</a></li>
+  #         <li><a>report_date</a></li>
+  #         <li><a>quantity</a></li>
+  #         <li><a>species</a></li>
+  #         <li><a>fog_type</a></li>
+  #         <li><a>wind_type</a></li>
+  #         <li><a>sea_swell_type</a></li>
+  #         <li><a>inserted_at</a></li>
+  #       </ul>
+  #     </div>
 
-          <div class="font-bold">
-            <h1>Sortable</h1>
-          </div>
-          <li><a>id</a></li>
-          <li><a>name</a></li>
-          <li><a>report_date</a></li>
-          <li><a>quantity</a></li>
-          <li><a>species</a></li>
-          <li><a>fog_type</a></li>
-          <li><a>wind_type</a></li>
-          <li><a>sea_swell_type</a></li>
-          <li><a>inserted_at</a></li>
-        </ul>
-      </div>
-
-      <button class="btn btn-secondary mt-4" phx-click="toggle_stats_panel">Close</button>
-    </div>
-    """
-  end
+  #     <button class="btn btn-secondary mt-4" phx-click="toggle_stats_panel">Close</button>
+  #   </div>
+  #   """
+  # end
 
   attr :stats_panel_is_open, :boolean, required: true
   attr :selected_filter, :list, required: true
 
   def pop_up_mobile(assigns) do
     ~H"""
-    <button class="btn" onclick="my_modal_2.showModal()">open modal</button>
+    <button class="btn" onclick="my_modal_2.showModal()">Filters</button>
     <dialog id="my_modal_2" class="modal h-11/12">
       <div class="modal-box">
-        <%= if length(@selected_filters) > 0 do %>
+        <%= if length(@current_filters) > 0 do %>
           <div class="border-dotted border-2 border-gray-400 p-2 mb-2">
             <h2 class="font-bold">Selected Filters:</h2>
             <ul>
-              <%= for filter <- @selected_filters do %>
+              <%= for filter <- @current_filters do %>
                 <li class="flex items-center mb-1">
                   <span><%= filter %></span>
                   <button
@@ -283,19 +276,42 @@ defmodule ISeeSeaWeb.HomeComponents do
   end
 
   attr :stats_panel_is_open, :boolean, required: true
-  attr :selected_filters, :list, required: true
+  attr :filter_menu_is_open, :boolean, required: true
+  attr :current_filters, :list, required: true
   attr :supports_touch, :boolean, required: true
 
   def stat_home(assigns) do
     ~H"""
-    <div class="stats stats-vertical shadow mt-2">
+    <div class={[
+      "relative stats stats-vertical shadow mt-2 transition-transform duration-500 ease-in-out",
+      if(@stats_panel_is_open, do: "translate-x-0", else: "-translate-x-10")
+    ]}>
+      <!-- Full Height Toggle Button -->
+      <button
+        class="absolute top-0 left-0 h-full w-10 bg-base text-black flex items-center
+          justify-start z-10 mr-2 transition-transform duration-500 ease-in-out"
+        phx-click="toggle_stats_panel"
+      >
+        <!-- Arrow Icon (SVG) -->
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class={[
+            "h-6 w-6 z-30",
+            if(@stats_panel_is_open,
+              do: "rotate-180 ease-in-out duration-500",
+              else: "ease-in-out duration-500"
+            )
+          ]}
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+        </svg>
+      </button>
+      <!-- Stats Content -->
       <div class="stat">
-        <button class="btn" phx-click="toggle_stats_panel">Filters</button>
-        <%= if @supports_touch do %>
-          <.pop_up_filters :if={@stats_panel_is_open} selected_filters={@selected_filters} />
-        <% else %>
-          <.pop_up_mobile :if={@stats_panel_is_open} selected_filters={@selected_filters} />
-        <% end %>
+        <CommonComponents.filter_button current_filters={@current_filters} />
       </div>
       <div class="stat">
         <div class="stat-title">Downloads</div>

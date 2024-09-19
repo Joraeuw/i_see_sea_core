@@ -57,10 +57,14 @@ Hooks.DetectClick = {
 
   handleOutsideClick(event) {
     const clickedElement = event.target;
-    if (!this.el.contains(clickedElement)) {
+    if (this.open && !this.el.contains(clickedElement)) {
       const elementId = clickedElement.id || "unknown";
-      this.pushEvent("stop_creating_report", { element_id: elementId });
+      this.pushEvent("exit_dialog", { element_id: elementId });
     }
+  },
+
+  updated() {
+    this.open = this.el.hasAttribute("data-is-open");
   },
 };
 

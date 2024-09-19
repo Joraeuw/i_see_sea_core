@@ -35,5 +35,5 @@
 }
 
 .btn {
-  @apply flex-1 w-full z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(24,158,180)] transition duration-100 hover:bg-[rgb(117,230,218)] active:translate-y-1 active:shadow-none;
+  @apply flex-1 z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(24,158,180)] transition duration-100 hover:bg-[rgb(117,230,218)] active:translate-y-1 active:shadow-none;
 }
