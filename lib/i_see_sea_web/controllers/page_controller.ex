@@ -6,4 +6,8 @@ defmodule ISeeSeaWeb.PageController do
     # so skip the default app layout.
     render(conn, :home, layout: false)
   end
+
+  def privacy_policy(conn, _params) do
+    render(conn, "privacy_policy.html")
+  end
 end
