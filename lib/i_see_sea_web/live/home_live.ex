@@ -1,5 +1,4 @@
 defmodule ISeeSeaWeb.HomeLive do
-  alias ISeeSea.DB.Logic.ReportOperations
   alias ISeeSeaWeb.ProfileComponents
   use ISeeSeaWeb, :live_view
 
@@ -8,6 +7,8 @@ defmodule ISeeSeaWeb.HomeLive do
 
   defmacro main_view, do: "main_view"
   defmacro my_profile_view, do: "my_profile_view"
+  defmacro terms_and_conditions_view, do: "terms_and_conditions_view"
+  defmacro privacy_policy_view, do: "privacy_policy_view"
 
   defmacro my_profile_subview, do: "my_profile_subview"
   defmacro my_reports_subview, do: "my_reports_subview"
@@ -16,7 +17,7 @@ defmodule ISeeSeaWeb.HomeLive do
   defmacro profile_edit_mode, do: "edit"
 
   def views do
-    [main_view(), my_profile_view()]
+    [main_view(), my_profile_view(), terms_and_conditions_view(), privacy_policy_view()]
   end
 
   def profile_subviews do

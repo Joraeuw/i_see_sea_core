@@ -32,7 +32,7 @@ defmodule ISeeSeaWeb.Router do
     live "/", HomeLive, :index
     live "/profile", ProfileLive, :index
     get "/privacy-policy", PageController, :privacy_policy
-    live "terms", TermLive, :index
+    get "/terms-and-conditions", PageController, :terms_and_conditions
   end
 
   scope "/api" do
