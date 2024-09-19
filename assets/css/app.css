@@ -2,9 +2,11 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import "leaflet/dist/leaflet.css";
+
 @import "homepage.css";
 @import "navbar.css";
 @import "term.css";
+@import "contact.css";
 /* This file is for your main application CSS */
 
 .phx-connected {
