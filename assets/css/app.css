@@ -4,6 +4,7 @@
 @import "leaflet/dist/leaflet.css";
 @import "homepage.css";
 @import "navbar.css";
+@import "term.css";
 /* This file is for your main application CSS */
 
 .phx-connected {
