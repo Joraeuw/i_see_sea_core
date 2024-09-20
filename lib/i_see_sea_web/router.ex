@@ -34,6 +34,7 @@ defmodule ISeeSeaWeb.Router do
     get "/privacy-policy", PageController, :privacy_policy
     get "/terms-and-conditions", PageController, :terms_and_conditions
     live "/register", RegisterLive, :index
+    live "/login", LoginLive, :indexn
   end
 
   scope "/api" do
