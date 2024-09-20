@@ -56,7 +56,7 @@ defmodule ISeeSeaWeb.CommonComponents do
     ~H"""
     <button class="btn" onclick="filter_modal.showModal()">Filters</button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
-      <div class="modal-box bg-white min-w-72">
+      <div class="modal-box overflow-visible bg-white min-w-72 z-30">
         <CoreComponents.simple_form
           for={@current_filters}
           id="demo_form"
@@ -64,7 +64,7 @@ defmodule ISeeSeaWeb.CommonComponents do
           phx-submit="save"
         >
           <.filter_base name="Date Range">
-            <div class="relative z-50">
+            <div class="relative z-30">
               <CoreComponents.date_range_picker
                 id="date_range_picker"
                 form={@current_filters}
@@ -89,7 +89,7 @@ defmodule ISeeSeaWeb.CommonComponents do
         </div>
       </div>
       <form method="dialog" class="modal-backdrop">
-        <button>hidden button</button>
+        <button class="z-30">hidden button</button>
       </form>
     </dialog>
     """
@@ -100,7 +100,7 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_base(assigns) do
     ~H"""
-    <div class="flex flex-row justify-center align-middle">
+    <div class="flex flex-row z-30 justify-center align-middle">
       <div class="relative w-72 p-4 border border-gray-400 rounded-md">
         <span class="absolute -top-3 left-4 bg-white px-1 text-gray-500 text-sm"><%= @name %></span>
         <%= render_slot(@inner_block) %>

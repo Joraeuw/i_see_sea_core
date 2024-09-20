@@ -2,12 +2,12 @@ defmodule ISeeSeaWeb.RegisterLive do
   use ISeeSeaWeb, :live_view
 
   def mount(_params, _session, socket) do
-
     socket = assign(socket, :form_data, %{})
     socket = assign(socket, :errors, %{})
 
     {:ok, socket}
   end
+
   @impl true
   def handle_event("submit", %{"register" => params}, socket) do
     {errors, trimmed_params} = validate_params(params)
@@ -18,25 +18,20 @@ defmodule ISeeSeaWeb.RegisterLive do
       |> assign(:form_data, trimmed_params)
 
     if errors == %{} do
-
       case ISeeSeaWeb.SessionController.register(socket.assigns.conn, trimmed_params) do
         {:ok, %{user: _user, token: _token}} ->
           {:noreply, push_navigate(socket, to: "/")}
 
         {:error, error} ->
-          {:noreply, assign(socket, :errors, %{registration_error: "Registration failed: #{error}"})}
+          {:noreply,
+           assign(socket, :errors, %{registration_error: "Registration failed: #{error}"})}
       end
-
     else
       {:noreply, socket}
     end
   end
 
-
-
-
   defp validate_params(params) do
-
     trimmed_params = Enum.into(params, %{}, fn {key, value} -> {key, String.trim(value)} end)
     errors = %{}
 
@@ -59,6 +54,7 @@ defmodule ISeeSeaWeb.RegisterLive do
       end
 
     email_regex = ~r/^[\w.!#$%&’*+\-\/=?\^`{|}~]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*$/i
+
     errors =
       if trimmed_params["email"] == "" do
         Map.put(errors, :email, "Email is required.")
@@ -72,13 +68,18 @@ defmodule ISeeSeaWeb.RegisterLive do
 
     password = trimmed_params["password"] || ""
     password_regex = ~r/^(?=.*[a-z])(?=.*[0-9]).{8,30}$/
+
     errors =
       cond do
         password == "" ->
           Map.put(errors, :password, "Password is required.")
 
         not Regex.match?(password_regex, password) ->
-          Map.put(errors, :password, "Password must be between 8 and 30 characters and contain at least 1 lowercase letter and 1 number.")
+          Map.put(
+            errors,
+            :password,
+            "Password must be between 8 and 30 characters and contain at least 1 lowercase letter and 1 number."
+          )
 
         true ->
           errors
@@ -86,9 +87,6 @@ defmodule ISeeSeaWeb.RegisterLive do
 
     {errors, trimmed_params}
   end
-
-
-
 
   @impl true
   def render(assigns) do
@@ -99,21 +97,31 @@ defmodule ISeeSeaWeb.RegisterLive do
         <p class="register_p">If you already have an account you can <a href="#">Login</a> now!</p>
         <form phx-submit="submit" class="form">
           <div class="full_name">
-             <label class="register_p">Fullname</label>
-             <input class="input_type" type="text" name="register[fullName]" value={@form_data["fullName"] || ""} />
-             <span class="register_span">
-               <span class="required-ch">*</span>
-               <%= if @errors[:full_name] do %>
-                 <span class="error_div"><%= @errors[:full_name] %></span>
-               <% else %>
-                 Please enter your First and Last name.
-               <% end %>
-             </span>
+            <label class="register_p">Fullname</label>
+            <input
+              class="input_type"
+              type="text"
+              name="register[fullName]"
+              value={@form_data["fullName"] || ""}
+            />
+            <span class="register_span">
+              <span class="required-ch">*</span>
+              <%= if @errors[:full_name] do %>
+                <span class="error_div"><%= @errors[:full_name] %></span>
+              <% else %>
+                Please enter your First and Last name.
+              <% end %>
+            </span>
           </div>
 
           <div class="username">
             <label class="register_p">Username</label>
-            <input class="input_type" type="text" name="register[username]" value={@form_data["username"] || ""} />
+            <input
+              class="input_type"
+              type="text"
+              name="register[username]"
+              value={@form_data["username"] || ""}
+            />
             <span class="register_span">
               <span class="required-ch">*</span>
               <%= if @errors[:username] do %>
@@ -126,7 +134,12 @@ defmodule ISeeSeaWeb.RegisterLive do
 
           <div class="email">
             <label class="register_p">Email</label>
-            <input class="input_type" type="text" name="register[email]" value={@form_data["email"] || ""} />
+            <input
+              class="input_type"
+              type="text"
+              name="register[email]"
+              value={@form_data["email"] || ""}
+            />
             <span class="register_span">
               <span class="required-ch">*</span>
               <%= if @errors[:email] do %>
@@ -151,8 +164,8 @@ defmodule ISeeSeaWeb.RegisterLive do
           </div>
 
           <%= if map_size(@errors) > 0 do %>
-          <div class="show-popup">Please fill in all required fields.</div>
-          <%end%>
+            <div class="show-popup">Please fill in all required fields.</div>
+          <% end %>
 
           <button class="register_button">Register</button>
         </form>
@@ -160,5 +173,4 @@ defmodule ISeeSeaWeb.RegisterLive do
     </div>
     """
   end
-
 end

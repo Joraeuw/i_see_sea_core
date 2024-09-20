@@ -77,8 +77,7 @@ defmodule ISeeSea.MixProject do
       {:oban, "~> 2.17.10"},
       {:timex, "~> 3.7.11"},
       {:gen_smtp, "~> 1.0"},
-      {:httpoison, "~> 1.8"},
-
+      {:httpoison, "~> 1.8"}
     ]
   end
 
