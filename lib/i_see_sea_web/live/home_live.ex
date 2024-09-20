@@ -83,11 +83,11 @@ defmodule ISeeSeaWeb.HomeLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-7/12 h-full">
+    <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-10/12 h-full">
       <div
         :if={@current_view === main_view()}
         id="map"
-        class="absolute flex items-center h-full w-full z-0 rounded-md shadow-md"
+        class="absolute flex items-center h-full md:mr-52 w-full z-0 rounded-md shadow-md"
         phx-hook="LeafletMap"
         phx-update="ignore"
         data-reports={Jason.encode!(@reports)}
@@ -129,7 +129,7 @@ defmodule ISeeSeaWeb.HomeLive do
       <!-- Stats Panel -->
       <div class={[
         "z-40 fixed top-1/5 right-0 bg-transparent shadow-lg transition-transform duration-500 ease-in-out",
-        if(@stats_panel_is_open, do: "translate-x-0", else: "translate-x-full")
+        if(@stats_panel_is_open, do: "translate-x-0", else: "translate-x-[calc(100%+1rem)]")
       ]}>
         <HomeComponents.stat_home
           supports_touch={@supports_touch}

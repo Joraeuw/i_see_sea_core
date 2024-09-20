@@ -26,7 +26,7 @@ defmodule ISeeSeaWeb.HomeComponents do
         class={[
           "z-20 menu menu-horizontal md:menu-vertical justify-center bg-transparent
           md:bg-base-100 w-auto rounded-md gap-1.5 p-1.5 ml-0 mt-2 transition-all duration-300 ease-in-out group",
-          "md:hover:gap-6 md:hover:p-4",
+          "md:hover:gap-4 md:hover:p-3",
           "md:gird-rows-5 md:grid-cols-1 md:ml-2 md:w-auto md:self-start",
           if(@create_report_toolbox_is_open or @supports_touch, do: "create_report_toolbox_open")
         ]}
@@ -37,7 +37,7 @@ defmodule ISeeSeaWeb.HomeComponents do
             class={[
               "relative z-40 flex items-center justify-center self-center overflow-hidden rounded-md
             shadow-sm shadow-primary-100 transition-all duration-300 ease-in-out aspect-w-1 aspect-h-1 h-14 w-14",
-              "md:group-hover:h-20 md:group-hover:w-20",
+              "md:group-hover:h-16 md:group-hover:w-16",
               if(@create_report_toolbox_is_open or @supports_touch,
                 do: "create_report_toolbox_open_button"
               )
@@ -283,7 +283,7 @@ defmodule ISeeSeaWeb.HomeComponents do
   def stat_home(assigns) do
     ~H"""
     <div class={[
-      "relative stats stats-vertical shadow mt-2 transition-transform duration-500 ease-in-out",
+      "relative stats stats-vertical overflow-x-hidden shadow mt-2 transition-transform duration-500 ease-in-out",
       if(@stats_panel_is_open, do: "translate-x-0", else: "-translate-x-10")
     ]}>
       <!-- Full Height Toggle Button -->

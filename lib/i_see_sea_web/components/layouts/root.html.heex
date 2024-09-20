@@ -93,28 +93,26 @@
 
           <div class="flex w-4/5 justify-around mb-2">
             <!-- Buttons for larger screens -->
-            <div class="hidden sm:flex w-full justify-around space-x-1">
-              <button class="btn" phx-click="navigate" phx-value-view="main_view">
-                Home
+            <div class="hidden sm:flex w-5/5 justify-around space-x-1">
+              <button class="btn md:min-w-32" phx-click="navigate" phx-value-view="main_view">
+                 <%=gettext("Home")%>
               </button>
-              <button class="btn" phx-click="navigate" phx-value-view="my_profile_view">
-                Profile
+              <button class="btn md:min-w-32" phx-click="navigate" phx-value-view="my_profile_view">
+                 <%=gettext("Profile")%>
               </button>
-              <button class="btn" phx-click="navigate" phx-value-view="reports_view">
-                Reports
+              <button class="btn md:min-w-32" phx-click="navigate" phx-value-view="reports_view">
+                <%=gettext("Reports")%>
               </button>
-              <button class="btn" phx-click="navigate" phx-value-view="purpose_view">
-                Our purpose
-              </button>
-              <button class="slider-item" phx-click="navigate" phx-value-view="terms_and_conditions_view">
-                Terms and Conditions
-              </button>
-              <button class="slider-item" phx-click="navigate" phx-value-view="privacy_policy_view">
-                Privacy Policy
-              </button>
-              <button class="btn" phx-click="navigate" phx-value-view="about_us_view">
-                About us
-              </button>
+              <div class="dropdown dropdown-bottom">
+                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">More</div>
+                <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                  <li><a><%=gettext("Terms of use")%></a></li>
+                  <li><a><%=gettext("Our purpose")%></a></li>
+                  <li><a><%=gettext("Contacts")%></a></li>
+                  <li><a><%=gettext("Privacy and policy")%></a></li>
+                </ul>
+              </div>
+             
             </div>
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 justify-center mr-4 sm:hidden">
