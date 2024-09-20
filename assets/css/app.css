@@ -2,6 +2,7 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 @import "leaflet/dist/leaflet.css";
+@import "register.css";
 
 @import "homepage.css";
 @import "navbar.css";
