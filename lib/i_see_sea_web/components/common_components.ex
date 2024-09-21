@@ -3,9 +3,25 @@ defmodule ISeeSeaWeb.CommonComponents do
   alias ISeeSeaWeb.CoreComponents
   use Phoenix.Component
 
+
+
+  # Handling validation event
+  @impl true
+  def handle_event("validate", %{"current_filters" => filters}, socket) do
+    start_date = filters["start_date"]["value"]
+    end_date = filters["end_date"]["value"]
+    report_type = filters["report_type"]
+
+    # IO.inspect for debugging purposes
+    IO.inspect(start_date, label: "Selected Start Date")
+    IO.inspect(end_date, label: "Selected End Date")
+    IO.inspect(report_type, label: "Selected Report Type")
+
+    # You can perform further validation here, e.g., checking if dates are valid, etc.
+
+  end
   attr :current_page, :integer, required: true
   attr :total_pages, :integer, required: true
-
   def pagination(assigns) do
     ~H"""
     <div class="join">
@@ -81,6 +97,11 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select>
           </.filter_base>
         </CoreComponents.simple_form>
+        <div class="modal-action justify-center">
+          <form method="dialog">
+            <button class="btn">Apply</button>
+          </form>
+        </div>
 
         <div class="modal-action">
           <form method="dialog">
