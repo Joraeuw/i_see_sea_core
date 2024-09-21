@@ -35,7 +35,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
       >
         <div
           id="calendar_background"
-          class="w-full bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-3"
+          class="absolute w-full overflow-visible bg-white z-50 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none p-3"
         >
           <div id="calendar_header" class="flex justify-between">
             <div id="button_left">

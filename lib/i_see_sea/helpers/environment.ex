@@ -16,6 +16,7 @@ defmodule ISeeSea.Helpers.Environment do
   def allowed_origins do
     get(:allowed_origins, [:i_see_sea, :allowed_origins])
   end
+
   def email_regex do
     get(:email_regex, [:goal, :email_regex])
   end
