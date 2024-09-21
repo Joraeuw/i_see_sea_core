@@ -4,7 +4,7 @@ defmodule ISeeSea.MixProject do
   def project do
     [
       app: :i_see_sea,
-      version: "0.1.0",
+      version: "2.0.0",
       elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -78,7 +78,7 @@ defmodule ISeeSea.MixProject do
       {:timex, "~> 3.7.11"},
       {:gen_smtp, "~> 1.0"},
       {:httpoison, "~> 1.8"},
-
+      {:ex_utils, "~> 0.1.7"}
     ]
   end
 

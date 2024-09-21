@@ -71,6 +71,9 @@ defmodule ISeeSeaWeb do
         layout: {ISeeSeaWeb.Layouts, :app}
 
       require ISeeSeaWeb.Lens
+
+      import ISeeSeaWeb.CoreComponents
+
       alias ISeeSeaWeb.Focus
       alias ISeeSeaWeb.Lens
 

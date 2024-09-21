@@ -19,6 +19,7 @@ defmodule ISeeSea.DB.Models.User do
     field(:password, :string)
     field(:username, :string)
     field(:verified, :boolean, default: false)
+    field(:verified_at, :utc_datetime)
     field(:phone_number, :string)
 
     has_many(:reports, BaseReport)
