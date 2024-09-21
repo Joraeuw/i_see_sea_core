@@ -53,7 +53,7 @@ defmodule ISeeSeaWeb.HomeLive do
         current_user: socket.assigns.current_user || %{email: "not_logged_in"},
         supports_touch: supports_touch,
         create_report_images: create_report_images,
-        current_filters: to_form(current_filters) |> IO.inspect(),
+        current_filters: to_form(current_filters),
         reports_pagination: reports_pagination,
         reports: reports,
         create_report_toolbox_is_open: false,
@@ -229,5 +229,19 @@ defmodule ISeeSeaWeb.HomeLive do
       |> Enum.reject(fn f -> f == filter end)
 
     {:noreply, assign(socket, current_filters: current_filters)}
+  end
+  @impl true
+  def handle_event("validate", params, socket) do
+    #start_date = filters["start_date"]["value"]
+    #end_date = filters["end_date"]["value"]
+    #report_type = filters["report_type"]
+
+    # IO.inspect for debugging purposes
+    #IO.inspect(start_date, label: "Selected Start Date")
+    #IO.inspect(end_date, label: "Selected End Date")
+    #IO.inspect(report_type, label: "Selected Report Type")
+    IO.inspect(params)
+    # You can perform further validation here, e.g., checking if dates are valid, etc.
+
   end
 end

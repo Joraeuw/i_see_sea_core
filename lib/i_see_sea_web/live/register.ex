@@ -6,11 +6,11 @@ defmodule ISeeSeaWeb.RegisterLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="mx-auto max-w-sm">
+    <div class="flex flex-col justify-around align-middle rounded-xl shadow-lg shadow-top-bottom  mx-auto w-5/12">
       <.header class="text-center">
         <:subtitle>
           Already registered?
-          <.link navigate={~p"/login"} class="font-semibold text-brand hover:underline">
+          <.link navigate={~p"/login"} class="font-semibold text-brand hover:underline text-primary">
             Log in
           </.link>
           to your account now.
@@ -25,12 +25,14 @@ defmodule ISeeSeaWeb.RegisterLive do
         phx-trigger-action={@trigger_submit}
         action={~p"/login?_action=registered"}
         method="post"
+        class="flex flex-col items-center bg-[url('/images/Assetss/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full mt-3 space-y-2 shadow-bottom"
+
       >
         <.error :if={@check_errors}>
           Oops, something went wrong! Please check the errors below.
         </.error>
 
-        <.input field={@form[:first_name]} type="text" label="First Name" required />
+        <.input field={@form[:first_name]} type="text"  label="First Name" required />
         <.input field={@form[:last_name]} type="text" label="Last Name" required />
         <.input field={@form[:username]} type="text" label="Username" required />
         <.input field={@form[:email]} type="email" label="Email" required />
