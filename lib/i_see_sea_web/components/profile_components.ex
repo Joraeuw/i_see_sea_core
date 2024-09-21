@@ -21,7 +21,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
       <div class="relative flex flex-col md:flex-row items-center justify-center bg-secondary rounded-md p-2 m-2 mb-6">
         <div class="avatar placeholder m-2 md:mr-10">
           <div class="bg-neutral text-neutral-content w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center">
-            <span class="text-3xl">D</span>
+            <span class="text-3xl"><%= String.upcase(String.first(@username)) %></span>
           </div>
         </div>
         <!-- User Info -->
@@ -99,6 +99,8 @@ defmodule ISeeSeaWeb.ProfileComponents do
         :if={@view === "my_profile_view"}
         user_report_summary={@user_report_summary}
       />
+
+      <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
       <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
       <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
     </div>

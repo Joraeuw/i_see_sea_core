@@ -4,8 +4,6 @@ defmodule ISeeSeaWeb.CommonComponents do
   alias ISeeSeaWeb.CoreComponents
   use Phoenix.Component
 
-
-
   # Handling validation event
   @impl true
   def handle_event("validate", %{"current_filters" => filters}, socket) do
@@ -19,10 +17,11 @@ defmodule ISeeSeaWeb.CommonComponents do
     IO.inspect(report_type, label: "Selected Report Type")
 
     # You can perform further validation here, e.g., checking if dates are valid, etc.
-
   end
+
   attr :current_page, :integer, required: true
   attr :total_pages, :integer, required: true
+
   def pagination(assigns) do
     ~H"""
     <div class="join">

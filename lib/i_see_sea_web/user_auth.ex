@@ -93,6 +93,33 @@ defmodule ISeeSeaWeb.UserAuth do
     end
   end
 
+  def on_mount(
+        {:maybe_ensure_authenticated, %{authorize: require_authorized_action}},
+        _params,
+        session,
+        socket
+      ) do
+    socket = mount_current_user(socket, session)
+
+    IO.inspect({socket.assigns[:live_action], require_authorized_action}, label: :action)
+
+    cond do
+      socket.assigns.current_user ->
+        {:cont, socket}
+
+      socket.assigns[:live_action] not in require_authorized_action ->
+        {:cont, socket}
+
+      true ->
+        socket =
+          socket
+          |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+          |> Phoenix.LiveView.redirect(to: ~p"/login")
+
+        {:halt, socket}
+    end
+  end
+
   def on_mount(:redirect_if_user_is_authenticated, _params, session, socket) do
     socket = mount_current_user(socket, session)
 

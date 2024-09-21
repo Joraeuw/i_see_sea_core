@@ -46,13 +46,12 @@ defmodule ISeeSeaWeb.Router do
     delete "/logout", SessionController, :logout
 
     live_session :current_user,
-      on_mount: [{ISeeSeaWeb.UserAuth, :mount_current_user}] do
-      live "/", HomeLive, :index
-    end
-
-    live_session :require_authenticated_user,
-      on_mount: [{ISeeSeaWeb.UserAuth, :ensure_authenticated}] do
-      live "/profile", ProfileLive, :index
+      on_mount: [
+        {ISeeSeaWeb.UserAuth, {:maybe_ensure_authenticated, %{authorize: [:profile_index]}}}
+      ] do
+      live "/", HomeLive, :home_index
+      live "/profile", ProfileLive, :profile_index
+      live "/reports-list", ReportsLive, :reports_index
     end
   end
 

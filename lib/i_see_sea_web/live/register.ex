@@ -26,13 +26,12 @@ defmodule ISeeSeaWeb.RegisterLive do
         action={~p"/login?_action=registered"}
         method="post"
         class="flex flex-col items-center bg-[url('/images/Assetss/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full mt-3 space-y-2 shadow-bottom"
-
       >
         <.error :if={@check_errors}>
           Oops, something went wrong! Please check the errors below.
         </.error>
 
-        <.input field={@form[:first_name]} type="text"  label="First Name" required />
+        <.input field={@form[:first_name]} type="text" label="First Name" required />
         <.input field={@form[:last_name]} type="text" label="Last Name" required />
         <.input field={@form[:username]} type="text" label="Username" required />
         <.input field={@form[:email]} type="email" label="Email" required />

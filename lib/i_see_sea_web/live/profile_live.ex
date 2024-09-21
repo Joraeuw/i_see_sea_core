@@ -32,6 +32,7 @@ defmodule ISeeSeaWeb.ProfileLive do
     """
   end
 
+  @impl true
   def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
@@ -55,14 +56,6 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     reports_pagination = %{page_size: 100, page: 1}
 
-    create_report_images = [
-      {"jellyfish", "/images/create-report/jellyfish.jpeg"},
-      {"meteorological", "/images/create-report/storm.jpeg"},
-      {"atypical_activity", "/images/create-report/atypical_wether.jpeg"},
-      {"pollution", "/images/create-report/pollution.jpeg"},
-      {"other", "/images/create-report/pollution.jpeg"}
-    ]
-
     {:ok, reports} =
       get_user_reports(Map.values(current_filters), current_user, reports_pagination)
 
@@ -70,7 +63,6 @@ defmodule ISeeSeaWeb.ProfileLive do
       assign(socket,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
-        create_report_images: create_report_images,
         current_filters: to_form(current_filters) |> IO.inspect(),
         reports_pagination: reports_pagination,
         reports: reports,

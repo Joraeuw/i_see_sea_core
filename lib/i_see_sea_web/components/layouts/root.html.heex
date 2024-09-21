@@ -94,19 +94,21 @@
           <div class="flex w-4/5 justify-around mb-2">
             <!-- Buttons for larger screens -->
             <div class="hidden sm:flex w-5/5 justify-around space-x-1">
-              <button class="btn md:min-w-32" phx-click="navigate" phx-value-view="main_view">
-                <%= gettext("Home") %>
-              </button>
-              <button
-                class="btn md:min-w-32"
-                phx-click="navigate"
-                phx-value-view="my_profile_view"
-              >
-                <%= gettext("Profile") %>
-              </button>
-              <button class="btn md:min-w-32" phx-click="navigate" phx-value-view="reports_view">
-                <%= gettext("Reports") %>
-              </button>
+              <.link class="z-10" navigate={~p"/"}>
+                <button class="btn md:min-w-32">
+                  <%= gettext("Home") %>
+                </button>
+              </.link>
+              <.link class="z-10" navigate={~p"/profile"}>
+                <button class="btn md:min-w-32">
+                  <%= gettext("Profile") %>
+                </button>
+              </.link>
+              <.link class="z-10" navigate={~p"/reports-list"}>
+                <button class="btn md:min-w-32">
+                  <%= gettext("Reports") %>
+                </button>
+              </.link>
               <div class="dropdown dropdown-bottom">
                 <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">More</div>
                 <ul
@@ -197,14 +199,14 @@
           <!-- User and login images -->
         </div>
       </div>
-    <div class="flex flex-row justify-center align-middle w-2/12">
-      <button class="z-20 md:w-[70px] md:h-[70px] sm:w-[30px] sm:h-[30px] mt-16 bg-cover">
-  <img src="/images/Assetss/bulgaria.png" class="otvara1" />
-</button>
-<button class="z-20 mt-[70px] md:w-[57px] md:h-[57px] sm:w-[17px] sm:h-[17px] bg-cover">
-  <img src="/images/auth_icons/login.svg" class="otvara" />
-</button>
-</div>
+      <div class="flex flex-row justify-center align-middle w-2/12">
+        <button class="z-20 md:w-[70px] md:h-[70px] sm:w-[30px] sm:h-[30px] mt-16 bg-cover">
+          <img src="/images/Assetss/bulgaria.png" class="otvara1" />
+        </button>
+        <button class="z-20 mt-[70px] md:w-[57px] md:h-[57px] sm:w-[17px] sm:h-[17px] bg-cover">
+          <img src="/images/auth_icons/login.svg" class="otvara" />
+        </button>
+      </div>
     </nav>
     <div class="relative w-full h-4/6">
       <%= @inner_content %>

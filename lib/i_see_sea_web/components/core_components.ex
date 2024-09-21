@@ -192,6 +192,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
   attr :class, :string, default: nil
+
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
     doc: "the arbitrary HTML attributes to apply to the form tag"
@@ -200,7 +201,6 @@ defmodule ISeeSeaWeb.CoreComponents do
   slot :actions, doc: "the slot for form actions, such as a submit button"
 
   def simple_form(assigns) do
-
     ~H"""
     <.form :let={f} for={@for} as={@as} {@rest}>
       <div class={@class || "mt-10 space-y-8 bg-white"}>
@@ -209,7 +209,6 @@ defmodule ISeeSeaWeb.CoreComponents do
           <%= render_slot(action, f) %>
         </div>
       </div>
-
     </.form>
     """
   end
@@ -398,7 +397,10 @@ defmodule ISeeSeaWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="flex flex-row w-11/12 items-start text-sm font-semibold leading-6 text-primary">
+    <label
+      for={@for}
+      class="flex flex-row w-11/12 items-start text-sm font-semibold leading-6 text-primary"
+    >
       <%= render_slot(@inner_block) %>
     </label>
     """
