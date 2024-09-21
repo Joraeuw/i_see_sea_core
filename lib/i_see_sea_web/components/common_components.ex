@@ -1,4 +1,5 @@
 defmodule ISeeSeaWeb.CommonComponents do
+  alias ISeeSeaWeb.HomeComponents
   alias ISeeSea.Constants.ReportType
   alias ISeeSeaWeb.CoreComponents
   use Phoenix.Component

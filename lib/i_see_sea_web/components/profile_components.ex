@@ -1,11 +1,7 @@
 defmodule ISeeSeaWeb.ProfileComponents do
   @moduledoc false
-  alias ISeeSea.DB.Models.OtherReport
-  alias ISeeSea.DB.Models.PollutionReport
-  alias ISeeSea.DB.Models.MeteorologicalReport
-  alias ISeeSea.DB.Models.AtypicalActivityReport
-  alias ISeeSea.DB.Models.JellyfishReport
   alias ISeeSea.DB.Models.BaseReport
+  alias ISeeSeaWeb.CommonComponents
 
   use Phoenix.Component
 
@@ -22,34 +18,35 @@ defmodule ISeeSeaWeb.ProfileComponents do
   def index(assigns) do
     ~H"""
     <div class="flex flex-col items-center justify-start">
-      <div class="relative flex flex-row items-center justify-center bg-secondary rounded-md p-2 m-2 mb-6">
-        <div class="avatar placeholder m-2">
-          <div class="bg-neutral text-neutral-content w-24 rounded-full">
-            <span class="text-3xl"><%= String.upcase(String.first(@username)) %></span>
+      <div class="relative flex flex-col md:flex-row items-center justify-center bg-secondary rounded-md p-2 m-2 mb-6">
+        <div class="avatar placeholder m-2 md:mr-10">
+          <div class="bg-neutral text-neutral-content w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center">
+            <span class="text-3xl">D</span>
           </div>
         </div>
-        <div class="flex flex-col gap-3 ml-2">
+        <!-- User Info -->
+        <div class="flex flex-col gap-3 ml-2 w-full md:w-1/2 lg:w-1/3 md:mr-8">
           <input
             type="text"
-            username="username"
+            name="username"
             value={@username}
-            class="input input-bordered w-full max-w-xs"
+            class="input input-bordered w-full"
             disabled={not @is_edit_mode}
           />
           <input
             type="text"
-            username="email"
+            name="email"
             value={@email}
-            class="input input-bordered w-full max-w-xs"
+            class="input input-bordered w-full"
             disabled={not @is_edit_mode}
           />
         </div>
-
-        <div class="flex flex-col">
-          <%!-- Edit profile left for later when user profile pic uploading is setup --%>
+        <!-- Action Buttons -->
+        <div class="flex flex-col gap-3 mt-4 md:mt-0">
+          <!-- Edit profile buttons hidden until needed -->
           <div class="hidden">
             <button :if={not @is_edit_mode} class="btn" phx-click="edit_profile">Edit profile</button>
-            <div class="join">
+            <div class="flex gap-2">
               <button
                 :if={@view === "my_profile_view" && @is_edit_mode}
                 class="btn btn-success"
@@ -69,18 +66,26 @@ defmodule ISeeSeaWeb.ProfileComponents do
               </button>
             </div>
           </div>
+          <!-- Profile and Reports navigation -->
           <button
             :if={@view === "my_reports_view"}
-            class="btn ml-3"
+            class="btn ml-0 md:ml-3"
             phx-click="toggle_profile_view"
             phx-value-view="my_profile_view"
           >
             My Profile
           </button>
-
+          <button
+            :if={@view === "my_reports_view"}
+            class="btn ml-0 md:ml-3 mt-2"
+            phx-click="toggle_profile_view"
+            phx-value-view="my_profile_view"
+          >
+            Filter
+          </button>
           <button
             :if={@view === "my_profile_view"}
-            class="btn ml-3"
+            class="btn ml-0 md:ml-3"
             phx-click="toggle_profile_view"
             phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
@@ -95,6 +100,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
         user_report_summary={@user_report_summary}
       />
       <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
+      <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
     </div>
     """
   end
@@ -103,13 +109,13 @@ defmodule ISeeSeaWeb.ProfileComponents do
 
   def my_report_summary_view(assigns) do
     ~H"""
-    <div class="flex flex-wrap justify-center gap-2 py-6 md:px-6 bg-gray-50 rounded-md shadow-md mb-6">
+    <div class="flex flex-wrap justify-center gap-5 py-6 md:px-6  w-[calc(100vw-5em)] bg-gray-50 rounded-md shadow-md mb-6">
       <div
         :for={{type, image, count} <- @user_report_summary}
-        class="card card-compact bg-base-100 w-96 shadow-xl"
+        class="card card-compact bg-base-100 w-72 shadow-xl"
       >
-        <figure>
-          <img src={image} alt="Shoes" />
+        <figure class="h-80">
+          <img class="bg-cover" src={image} alt="Shoes" />
         </figure>
         <div class="card-body shadow-md rounded-md">
           <h2 class="card-title"><%= type %></h2>
@@ -127,7 +133,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
 
   def my_report_view(assigns) do
     ~H"""
-    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md mb-6 w-full h-full">
+    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md mb-6 w-[calc(100vw-5em)] mx-10 h-full">
       <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @user_reports do %>
         <!-- Polaroid card container with perspective for 3D effect -->
         <.live_component
@@ -136,46 +142,10 @@ defmodule ISeeSeaWeb.ProfileComponents do
           name={name}
           comment={comment}
           pictures={pictures}
+          report={report}
         />
       <% end %>
     </div>
-    """
-  end
-
-  attr :report, :map, required: true
-
-  defp back_of_report(
-         %{
-           report: %BaseReport{
-             jellyfish_report: %JellyfishReport{quantity: quantity, species: species}
-           }
-         } = assigns
-       ) do
-    ~H"""
-    """
-  end
-
-  defp back_of_report(
-         %{report: %BaseReport{atypical_activity_report: %AtypicalActivityReport{}}} = assigns
-       ) do
-    ~H"""
-    """
-  end
-
-  defp back_of_report(
-         %{report: %BaseReport{meteorological_report: %MeteorologicalReport{}}} = assigns
-       ) do
-    ~H"""
-    """
-  end
-
-  defp back_of_report(%{report: %BaseReport{pollution_report: %PollutionReport{}}} = assigns) do
-    ~H"""
-    """
-  end
-
-  defp back_of_report(%{report: %BaseReport{other_report: %OtherReport{}}} = assigns) do
-    ~H"""
     """
   end
 end

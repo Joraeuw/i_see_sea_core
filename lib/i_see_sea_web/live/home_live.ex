@@ -62,7 +62,16 @@ defmodule ISeeSeaWeb.HomeLive do
         form_data: %{username: nil},
         current_view: main_view(),
         is_profile_edit_mode: false,
-        user_reports: BaseReport.all!(),
+        user_reports:
+          BaseReport.all!([
+            :jellyfish_report,
+            :meteorological_report,
+            :atypical_activity_report,
+            :other_report,
+            :pictures,
+            :user,
+            pollution_report: :pollution_types
+          ]),
         current_page: 1,
         total_pages: 50,
         stats_panel_is_open: not supports_touch,
@@ -131,8 +140,6 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("navigate", %{"view" => new_view}, socket) do
-    IO.inspect(new_view)
-
     if new_view in views() do
       {:noreply, assign(socket, current_view: new_view)}
     else
@@ -230,18 +237,18 @@ defmodule ISeeSeaWeb.HomeLive do
 
     {:noreply, assign(socket, current_filters: current_filters)}
   end
+
   @impl true
   def handle_event("validate", params, socket) do
-    #start_date = filters["start_date"]["value"]
-    #end_date = filters["end_date"]["value"]
-    #report_type = filters["report_type"]
+    # start_date = filters["start_date"]["value"]
+    # end_date = filters["end_date"]["value"]
+    # report_type = filters["report_type"]
 
     # IO.inspect for debugging purposes
-    #IO.inspect(start_date, label: "Selected Start Date")
-    #IO.inspect(end_date, label: "Selected End Date")
-    #IO.inspect(report_type, label: "Selected Report Type")
+    # IO.inspect(start_date, label: "Selected Start Date")
+    # IO.inspect(end_date, label: "Selected End Date")
+    # IO.inspect(report_type, label: "Selected Report Type")
     IO.inspect(params)
     # You can perform further validation here, e.g., checking if dates are valid, etc.
-
   end
 end

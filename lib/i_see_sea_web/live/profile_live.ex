@@ -78,7 +78,16 @@ defmodule ISeeSeaWeb.ProfileLive do
         create_report_type: nil,
         sidebar_open: true,
         profile_view: my_profile_view(),
-        user_reports: BaseReport.all!(),
+        user_reports:
+          BaseReport.all!([
+            :jellyfish_report,
+            :meteorological_report,
+            :atypical_activity_report,
+            :other_report,
+            :pictures,
+            :user,
+            pollution_report: :pollution_types
+          ]),
         current_page: 1,
         total_pages: 50,
         filter_menu_is_open: false
@@ -87,12 +96,19 @@ defmodule ISeeSeaWeb.ProfileLive do
     {:ok, new_socket}
   end
 
+  @impl true
   def handle_event("toggle_profile_view", %{"view" => view}, socket) do
     if view in profile_views() do
       {:noreply, assign(socket, profile_view: view)}
     else
       {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("change_page", %{"page" => page}, socket) do
+    page = String.to_integer(page)
+    {:noreply, assign(socket, :current_page, page)}
   end
 
   defp get_user_reports(filters, _user, pagination) do
