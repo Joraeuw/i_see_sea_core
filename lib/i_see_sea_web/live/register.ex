@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.RegisterLive do
   alias ISeeSea.DB.Models.User
   use ISeeSeaWeb, :live_view
 
+  @impl true
   def render(assigns) do
     ~H"""
     <div class="mx-auto max-w-sm">

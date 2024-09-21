@@ -34,5 +34,6 @@ defmodule ISeeSeaWeb.Params.Session do
   defparams :login do
     required(:email, :string, format: :email)
     required(:password, :string, format: :password)
+    optional(:remember_me, :boolean)
   end
 end

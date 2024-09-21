@@ -9,23 +9,23 @@ defmodule ISeeSeaWeb.ProfileComponents do
 
   use Phoenix.Component
 
-  attr :subview, :string, required: true
-  attr :is_edit_mode, :boolean, required: true
+  attr :view, :string, required: true
   attr :username, :string, required: true
   attr :email, :string, required: true
   attr :user_report_summary, :list, required: true
   attr :user_reports, :list, required: true
+  attr :is_edit_mode, :boolean, default: false
 
   attr :current_page, :integer, required: true
   attr :total_pages, :integer, required: true
 
   def index(assigns) do
     ~H"""
-    <div class="flex flex-col items-center justify-center">
+    <div class="flex flex-col items-center justify-start">
       <div class="relative flex flex-row items-center justify-center bg-secondary rounded-md p-2 m-2 mb-6">
         <div class="avatar placeholder m-2">
           <div class="bg-neutral text-neutral-content w-24 rounded-full">
-            <span class="text-3xl">D</span>
+            <span class="text-3xl"><%= String.upcase(String.first(@username)) %></span>
           </div>
         </div>
         <div class="flex flex-col gap-3 ml-2">
@@ -51,38 +51,38 @@ defmodule ISeeSeaWeb.ProfileComponents do
             <button :if={not @is_edit_mode} class="btn" phx-click="edit_profile">Edit profile</button>
             <div class="join">
               <button
-                :if={@subview === "my_profile_subview" && @is_edit_mode}
+                :if={@view === "my_profile_view" && @is_edit_mode}
                 class="btn btn-success"
-                phx-click="toggle_profile_subview"
-                phx-value-subview="my_profile_subview"
+                phx-click="toggle_profile_view"
+                phx-value-view="my_profile_view"
               >
                 Save
               </button>
 
               <button
-                :if={@subview === "my_profile_subview" && @is_edit_mode}
+                :if={@view === "my_profile_view" && @is_edit_mode}
                 class="btn btn-error"
-                phx-click="toggle_profile_subview"
-                phx-value-subview="my_profile_subview"
+                phx-click="toggle_profile_view"
+                phx-value-view="my_profile_view"
               >
                 Cancel
               </button>
             </div>
           </div>
           <button
-            :if={@subview === "my_reports_subview"}
+            :if={@view === "my_reports_view"}
             class="btn ml-3"
-            phx-click="toggle_profile_subview"
-            phx-value-subview="my_profile_subview"
+            phx-click="toggle_profile_view"
+            phx-value-view="my_profile_view"
           >
             My Profile
           </button>
 
           <button
-            :if={@subview === "my_profile_subview"}
+            :if={@view === "my_profile_view"}
             class="btn ml-3"
-            phx-click="toggle_profile_subview"
-            phx-value-subview="my_reports_subview"
+            phx-click="toggle_profile_view"
+            phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
           >
             My Reports
@@ -91,10 +91,10 @@ defmodule ISeeSeaWeb.ProfileComponents do
       </div>
 
       <.my_report_summary_view
-        :if={@subview === "my_profile_subview"}
+        :if={@view === "my_profile_view"}
         user_report_summary={@user_report_summary}
       />
-      <.my_report_view :if={@subview === "my_reports_subview"} user_reports={@user_reports} />
+      <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
     </div>
     """
   end
@@ -128,7 +128,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   def my_report_view(assigns) do
     ~H"""
     <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md mb-6 w-full h-full">
-      <%= for %BaseReport{name: name, comment: comment, report_type: type, pictures: pictures} = report <- @user_reports do %>
+      <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @user_reports do %>
         <!-- Polaroid card container with perspective for 3D effect -->
         <.live_component
           module={ISeeSeaWeb.ReportCardLiveComponent}

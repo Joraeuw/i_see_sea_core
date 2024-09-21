@@ -1,6 +1,8 @@
 defmodule ISeeSeaWeb.Router do
   use ISeeSeaWeb, :router
 
+  import ISeeSeaWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,7 @@ defmodule ISeeSeaWeb.Router do
     plug :put_root_layout, html: {ISeeSeaWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
   end
 
   pipeline :api do
@@ -27,14 +30,30 @@ defmodule ISeeSeaWeb.Router do
   end
 
   scope "/", ISeeSeaWeb do
-    pipe_through :browser
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    live "/", HomeLive, :index
-    live "/profile", ProfileLive, :index
+    live "/register", RegisterLive, :index
+    live "/login", LoginLive, :index
+
+    post "/login", SessionController, :login
+  end
+
+  scope "/", ISeeSeaWeb do
+    pipe_through [:browser]
+
     get "/privacy-policy", PageController, :privacy_policy
     get "/terms-and-conditions", PageController, :terms_and_conditions
-    live "/register", RegisterLive, :index
-    live "/login", LoginLive, :indexn
+    delete "/logout", SessionController, :logout
+
+    live_session :current_user,
+      on_mount: [{ISeeSeaWeb.UserAuth, :mount_current_user}] do
+      live "/", HomeLive, :index
+    end
+
+    live_session :require_authenticated_user,
+      on_mount: [{ISeeSeaWeb.UserAuth, :ensure_authenticated}] do
+      live "/profile", ProfileLive, :index
+    end
   end
 
   scope "/api" do
@@ -47,7 +66,6 @@ defmodule ISeeSeaWeb.Router do
   scope "/api", ISeeSeaWeb do
     pipe_through :api
 
-    post "/login", SessionController, :login
     post "/register", SessionController, :register
     get "/verify-email/:token", UserController, :verify_email
 

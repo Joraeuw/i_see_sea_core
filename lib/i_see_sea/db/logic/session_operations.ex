@@ -20,7 +20,7 @@ defmodule ISeeSea.DB.Logic.SessionOperations do
   def put_token_in_session(conn, token) do
     conn
     |> Plug.Conn.put_session(:user_token, token)
-    |> Plug.Conn.put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
+    |> Plug.Conn.put_session(:live_socket_id, "i_see_sea:sessions:#{Base.url_encode64(token)}")
   end
 
   def maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do

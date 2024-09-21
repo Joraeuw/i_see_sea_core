@@ -46,6 +46,16 @@ defmodule ISeeSea.DB.Models.User do
     |> unique_constraint(:email)
   end
 
+  def confirm_changeset(user) do
+    now = DateTime.utc_now() |> DateTime.truncate(:second)
+    change(user, confirmed_at: now)
+  end
+
+  def valid_password?(%__MODULE__{password: hashed_password}, password)
+      when is_binary(hashed_password) and byte_size(password) > 0 do
+    Bcrypt.verify_pass(password, hashed_password)
+  end
+
   defp put_password_hash(
          %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
        ) do
