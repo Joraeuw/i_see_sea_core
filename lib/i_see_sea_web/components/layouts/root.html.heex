@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html data-theme="base" lang="en" class="">
+<html data-theme="base" lang="en" class="bg-white">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -84,7 +84,7 @@
         </g>
       </svg>
       <!-- Navigation bar content -->
-      <div class="px-30 w-10/12">
+      <div class="flex items-end px-30 w-10/12 ">
         <div class="flex w-full justify-between items-baseline">
           <!-- Logo -->
           <div class="relative w-28 top-2 left-2 sm:w-16 md:w-24 lg:w-28">
@@ -141,7 +141,7 @@
               </div>
             </div>
             <!-- Mobile Menu Button -->
-            <div class="flex w-4/5 justify-center mr-4 sm:hidden">
+            <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
               <div class="slider-container">
                 <!-- Left arrow -->
                 <button class="arrow-left hidden">
@@ -149,40 +149,40 @@
                 </button>
                 <!-- The slider itself -->
                 <div class="slider-wrapper">
-                  <.link class="z-10" navigate={~p"/"}>
-                    <button class="slider-item">
-                      Home
-                    </button>
+                  <.link class="z-10 slider-item" navigate={~p"/"}>
+                    
+                    Home
+                    
                   </.link>
-                  <.link class="z-10" navigate={~p"/profile"}>
-                    <button class="slider-item">
+                  <.link class="z-10 slider-item" navigate={~p"/profile"}>
+                    
                       Profile
-                    </button>
+                   
                   </.link>
-                  <.link class="z-10" navigate={~p"/reports-list"}>
-                    <button class="slider-item">
+                  <.link class="z-10 slider-item" navigate={~p"/reports-list"}>
+                   
                       Reports
-                    </button>
+                    
                   </.link>
-                  <.link class="z-10" navigate={~p"/about"}>
-                    <button class="slider-item">
+                  <.link class="z-10 slider-item" navigate={~p"/about"}>
+                    
                       Our purpose
-                    </button>
+                    
                   </.link>
-                  <.link class="z-10" navigate={~p"/terms-and-conditions"}>
-                    <button class="slider-item">
-                      Terms and Conditions
-                    </button>
+                  <.link class="z-10 slider-item" navigate={~p"/terms-and-conditions"}>
+                   
+                      Terms of use
+                  
                   </.link>
-                  <.link class="z-10" navigate={~p"/privacy-policy"}>
-                    <button class="slider-item">
+                  <.link class="z-10 slider-item" navigate={~p"/privacy-policy"}>
+                   
                       Privacy Policy
-                    </button>
+                   
                   </.link>
-                  <.link class="z-10" navigate={~p"/contacts"}>
-                    <button class="slider-item">
+                  <.link class="z-10 slider-item" navigate={~p"/contacts"}>
+                    
                       Contacts
-                    </button>
+                    
                   </.link>
                 </div>
                 <!-- Right arrow -->
@@ -206,7 +206,7 @@
         </.link>
       </div>
     </nav>
-    <div class="relative w-full h-4/6">
+    <div class="relative bg-white w-full h-4/6">
       <%= @inner_content %>
     </div>
     <script>
@@ -280,5 +280,6 @@
         showItem(currentIndex); // Initialize
       });
     </script>
+
   </body>
 </html>

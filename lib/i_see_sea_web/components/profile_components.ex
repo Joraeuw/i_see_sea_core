@@ -80,7 +80,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
             My Profile
           </button>
 
-          <CommonComponents.filter_button class="btn ml-0 md:ml-3" filters={@filters} />
+          <CommonComponents.filter_button
+          :if={@view === "my_reports_view"}
+           class="btn ml-0 md:ml-3" filters={@filters} />
 
           <button
             :if={@view === "my_profile_view"}
