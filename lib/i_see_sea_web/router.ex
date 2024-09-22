@@ -43,6 +43,9 @@ defmodule ISeeSeaWeb.Router do
 
     get "/privacy-policy", PageController, :privacy_policy
     get "/terms-and-conditions", PageController, :terms_and_conditions
+    get "/contacts", PageController, :contacts
+    get "/about-us", PageController, :about
+
     delete "/logout", SessionController, :logout
 
     live_session :current_user,

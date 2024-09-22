@@ -1,0 +1,41 @@
+defmodule ISeeSeaWeb.AboutLive do
+  use ISeeSeaWeb, :live_view
+
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok, socket}
+  end
+
+  @impl true
+  def render(assigns) do
+    ~L"""
+    <h1 class="about_us_header">About us</h1>
+    <div class="mission_cont">
+    <div class="img_container">
+    <div class="first_img">
+    <img id="sea-v" src="/images/Assetss/media/sea-v.b7d98c3c.jpg" alt="sea">
+    </div>
+    <div class="two_img">
+    <img id="storm-v" src="/images/Assetss/media/stormM.f946614c.jpg"/>
+    <img id="trash-v" src="/images/Assetss/media/trashfull.e9e26d66.jpg" />
+    </div>
+    </div>
+    <div class="mission">
+    <h2 class="header2">Our mission</h2>
+    <div class="conteriner_mission">
+    <p>Welcome to our community, dedicated to preserving the sea! We are a large group of passionate individuals who share a common goal of protecting our oceans and marine life.
+
+    Our community was founded on the belief that the health of the ocean is crucial to the health of our planet, and we strive to raise awareness and inspire action to safeguard the ocean for future generations. We are committed to promoting sustainable practices, reducing pollution, and protecting endangered species.
+
+    We believe that it is our responsibility to take actions to protect the ocean and its inhabitants, and we welcome anyone who shares our passion to join us in our mission. By working together, we can make a positive impact on the health of the ocean and create a better future for our planet.
+
+    Our community is made up of individuals from all walks of life, including environmentalists, scientists, educators, and concerned citizens. We welcome diversity and believe that by coming together and sharing our knowledge and expertise, we can make a greater impact than we could on our own.
+
+    Thank you for your interest in our community! We invite you to join us in our mission to preserve the sea and protect the health of our planet!</p>
+    </div>
+    </div>
+    </div>
+
+    """
+  end
+end
