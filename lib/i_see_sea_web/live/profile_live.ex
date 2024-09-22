@@ -71,12 +71,14 @@ defmodule ISeeSeaWeb.ProfileLive do
         reports_pagination
       )
 
+    pagination = %{page: 1, total_pages: 10}
+
     new_socket =
       assign(socket,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         filters: to_form(filters),
-        pagination: reports_pagination,
+        pagination: pagination,
         reports: reports,
         stats_panel_is_open: true,
         profile_view: my_profile_view(),
@@ -114,7 +116,7 @@ defmodule ISeeSeaWeb.ProfileLive do
   @impl true
   def handle_event("change_page", %{"page" => page}, socket) do
     page = String.to_integer(page)
-    {:noreply, assign(socket, :current_page, page)}
+    {:noreply, assign(socket, :page, page)}
   end
 
   defp get_user_reports(filters, _user, pagination) do

@@ -47,7 +47,7 @@ defmodule ISeeSeaWeb.HomeLive do
       {"other", "/images/create-report/other_report.png"}
     ]
 
-    {:ok, reports, %{page: current_page} = pagination} =
+    {:ok, reports, %{page: page} = pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         report_type,
         %{page: 1, page_size: 10},
@@ -112,7 +112,7 @@ defmodule ISeeSeaWeb.HomeLive do
   @impl true
   def handle_event("change_page", %{"page" => page}, socket) do
     page = String.to_integer(page)
-    {:noreply, assign(socket, :current_page, page)}
+    {:noreply, assign(socket, :page, page)}
   end
 
   @impl true
@@ -189,7 +189,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("filter_reports", filters, socket) do
-    {:ok, reports, %{page: current_page} = pagination} =
+    {:ok, reports, %{page: page} = pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         filters["report_type"],
         socket.assigns.pagination,
@@ -197,7 +197,7 @@ defmodule ISeeSeaWeb.HomeLive do
       )
 
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: current_page, total_pages: total_pages}
+    pagination = %{page: page, total_pages: total_pages}
 
     socket =
       socket

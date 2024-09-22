@@ -11,21 +11,21 @@ defmodule ISeeSeaWeb.CommonComponents do
       <button
         class="join-item btn"
         phx-click="change_page"
-        phx-value-page={@pagination.current_page - 1}
-        disabled={@pagination.current_page == 1}
+        phx-value-page={@pagination.page - 1}
+        disabled={@pagination.page == 1}
       >
         «
       </button>
       <button class="join-item btn" phx-click="change_page" phx-value-page={1}>
         1
       </button>
-      <%= if @pagination.current_page > 3 do %>
+      <%= if @pagination.page > 3 do %>
         <button class="join-item btn btn-disabled">...</button>
       <% end %>
 
-      <%= for page <- max(2, @pagination.current_page - 1)..min(@pagination.total_pages - 1, @pagination.current_page + 1) do %>
+      <%= for page <- max(2, @pagination.page - 1)..min(@pagination.total_pages - 1, @pagination.page + 1) do %>
         <button
-          class={"join-item btn #{if page == @pagination.current_page, do: "btn-primary", else: ""}"}
+          class={"join-item btn #{if page == @pagination.page, do: "btn-primary", else: ""}"}
           phx-click="change_page"
           phx-value-page={page}
         >
@@ -33,7 +33,7 @@ defmodule ISeeSeaWeb.CommonComponents do
         </button>
       <% end %>
 
-      <%= if @pagination.current_page < @pagination.total_pages - 2 do %>
+      <%= if @pagination.page < @pagination.total_pages - 2 do %>
         <button class="join-item btn btn-disabled">...</button>
       <% end %>
       <button class="join-item btn" phx-click="change_page" phx-value-page={@pagination.total_pages}>
@@ -42,8 +42,8 @@ defmodule ISeeSeaWeb.CommonComponents do
       <button
         class="join-item btn"
         phx-click="change_page"
-        phx-value-page={@pagination.current_page + 1}
-        disabled={@pagination.current_page == @pagination.total_pages}
+        phx-value-page={@pagination.page + 1}
+        disabled={@pagination.page == @pagination.total_pages}
       >
         »
       </button>
