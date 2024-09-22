@@ -8,7 +8,7 @@
 @import "homepage.css";
 @import "navbar.css";
 @import "term.css";
-@import "contact.css";
+
 @import "login.css";
 /* This file is for your main application CSS */
 
@@ -66,3 +66,43 @@
   color: #189ab4;
   font-weight: 600;
 }
+@layer utilities {
+  .auto-if-overflow {
+    min-height: screen;
+    height: auto;
+  }
+}
+.trin-trin {
+  animation-name: jiggle;
+  animation-duration: 0.4s; 
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes jiggle {
+  0%, 100% { 
+      transform: translateX(0); /* Start and end at the original position */
+  }
+  25% { 
+      transform: translateX(-5px); /* Move 5px to the left */
+  }
+  75% { 
+      transform: translateX(5px);  /* Move 5px to the right */
+  }
+}
+
+
+.bounce-message {
+  animation: bounce2 2s ease infinite;
+}
+
+@keyframes bounce2 {
+  0%, 100% {
+      transform: translateY(0);
+  }
+  50% {
+      transform: translateY(-20px);
+  }
+}
+
+

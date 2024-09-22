@@ -35,7 +35,7 @@ defmodule ISeeSeaWeb.HomeComponents do
             id={"#{type}_create_report_button"}
             class={[
               "relative z-40 flex items-center justify-center self-center overflow-hidden rounded-md
-            shadow-sm shadow-primary-100 transition-all duration-300 ease-in-out aspect-w-1 aspect-h-1 h-14 w-14",
+            shadow-sm bg-base-100 shadow-primary-100 transition-all duration-300 ease-in-out aspect-w-1 aspect-h-1 h-14 w-14",
               "md:group-hover:h-16 md:group-hover:w-16",
               if(@create_report_toolbox_is_open or @supports_touch,
                 do: "create_report_toolbox_open_button"

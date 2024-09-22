@@ -55,7 +55,8 @@ defmodule ISeeSeaWeb.ReportsLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md mb-6 w-[calc(100vw-5em)] mx-10 h-full">
+    <div class="flex flex-col items-center justify-start">
+    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto">
       <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @reports do %>
         <!-- Polaroid card container with perspective for 3D effect -->
         <.live_component
@@ -68,12 +69,14 @@ defmodule ISeeSeaWeb.ReportsLive do
         />
       <% end %>
     </div>
+    </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
       filter_menu_is_open={@filter_menu_is_open}
       filters={@filters}
       stats_panel_is_open={@stats_panel_is_open}
     />
+
     """
   end
 

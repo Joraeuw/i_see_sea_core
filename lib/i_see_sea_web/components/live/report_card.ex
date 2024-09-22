@@ -100,7 +100,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
         ">Species</p>
         </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
+      <div class="flex flex-row  p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
         <div class="felx felx-row h-3/3 w-2/12">
           <img src="/images/report_icons/comment.svg" />
         </div>
@@ -135,11 +135,13 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
         ">Storm type</p>
         </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
-        <div class="felx felx-row h-3/3 w-1/2">
+      <div class="flex flex-row  p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-2/12">
           <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
         </div>
-        <p class="line-clamp-3"><%= comment %></p>
+        <div class="w-10/12">
+          <p class="line-clamp-3"><%= comment %></p>
+        </div>
       </div>
       <div class="flex justify-end p-3 w-11/12 mb-[10px]"><%= formatted_date %></div>
     </div>
@@ -188,11 +190,13 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
         ">Sea swell type</p>
         </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
-        <div class="felx felx-row h-3/3 w-1/2">
+      <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <div class="felx felx-row h-3/3 w-2/12">
           <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
         </div>
-        <p class="line-clamp-3"><%= comment %></p>
+        <div class="w-10/12">
+          <p class="line-clamp-3"><%= comment %></p>
+        </div>
       </div>
 
       <div class="flex justify-end p-3 w-11/12 mb-[10px]"><%= formatted_date %></div>
@@ -251,10 +255,12 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
         </p>
       </div>
       <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
-        <div class="felx felx-row h-3/3 w-1/2">
+        <div class="felx felx-row h-3/3 w-2/12">
           <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
         </div>
-        <p class="line-clamp-3"><%= comment %></p>
+        <div class="w-10/12">
+          <p class="line-clamp-3"><%= comment %></p>
+        </div>
       </div>
 
       <div class="flex justify-end p-3 w-11/12 mb-[10px]"><%= formatted_date %></div>
@@ -277,10 +283,12 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
     <div class="flex flex-col justify-around align-middle h-full w-full">
       <div class="flex flex-row justify-center text-center card-title">Details:</div>
       <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
-        <div class="felx felx-row h-3/3 w-1/2">
+        <div class="felx felx-row h-3/3 w-2/12">
           <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
         </div>
-        <p class="line-clamp-6"><%= comment %></p>
+        <div class="w-10/12">
+          <p class="line-clamp-3"><%= comment %></p>
+        </div>
       </div>
       <div class="flex justify-end w-11/12 mb-[10px]"><%= formatted_date %></div>
     </div>
