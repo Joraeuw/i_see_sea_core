@@ -82,21 +82,31 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
     formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
 
     ~H"""
-    <div class="flex flex-col justify-around align-middle  h-full w-full">
+    <div class="flex flex-col justify-around items-center  h-full w-full">
       <div class="flex flex-row justify-center text-center card-title">Details:</div>
-      <div class="flex flex-row align-middle w-11/12 p-3 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center w-11/12 p-3 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/quintity_icon.svg" />
-        <p><%= quantity %></p>
+        <p class="p_card">
+          <%= quantity %>
+          <p class="opacity-50 text-[0.9em]
+        ">Quantity</p>
+        </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
+      <div class="flex flex-row items-center  p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/jelly_icon.svg" />
-        <p><%= species %></p>
+        <p class="p_card">
+          <%= species %>
+          <p class="opacity-50 text-[0.9em]
+        ">Species</p>
+        </p>
       </div>
       <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px]  bg-accent rounded-xl">
-        <div class="felx felx-row h-3/3 w-1/2">
-          <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
+        <div class="felx felx-row h-3/3 w-2/12">
+          <img src="/images/report_icons/comment.svg" />
         </div>
-        <p class="line-clamp-3"><%= comment %></p>
+        <div class="w-10/12">
+          <p class="line-clamp-3"><%= comment %></p>
+        </div>
       </div>
       <div class="flex justify-end p-3 w-11/12 mb-[10px] "><%= formatted_date %></div>
     </div>
@@ -115,11 +125,15 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
     formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
 
     ~H"""
-    <div class="flex flex-col justify-around align-middle h-full w-full">
+    <div class="flex flex-col justify-around  h-full w-full">
       <div class="flex flex-row justify-center text-center card-title">Details:</div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/strorm_type.svg" />
-        <p><%= storm_type %></p>
+        <p class="p_card">
+          <%= storm_type %>
+          <p class="opacity-50 text-[0.9em]
+        ">Storm type</p>
+        </p>
       </div>
       <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <div class="felx felx-row h-3/3 w-1/2">
@@ -150,17 +164,29 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
     ~H"""
     <div class="flex flex-col justify-around align-middle h-full w-full">
       <div class="flex flex-row justify-center text-center card-title">Details:</div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/fog_type.svg" />
-        <p><%= fog_type %></p>
+        <p class="p_card">
+          <%= fog_type %>
+          <p class="opacity-50 text-[0.9em]
+        ">Fog type</p>
+        </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/wind_type.svg" />
-        <p><%= wind_type %></p>
+        <p class="p_card">
+          <%= wind_type %>
+          <p class="opacity-50 text-[0.9em]
+        ">Wind type</p>
+        </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/sea_swell.svg" />
-        <p><%= sea_swell_type %></p>
+        <p class="p_card">
+          <%= sea_swell_type %>
+          <p class="opacity-50 text-[0.9em]
+        ">Sea swell type</p>
+        </p>
       </div>
       <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <div class="felx felx-row h-3/3 w-1/2">
@@ -197,23 +223,34 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
     ~H"""
     <div class="flex flex-col justify-around align-middle h-full w-full">
       <div class="flex flex-row justify-center text-center card-title">Details:</div>
-      <div class="tooltip" data-tip="Oil">
-        <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
-          <img src="/images/report_icons/oil_icon.svg" />
 
-          <p><%= if has_oil, do: "Yes", else: "No" %></p>
-        </div>
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+        <img class="mr-[5px] bg-cover" src="/images/report_icons/oil_icon.svg" />
+
+        <p class="p_card">
+          <%= if has_oil, do: "Yes", else: "No" %>
+          <p class="opacity-50 text-[0.9em]
+          ">Oil pollution</p>
+        </p>
       </div>
 
-      <div class="flex flex-row align-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[5px] bg-cover" src="/images/report_icons/plastic_icon.svg" />
-        <p><%= if has_plastic, do: "Yes", else: "No" %></p>
+        <p class="p_card">
+          <%= if has_plastic, do: "Yes", else: "No" %>
+          <p class="opacity-50 justify-end text-[0.9em]
+        ">Plas. pollution</p>
+        </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <img class="mr-[10px]" src="/images/report_icons/biological_icon.svg" />
-        <p><%= if has_biological, do: "Yes", else: "No" %></p>
+        <p class="p_card">
+          <%= if has_biological, do: "Yes", else: "No" %>
+          <p class="opacity-50 justify-end text-[0.9em]
+        ">Bio. pollution</p>
+        </p>
       </div>
-      <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
+      <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
         <div class="felx felx-row h-3/3 w-1/2">
           <img class="mr-[10px] " src="/images/report_icons/comment.svg" />
         </div>
