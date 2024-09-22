@@ -47,26 +47,36 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     current_user = socket.assigns.current_user
 
+    report_type = "all"
+
     filters = %{
-      start_date: %{
-        "field" => "inserted_at",
-        "op" => ">=",
-        "value" => Timex.shift(DateTime.utc_now(), days: -1)
-      },
-      end_date: %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
+      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -1)),
+      "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
+      "report_type" => report_type
     }
 
     reports_pagination = %{page_size: 100, page: 1}
 
     {:ok, reports} =
-      get_user_reports(Map.values(filters), current_user, reports_pagination)
+      get_user_reports(
+        Map.values(%{
+          start_date: %{
+            "field" => "inserted_at",
+            "op" => ">=",
+            "value" => Timex.shift(DateTime.utc_now(), days: -1)
+          },
+          end_date: %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
+        }),
+        current_user,
+        reports_pagination
+      )
 
     new_socket =
       assign(socket,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         filters: to_form(filters),
-        reports_pagination: reports_pagination,
+        pagination: reports_pagination,
         reports: reports,
         stats_panel_is_open: true,
         profile_view: my_profile_view(),

@@ -22,7 +22,7 @@ defmodule ISeeSeaWeb.HomeLive do
   def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
-        ISeeSeaWeb.Endpoint.subscribe("reports:updates")
+        # ISeeSeaWeb.Endpoint.subscribe("reports:updates")
 
         socket
         |> get_connect_params()
@@ -99,11 +99,6 @@ defmodule ISeeSeaWeb.HomeLive do
         create_report_type={@create_report_type}
         supports_touch={@supports_touch}
       />
-
-      <%!-- <div id="sidebar" class="sidebar closed">
-        <button class="closebtn" phx-click="toggle_sidebar">Close &#10005;</button>
-        <p>Sidebar content goes here.</p>
-      </div> --%>
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
@@ -217,7 +212,7 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   def handle_info(%{event: "add_marker", payload: report}, socket) do
-    push_event(socket, "add_marker", report)
+    socket = push_event(socket, "add_marker", report)
 
     {:noreply, socket}
   end
