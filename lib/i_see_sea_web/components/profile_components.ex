@@ -1,5 +1,6 @@
 defmodule ISeeSeaWeb.ProfileComponents do
   @moduledoc false
+  alias ISeeSeaWeb.HomeComponents
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.CommonComponents
 
@@ -11,6 +12,11 @@ defmodule ISeeSeaWeb.ProfileComponents do
   attr :user_report_summary, :list, required: true
   attr :user_reports, :list, required: true
   attr :is_edit_mode, :boolean, default: false
+
+  attr :supports_touch, :boolean, required: true
+  attr :filters, :map, required: true
+  attr :filter_menu_is_open, :boolean, required: true
+  attr :stats_panel_is_open, :boolean, required: true
 
   attr :current_page, :integer, required: true
   attr :total_pages, :integer, required: true
@@ -75,14 +81,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
           >
             My Profile
           </button>
-          <button
-            :if={@view === "my_reports_view"}
-            class="btn ml-0 md:ml-3 mt-2"
-            phx-click="toggle_profile_view"
-            phx-value-view="my_profile_view"
-          >
-            Filter
-          </button>
+
+          <CommonComponents.filter_button class="btn ml-0 md:ml-3" filters={@filters} />
+
           <button
             :if={@view === "my_profile_view"}
             class="btn ml-0 md:ml-3"
@@ -100,9 +101,17 @@ defmodule ISeeSeaWeb.ProfileComponents do
         user_report_summary={@user_report_summary}
       />
 
-      <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
+      <CommonComponents.pagination
+        :if={@view === "my_reports_view"}
+        current_page={@current_page}
+        total_pages={@total_pages}
+      />
       <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
-      <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
+      <CommonComponents.pagination
+        :if={@view === "my_reports_view"}
+        current_page={@current_page}
+        total_pages={@total_pages}
+      />
     </div>
     """
   end

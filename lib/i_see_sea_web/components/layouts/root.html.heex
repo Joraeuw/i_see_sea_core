@@ -88,7 +88,9 @@
         <div class="flex w-full justify-between items-baseline">
           <!-- Logo -->
           <div class="relative w-28 top-2 left-2 sm:w-16 md:w-24 lg:w-28">
-            <img class="z-10 w-full h-auto" src="/images/Assetss/ICC-logo.png" />
+            <.link class="z-10" navigate={~p"/"}>
+              <img class="z-10 w-full h-auto" src="/images/Assetss/ICC-logo.png" />
+            </.link>
           </div>
 
           <div class="flex w-4/5 justify-around mb-2">
@@ -115,10 +117,26 @@
                   tabindex="0"
                   class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow"
                 >
-                  <li><a><%= gettext("Terms of use") %></a></li>
-                  <li><a><%= gettext("Our purpose") %></a></li>
-                  <li><a><%= gettext("Contacts") %></a></li>
-                  <li><a><%= gettext("Privacy and policy") %></a></li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/terms-and-conditions"}>
+                      <%= gettext("Terms of use") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/about"}>
+                      <%= gettext("Our purpose") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/contacts"}>
+                      <%= gettext("Contacts") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/privacy-policy"}>
+                      <%= gettext("Privacy and policy") %>
+                    </.link>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -142,39 +160,41 @@
                 </button>
                 <!-- The slider itself -->
                 <div class="slider-wrapper">
-                  <button class="slider-item" phx-click="navigate" phx-value-view="main_view">
-                    Home
-                  </button>
-                  <button
-                    class="slider-item"
-                    phx-click="navigate"
-                    phx-value-view="my_profile_view"
-                  >
-                    Profile
-                  </button>
-                  <button class="slider-item" phx-click="navigate" phx-value-view="reports_view">
-                    Reports
-                  </button>
-                  <button class="slider-item" phx-click="navigate" phx-value-view="purpose_view">
-                    Our purpose
-                  </button>
-                  <button
-                    class="slider-item"
-                    phx-click="navigate"
-                    phx-value-view="terms_and_conditions_view"
-                  >
-                    Terms and Conditions
-                  </button>
-                  <button
-                    class="slider-item"
-                    phx-click="navigate"
-                    phx-value-view="privacy_policy_view"
-                  >
-                    Privacy Policy
-                  </button>
-                  <button class="slider-item" phx-click="navigate" phx-value-view="about_us_view">
-                    About us
-                  </button>
+                  <.link class="z-10" navigate={~p"/"}>
+                    <button class="slider-item">
+                      Home
+                    </button>
+                  </.link>
+                  <.link class="z-10" navigate={~p"/profile"}>
+                    <button class="slider-item">
+                      Profile
+                    </button>
+                  </.link>
+                  <.link class="z-10" navigate={~p"/reports-list"}>
+                    <button class="slider-item">
+                      Reports
+                    </button>
+                  </.link>
+                  <.link class="z-10" navigate={~p"/about"}>
+                    <button class="slider-item">
+                      Our purpose
+                    </button>
+                  </.link>
+                  <.link class="z-10" navigate={~p"/terms-and-conditions"}>
+                    <button class="slider-item">
+                      Terms and Conditions
+                    </button>
+                  </.link>
+                  <.link class="z-10" navigate={~p"/privacy-policy"}>
+                    <button class="slider-item">
+                      Privacy Policy
+                    </button>
+                  </.link>
+                  <.link class="z-10" navigate={~p"/contacts"}>
+                    <button class="slider-item">
+                      Contacts
+                    </button>
+                  </.link>
                 </div>
                 <!-- Right arrow -->
                 <button class="arrow-right">
@@ -203,9 +223,11 @@
         <button class="z-20 md:w-[70px] md:h-[70px] sm:w-[30px] sm:h-[30px] mt-16 bg-cover">
           <img src="/images/Assetss/bulgaria.png" class="otvara1" />
         </button>
-        <button class="z-20 mt-[70px] md:w-[57px] md:h-[57px] sm:w-[17px] sm:h-[17px] bg-cover">
-          <img src="/images/auth_icons/login.svg" class="otvara" />
-        </button>
+        <.link class="z-10" navigate={~p"/login"}>
+          <button class="z-20 mt-[70px] md:w-[57px] md:h-[57px] sm:w-[17px] sm:h-[17px] bg-cover">
+            <img src="/images/auth_icons/login.svg" class="otvara" />
+          </button>
+        </.link>
       </div>
     </nav>
     <div class="relative w-full h-4/6">

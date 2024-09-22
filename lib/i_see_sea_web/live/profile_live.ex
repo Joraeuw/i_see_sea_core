@@ -19,13 +19,16 @@ defmodule ISeeSeaWeb.ProfileLive do
       view={@profile_view}
       username={@current_user.username}
       email={@current_user.email}
+      stats_panel_is_open={@stats_panel_is_open}
+      supports_touch={@supports_touch}
+      filters={@filters}
+      filter_menu_is_open={@filter_menu_is_open}
       user_report_summary={[
-        {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
-        {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
-        {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
-        {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
-        {"jellyfish", "/images/create-report/jellyfish.jpeg", 2},
-        {"jellyfish", "/images/create-report/jellyfish.jpeg", 2}
+        {"jellyfish", "/images/create-report/jellyfish_report.png", 1},
+        {"meteorological", "/images/create-report/meteorological_report.png", 10},
+        {"atypical_activity", "/images/create-report/atypical_report.png", 12},
+        {"pollution", "/images/create-report/pollution_report.png", 51},
+        {"other", "/images/create-report/other_report.png", 3}
       ]}
       user_reports={@user_reports}
     />
@@ -45,7 +48,7 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     current_user = socket.assigns.current_user
 
-    current_filters = %{
+    filters = %{
       start_date: %{
         "field" => "inserted_at",
         "op" => ">=",
@@ -57,18 +60,16 @@ defmodule ISeeSeaWeb.ProfileLive do
     reports_pagination = %{page_size: 100, page: 1}
 
     {:ok, reports} =
-      get_user_reports(Map.values(current_filters), current_user, reports_pagination)
+      get_user_reports(Map.values(filters), current_user, reports_pagination)
 
     new_socket =
       assign(socket,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
-        current_filters: to_form(current_filters) |> IO.inspect(),
+        filters: to_form(filters) |> IO.inspect(),
         reports_pagination: reports_pagination,
         reports: reports,
-        create_report_toolbox_is_open: false,
-        create_report_type: nil,
-        sidebar_open: true,
+        stats_panel_is_open: true,
         profile_view: my_profile_view(),
         user_reports:
           BaseReport.all!([
@@ -95,6 +96,12 @@ defmodule ISeeSeaWeb.ProfileLive do
     else
       {:noreply, socket}
     end
+  end
+
+  @impl true
+  def handle_event("toggle_stats_panel", _params, socket) do
+    new_state = !socket.assigns.stats_panel_is_open
+    {:noreply, assign(socket, stats_panel_is_open: new_state)}
   end
 
   @impl true

@@ -14,4 +14,12 @@ defmodule ISeeSeaWeb.PageController do
   def terms_and_conditions(conn, _params) do
     render(conn, "terms_and_conditions.html")
   end
+
+  def contacts(conn, _params) do
+    render(conn, "contacts.html")
+  end
+
+  def about(conn, _params) do
+    render(conn, "about.html")
+  end
 end

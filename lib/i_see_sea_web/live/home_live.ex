@@ -27,33 +27,31 @@ defmodule ISeeSeaWeb.HomeLive do
         false
       end
 
-    current_filters = %{
-      start_date: %{
-        "field" => "inserted_at",
-        "op" => ">=",
-        "value" => Timex.shift(DateTime.utc_now(), days: -1)
-      },
-      end_date: %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
+    filters = %{
+      start_date: Date.to_iso8601(Timex.shift(Date.utc_today(), days: -1)),
+      end_date: Date.to_iso8601(Date.utc_today()),
+      report_type: "all"
     }
 
     reports_pagination = %{page_size: 100, page: 1}
 
     create_report_images = [
-      {"jellyfish", "/images/create-report/jellyfish.jpeg"},
-      {"meteorological", "/images/create-report/storm.jpeg"},
-      {"atypical_activity", "/images/create-report/atypical_wether.jpeg"},
-      {"pollution", "/images/create-report/pollution.jpeg"},
-      {"other", "/images/create-report/pollution.jpeg"}
+      {"jellyfish", "/images/create-report/jellyfish_report.png"},
+      {"meteorological", "/images/create-report/meteorological_report.png"},
+      {"atypical_activity", "/images/create-report/atypical_report.png"},
+      {"pollution", "/images/create-report/pollution_report.png"},
+      {"other", "/images/create-report/other_report.png"}
     ]
 
-    {:ok, reports} = get_reports(Map.values(current_filters), reports_pagination)
+    # {:ok, reports} = get_reports(Map.values(filters), reports_pagination)
+    reports = []
 
     new_socket =
       assign(socket,
         current_user: socket.assigns.current_user || %{email: "not_logged_in"},
         supports_touch: supports_touch,
         create_report_images: create_report_images,
-        current_filters: to_form(current_filters),
+        filters: to_form(filters),
         reports_pagination: reports_pagination,
         reports: reports,
         create_report_toolbox_is_open: false,
@@ -107,27 +105,19 @@ defmodule ISeeSeaWeb.HomeLive do
         <p>Sidebar content goes here.</p>
       </div> --%>
     </div>
-    <div class="relative">
-      <!-- Stats Panel -->
-      <div class={[
-        "z-40 fixed top-1/5 right-0 bg-transparent shadow-lg transition-transform duration-500 ease-in-out",
-        if(@stats_panel_is_open, do: "translate-x-0", else: "translate-x-[calc(100%+1rem)]")
-      ]}>
-        <HomeComponents.stat_home
-          supports_touch={@supports_touch}
-          filter_menu_is_open={@filter_menu_is_open}
-          current_filters={@current_filters}
-          stats_panel_is_open={@stats_panel_is_open}
-        />
-      </div>
-    </div>
+    <HomeComponents.stat_home
+      supports_touch={@supports_touch}
+      filter_menu_is_open={@filter_menu_is_open}
+      filters={@filters}
+      stats_panel_is_open={@stats_panel_is_open}
+    />
     """
   end
 
   defp get_reports(filters, pagination) do
-    with {:ok, reports, _} <-
+    with {:ok, _reports, _} <-
            BaseReport.get_with_filter(%{filters: filters}, pagination),
-         parsed_reports <- Focus.view(reports, %Lens{view: Lens.expanded()}) do
+         parsed_reports <- Focus.view(BaseReport.all!(), %Lens{view: Lens.expanded()}) do
       {:ok, parsed_reports}
     end
   end
@@ -219,36 +209,75 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("add_filter", %{"filter" => filter}, socket) do
-    current_filters =
-      if filter in socket.assigns.current_filters do
-        socket.assigns.current_filters
+    filters =
+      if filter in socket.assigns.filters do
+        socket.assigns.filters
       else
-        [filter | socket.assigns.current_filters]
+        [filter | socket.assigns.filters]
       end
 
-    {:noreply, assign(socket, current_filters: current_filters)}
+    {:noreply, assign(socket, filters: filters)}
   end
 
   @impl true
   def handle_event("remove_filter", %{"filter" => filter}, socket) do
-    current_filters =
-      socket.assigns.current_filters
+    filters =
+      socket.assigns.filters
       |> Enum.reject(fn f -> f == filter end)
 
-    {:noreply, assign(socket, current_filters: current_filters)}
+    {:noreply, assign(socket, filters: filters)}
   end
 
   @impl true
-  def handle_event("validate", params, socket) do
-    # start_date = filters["start_date"]["value"]
-    # end_date = filters["end_date"]["value"]
-    # report_type = filters["report_type"]
+  def handle_event("validate", filters, socket) do
+    # Process the filters here
+    IO.inspect(filters, label: :handling_validate)
+    {:noreply, assign(socket, :filters, format_filters(filters))}
+  end
 
-    # IO.inspect for debugging purposes
-    # IO.inspect(start_date, label: "Selected Start Date")
-    # IO.inspect(end_date, label: "Selected End Date")
-    # IO.inspect(report_type, label: "Selected Report Type")
-    IO.inspect(params)
-    # You can perform further validation here, e.g., checking if dates are valid, etc.
+  def handle_info({:updated_event, %{id: "date_range_picker", form: form} = event}, socket) do
+    # Extract the updated dates from the event
+    # %{
+    #   "start_date" => start_date,
+    #   "end_date" => end_date,
+    #   "report_type" => report_type
+    # } = form.params
+    IO.inspect(event, label: :event)
+
+    # Process the data (e.g., query the database based on the new filter values)
+    # updated_results =
+    #   query_database(%{
+    #     "start_date" => start_date,
+    #     "end_date" => end_date,
+    #     "report_type" => report_type
+    #   })
+
+    # Update the socket with the new data
+    {:noreply, socket}
+  end
+
+  # Fallback handle_info for unhandled messages
+  def handle_info(msg, socket) do
+    IO.inspect(msg, label: "Unhandled message")
+    {:noreply, socket}
+  end
+
+  defp format_filters(filters) do
+    # Extract date range
+    date_filter = %{
+      field: "date",
+      op: "between",
+      value: {filters["start_date"], filters["end_date"]}
+    }
+
+    # Extract report type
+    report_type_filter = %{
+      field: "report_type",
+      op: "eq",
+      value: filters["report_type"]
+    }
+
+    # Return the list of filter maps
+    [date_filter, report_type_filter]
   end
 end

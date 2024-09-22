@@ -676,7 +676,7 @@ defmodule ISeeSeaWeb.CoreComponents do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
   end
 
-  @min_date Date.utc_today() |> Date.add(-365)
+  @min_date ~D[2024-01-01]
 
   attr(:id, :string, required: true)
 

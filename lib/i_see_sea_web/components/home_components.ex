@@ -36,7 +36,7 @@ defmodule ISeeSeaWeb.HomeComponents do
             class={[
               "relative z-40 flex items-center justify-center self-center overflow-hidden rounded-md
             shadow-sm shadow-primary-100 transition-all duration-300 ease-in-out aspect-w-1 aspect-h-1 h-14 w-14",
-              "md:group-hover:h-16 md:group-hover:w-1",
+              "md:group-hover:h-16 md:group-hover:w-16",
               if(@create_report_toolbox_is_open or @supports_touch,
                 do: "create_report_toolbox_open_button"
               )
@@ -124,58 +124,66 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   attr :stats_panel_is_open, :boolean, required: true
   attr :filter_menu_is_open, :boolean, required: true
-  attr :current_filters, :list, required: true
   attr :supports_touch, :boolean, required: true
+  attr :filters, :map, required: true
 
   def stat_home(assigns) do
     ~H"""
-    <div class={[
-      "relative stats stats-vertical overflow-x-hidden shadow mt-2 transition-transform duration-500 ease-in-out",
-      if(@stats_panel_is_open, do: "translate-x-0", else: "-translate-x-10")
-    ]}>
-      <!-- Full Height Toggle Button -->
-      <button
-        class="absolute top-0 left-0 h-full w-10 bg-base text-black flex items-center
+    <div class="relative">
+      <!-- Stats Panel -->
+      <div class={[
+        "z-40 fixed top-1/5 right-0 bg-transparent shadow-lg transition-transform duration-500 ease-in-out",
+        if(@stats_panel_is_open, do: "translate-x-0", else: "translate-x-[calc(100%+1rem)]")
+      ]}>
+        <div class={[
+          "relative stats stats-vertical overflow-x-hidden shadow mt-2 transition-transform duration-500 ease-in-out",
+          if(@stats_panel_is_open, do: "translate-x-0", else: "-translate-x-10")
+        ]}>
+          <!-- Full Height Toggle Button -->
+          <button
+            class="absolute top-0 left-0 h-full w-10 bg-base text-black flex items-center
           justify-start z-10 mr-2 transition-transform duration-500 ease-in-out"
-        phx-click="toggle_stats_panel"
-      >
-        <!-- Arrow Icon (SVG) -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class={[
-            "h-6 w-6 z-30",
-            if(@stats_panel_is_open,
-              do: "rotate-180 ease-in-out duration-500",
-              else: "ease-in-out duration-500"
-            )
-          ]}
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
-        </svg>
-      </button>
-      <!-- Stats Content -->
-      <div class="stat">
-        <CommonComponents.filter_button current_filters={@current_filters} />
-      </div>
-      <div class="stat">
-        <div class="stat-title">Downloads</div>
-        <div class="stat-value">31K</div>
-        <div class="stat-desc">Jan 1st - Feb 1st</div>
-      </div>
+            phx-click="toggle_stats_panel"
+          >
+            <!-- Arrow Icon (SVG) -->
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class={[
+                "h-6 w-6 z-30",
+                if(@stats_panel_is_open,
+                  do: "rotate-180 ease-in-out duration-500",
+                  else: "ease-in-out duration-500"
+                )
+              ]}
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+          <!-- Stats Content -->
+          <div class="stat">
+            <CommonComponents.filter_button filters={@filters} />
+          </div>
+          <div class="stat">
+            <div class="stat-title">Downloads</div>
+            <div class="stat-value">31K</div>
+            <div class="stat-desc">Jan 1st - Feb 1st</div>
+          </div>
 
-      <div class="stat">
-        <div class="stat-title">New Users</div>
-        <div class="stat-value">4,200</div>
-        <div class="stat-desc">↗︎ 400 (22%)</div>
-      </div>
+          <div class="stat">
+            <div class="stat-title">New Users</div>
+            <div class="stat-value">4,200</div>
+            <div class="stat-desc">↗︎ 400 (22%)</div>
+          </div>
 
-      <div class="stat">
-        <div class="stat-title">New Registers</div>
-        <div class="stat-value">1,200</div>
-        <div class="stat-desc">↘︎ 90 (14%)</div>
+          <div class="stat">
+            <div class="stat-title">New Registers</div>
+            <div class="stat-value">1,200</div>
+            <div class="stat-desc">↘︎ 90 (14%)</div>
+          </div>
+        </div>
       </div>
     </div>
     """
