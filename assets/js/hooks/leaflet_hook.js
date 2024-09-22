@@ -33,14 +33,33 @@ const LeafletMap = {
 
     const initialMarkers = JSON.parse(this.el.dataset.reports);
 
-    this.initialRender(initialMarkers);
+    this.renderMarkers(initialMarkers);
 
     this.handleEvent("add_marker", (marker) => {
       this.addMarker(marker);
     });
+    this.trackingNewMarkers = true;
 
     this.handleEvent("delete_marker", (marker) => {
       this.deleteMarker(marker.report_id);
+    });
+
+    this.handleEvent("filters_updated", (params) => {
+      console.log(params);
+
+      let { reports, stop_live_tracker } = params;
+      if (stop_live_tracker) {
+        this.removeEventListener("add_marker");
+      } else {
+        if (!this.trackingNewMarkers) {
+          this.handleEvent("add_marker", (marker) => {
+            this.addMarker(marker);
+          });
+          this.trackingNewMarkers = true;
+        }
+      }
+
+      this.renderMarkers(reports);
     });
 
     this.detectUserLocation();
@@ -69,9 +88,10 @@ const LeafletMap = {
     }
   },
 
-  async initialRender(initialMarkers) {
-    console.log("initialMarkers", initialMarkers);
-    initialMarkers.forEach((markerData) => {
+  async renderMarkers(markers) {
+    this.clearMarkers();
+
+    markers.forEach((markerData) => {
       const { report_id, report_type, latitude, longitude } = markerData;
       const marker = L.marker([latitude, longitude], {
         icon: markerIconByReportType(report_type),
@@ -79,6 +99,13 @@ const LeafletMap = {
       this.markerClusterGroup.addLayer(marker);
       this.markers[report_id] = marker;
     });
+  },
+
+  clearMarkers() {
+    if (this.markerClusterGroup) {
+      this.markerClusterGroup.clearLayers();
+    }
+    this.markers = {};
   },
 
   detectUserLocation() {

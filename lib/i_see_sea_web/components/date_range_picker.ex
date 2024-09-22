@@ -136,8 +136,8 @@ defmodule ISeeSeaWeb.DateRangePicker do
 
   @impl true
   def update(assigns, socket) do
-    range_start = from_str!(assigns.start_date_field.value)
-    range_end = from_str!(end_value(assigns))
+    range_start = from_str!(assigns.start_date_field.form.params["start_date"])
+    range_end = from_str!(assigns.end_date_field.form.params["end_date"])
     current_date = socket.assigns.current.date
 
     {
@@ -147,6 +147,14 @@ defmodule ISeeSeaWeb.DateRangePicker do
       |> assign(:current, format_date(current_date))
       |> assign(:range_start, range_start)
       |> assign(:range_end, range_end)
+      |> assign(
+        :end_date_field,
+        set_field_value(assigns, :end_date_field, range_end)
+      )
+      |> assign(
+        :start_date_field,
+        set_field_value(assigns, :start_date_field, range_start)
+      )
       |> assign(:state, @initial_state)
     }
   end
@@ -170,23 +178,17 @@ defmodule ISeeSeaWeb.DateRangePicker do
       ]
       |> Enum.sort(&(DateTime.compare(&1, &2) != :gt))
 
-    attrs = %{
-      id: socket.assigns.id,
-      start_date: range_start,
-      end_date: range_end,
-      form: socket.assigns.form
-    }
-
-    send(self(), {:updated_event, attrs})
-
     {
       :noreply,
       socket
       |> assign(:calendar?, false)
-      |> assign(:end_date_field, set_field_value(socket.assigns, :end_date_field, range_end))
+      |> assign(
+        :end_date_field,
+        set_field_value(socket.assigns, :end_date_field, Timex.end_of_day(range_end))
+      )
       |> assign(
         :start_date_field,
-        set_field_value(socket.assigns, :start_date_field, range_start)
+        set_field_value(socket.assigns, :start_date_field, Timex.beginning_of_day(range_start))
       )
       |> assign(:state, @initial_state)
     }
@@ -252,16 +254,6 @@ defmodule ISeeSeaWeb.DateRangePicker do
       {:noreply, socket |> assign(:hover_range_end, hover_range_end)}
     end
   end
-
-  defp end_value(assigns) when is_map_key(assigns, :to) do
-    case assigns.to.value do
-      nil -> nil
-      "" -> nil
-      _ -> assigns.to.value
-    end
-  end
-
-  defp end_value(_), do: nil
 
   defp next_month_new_date(current_date, last_row) do
     last_row_last_day = last_row |> List.last()
@@ -385,7 +377,12 @@ defmodule ISeeSeaWeb.DateRangePicker do
   defp selected_range?(day, range_start, range_end) do
     start_date = DateTime.to_date(range_start)
     end_date = DateTime.to_date(range_end)
-    day in Date.range(start_date, end_date)
+
+    if Date.compare(start_date, end_date) == :gt do
+      day in Date.range(start_date, end_date, -1)
+    else
+      day in Date.range(start_date, end_date)
+    end
   end
 
   defp format_date(date) do
@@ -421,7 +418,22 @@ defmodule ISeeSeaWeb.DateRangePicker do
     start_date_datetime = extract_date(start_date)
     end_date_datetime = extract_date(end_date)
 
-    "#{Calendar.strftime(start_date_datetime, "%b %d, %Y")} - #{Calendar.strftime(end_date_datetime, "%b %d, %Y")}"
+    {start_date_formatted, end_date_formatted} =
+      case Date.compare(start_date_datetime, end_date_datetime) do
+        :gt ->
+          {
+            Calendar.strftime(end_date_datetime, "%b %d, %Y"),
+            Calendar.strftime(start_date_datetime, "%b %d, %Y")
+          }
+
+        _ ->
+          {
+            Calendar.strftime(start_date_datetime, "%b %d, %Y"),
+            Calendar.strftime(end_date_datetime, "%b %d, %Y")
+          }
+      end
+
+    "#{start_date_formatted} - #{end_date_formatted}"
   end
 
   defp extract_date(input) when input in [nil, ""], do: Date.utc_today()

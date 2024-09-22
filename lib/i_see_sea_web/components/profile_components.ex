@@ -1,6 +1,5 @@
 defmodule ISeeSeaWeb.ProfileComponents do
   @moduledoc false
-  alias ISeeSeaWeb.HomeComponents
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.CommonComponents
 
@@ -18,8 +17,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   attr :filter_menu_is_open, :boolean, required: true
   attr :stats_panel_is_open, :boolean, required: true
 
-  attr :current_page, :integer, required: true
-  attr :total_pages, :integer, required: true
+  attr :pagination, :map, required: true
 
   def index(assigns) do
     ~H"""
@@ -101,17 +99,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
         user_report_summary={@user_report_summary}
       />
 
-      <CommonComponents.pagination
-        :if={@view === "my_reports_view"}
-        current_page={@current_page}
-        total_pages={@total_pages}
-      />
+      <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
       <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
-      <CommonComponents.pagination
-        :if={@view === "my_reports_view"}
-        current_page={@current_page}
-        total_pages={@total_pages}
-      />
+      <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
     </div>
     """
   end

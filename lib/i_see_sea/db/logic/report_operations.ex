@@ -31,6 +31,43 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     end)
   end
 
+  def get_total_pages(%{total_count: total_entries, page_size: page_size}) do
+    div(total_entries, page_size) + if rem(total_entries, page_size) > 0, do: 1, else: 0
+  end
+
+  def retrieve_reports_with_live_view_filters(report_type, pagination, filters)
+      when is_map(filters) do
+    retrieve_reports_with_live_view_filters(
+      report_type,
+      pagination,
+      Map.to_list(Map.drop(filters, ["report_type", "date_range_picker_display_value"])),
+      []
+    )
+  end
+
+  defp retrieve_reports_with_live_view_filters(
+         report_type,
+         pagination,
+         [current_filter | rest],
+         built_filter
+       ) do
+    retrieve_reports_with_live_view_filters(report_type, pagination, rest, [
+      parse_live_view_filter(current_filter) | built_filter
+    ])
+  end
+
+  defp retrieve_reports_with_live_view_filters(report_type, pagination, [], built_filter) do
+    BaseReport.get_filtered_paginated_reports(report_type, %{filters: built_filter}, pagination)
+  end
+
+  defp parse_live_view_filter({"start_date", value}) do
+    %{"field" => "inserted_at", "op" => ">=", "value" => value}
+  end
+
+  defp parse_live_view_filter({"end_date", value}) do
+    %{"field" => "inserted_at", "op" => "<=", "value" => value}
+  end
+
   defp create_specific_report(base_report_id, report_type, params)
        when report_type == "jellyfish" do
     with {:ok, %{species: species} = validated_prams} <-

@@ -11,7 +11,6 @@ defmodule ISeeSeaWeb.UserAuth do
   @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
 
   def log_in_user(conn, user, params \\ %{}) do
-    IO.inspect(conn)
     token = Accounts.generate_user_session_token(user)
     user_return_to = get_session(conn, :user_return_to)
 
@@ -100,8 +99,6 @@ defmodule ISeeSeaWeb.UserAuth do
         socket
       ) do
     socket = mount_current_user(socket, session)
-
-    IO.inspect({socket.assigns[:live_action], require_authorized_action}, label: :action)
 
     cond do
       socket.assigns.current_user ->

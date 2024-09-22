@@ -1,4 +1,6 @@
 defmodule ISeeSeaWeb.HomeLive do
+  alias ISeeSea.Helpers.Broadcaster
+  alias ISeeSea.DB.Logic.ReportOperations
   use ISeeSeaWeb, :live_view
 
   alias ISeeSea.DB.Models.BaseReport
@@ -23,17 +25,19 @@ defmodule ISeeSeaWeb.HomeLive do
         socket
         |> get_connect_params()
         |> Map.get("supports_touch", false)
+
+        # ISeeSeaWeb.Endpoint.subscribe("reports:updates")
       else
         false
       end
 
-    filters = %{
-      start_date: Date.to_iso8601(Timex.shift(Date.utc_today(), days: -1)),
-      end_date: Date.to_iso8601(Date.utc_today()),
-      report_type: "all"
-    }
+    report_type = "all"
 
-    reports_pagination = %{page_size: 100, page: 1}
+    filters = %{
+      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -1)),
+      "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
+      "report_type" => report_type
+    }
 
     create_report_images = [
       {"jellyfish", "/images/create-report/jellyfish_report.png"},
@@ -43,8 +47,15 @@ defmodule ISeeSeaWeb.HomeLive do
       {"other", "/images/create-report/other_report.png"}
     ]
 
-    # {:ok, reports} = get_reports(Map.values(filters), reports_pagination)
-    reports = []
+    {:ok, reports, %{page: current_page} = pagination} =
+      ReportOperations.retrieve_reports_with_live_view_filters(
+        report_type,
+        %{page: 1, page_size: 10},
+        filters
+      )
+
+    total_pages = ReportOperations.get_total_pages(pagination)
+    pagination = %{page: pagination.page, total_pages: total_pages}
 
     new_socket =
       assign(socket,
@@ -52,7 +63,7 @@ defmodule ISeeSeaWeb.HomeLive do
         supports_touch: supports_touch,
         create_report_images: create_report_images,
         filters: to_form(filters),
-        reports_pagination: reports_pagination,
+        pagination: pagination,
         reports: reports,
         create_report_toolbox_is_open: false,
         create_report_type: nil,
@@ -60,18 +71,6 @@ defmodule ISeeSeaWeb.HomeLive do
         form_data: %{username: nil},
         current_view: main_view(),
         is_profile_edit_mode: false,
-        user_reports:
-          BaseReport.all!([
-            :jellyfish_report,
-            :meteorological_report,
-            :atypical_activity_report,
-            :other_report,
-            :pictures,
-            :user,
-            pollution_report: :pollution_types
-          ]),
-        current_page: 1,
-        total_pages: 50,
         stats_panel_is_open: not supports_touch,
         filter_menu_is_open: false
       )
@@ -84,13 +83,14 @@ defmodule ISeeSeaWeb.HomeLive do
     ~H"""
     <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-10/12 h-full">
       <h1><%= @current_user.email %></h1>
-      <div
-        id="map"
-        class="absolute flex items-center h-full md:mr-52 w-full z-0 rounded-md shadow-md"
-        phx-hook="LeafletMap"
-        phx-update="ignore"
-        data-reports={Jason.encode!(@reports)}
-      />
+      <div id="map_wrapper" phx-update="ignore">
+        <div
+          id="map"
+          class="absolute flex items-center h-full md:mr-52 w-full z-0 rounded-md shadow-md"
+          phx-hook="LeafletMap"
+          data-reports={Jason.encode!(Focus.view(@reports, %Lens{view: Lens.expanded()}))}
+        />
+      </div>
 
       <%!-- Desktop Design --%>
       <HomeComponents.report_toolbox
@@ -114,14 +114,6 @@ defmodule ISeeSeaWeb.HomeLive do
     """
   end
 
-  defp get_reports(filters, pagination) do
-    with {:ok, _reports, _} <-
-           BaseReport.get_with_filter(%{filters: filters}, pagination),
-         parsed_reports <- Focus.view(BaseReport.all!(), %Lens{view: Lens.expanded()}) do
-      {:ok, parsed_reports}
-    end
-  end
-
   @impl true
   def handle_event("change_page", %{"page" => page}, socket) do
     page = String.to_integer(page)
@@ -142,7 +134,6 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   def handle_event("toggle_filters", _params, socket) do
-    IO.inspect(!socket.assigns.filter_menu_is_open)
     {:noreply, assign(socket, :filter_menu_is_open, !socket.assigns.filter_menu_is_open)}
   end
 
@@ -202,82 +193,26 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   @impl true
-  def handle_event("toggle_stats_panel", _params, socket) do
-    new_state = !socket.assigns.stats_panel_is_open
-    {:noreply, assign(socket, stats_panel_is_open: new_state)}
-  end
+  def handle_event("filter_reports", filters, socket) do
+    {:ok, reports, %{page: current_page} = pagination} =
+      ReportOperations.retrieve_reports_with_live_view_filters(
+        filters["report_type"],
+        socket.assigns.pagination,
+        filters
+      )
 
-  @impl true
-  def handle_event("add_filter", %{"filter" => filter}, socket) do
-    filters =
-      if filter in socket.assigns.filters do
-        socket.assigns.filters
-      else
-        [filter | socket.assigns.filters]
-      end
+    total_pages = ReportOperations.get_total_pages(pagination)
+    pagination = %{page: current_page, total_pages: total_pages}
 
-    {:noreply, assign(socket, filters: filters)}
-  end
+    socket =
+      socket
+      |> assign(:pagination, pagination)
+      |> assign(:reports, reports)
+      |> push_event("filters_updated", %{
+        stop_live_tracker: false,
+        reports: Focus.view(reports, %Lens{view: Lens.expanded()})
+      })
 
-  @impl true
-  def handle_event("remove_filter", %{"filter" => filter}, socket) do
-    filters =
-      socket.assigns.filters
-      |> Enum.reject(fn f -> f == filter end)
-
-    {:noreply, assign(socket, filters: filters)}
-  end
-
-  @impl true
-  def handle_event("validate", filters, socket) do
-    # Process the filters here
-    IO.inspect(filters, label: :handling_validate)
-    {:noreply, assign(socket, :filters, format_filters(filters))}
-  end
-
-  def handle_info({:updated_event, %{id: "date_range_picker", form: form} = event}, socket) do
-    # Extract the updated dates from the event
-    # %{
-    #   "start_date" => start_date,
-    #   "end_date" => end_date,
-    #   "report_type" => report_type
-    # } = form.params
-    IO.inspect(event, label: :event)
-
-    # Process the data (e.g., query the database based on the new filter values)
-    # updated_results =
-    #   query_database(%{
-    #     "start_date" => start_date,
-    #     "end_date" => end_date,
-    #     "report_type" => report_type
-    #   })
-
-    # Update the socket with the new data
     {:noreply, socket}
-  end
-
-  # Fallback handle_info for unhandled messages
-  def handle_info(msg, socket) do
-    IO.inspect(msg, label: "Unhandled message")
-    {:noreply, socket}
-  end
-
-  defp format_filters(filters) do
-    # Extract date range
-    date_filter = %{
-      field: "date",
-      op: "between",
-      value: {filters["start_date"], filters["end_date"]}
-    }
-
-    # Extract report type
-    report_type_filter = %{
-      field: "report_type",
-      op: "eq",
-      value: filters["report_type"]
-    }
-
-    # Return the list of filter maps
-    [date_filter, report_type_filter]
   end
 end

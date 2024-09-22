@@ -3,8 +3,7 @@ defmodule ISeeSeaWeb.CommonComponents do
   alias ISeeSeaWeb.CoreComponents
   use Phoenix.Component
 
-  attr :current_page, :integer, required: true
-  attr :total_pages, :integer, required: true
+  attr :pagination, :map, required: true
 
   def pagination(assigns) do
     ~H"""
@@ -12,21 +11,21 @@ defmodule ISeeSeaWeb.CommonComponents do
       <button
         class="join-item btn"
         phx-click="change_page"
-        phx-value-page={@current_page - 1}
-        disabled={@current_page == 1}
+        phx-value-page={@pagination.current_page - 1}
+        disabled={@pagination.current_page == 1}
       >
         «
       </button>
       <button class="join-item btn" phx-click="change_page" phx-value-page={1}>
         1
       </button>
-      <%= if @current_page > 3 do %>
+      <%= if @pagination.current_page > 3 do %>
         <button class="join-item btn btn-disabled">...</button>
       <% end %>
 
-      <%= for page <- max(2, @current_page - 1)..min(@total_pages - 1, @current_page + 1) do %>
+      <%= for page <- max(2, @pagination.current_page - 1)..min(@pagination.total_pages - 1, @pagination.current_page + 1) do %>
         <button
-          class={"join-item btn #{if page == @current_page, do: "btn-primary", else: ""}"}
+          class={"join-item btn #{if page == @pagination.current_page, do: "btn-primary", else: ""}"}
           phx-click="change_page"
           phx-value-page={page}
         >
@@ -34,17 +33,17 @@ defmodule ISeeSeaWeb.CommonComponents do
         </button>
       <% end %>
 
-      <%= if @current_page < @total_pages - 2 do %>
+      <%= if @pagination.current_page < @pagination.total_pages - 2 do %>
         <button class="join-item btn btn-disabled">...</button>
       <% end %>
-      <button class="join-item btn" phx-click="change_page" phx-value-page={@total_pages}>
-        <%= @total_pages %>
+      <button class="join-item btn" phx-click="change_page" phx-value-page={@pagination.total_pages}>
+        <%= @pagination.total_pages %>
       </button>
       <button
         class="join-item btn"
         phx-click="change_page"
-        phx-value-page={@current_page + 1}
-        disabled={@current_page == @total_pages}
+        phx-value-page={@pagination.current_page + 1}
+        disabled={@pagination.current_page == @pagination.total_pages}
       >
         »
       </button>
@@ -60,7 +59,7 @@ defmodule ISeeSeaWeb.CommonComponents do
     <button class={@class || "btn"} onclick="filter_modal.showModal()">Filters</button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
-        <CoreComponents.simple_form for={@filters} phx-change="validate" phx-submit="save">
+        <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
           <.filter_base name="Date Range">
             <div class="relative z-30">
               <CoreComponents.date_range_picker
@@ -73,11 +72,22 @@ defmodule ISeeSeaWeb.CommonComponents do
             </div>
           </.filter_base>
           <.filter_base name="Report Type">
-            <select class="select w-full max-w-xs" name="report_type">
+            <CoreComponents.input
+              type="select"
+              field={@filters[:report_type]}
+              options={ReportType.filter_values()}
+              value={@filters[:report_type].form.params["report_type"]}
+            />
+            <%!-- <select class="select w-full max-w-xs" name="report_type">
               <option selected disabled>Select a report type</option>
               <option :for={type <- ReportType.values()} value={type}><%= type %></option>
-            </select>
+            </select> --%>
           </.filter_base>
+          <:actions>
+            <CoreComponents.button phx-disable-with="Applying Filters..." class="w-full">
+              Apply
+            </CoreComponents.button>
+          </:actions>
         </CoreComponents.simple_form>
         <div class="modal-action justify-center">
           <form method="dialog">

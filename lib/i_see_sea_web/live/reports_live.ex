@@ -44,8 +44,6 @@ defmodule ISeeSeaWeb.ReportsLive do
         reports_pagination: reports_pagination,
         reports: reports,
         sidebar_open: true,
-        current_page: 1,
-        total_pages: 50,
         filter_menu_is_open: false
       )
 
@@ -84,7 +82,6 @@ defmodule ISeeSeaWeb.ReportsLive do
 
   @impl true
   def handle_event("toggle_filters", _params, socket) do
-    IO.inspect(!socket.assigns.filter_menu_is_open)
     {:noreply, assign(socket, :filter_menu_is_open, !socket.assigns.filter_menu_is_open)}
   end
 end

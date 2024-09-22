@@ -14,8 +14,7 @@ defmodule ISeeSeaWeb.ProfileLive do
   def render(assigns) do
     ~H"""
     <ProfileComponents.index
-      current_page={@current_page}
-      total_pages={@total_pages}
+      pagination={@pagination}
       view={@profile_view}
       username={@current_user.username}
       email={@current_user.email}
@@ -66,7 +65,7 @@ defmodule ISeeSeaWeb.ProfileLive do
       assign(socket,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
-        filters: to_form(filters) |> IO.inspect(),
+        filters: to_form(filters),
         reports_pagination: reports_pagination,
         reports: reports,
         stats_panel_is_open: true,
@@ -81,8 +80,6 @@ defmodule ISeeSeaWeb.ProfileLive do
             :user,
             pollution_report: :pollution_types
           ]),
-        current_page: 1,
-        total_pages: 50,
         filter_menu_is_open: false
       )
 

@@ -209,7 +209,6 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
            }
          } = assigns
        ) do
-    IO.inspect(pollution_types)
     has_oil = Enum.member?(pollution_types, fn %PollutionType{name: name} -> name === "oil" end)
 
     has_plastic =

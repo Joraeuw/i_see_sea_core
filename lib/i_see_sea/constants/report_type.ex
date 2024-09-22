@@ -8,11 +8,16 @@ defmodule ISeeSea.Constants.ReportType do
   @atypical_activity "atypical_activity"
   @pollution "pollution"
   @other "other"
+  @all "all"
 
   @values [@jellyfish, @meteorological, @atypical_activity, @pollution, @other]
 
   def values do
     @values
+  end
+
+  def filter_values do
+    [@all | @values]
   end
 
   Enum.each(@values, fn value ->
