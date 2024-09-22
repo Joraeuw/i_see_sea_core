@@ -100,9 +100,17 @@ defmodule ISeeSeaWeb.ProfileComponents do
         user_report_summary={@user_report_summary}
       />
 
-      <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
+      <CommonComponents.pagination
+        :if={@view === "my_reports_view"}
+        current_page={@current_page}
+        total_pages={@total_pages}
+      />
       <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
-      <CommonComponents.pagination current_page={@current_page} total_pages={@total_pages} />
+      <CommonComponents.pagination
+        :if={@view === "my_reports_view"}
+        current_page={@current_page}
+        total_pages={@total_pages}
+     />
     </div>
     """
   end
@@ -135,7 +143,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
 
   def my_report_view(assigns) do
     ~H"""
-    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md mb-6 w-[calc(100vw-5em)] mx-10 h-full">
+    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto">
       <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @user_reports do %>
         <!-- Polaroid card container with perspective for 3D effect -->
         <.live_component
