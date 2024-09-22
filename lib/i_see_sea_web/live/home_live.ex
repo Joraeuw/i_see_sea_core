@@ -22,11 +22,11 @@ defmodule ISeeSeaWeb.HomeLive do
   def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
+        ISeeSeaWeb.Endpoint.subscribe("reports:updates")
+
         socket
         |> get_connect_params()
         |> Map.get("supports_touch", false)
-
-        # ISeeSeaWeb.Endpoint.subscribe("reports:updates")
       else
         false
       end
@@ -212,6 +212,12 @@ defmodule ISeeSeaWeb.HomeLive do
         stop_live_tracker: false,
         reports: Focus.view(reports, %Lens{view: Lens.expanded()})
       })
+
+    {:noreply, socket}
+  end
+
+  def handle_info(%{event: "add_marker", payload: report}, socket) do
+    push_event(socket, "add_marker", report)
 
     {:noreply, socket}
   end
