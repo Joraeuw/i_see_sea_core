@@ -84,7 +84,7 @@
         </g>
       </svg>
       <!-- Navigation bar content -->
-      <div class="flex items-end px-30 w-10/12 ">
+      <div class="flex items-end px-30 w-10/12 md:w-10/12">
         <div class="flex w-full justify-between items-baseline">
           <!-- Logo -->
           <div class="relative w-28 top-2 left-2 sm:w-16 md:w-24 lg:w-28">
@@ -195,16 +195,17 @@
           <!-- User and login images -->
         </div>
       </div>
-      <div class="flex flex-row justify-center align-middle w-2/12">
-        <button class="z-20  mt-[70px]  bg-cover">
-          <img src="/images/Assetss/home-icons/bulgaria.png" class="otvara1" />
-        </button>
-        <.link class="z-10" navigate={~p"/login"}>
-          <button class="z-20 mt-[75px]  bg-cover">
-            <img src="/images/auth_icons/login.svg" class="otvara" />
-          </button>
-        </.link>
-      </div>
+      <div class="flex flex-row justify-start w-3/12 mb-2 md:w-2/12 items-end">
+  <!-- Language Button -->
+  <button class="z-20 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] md:w-[57px] md:h-[57px]">
+    <img src="/images/Assetss/home-icons/bulgaria.png" class="w-full h-full" alt="Language Selection"/>
+  </button>
+
+  <!-- Login Button -->
+  <.link class="z-10 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] md:w-[57px] md:h-[57px]" navigate={~p"/login"}>
+    <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login"/>
+  </.link>
+</div>
     </nav>
     <div class="relative bg-white w-full h-4/6">
       <%= @inner_content %>

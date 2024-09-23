@@ -89,11 +89,7 @@ defmodule ISeeSeaWeb.CommonComponents do
             </CoreComponents.button>
           </:actions>
         </CoreComponents.simple_form>
-        <div class="modal-action justify-center">
-          <form method="dialog">
-            <button class="btn">Apply</button>
-          </form>
-        </div>
+
 
         <div class="modal-action">
           <form method="dialog">

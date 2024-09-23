@@ -125,12 +125,11 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   def handle_event("toggle_stats_panel", _params, socket) do
+
     {:noreply, assign(socket, :stats_panel_is_open, !socket.assigns.stats_panel_is_open)}
   end
 
-  def handle_event("toggle_filters", _params, socket) do
-    {:noreply, assign(socket, :filter_menu_is_open, !socket.assigns.filter_menu_is_open)}
-  end
+
 
   @impl true
   def handle_event("edit_profile", _params, socket) do
@@ -138,11 +137,7 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, assign(socket, is_profile_edit_mode: new_state)}
   end
 
-  @impl true
-  def handle_event("toggle_sidebar", _params, socket) do
-    new_state = !socket.assigns.sidebar_open
-    {:noreply, assign(socket, sidebar_open: new_state)}
-  end
+
 
   @impl true
   def handle_event("toggle_report", %{"type" => report_type}, socket) do
