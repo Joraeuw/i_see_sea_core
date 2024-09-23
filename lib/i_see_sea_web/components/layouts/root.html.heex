@@ -29,6 +29,12 @@
     </script>
   </head>
   <body class="bg-white h-screen w-screen">
+    <div id="modal_fullscreen_image_slider" class="modal" role="dialog">
+          <div class="modal-box relative">
+            <img src="${picture}" alt="Large Picture" class="w-full h-auto"/>
+          </div>
+          <label class="modal-backdrop" for="modal_fullscreen_image_slider">Close</label>
+    </div>
     <nav class="flex relative pb-0.5 w-full shadow-md mb-4">
       <!-- SVG for wave background -->
       <svg
@@ -84,12 +90,12 @@
         </g>
       </svg>
       <!-- Navigation bar content -->
-      <div class="flex items-end px-30 w-10/12 md:w-10/12">
+      <div class="flex justify-end items-end px-30 w-10/12 md:w-10/12">
         <div class="flex w-full justify-between items-baseline">
           <!-- Logo -->
           <div class="relative w-28 top-2 left-2 sm:w-16 md:w-24 lg:w-28">
             <.link class="z-10" navigate={~p"/"}>
-              <img class="z-10 w-full h-auto" src="/images/Assetss/ICC-logo.png" />
+              <img class="z-10 w-full h-auto" src="/images/home-icons/ICC-logo.png" />
             </.link>
           </div>
 
@@ -145,49 +151,35 @@
               <div class="slider-container">
                 <!-- Left arrow -->
                 <button class="arrow-left hidden">
-                  <img src="/images/Assetss/home-icons/left-arrow-icon.svg" />
+                  <img src="/images/home-icons/left-arrow-icon.svg" />
                 </button>
                 <!-- The slider itself -->
                 <div class="slider-wrapper">
                   <.link class="z-10 slider-item" navigate={~p"/"}>
-                    
                     Home
-                    
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/profile"}>
-                    
-                      Profile
-                   
+                    Profile
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/reports-list"}>
-                   
-                      Reports
-                    
+                    Reports
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/about"}>
-                    
-                      Our purpose
-                    
+                    Our purpose
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/terms-and-conditions"}>
-                   
-                      Terms of use
-                  
+                    Terms of use
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/privacy-policy"}>
-                   
-                      Privacy Policy
-                   
+                    Privacy Policy
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/contacts"}>
-                    
-                      Contacts
-                    
+                    Contacts
                   </.link>
                 </div>
                 <!-- Right arrow -->
                 <button class="arrow-right">
-                  <img src="/images/Assetss/home-icons/right-arrow-icon.svg" />
+                  <img src="/images/home-icons/right-arrow-icon.svg" />
                 </button>
               </div>
             </div>
@@ -196,16 +188,22 @@
         </div>
       </div>
       <div class="flex flex-row justify-start w-3/12 mb-2 md:w-2/12 items-end">
-  <!-- Language Button -->
-  <button class="z-20 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] md:w-[57px] md:h-[57px]">
-    <img src="/images/Assetss/home-icons/bulgaria.png" class="w-full h-full" alt="Language Selection"/>
-  </button>
-
-  <!-- Login Button -->
-  <.link class="z-10 w-[30px] h-[30px] sm:w-[40px] sm:h-[40px] md:w-[57px] md:h-[57px]" navigate={~p"/login"}>
-    <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login"/>
-  </.link>
-</div>
+        <!-- Language Button -->
+        <button class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]">
+          <img
+            src="/images/home-icons/bulgarian_flag_transparent.png"
+            class="w-full h-full"
+            alt="Language Selection"
+          />
+        </button>
+        <!-- Login Button -->
+        <.link
+          class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+          navigate={~p"/login"}
+        >
+          <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
+        </.link>
+      </div>
     </nav>
     <div class="relative bg-white w-full h-4/6">
       <%= @inner_content %>
@@ -281,6 +279,5 @@
         showItem(currentIndex); // Initialize
       });
     </script>
-
   </body>
 </html>

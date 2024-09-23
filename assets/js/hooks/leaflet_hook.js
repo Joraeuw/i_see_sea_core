@@ -1,4 +1,4 @@
-import L from "leaflet";
+import L, { marker } from "leaflet";
 import "leaflet.markercluster";
 
 import {
@@ -90,7 +90,7 @@ const LeafletMap = {
 
   async renderMarkers(markers) {
     this.clearMarkers();
-
+    console.log(markers)
     markers.forEach((markerData) => {
       const { report_id, report_type, latitude, longitude } = markerData;
       const marker = L.marker([latitude, longitude], {
