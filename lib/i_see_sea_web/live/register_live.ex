@@ -6,7 +6,7 @@ defmodule ISeeSeaWeb.RegisterLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col justify-around align-middle rounded-xl shadow-lg shadow-top-bottom  mx-auto w-5/12">
+    <div class="flex flex-col align-middle rounded-xl shadow-lg shadow-top-bottom mx-auto w-8/12 sm:w-96">
       <.header class="text-center">
         <:subtitle>
           Already registered?

@@ -4,7 +4,7 @@ defmodule ISeeSeaWeb.LoginLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col justify-evenly items-center rounded-xl shadow-lg shadow-top-bottom  mx-auto w-4/12">
+    <div class="flex flex-col items-center rounded-xl shadow-lg shadow-top-bottom  mx-auto w-8/12 sm:w-96">
       <.header class="text-center">
         Log in to account
         <:subtitle>
