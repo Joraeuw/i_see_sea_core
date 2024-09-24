@@ -44,6 +44,9 @@
 .btn_delete{
   @apply flex-1 z-20 text-center font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(255,20,60)] transition duration-100 hover:bg-[rgb(255,65,95)] active:translate-y-1 active:shadow-none;
 }
+.btn_sucsess{
+  @apply flex-1 z-20 text-center text-lg  font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(7,204,73)] transition duration-100 hover:bg-[rgb(41,243,23)] active:translate-y-1 active:shadow-none;
+}
 .p_card {
   @apply flex flex-row justify-between w-6/12;
 }
