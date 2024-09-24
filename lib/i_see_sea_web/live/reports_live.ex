@@ -20,7 +20,7 @@ defmodule ISeeSeaWeb.ReportsLive do
       "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -1)),
       "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
       "report_type" => report_type
-  }
+    }
 
     reports_pagination = %{page_size: 100, page: 1}
 

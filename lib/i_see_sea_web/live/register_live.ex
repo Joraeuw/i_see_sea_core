@@ -25,7 +25,7 @@ defmodule ISeeSeaWeb.RegisterLive do
         phx-trigger-action={@trigger_submit}
         action={~p"/login?_action=registered"}
         method="post"
-        class="flex flex-col items-center bg-[url('/images/Assetss/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full mt-3 space-y-2 shadow-bottom"
+        class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full mt-3 space-y-2 shadow-bottom"
       >
         <.error :if={@check_errors}>
           Oops, something went wrong! Please check the errors below.

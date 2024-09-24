@@ -90,7 +90,6 @@ defmodule ISeeSeaWeb.CommonComponents do
           </:actions>
         </CoreComponents.simple_form>
 
-
         <div class="modal-action">
           <form method="dialog">
             <button class="btn">Close</button>

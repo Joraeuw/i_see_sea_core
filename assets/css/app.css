@@ -48,20 +48,20 @@
 .conteiner {
   display: block;
   height: auto;
-  width: auto;
+  width:80%;
 }
 
 .bolded_blue {
   font-weight: 600;
   color: #189ab4;
   font-size: 1.5em;
-  text-align: center;
+  text-align: left;
 }
 .normal_blue {
   color: #189ab4;
 }
 .less_blue {
-  text-align: center;
+  text-align: left;
   color: #189ab4;
   font-weight: 600;
 }
@@ -103,4 +103,28 @@
   50% {
     transform: translateY(-20px);
   }
+}
+.leaflet-popup-content-wrapper{
+  @apply bg-base-100
+}
+.leaflet-popup-close-button{
+  @apply hidden
+}
+.leaflet-popup-tip{
+  @apply bg-base-100
+}
+.leaflet-popup-content{
+  width: 200px; 
+}
+.p_card_map{
+  @apply flex my-0 mx-0 items-center bg-accent px-1 py-1 w-full rounded-md
+}
+.p_card_map_comment{
+  @apply my-0 mx-0 bg-accent w-full rounded-md
+}
+.p_card_name{
+  @apply mt-5 mx-0 text-center items-center text-lg  px-1 py-1 w-full rounded-md
+}
+.leaflet-popup-content p{
+  margin: 0;
 }
