@@ -272,6 +272,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
+  attr :class, :any, default: nil
 
   attr :type, :string,
     default: "text",
@@ -308,20 +309,30 @@ defmodule ISeeSeaWeb.CoreComponents do
         Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
       end)
 
+    #   <div class="form-control">
+    #   <label class="cursor-pointer label">
+    #     <span class="label-text mr-2"><%= @text %></span>
+    #     <input type="checkbox" checked="checked" class="checkbox checkbox-secondary" />
+    #   </label>
+    # </div>
     ~H"""
     <div phx-feedback-for={@name}>
       <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
         <input type="hidden" name={@name} value="false" />
-        <input
-          type="checkbox"
-          id={@id}
-          name={@name}
-          value="true"
-          checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
-          {@rest}
-        />
-        <%= @label %>
+        <div class="form-control">
+          <label class="cursor-pointer label">
+            <span class="label-text mr-2"><%= @label %></span>
+            <input
+              type="checkbox"
+              id={@id}
+              name={@name}
+              value="true"
+              checked={@checked}
+              class="checkbox checkbox-secondary"
+              {@rest}
+            />
+          </label>
+        </div>
       </label>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
@@ -335,7 +346,10 @@ defmodule ISeeSeaWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class={
+          @class ||
+            "mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        }
         multiple={@multiple}
         {@rest}
       >
@@ -358,7 +372,8 @@ defmodule ISeeSeaWeb.CoreComponents do
           "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @class
         ]}
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
@@ -367,10 +382,18 @@ defmodule ISeeSeaWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name} class="none hidden">
+      <input type="hidden" class="none hidden" value={@value} id={@id} name={@name} {@rest} />
+    </div>
+    """
+  end
+
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name} class=" w-full flex flex-col items-center">
+    <div phx-feedback-for={@name} class="w-full flex flex-col items-center">
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
@@ -381,7 +404,8 @@ defmodule ISeeSeaWeb.CoreComponents do
           "mt-2 block w-11/12 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @class
         ]}
         {@rest}
       />

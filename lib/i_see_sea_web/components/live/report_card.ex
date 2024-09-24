@@ -9,7 +9,6 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
   alias ISeeSea.DB.Models.OtherReport
   alias ISeeSea.DB.Models.MeteorologicalReport
   alias ISeeSea.DB.Models.PollutionType
-  import Timex
 
   @impl true
 
@@ -161,7 +160,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
            }
          } = assigns
        ) do
-    formatted_date = Timex.format!(report_date, "{D} {Mfull} {YYYY}, {h12}:{m} {AM}")
+    formatted_date = Timex.format!(report_date, "{D} {M} {YYYY}, {h12}:{m} {AM}")
 
     ~H"""
     <div class="flex flex-col justify-around align-middle h-full w-full">

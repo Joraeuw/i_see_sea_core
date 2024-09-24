@@ -68,7 +68,7 @@ defmodule ISeeSea.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:logger_json, "~> 5.1.4"},
       {:excoveralls, "~> 0.18.1", only: :test},
-      {:goal, "~> 0.3.3"},
+      {:goal, "~> 1.0.2"},
       {:faker, "~> 0.18", only: [:dev, :test]},
       {:flop, "~> 0.25.0"},
       {:image, "~> 0.46.0"},

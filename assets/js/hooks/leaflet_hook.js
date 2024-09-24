@@ -63,10 +63,42 @@ const LeafletMap = {
     });
 
     this.detectUserLocation();
+    this.addMarkerOnClick();
 
     setTimeout(() => {
       this.map.invalidateSize();
     }, 100);
+  },
+
+  addMarkerOnClick() {
+    let mapContainer = this.map.getContainer();
+
+    console.log(mapContainer);
+    this.handleEvent("enable_pin_mode", () => {
+      mapContainer.style.cursor = `url(${this.el.dataset.pinUrl}), auto`;
+      this.map.on("click", this.onMapClick.bind(this));
+      this.map.on("touch", this.onMapClick.bind(this));
+    });
+  },
+
+  onMapClick(e) {
+    // Get the clicked location's lat and lng
+    console.log("click_is_called");
+    const { lat, lng } = e.latlng;
+
+    // Add a marker at the selected location
+    // L.marker([lat, lng]).addTo(this.map);
+
+    // Send the location back to LiveView
+    this.pushEvent("location_selected", {});
+    this.pushEventTo("#select-location-button", "location_selected", {
+      lat,
+      lng,
+    });
+
+    // Reset the map interaction
+    this.map.off("click");
+    this.map.getContainer().style.cursor = "";
   },
 
   addMarker(markerData) {

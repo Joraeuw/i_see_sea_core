@@ -47,7 +47,7 @@ defmodule ISeeSeaWeb.HomeLive do
       {"other", "/images/create-report/other_report.png"}
     ]
 
-    {:ok, reports, %{page: page} = pagination} =
+    {:ok, reports, pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         report_type,
         %{page: 1, page_size: 10},
@@ -59,6 +59,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
     new_socket =
       assign(socket,
+        is_selecting_location: false,
         current_user: socket.assigns.current_user || %{email: "not_logged_in"},
         supports_touch: supports_touch,
         create_report_images: create_report_images,
@@ -75,6 +76,12 @@ defmodule ISeeSeaWeb.HomeLive do
         filter_menu_is_open: false
       )
 
+    new_socket =
+      if(!socket.assigns.current_user,
+        do: put_flash(new_socket, :error, "Please Login or create an account"),
+        else: new_socket
+      )
+
     {:ok, new_socket}
   end
 
@@ -83,12 +90,13 @@ defmodule ISeeSeaWeb.HomeLive do
     ~H"""
     <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-10/12 h-full">
       <h1><%= @current_user.email %></h1>
-      <div id="map_wrapper" phx-update="ignore">
+      <div id="map_wrapper" class="absolute h-full w-full self-start" phx-update="ignore">
         <div
           id="map"
-          class="absolute flex items-center h-full md:mr-52 w-full z-0 rounded-md shadow-md"
+          class="relative flex items-center h-full md:mr-52 w-full z-0 rounded-md shadow-md"
           phx-hook="LeafletMap"
           data-reports={Jason.encode!(Focus.view(@reports, %Lens{view: Lens.expanded()}))}
+          data-pin-url="/images/marker-icons/pin.svg"
         />
       </div>
 
@@ -98,11 +106,14 @@ defmodule ISeeSeaWeb.HomeLive do
         create_report_images={@create_report_images}
         create_report_type={@create_report_type}
         supports_touch={@supports_touch}
+        current_user={@current_user}
+        is_selecting_location={@is_selecting_location}
       />
+
+      <div :if={@is_selecting_location}>CLICK TO SELECT A LOCATION</div>
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
-      filter_menu_is_open={@filter_menu_is_open}
       filters={@filters}
       stats_panel_is_open={@stats_panel_is_open}
     />
@@ -211,9 +222,32 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
+  def handle_event("select_location", _params, socket) do
+    socket =
+      socket
+      |> push_event("enable_pin_mode", %{})
+      |> assign(is_selecting_location: true, create_report_toolbox_is_open: false)
+
+    {:noreply, socket}
+  end
+
+  def handle_event("location_selected", _params, socket) do
+    {:noreply,
+     assign(socket,
+       create_report_toolbox_is_open: true,
+       is_selecting_location: false
+     )}
+  end
+
+  @impl true
   def handle_info(%{event: "add_marker", payload: report}, socket) do
     socket = push_event(socket, "add_marker", report)
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info({:update_flash, {flash_type, msg}}, socket) do
+    {:noreply, put_flash(socket, flash_type, msg)}
   end
 end

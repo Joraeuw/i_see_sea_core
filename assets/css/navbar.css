@@ -5,9 +5,6 @@
   border-radius: 1%; /* Rounded corners */
 
   /* Multiple background images */
-  background-image: url(/images/Assetss/waveDark.b0be5a10.svg),
-    url(/images/Assetss/waveBlueGreen.85bcaa33.svg),
-    url(/images/Assetss/waveLightBlue.3148e9d0.svg);
   background-size: cover, cover, cover; /* Adjust size for each image */
   background-repeat: no-repeat, no-repeat, no-repeat;
   background-position:
@@ -103,15 +100,16 @@
 }
 
 /* Left and Right Arrow Buttons */
-.arrow-left, .arrow-right {
-  background-color: rgba(0, 0, 0, 0.0);
+.arrow-left,
+.arrow-right {
+  background-color: rgba(0, 0, 0, 0);
   color: white;
   font-size: 1.5em;
   border: none;
-  
+
   cursor: pointer;
   position: absolute;
- 
+
   top: 50%;
   transform: translateY(-50%);
   z-index: 30;
@@ -122,7 +120,7 @@
 }
 
 .arrow-right {
-  border-radius: 0 0.5em 0.5em 0;  
+  border-radius: 0 0.5em 0.5em 0;
   right: 0;
 }
 
@@ -140,8 +138,8 @@
   font-size: 1.25rem;
   font-weight: bold;
   padding: 0.5rem;
-  background-color: rgb(24,158,180);
-  color: rgb(212,241,244);
+  background-color: rgb(24, 158, 180);
+  color: rgb(212, 241, 244);
   border: none;
   border-radius: 0.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -151,26 +149,26 @@
 }
 
 .slider-item:hover {
-  background-color: rgb(117,230,218);
+  background-color: rgb(117, 230, 218);
 }
 
 /* Hide the left or right arrow when not needed */
 .hidden {
   display: none;
 }
-.otvara{
+.otvara {
   width: 50px;
   height: 50px;
   max-width: 50px;
 }
-.otvara1{
+.otvara1 {
   width: 50px;
   height: 50px;
   max-width: 50px;
 }
 
 .slider-item:hover {
-  background-color: rgb(117,230,218);
+  background-color: rgb(117, 230, 218);
 }
 @media (max-width: 640px) {
   .slider-item {
