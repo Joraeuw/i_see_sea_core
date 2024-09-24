@@ -9,11 +9,11 @@ defmodule ISeeSeaWeb.RegisterLive do
     <div class="flex flex-col align-middle rounded-xl shadow-lg shadow-top-bottom mx-auto w-8/12 sm:w-96">
       <.header class="text-center">
         <:subtitle>
-          Already registered?
+          <%=gettext("Already registered?")%>
           <.link navigate={~p"/login"} class="font-semibold text-brand hover:underline text-primary">
-            Log in
+            <%=gettext("Log in")%>
           </.link>
-          to your account now.
+          <%=gettext("to your account now.")%>
         </:subtitle>
       </.header>
 
@@ -28,17 +28,17 @@ defmodule ISeeSeaWeb.RegisterLive do
         class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full mt-3 space-y-2 shadow-bottom"
       >
         <.error :if={@check_errors}>
-          Oops, something went wrong! Please check the errors below.
+          <%=gettext("Oops, something went wrong! Please check the errors below.")%>
         </.error>
 
-        <.input field={@form[:first_name]} type="text" label="First Name" required />
-        <.input field={@form[:last_name]} type="text" label="Last Name" required />
-        <.input field={@form[:username]} type="text" label="Username" required />
-        <.input field={@form[:email]} type="email" label="Email" required />
-        <.input field={@form[:password]} type="password" label="Password" required />
+        <.input field={@form[:first_name]} type="text" label={gettext("First Name")} required />
+        <.input field={@form[:last_name]} type="text" label={gettext("Last Name")} required />
+        <.input field={@form[:username]} type="text" label={gettext("Username")} required />
+        <.input field={@form[:email]} type="email" label={gettext("Email")} required />
+        <.input field={@form[:password]} type="password" label={gettext("Password")} required />
 
         <:actions>
-          <.button phx-disable-with="Creating account..." class="w-full">Create an account</.button>
+          <.button phx-disable-with={gettext("Creating account...")} class="w-full"><%=gettext("Create an account")%></.button>
         </:actions>
       </.simple_form>
     </div>
