@@ -148,6 +148,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
           comment={comment}
           pictures={pictures}
           report={report}
+          show_extra_button={false}
         />
       <% end %>
     </div>

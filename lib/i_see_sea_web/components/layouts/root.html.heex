@@ -29,12 +29,12 @@
     </script>
   </head>
   <body class="bg-white h-screen w-screen">
-    <div id="modal_fullscreen_image_slider" class="modal" role="dialog">
-          <div class="modal-box relative">
-            <img src="${picture}" alt="Large Picture" class="w-full h-auto"/>
-          </div>
-          <label class="modal-backdrop" for="modal_fullscreen_image_slider">Close</label>
-    </div>
+    <dialog id="modal_fullscreen_image_slider" class="modal">
+      <div class="modal-box relative">
+        <img src="${picture}" alt="Large Picture" class="w-full h-auto" />
+      </div>
+      <label class="modal-backdrop" for="modal_fullscreen_image_slider">Close</label>
+    </dialog>
     <nav class="flex relative pb-0.5 w-full shadow-md mb-4">
       <!-- SVG for wave background -->
       <svg

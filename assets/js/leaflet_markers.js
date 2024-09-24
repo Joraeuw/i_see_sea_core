@@ -12,11 +12,20 @@ window.openFullscreenModal = (imageSrc) => {
   const selectedImageDiv = `
     <div class="swiper-slide mt-3 z-40">
       <img src="${imageSrc}" alt="Large Picture" class="w-[500px] h-[500px] z-30"/>
-       
     </div>
   `;
 
   container.innerHTML = selectedImageDiv;
+  fullscreen_modal.addEventListener("click", (event) => {
+    const modalBox = fullscreen_modal.querySelector(".modal-box");
+    const rect = modalBox.getBoundingClientRect();
+
+    // Check if click is outside modal content
+    if (!(event.clientX >= rect.left && event.clientX <= rect.right &&
+          event.clientY >= rect.top && event.clientY <= rect.bottom)) {
+      fullscreen_modal.removeAttribute("open"); // Close the modal
+    }
+  });
 };
 
 const createImageSlider = (pictures) => {
@@ -92,7 +101,9 @@ const jellyfishContent = ({
     <p class="p_card_map p_map_cards"><b>Species: </b> &nbsp;${species}</p>
     <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
     <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
-    <p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
+<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+</div>
     <p class="w-full text-end mt-6">${formattedDate}</p>
     </div>
     </div>
@@ -125,7 +136,9 @@ const pollutionContent = ({
   <p class="p_card_map p_map_cards"><b>Biological: </b> &nbsp; ${biological ? "Yes" : "No"}</p>
   <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
   <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
-  <p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
+<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+</div>
   <p class="w-full text-end mt-6">${formattedDate}</p>
   </div>
 </div>`;
@@ -150,7 +163,9 @@ const atypicalActivityContent = ({
   <p class="p_card_map p_map_cards"><b>Storm type: </b> &nbsp; ${storm_type_id}</p>
   <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
   <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
-  <p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
+<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+</div>
   <p class="w-full text-end mt-6">${formattedDate}</p>
   </div>
   </div>`;
@@ -178,7 +193,9 @@ const meteorologicalContent = ({
 <p class="p_card_map p_map_cards"><b>Sea swell type: </b> &nbsp;${sea_swell_type}</p>
 <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
 <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
+<div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
 <p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+</div>
 <p class="w-full text-end mt-6">${formattedDate}</p>
 </div>
     </div>
@@ -201,7 +218,9 @@ const otherContent = ({
   <div class="flex flex-col items-center justify-between w-full h-[150px] mt-3">
   <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
 <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
- <p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
+<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+</div>
  <p class="w-full text-end mt-6">${formattedDate}</p>
  </div>
     </div>

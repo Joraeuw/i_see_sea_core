@@ -18,24 +18,25 @@ defmodule ISeeSeaWeb.ReportController do
   plug(EnsurePermitted)
 
   def create_report(%{assigns: %{user: user}} = conn, params) do
-    with {:ok, validated_base} <- validate(:create_base_report, params),
-         {:ok, report} <- ReportOperations.create(user, validated_base, params) do
-      Broadcaster.broadcast!("reports:updates", "add_marker", report)
-      success(conn, report)
-    else
-      {:error, :failed_to_attach_pollution_type} ->
-        error(conn, {:error, :unprocessable_entity})
+    # with {:ok, validated_base} <- validate(:create_base_report, params),
+    #      {:ok, report} <- ReportOperations.create(user, validated_base, params) do
+    #   Broadcaster.broadcast!("reports:updates", "add_marker", report)
+    #   success(conn, report)
+    # else
+    #   {:error, :failed_to_attach_pollution_type} ->
+    #     error(conn, {:error, :unprocessable_entity})
 
-      {:error, :image_not_uploaded} ->
-        error(
-          conn,
-          {:error, :bad_request,
-           "At least one of your image types is unsupported! Supported image types are: jpg, png and webp."}
-        )
+    #   {:error, :image_not_uploaded} ->
+    #     error(
+    #       conn,
+    #       {:error, :bad_request,
+    #        "At least one of your image types is unsupported! Supported image types are: jpg, png and webp."}
+    #     )
 
-      error ->
-        error(conn, error)
-    end
+    #   error ->
+    #     error(conn, error)
+    # end
+    success_empty(conn)
   end
 
   def index(conn, params) do

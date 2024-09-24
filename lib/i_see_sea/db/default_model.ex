@@ -124,7 +124,22 @@ defmodule ISeeSea.DB.DefaultModel do
           entry -> Repo.delete(entry)
         end
       end
+      def soft_delete(id_str) when is_binary(id_str), do: soft_delete(String.to_integer(id_str))
 
+      def soft_delete(id) when is_integer(id) do
+        case Repo.get(__MODULE__, id) do
+          nil ->
+            {:error, :not_found, __MODULE__}
+
+          entry ->
+            changeset = changeset(entry, %{deleted: true})
+
+            case Repo.update(changeset) do
+              {:ok, entry} -> {:ok, entry}
+              {:error, changeset} -> {:error, changeset}
+            end
+        end
+      end
       def soft_delete(entry) do
         changeset = changeset(entry, %{deleted: true})
 
@@ -133,6 +148,7 @@ defmodule ISeeSea.DB.DefaultModel do
           {:error, changeset} -> {:error, changeset}
         end
       end
+
 
       defp process_binding(current_binding, q) do
         join(q, :left, [current_binding], entity in assoc(current_binding, ^current_binding),

@@ -16,20 +16,37 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Report
 
-  def create(user, %{pictures: pictures} = validated_base, params) do
+  def create(user, validated_params) do
+    IO.inspect("start creating")
+
     Repo.transaction(fn ->
       with {:ok, %BaseReport{id: id, report_type: report_type}} <-
              BaseReport.create(
-               Map.merge(validated_base, %{user_id: user.id, report_date: DateTime.utc_now()})
-             ),
-           :ok <- attach_pictures(id, pictures),
-           {:ok, report} <- create_specific_report(id, report_type, params) do
+               Map.merge(validated_params, %{user_id: user.id, report_date: DateTime.utc_now()})
+             )
+             |> IO.inspect(label: :created_base),
+           {:ok, report} <-
+             create_specific_report(id, report_type, validated_params)
+             |> IO.inspect(label: :created_report) do
         report
-      else
-        {:error, error} -> Repo.rollback(error)
       end
     end)
   end
+
+  # def create(user, %{pictures: pictures} = validated_base, params) do
+  #   Repo.transaction(fn ->
+  #     with {:ok, %BaseReport{id: id, report_type: report_type}} <-
+  #            BaseReport.create(
+  #              Map.merge(validated_base, %{user_id: user.id, report_date: DateTime.utc_now()})
+  #            ),
+  #          :ok <- attach_pictures(id, pictures),
+  #          {:ok, report} <- create_specific_report(id, report_type, params) do
+  #       report
+  #     else
+  #       {:error, error} -> Repo.rollback(error)
+  #     end
+  #   end)
+  # end
 
   def get_total_pages(%{total_count: total_entries, page_size: page_size}) do
     div(total_entries, page_size) + if rem(total_entries, page_size) > 0, do: 1, else: 0
@@ -68,14 +85,16 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     %{"field" => "inserted_at", "op" => "<=", "value" => value}
   end
 
-  defp create_specific_report(base_report_id, report_type, params)
+  defp create_specific_report(base_report_id, report_type, %{species: species} = validated_prams)
        when report_type == "jellyfish" do
-    with {:ok, %{species: species} = validated_prams} <-
-           Report.validate(:create_jellyfish_report, params),
-         {:ok, jellyfish_report} <-
+    with {:ok, jellyfish_report} <-
            JellyfishReport.create(
-             Map.merge(validated_prams, %{report_id: base_report_id, species_id: species})
+             Map.merge(validated_prams, %{
+               report_id: base_report_id,
+               species_id: species
+             })
            ) do
+      IO.inspect("REPORT CREATED GOOD")
       {:ok, jellyfish_report}
     else
       {:error, error} -> Repo.rollback(error)

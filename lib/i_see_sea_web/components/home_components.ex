@@ -1,21 +1,16 @@
 defmodule ISeeSeaWeb.HomeComponents do
   @moduledoc false
+  alias ISeeSeaWeb.Live.CreateReportPanel
   alias ISeeSeaWeb.CommonComponents
-  alias ISeeSea.Constants
-  alias ISeeSea.Constants.StormType
-  alias ISeeSea.Constants.JellyfishQuantityRange
-  alias ISeeSea.DB.Models.JellyfishSpecies
-  alias ISeeSeaWeb.CoreComponents
 
   import ISeeSeaWeb.Gettext
   use Phoenix.Component
-
-  require ISeeSea.Constants.ReportType, as: ReportType
 
   attr :create_report_toolbox_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
   attr :create_report_images, :map, required: true
   attr :create_report_type, :string, required: true
+  attr :current_user, :map, required: true
 
   def report_toolbox(assigns) do
     ~H"""
@@ -51,8 +46,9 @@ defmodule ISeeSeaWeb.HomeComponents do
         </div>
       </div>
       <!-- Create Report Panel -->
-      <div
+      <.live_component
         id="create-report-panel"
+<<<<<<< HEAD
         data-is-open={@create_report_toolbox_is_open}
         phx-hook="DetectClick"
         class={[
@@ -66,10 +62,19 @@ defmodule ISeeSeaWeb.HomeComponents do
         <input type="file" class="file-input w-full max-w-xs" />
         <button class="btn w-full"><%=gettext("Submit")%></button>
       </div>
+=======
+        module={CreateReportPanel}
+        create_report_toolbox_is_open={@create_report_toolbox_is_open}
+        report_type={@create_report_type}
+        is_selecting_location={@is_selecting_location}
+        current_user={@current_user}
+      />
+>>>>>>> 9c146ecdc6a169f20e1c272eb436283f2baee7f2
     </div>
     """
   end
 
+<<<<<<< HEAD
   attr :report_type, :string, required: true
 
   def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
@@ -123,6 +128,8 @@ defmodule ISeeSeaWeb.HomeComponents do
     """
   end
 
+=======
+>>>>>>> 9c146ecdc6a169f20e1c272eb436283f2baee7f2
   attr :stats_panel_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
   attr :filters, :map, required: true

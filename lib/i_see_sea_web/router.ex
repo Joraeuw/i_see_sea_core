@@ -68,13 +68,13 @@ defmodule ISeeSeaWeb.Router do
   scope "/api", ISeeSeaWeb do
     pipe_through :api
 
-    post "/register", SessionController, :register
-    get "/verify-email/:token", UserController, :verify_email
+    # post "/register", SessionController, :register
+    # get "/verify-email/:token", UserController, :verify_email
 
-    scope "/users" do
-      post "/forgot-password", UserController, :forgot_password
-      post "/reset-password/:token", UserController, :reset_password
-    end
+    # scope "/users" do
+    #   post "/forgot-password", UserController, :forgot_password
+    #   post "/reset-password/:token", UserController, :reset_password
+    # end
 
     ## Constants
     scope "/constants" do
@@ -99,26 +99,26 @@ defmodule ISeeSeaWeb.Router do
     end
   end
 
-  scope "/api", ISeeSeaWeb do
-    pipe_through :authenticated
+  # scope "/api", ISeeSeaWeb do
+  #   pipe_through :authenticated
 
-    get "/refresh", SessionController, :refresh
+  #   get "/refresh", SessionController, :refresh
 
-    ## Users
-    scope "/users" do
-      get "/me", UserController, :user_info
-      get "/reports/:report_type", UserController, :list_reports
-    end
+  #   ## Users
+  #   scope "/users" do
+  #     get "/me", UserController, :user_info
+  #     get "/reports/:report_type", UserController, :list_reports
+  #   end
 
-    ## Reports
-    scope "/reports" do
-      delete "/delete/:report_id", ReportController, :delete_report
+  #   ## Reports
+  #   scope "/reports" do
+  #     delete "/delete/:report_id", ReportController, :delete_report
 
-      pipe_through :image_uploading
+  #     pipe_through :image_uploading
 
-      post "/create/:report_type", ReportController, :create_report
-    end
-  end
+  #     post "/create/:report_type", ReportController, :create_report
+  #   end
+  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:i_see_sea, :dev_routes) do
