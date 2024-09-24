@@ -27,6 +27,9 @@ config :i_see_sea, ISeeSeaWeb.Endpoint,
     formats: [html: ISeeSeaWeb.ErrorHTML, json: ISeeSeaWeb.ErrorJSON],
     layout: false
   ],
+  http: [
+    http_options: [log_protocol_errors: false]
+  ],
   pubsub_server: ISeeSea.PubSub,
   live_view: [signing_salt: "FEWjgVlX"]
 

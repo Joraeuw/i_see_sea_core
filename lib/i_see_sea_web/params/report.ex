@@ -36,24 +36,74 @@ defmodule ISeeSeaWeb.Params.Report do
   defparams :create_jellyfish_report do
     required(:quantity, :string, values: ISeeSea.Constants.JellyfishQuantityRange.values())
     required(:species, :string, values: ISeeSea.DB.Models.JellyfishSpecies.values())
+
+    required(:name, :string)
+
+    required(:longitude, :float,
+      greater_than_or_equal_to: -180.0,
+      less_than_or_equal_to: 180.0
+    )
+
+    required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
+    optional(:comment, :string)
   end
 
   defparams :create_pollution_report do
-    required(:pollution_types, {:array, :string}, min: 1)
+    optional(:pollution_type_oil, :boolean)
+    optional(:pollution_type_plastic, :boolean)
+    optional(:pollution_type_biological, :boolean)
+
+    required(:name, :string)
+
+    required(:longitude, :float,
+      greater_than_or_equal_to: -180.0,
+      less_than_or_equal_to: 180.0
+    )
+
+    required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
+    optional(:comment, :string)
   end
 
   defparams :create_meteorological_report do
     required(:fog_type, :string, values: ISeeSea.Constants.FogType.values())
     required(:wind_type, :string, values: ISeeSea.Constants.WindType.values())
     required(:sea_swell_type, :string, values: ISeeSea.Constants.SeaSwellType.values())
+
+    required(:name, :string)
+
+    required(:longitude, :float,
+      greater_than_or_equal_to: -180.0,
+      less_than_or_equal_to: 180.0
+    )
+
+    required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
+    optional(:comment, :string)
   end
 
   defparams :create_atypical_activity_report do
     required(:storm_type, :string, values: ISeeSea.Constants.StormType.values())
+
+    required(:name, :string)
+
+    required(:longitude, :float,
+      greater_than_or_equal_to: -180.0,
+      less_than_or_equal_to: 180.0
+    )
+
+    required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
     optional(:comment, :string)
   end
 
   defparams :create_other_report do
     required(:comment, :string)
+
+    required(:name, :string)
+
+    required(:longitude, :float,
+      greater_than_or_equal_to: -180.0,
+      less_than_or_equal_to: 180.0
+    )
+
+    required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
   end
 end

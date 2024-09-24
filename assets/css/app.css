@@ -107,6 +107,11 @@
     transform: translateY(-20px);
   }
 }
+
+.none {
+  display: none;
+}
+
 .leaflet-popup-content-wrapper{
   @apply bg-base-100
 }
