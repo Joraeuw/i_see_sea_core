@@ -1,6 +1,8 @@
 defmodule ISeeSeaWeb.CommonComponents do
   alias ISeeSea.Constants.ReportType
   alias ISeeSeaWeb.CoreComponents
+
+  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   attr :pagination, :map, required: true
@@ -56,11 +58,11 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_button(assigns) do
     ~H"""
-    <button class={@class || "btn"} onclick="filter_modal.showModal()">Filters</button>
-    <dialog id="filter_modal" class="modal ">
+    <button class={@class || "btn"} onclick="filter_modal.showModal()"><%=gettext("Filters")%></button>
+    <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
-          <.filter_base name="Date Range">
+          <.filter_base name={gettext("Date Range")}>
             <div class="relative z-30">
               <CoreComponents.date_range_picker
                 id="date_range_picker"
@@ -71,7 +73,7 @@ defmodule ISeeSeaWeb.CommonComponents do
               />
             </div>
           </.filter_base>
-          <.filter_base name="Report Type">
+          <.filter_base name={gettext("Report Type")}>
             <CoreComponents.input
               type="select"
               field={@filters[:report_type]}
@@ -84,15 +86,16 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select> --%>
           </.filter_base>
           <:actions>
-            <CoreComponents.button phx-disable-with="Applying Filters..." class="w-full">
+            <CoreComponents.button phx-disable-with={gettext("Applying Filters...")} class="w-full">
               Apply
             </CoreComponents.button>
           </:actions>
         </CoreComponents.simple_form>
 
+
         <div class="modal-action">
           <form method="dialog">
-            <button class="btn">Close</button>
+            <button class="btn"><%=gettext("Close")%></button>
           </form>
         </div>
       </div>

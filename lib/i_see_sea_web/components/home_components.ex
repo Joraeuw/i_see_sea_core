@@ -7,6 +7,7 @@ defmodule ISeeSeaWeb.HomeComponents do
   alias ISeeSea.DB.Models.JellyfishSpecies
   alias ISeeSeaWeb.CoreComponents
 
+  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   require ISeeSea.Constants.ReportType, as: ReportType
@@ -61,9 +62,9 @@ defmodule ISeeSeaWeb.HomeComponents do
         ]}
       >
         <.create_report_window report_type={@create_report_type} />
-        <textarea class="textarea max-h-40" placeholder="Comment..."></textarea>
+        <textarea class="textarea max-h-40" placeholder={gettext("Comment...")}></textarea>
         <input type="file" class="file-input w-full max-w-xs" />
-        <button class="btn w-full">Submit</button>
+        <button class="btn w-full"><%=gettext("Submit")%></button>
       </div>
     </div>
     """
@@ -73,35 +74,35 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
-    <CoreComponents.selection display_text="Select Species" options={JellyfishSpecies.values()} />
-    <CoreComponents.selection display_text="Select Range" options={JellyfishQuantityRange.values()} />
+    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
+    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />SS
+    <CoreComponents.selection display_text={gettext("Select Species")} options={JellyfishSpecies.values()} />
+    <CoreComponents.selection display_text={gettext("Select Range")} options={JellyfishQuantityRange.values()} />
     """
   end
 
   def create_report_window(%{report_type: ReportType.atypical_activity()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
-    <CoreComponents.selection display_text="Storm Type" options={StormType.values()} />
+    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
+    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
+    <CoreComponents.selection display_text={gettext("Storm Type")} options={StormType.values()} />
     """
   end
 
   def create_report_window(%{report_type: ReportType.meteorological()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
-    <CoreComponents.selection display_text="Fog Type" options={Constants.FogType.values()} />
-    <CoreComponents.selection display_text="Wind Type" options={Constants.WindType.values()} />
-    <CoreComponents.selection display_text="Sea Swell Type" options={Constants.SeaSwellType.values()} />
+    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
+    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
+    <CoreComponents.selection display_text={gettext("Fog Type")} options={Constants.FogType.values()} />
+    <CoreComponents.selection display_text={gettext("Wind Type")} options={Constants.WindType.values()} />
+    <CoreComponents.selection display_text={gettext("Sea Swell Type")} options={Constants.SeaSwellType.values()} />
     """
   end
 
   def create_report_window(%{report_type: ReportType.pollution()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
+    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
     <div class="flex flex-row space-x-3">
       <CoreComponents.checkbox text="oil" />
       <CoreComponents.checkbox text="plastic" />
@@ -112,8 +113,8 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   def create_report_window(%{report_type: ReportType.other()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
-    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />
+    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
+    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
     """
   end
 
@@ -166,19 +167,19 @@ defmodule ISeeSeaWeb.HomeComponents do
             <CommonComponents.filter_button filters={@filters} />
           </div>
           <div class="stat">
-            <div class="stat-title">Downloads</div>
+            <div class="stat-title"><%=gettext("Reports for the day")%></div>
             <div class="stat-value">31K</div>
-            <div class="stat-desc">Jan 1st - Feb 1st</div>
+            <div class="stat-desc"><%=gettext("Jan 1st - Feb 1st")%></div>
           </div>
 
           <div class="stat">
-            <div class="stat-title">New Users</div>
+            <div class="stat-title"><%=gettext("Active Users")%></div>
             <div class="stat-value">4,200</div>
             <div class="stat-desc">↗︎ 400 (22%)</div>
           </div>
 
           <div class="stat">
-            <div class="stat-title">New Registers</div>
+            <div class="stat-title"><%=gettext("New Registers")%></div>
             <div class="stat-value">1,200</div>
             <div class="stat-desc">↘︎ 90 (14%)</div>
           </div>
