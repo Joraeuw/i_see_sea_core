@@ -44,7 +44,7 @@ defmodule ISeeSeaWeb.HomeLive do
       {"meteorological", "/images/create-report/meteorological_report.png"},
       {"atypical_activity", "/images/create-report/atypical_report.png"},
       {"pollution", "/images/create-report/pollution_report.png"},
-      {"other", "/images/create-report/other_report.png"}
+      {"other", "/images/create-report/others1.png"}
     ]
 
     {:ok, reports, pagination} =
