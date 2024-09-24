@@ -135,7 +135,7 @@ defmodule ISeeSeaWeb.HomeComponents do
         if(@stats_panel_is_open, do: "translate-x-0", else: "translate-x-[calc(100%+1rem)]")
       ]}>
         <div class={[
-          "relative stats stats-vertical overflow-x-hidden shadow mt-2 transition-transform duration-500 ease-in-out",
+          "relative stats stats-vertical overflow-x-hidden overflow-y-hidden shadow mt-2 transition-transform duration-500 ease-in-out",
           if(@stats_panel_is_open, do: "translate-x-0", else: "-translate-x-10")
         ]}>
           <!-- Full Height Toggle Button -->

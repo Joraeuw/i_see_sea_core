@@ -57,7 +57,7 @@ defmodule ISeeSeaWeb.CommonComponents do
   def filter_button(assigns) do
     ~H"""
     <button class={@class || "btn"} onclick="filter_modal.showModal()">Filters</button>
-    <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
+    <dialog id="filter_modal" class="modal ">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
           <.filter_base name="Date Range">
