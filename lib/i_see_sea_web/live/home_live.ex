@@ -34,7 +34,7 @@ defmodule ISeeSeaWeb.HomeLive do
     report_type = "all"
 
     filters = %{
-      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -20)),
+      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -21)),
       "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
       "report_type" => report_type
     }

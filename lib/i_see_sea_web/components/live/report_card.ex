@@ -2,6 +2,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
   use ISeeSeaWeb, :live_component
 
   alias ISeeSea.DB.Models.Picture
+  alias ISeeSea.Helpers.Broadcaster
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSea.DB.Models.JellyfishReport
   alias ISeeSea.DB.Models.AtypicalActivityReport
@@ -15,6 +16,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
   def render(assigns) do
     ~H"""
+
     <div class="relative w-80 h-96 transform transition-transform duration-50s hover:scale-105">
       <div class={[
         "relative transition-transform duration-[0.5] ease-[ease-in-out] transform-style-preserve-3d will-change-transform",
@@ -35,10 +37,18 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
           <div class="card-body relative shadow-md rounded-md h-48">
             <h2 class="card-title w-full line-clamp-1"><%= @name %></h2>
             <p class="line-clamp-3 w-full"><%= @comment %></p>
-            <div class="card-actions justify-end">
-              <button phx-click="toggle_flip" phx-target={@myself} class="btn btn-primary">
+            <div class="card-actions grid grid-cols-12 gap-2 w-full">
+
+              <button phx-click="toggle_flip" phx-target={@myself}  class={"btn btn-primary " <> (if @show_extra_button, do: "col-span-9", else: "col-span-12")}>
                 Details
               </button>
+
+              <%= if @show_extra_button do %>
+                <button phx-click="delete_report" phx-target={@myself} phx-value-id={@report.id} class="btn_delete flex items-center justify-center col-span-3">
+                  <img class="bg-contain h-[31px] w-[36px]" src="/images/report_icons/trash_icon.svg" />
+                </button>
+              <% end %>
+
             </div>
           </div>
         </div>
@@ -67,6 +77,39 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
   def handle_event("toggle_flip", _params, socket) do
     {:noreply, assign(socket, :is_back, !socket.assigns.is_back)}
   end
+
+  def update(assigns, socket) do
+    show_extra_button = Map.get(assigns, :show_extra_button, false)
+    {:ok, assign(socket, assigns |> Map.put(:show_extra_button, show_extra_button))}
+  end
+  @impl true
+def handle_event("delete_report", %{"id" => id}, socket) do
+  case BaseReport.soft_delete(id) do
+    {:ok, report} ->
+      Broadcaster.broadcast!("reports:updates", "delete_marker", %{report_id: report.id})
+      # Set a success flash message
+      socket =
+        socket
+        |> put_flash(:info, "Report deleted successfully.")
+        |> push_patch(to: "/reports") # Change to the correct route
+
+      {:noreply, socket}
+
+    {:error, :not_found, BaseReport} ->
+      # Set an error flash message
+      socket =
+        socket
+        |> put_flash(:error, "Report not found.")
+        |> push_patch(to: "/reports") # Change to the correct route
+
+      {:noreply, socket}
+  end
+end
+
+
+
+
+
 
   attr :report, :map, required: true
 

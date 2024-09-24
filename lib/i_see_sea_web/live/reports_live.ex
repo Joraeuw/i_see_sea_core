@@ -63,6 +63,7 @@ defmodule ISeeSeaWeb.ReportsLive do
             comment={comment}
             pictures={pictures}
             report={report}
+            show_extra_button={true}
           />
         <% end %>
       </div>
