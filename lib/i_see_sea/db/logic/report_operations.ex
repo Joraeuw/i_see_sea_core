@@ -16,37 +16,21 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Report
 
-  def create(user, validated_params) do
-    IO.inspect("start creating")
-
+  def create(user, validated_params, picture_upload_function_refs) do
     Repo.transaction(fn ->
       with {:ok, %BaseReport{id: id, report_type: report_type}} <-
              BaseReport.create(
                Map.merge(validated_params, %{user_id: user.id, report_date: DateTime.utc_now()})
-             )
-             |> IO.inspect(label: :created_base),
+             ),
+           true <- Enum.all?(picture_upload_function_refs, fn ref -> ref.(id) end),
            {:ok, report} <-
-             create_specific_report(id, report_type, validated_params)
-             |> IO.inspect(label: :created_report) do
+             create_specific_report(id, report_type, validated_params) do
         report
+      else
+        error -> Repo.rollback(error)
       end
     end)
   end
-
-  # def create(user, %{pictures: pictures} = validated_base, params) do
-  #   Repo.transaction(fn ->
-  #     with {:ok, %BaseReport{id: id, report_type: report_type}} <-
-  #            BaseReport.create(
-  #              Map.merge(validated_base, %{user_id: user.id, report_date: DateTime.utc_now()})
-  #            ),
-  #          :ok <- attach_pictures(id, pictures),
-  #          {:ok, report} <- create_specific_report(id, report_type, params) do
-  #       report
-  #     else
-  #       {:error, error} -> Repo.rollback(error)
-  #     end
-  #   end)
-  # end
 
   def get_total_pages(%{total_count: total_entries, page_size: page_size}) do
     div(total_entries, page_size) + if rem(total_entries, page_size) > 0, do: 1, else: 0
@@ -94,7 +78,6 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
                species_id: species
              })
            ) do
-      IO.inspect("REPORT CREATED GOOD")
       {:ok, jellyfish_report}
     else
       {:error, error} -> Repo.rollback(error)
@@ -120,14 +103,10 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
 
   defp create_specific_report(base_report_id, report_type, params)
        when report_type == "pollution" do
-    with {:ok, %{pollution_types: pollution_types}} <-
+    with {:ok, pollution_params} <-
            Report.validate(:create_pollution_report, params),
          {:ok, pollution_report} <- PollutionReport.create(%{report_id: base_report_id}),
-         :ok <-
-           With.check(
-             attach_pollution_types(base_report_id, pollution_types),
-             :failed_to_attach_pollution_type
-           ) do
+         :ok <- attach_pollution_types(base_report_id, pollution_params) do
       {:ok,
        pollution_report
        |> Repo.reload!()
@@ -167,46 +146,59 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     end
   end
 
-  defp attach_pollution_types(report_id, pollution_types) do
-    Enum.all?(pollution_types, fn pollution_type_name ->
-      with {:ok, %PollutionType{name: name}} <- PollutionType.get(pollution_type_name),
-           {:ok, _} <-
-             PollutionReportPollutionType.create(%{
-               pollution_type_id: name,
-               pollution_report_id: report_id
-             }) do
-        true
-      else
-        _ -> false
-      end
-    end)
+  defp attach_pollution_types(report_id, %{
+         pollution_type_oil: pollution_type_oil,
+         pollution_type_plastic: pollution_type_plastic,
+         pollution_type_biological: pollution_type_biological
+       }) do
+    if pollution_type_oil do
+      PollutionReportPollutionType.create(%{
+        pollution_type_id: "oil",
+        pollution_report_id: report_id
+      })
+    end
+
+    if pollution_type_plastic do
+      PollutionReportPollutionType.create(%{
+        pollution_type_id: "plastic",
+        pollution_report_id: report_id
+      })
+    end
+
+    if pollution_type_biological do
+      PollutionReportPollutionType.create(%{
+        pollution_type_id: "biological",
+        pollution_report_id: report_id
+      })
+    end
+
+    :ok
   end
 
-  defp attach_pictures(report_id, pictures) do
-    Enum.all?(pictures, fn %Plug.Upload{content_type: content_type, path: path} ->
-      with {:ok, image} <- Image.open(path),
-           {width, height, _} <- Image.shape(image),
-           {:ok, suffix} <- PictureTypes.get_suffix(content_type),
-           {:ok, img_binary} <-
-             Image.write(image, :memory, suffix: suffix, minimize_file_size: true),
-           {:ok, _} <-
-             Picture.create(%{
-               report_id: report_id,
-               file_size: byte_size(img_binary),
-               content_type: content_type,
-               image_data: img_binary,
-               width: width,
-               height: height
-             }) do
-        true
-      else
-        _ -> false
-      end
-    end)
-    |> if do
-      :ok
+  def attach_picture_callback_function(report_id, shape, image_binary, content_type) do
+    with {width, height, _} <- shape,
+         {:ok, _} <-
+           Picture.create(%{
+             report_id: report_id,
+             file_size: byte_size(image_binary),
+             content_type: content_type,
+             image_data: image_binary,
+             width: width,
+             height: height
+           }) do
+      true
     else
-      {:error, :image_not_uploaded}
+      _ -> false
+    end
+  end
+
+  #! maybe store image async
+  def retrieve_image_binary(path, content_type) do
+    with {:ok, image} <- Image.open(path),
+         shape <- Image.shape(image),
+         {:ok, suffix} <- PictureTypes.get_suffix(content_type),
+         {:ok, binary} <- Image.write(image, :memory, suffix: suffix) do
+      {binary, shape}
     end
   end
 end

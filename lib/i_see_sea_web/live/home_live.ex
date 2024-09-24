@@ -238,6 +238,11 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_info({:update_flash, {flash_type, msg}}, socket) do
-    {:noreply, put_flash(socket, flash_type, msg)}
+    socket =
+      socket
+      |> assign(create_report_toolbox_is_open: false)
+      |> put_flash(flash_type, msg)
+
+    {:noreply, socket}
   end
 end
