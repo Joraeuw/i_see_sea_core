@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.CommonComponents
 
+  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   attr :view, :string, required: true
@@ -57,7 +58,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                Save
+                <%=gettext("Save")%>
               </button>
 
               <button
@@ -66,7 +67,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                Cancel
+                <%=gettext("Cancel")%>
               </button>
             </div>
           </div>
@@ -77,7 +78,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-click="toggle_profile_view"
             phx-value-view="my_profile_view"
           >
-            My Profile
+            <%=gettext("My Profile")%>
           </button>
 
           <CommonComponents.filter_button
@@ -93,7 +94,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
           >
-            My Reports
+            <%=gettext("My Reports")%>
           </button>
         </div>
       </div>
@@ -124,9 +125,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
         </figure>
         <div class="card-body shadow-md rounded-md">
           <h2 class="card-title"><%= type %></h2>
-          <p>Count of your reports: <%= count %></p>
+          <p><%=gettext("Count of your reports: ")%><%= count %></p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary">See Reports</button>
+            <button class="btn btn-primary"><%=gettext("See Reports")%></button>
           </div>
         </div>
       </div>
@@ -148,7 +149,6 @@ defmodule ISeeSeaWeb.ProfileComponents do
           comment={comment}
           pictures={pictures}
           report={report}
-          show_extra_button={false}
         />
       <% end %>
     </div>

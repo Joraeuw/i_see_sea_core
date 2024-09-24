@@ -3,7 +3,6 @@ defmodule ISeeSeaWeb.HomeComponents do
   alias ISeeSeaWeb.Live.CreateReportPanel
   alias ISeeSeaWeb.CommonComponents
 
-  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   attr :create_report_toolbox_is_open, :boolean, required: true
@@ -48,88 +47,16 @@ defmodule ISeeSeaWeb.HomeComponents do
       <!-- Create Report Panel -->
       <.live_component
         id="create-report-panel"
-<<<<<<< HEAD
-        data-is-open={@create_report_toolbox_is_open}
-        phx-hook="DetectClick"
-        class={[
-          "z-50 bg-white self-center flex flex-col items-center space-y-3 space-x-5",
-          "md:h-11/12 md:max-w-1/3 md:m-2 md:self-start p-3 rounded-md",
-          if(not @create_report_toolbox_is_open, do: "hidden")
-        ]}
-      >
-        <.create_report_window report_type={@create_report_type} />
-        <textarea class="textarea max-h-40" placeholder={gettext("Comment...")}></textarea>
-        <input type="file" class="file-input w-full max-w-xs" />
-        <button class="btn w-full"><%=gettext("Submit")%></button>
-      </div>
-=======
         module={CreateReportPanel}
         create_report_toolbox_is_open={@create_report_toolbox_is_open}
         report_type={@create_report_type}
         is_selecting_location={@is_selecting_location}
         current_user={@current_user}
       />
->>>>>>> 9c146ecdc6a169f20e1c272eb436283f2baee7f2
     </div>
     """
   end
 
-<<<<<<< HEAD
-  attr :report_type, :string, required: true
-
-  def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
-    ~H"""
-    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
-    <input type="text" placeholder="Report Name" class="input w-full max-w-xs" />SS
-    <CoreComponents.selection display_text={gettext("Select Species")} options={JellyfishSpecies.values()} />
-    <CoreComponents.selection display_text={gettext("Select Range")} options={JellyfishQuantityRange.values()} />
-    """
-  end
-
-  def create_report_window(%{report_type: ReportType.atypical_activity()} = assigns) do
-    ~H"""
-    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
-    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
-    <CoreComponents.selection display_text={gettext("Storm Type")} options={StormType.values()} />
-    """
-  end
-
-  def create_report_window(%{report_type: ReportType.meteorological()} = assigns) do
-    ~H"""
-    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
-    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
-    <CoreComponents.selection display_text={gettext("Fog Type")} options={Constants.FogType.values()} />
-    <CoreComponents.selection display_text={gettext("Wind Type")} options={Constants.WindType.values()} />
-    <CoreComponents.selection display_text={gettext("Sea Swell Type")} options={Constants.SeaSwellType.values()} />
-    """
-  end
-
-  def create_report_window(%{report_type: ReportType.pollution()} = assigns) do
-    ~H"""
-    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
-    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
-    <div class="flex flex-row space-x-3">
-      <CoreComponents.checkbox text="oil" />
-      <CoreComponents.checkbox text="plastic" />
-      <CoreComponents.checkbox text="biological" />
-    </div>
-    """
-  end
-
-  def create_report_window(%{report_type: ReportType.other()} = assigns) do
-    ~H"""
-    <h2 class="text-2xl font-semibold mb-4"><%=gettext("Submit a %{report_type} report", report_type: @report_type)%></h2>
-    <input type="text" placeholder={gettext("Report Name")} class="input w-full max-w-xs" />
-    """
-  end
-
-  def create_report_window(assigns) do
-    ~H"""
-    """
-  end
-
-=======
->>>>>>> 9c146ecdc6a169f20e1c272eb436283f2baee7f2
   attr :stats_panel_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
   attr :filters, :map, required: true
@@ -174,19 +101,19 @@ defmodule ISeeSeaWeb.HomeComponents do
             <CommonComponents.filter_button filters={@filters} />
           </div>
           <div class="stat">
-            <div class="stat-title"><%=gettext("Reports for the day")%></div>
+            <div class="stat-title">Downloads</div>
             <div class="stat-value">31K</div>
-            <div class="stat-desc"><%=gettext("Jan 1st - Feb 1st")%></div>
+            <div class="stat-desc">Jan 1st - Feb 1st</div>
           </div>
 
           <div class="stat">
-            <div class="stat-title"><%=gettext("Active Users")%></div>
+            <div class="stat-title">New Users</div>
             <div class="stat-value">4,200</div>
             <div class="stat-desc">↗︎ 400 (22%)</div>
           </div>
 
           <div class="stat">
-            <div class="stat-title"><%=gettext("New Registers")%></div>
+            <div class="stat-title">New Registers</div>
             <div class="stat-value">1,200</div>
             <div class="stat-desc">↘︎ 90 (14%)</div>
           </div>
