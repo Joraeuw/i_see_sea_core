@@ -268,13 +268,15 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   #! CREATE EXESIVE VERIFICATION OF EACH REPORT TYPE POSSIBLY USING THE CHANGESETS IN PARAMS
   # ? 2h create report working
-  # ? 2h setup email verification
-  # ? 1h warning and errors for unverified users
-  # ? 30m-1h setup locale for language tracking (consider localstorage)
-  # ? 20m profile click on see reports filter
-
-  # ? 30m select location pin?
   # ? 1h lookout for broadcast
+  # ? 30m warning and errors for unverified users
+
+  # ? 20m profile click on see reports filter
+  # ? 30m select location pin?
+
+  # ? 2h setup email verification
+  # ? 30m-1h setup locale for language tracking (consider localstorage)
+
   # ? +2h
 
   # Ivan
@@ -287,10 +289,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   @impl true
   def handle_event("create_report", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
-    IO.inspect({params, socket.assigns.form})
 
     Report.changeset(changeset_signature, params)
-    |> IO.inspect()
     |> case do
       %Ecto.Changeset{valid?: false} = changeset ->
         {:noreply,
@@ -301,36 +301,41 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
          )}
 
       %Ecto.Changeset{valid?: true} ->
+        images =
+          consume_uploaded_entries(socket, :pictures, fn %{path: path},
+                                                         %{client_type: content_type} ->
+            {img_binary, shape} = ReportOperations.retrieve_image_binary(path, content_type)
+
+            upload_pictures_callback = fn report_id ->
+              ReportOperations.attach_picture_callback_function(
+                report_id,
+                shape,
+                img_binary,
+                content_type
+              )
+            end
+
+            {:ok, upload_pictures_callback}
+          end)
+
         ReportOperations.create(
           socket.assigns.current_user,
-          ExUtils.Map.atomize_keys(params, deep: true)
+          ExUtils.Map.atomize_keys(params, deep: true),
+          images
         )
+        |> case do
+          {:ok, _} ->
+            send(self(), {:update_flash, {:info, "Report created successfully!"}})
 
-        send(self(), {:update_flash, {:info, "Report created successfully!"}})
+          _ ->
+            send(
+              self(),
+              {:update_flash, {:error, "Something went wrong when creating your report!"}}
+            )
+        end
 
-        {:noreply,
-         assign(socket,
-           create_report_toolbox_is_open: false,
-           form: to_form(%{}, as: "report_params")
-         )}
+        {:noreply, assign(socket, form: to_form(%{}, as: "report_params"))}
     end
-
-    # # ReportOperations.create()
-    # uploaded_files =
-    #   consume_uploaded_entries(socket, :pictures, fn %{path: path}, _entry ->
-    #     # Move the uploaded file to a permanent location, if needed
-    #     dest = Path.join("uploads", Path.basename(path))
-    #     # Return the path where the file is stored
-    #     {:ok, dest}
-    #   end)
-    #   |> IO.inspect()
-
-    # socket =
-    #   socket
-    #   |> assign(form: to_form(%{}, as: "report_params"))
-    #   |> put_flash(:success, "Created report")
-
-    # {:noreply, socket}
   end
 
   def handle_event("verify_create_report_params", %{"report_params" => params}, socket) do
