@@ -4,7 +4,7 @@ defmodule ISeeSeaWeb.LoginLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col justify-evenly items-center rounded-xl shadow-lg shadow-top-bottom  mx-auto w-4/12">
+    <div class="flex flex-col items-center rounded-xl shadow-lg shadow-top-bottom  mx-auto w-8/12 sm:w-96">
       <.header class="text-center">
         Log in to account
         <:subtitle>
@@ -21,7 +21,7 @@ defmodule ISeeSeaWeb.LoginLive do
           id="login_form"
           action={~p"/login"}
           phx-update="ignore"
-          class="flex flex-col items-center bg-[url('/images/Assetss/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
+          class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
         >
           <.input field={@form[:email]} type="email" label="Email" required />
           <.input field={@form[:password]} type="password" label="Password" required />
@@ -33,7 +33,7 @@ defmodule ISeeSeaWeb.LoginLive do
             </.link>
           </:actions>
           <:actions>
-            <.button phx-disable-with="Logging in..." class="w-full mb-[5px]">
+            <.button phx-disable-with="Logging in..." class="w-full">
               Log in <span aria-hidden="true">→</span>
             </.button>
           </:actions>
