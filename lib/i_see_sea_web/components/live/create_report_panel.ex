@@ -23,7 +23,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       )
       |> assign(
         form: to_form(%{}, as: "report_params"),
-        check_errors: false
+        check_errors: false,
+        is_location_selected: false
       )
 
     {:ok, socket}
@@ -45,12 +46,13 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     >
       <CoreComponents.simple_form
         for={@form}
+        form_class="flex justify-center"
         id="registration_form"
         phx-submit="create_report"
         phx-change="verify_create_report_params"
         phx-target={@myself}
         method="post"
-        class="z-50 bg-white self-center flex flex-col items-center space-y-3 space-x-5
+        class="z-50 bg-white self-center flex flex-col items-center space-y-3
             md:h-11/12 md:max-w-1/3 md:m-2 md:self-start p-3 rounded-md"
       >
         <.error :if={@check_errors}>
@@ -65,7 +67,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         <CoreComponents.input
           type="textarea"
           field={@form[:comment]}
-          class="textarea max-h-40"
+          class="textarea h-25 w-[260px] md:w-[320px] max-h-40"
           placeholder="Comment..."
         />
 
@@ -76,19 +78,23 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         <:actions>
           <CoreComponents.button
             phx-disable-with="Creating a report..."
-            class="btn w-11/12"
+            class="btn w-[130px]"
             disabled={@current_user === nil}
           >
             Submit
           </CoreComponents.button>
-          <button
-            id="select-location-button"
-            phx-disable-with="Selecting a location..."
-            phx-click="select_location"
-            class="btn w-11/12"
-          >
-            Select Location
-          </button>
+          <div class={["tooltip"] ++ [(if @is_location_selected, do: "tooltip-success", else: "tooltip-error")]}
+     data-tip={if @is_location_selected, do: "You have already selected a location.", else: "You have not selected a location yet."}>
+  <button
+    id="select-location-button"
+    phx-disable-with="Selecting a location..."
+    phx-click="select_location"
+    class={["btn_sucsess w-[130px] h-[48px]"] ++ [(if not @is_location_selected, do: "btn_delete w-[131px] h-[48px]")]}
+  >
+    Set Location
+  </button>
+</div>
+
         </:actions>
         <div class="flex flex-row items-start space-x-4">
           <%= for entry <- @uploads.pictures.entries do %>
@@ -134,7 +140,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     />
     <CoreComponents.input
       type="select"
-      class="select w-full max-w-xs"
+      class="select w-[260px] md:w-[320px] max-w-xs"
       field={@form[:species]}
       prompt="Select Species"
       options={JellyfishSpecies.values()}
@@ -142,7 +148,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     />
     <CoreComponents.input
       type="select"
-      class="select w-full max-w-xs"
+      class="select w-[260px] md:w-[320px] max-w-xs"
       field={@form[:quantity]}
       prompt="Select Range"
       options={JellyfishQuantityRange.values()}
@@ -163,7 +169,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     />
     <CoreComponents.input
       type="select"
-      class="select w-full max-w-xs"
+      class="select w-[260px] md:w-[320px] max-w-xs"
       field={@form[:storm_type]}
       prompt="Storm Type"
       options={StormType.values()}
@@ -184,7 +190,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     />
     <CoreComponents.input
       type="select"
-      class="select w-full max-w-xs"
+      class="select w-[260px] md:w-[320px] max-w-xs"
       field={@form[:fog_type]}
       prompt="Fog Type"
       options={Constants.FogType.values()}
@@ -192,7 +198,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     />
     <CoreComponents.input
       type="select"
-      class="select w-full max-w-xs"
+      class="select w-[260px] md:w-[320px] max-w-xs"
       field={@form[:wind_type]}
       prompt="Wind Type"
       options={Constants.WindType.values()}
@@ -200,7 +206,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     />
     <CoreComponents.input
       type="select"
-      class="select w-full max-w-xs"
+      class="select w-[260px] md:w-[320px] max-w-xs"
       field={@form[:sea_swell_type]}
       prompt="Sea Swell Type"
       options={Constants.SeaSwellType.values()}
@@ -370,7 +376,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
     socket =
       assign(socket,
-        form: to_form(Map.put(changeset, :action, :validate), as: "report_params")
+        form: to_form(Map.put(changeset, :action, :validate), as: "report_params"),
+        is_location_selected: true
       )
 
     {:noreply, socket}
