@@ -156,25 +156,25 @@
                 <!-- The slider itself -->
                 <div class="slider-wrapper">
                   <.link class="z-10 slider-item" navigate={~p"/"}>
-                    <%= gettext("Home")%>
+                    <%= gettext("Home") %>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/profile"}>
-                    <%= gettext("Profile")%>
+                    <%= gettext("Profile") %>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/reports-list"}>
-                    <%= gettext("Reports")%>
+                    <%= gettext("Reports") %>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/about"}>
-                    <%= gettext("Our purpose")%>
+                    <%= gettext("Our purpose") %>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/terms-and-conditions"}>
-                    <%= gettext("Terms of use")%>
+                    <%= gettext("Terms of use") %>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/privacy-policy"}>
-                    <%= gettext("Privacy Policy")%>
+                    <%= gettext("Privacy Policy") %>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/contacts"}>
-                    <%= gettext("Contacts")%>
+                    <%= gettext("Contacts") %>
                   </.link>
                 </div>
                 <!-- Right arrow -->
@@ -198,10 +198,16 @@
         </button>
         <!-- Login Button -->
         <.link
+        
           class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
           navigate={~p"/login"}
         >
-          <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
+           <%= if assigns[:current_user] do %>
+              <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
+            <% else %>
+             <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
+            <% end %>
+          
         </.link>
       </div>
     </nav>

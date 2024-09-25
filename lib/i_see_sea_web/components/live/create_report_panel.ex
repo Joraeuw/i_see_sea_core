@@ -82,18 +82,28 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
           >
             Submit
           </CoreComponents.button>
-          <div class={["tooltip"] ++ [(if @is_location_selected, do: "tooltip-success", else: "tooltip-error")]}
-     data-tip={if @is_location_selected, do: "You have already selected a location.", else: "You have not selected a location yet."}>
-  <button
-    id="select-location-button"
-    phx-disable-with="Selecting a location..."
-    phx-click="select_location"
-    class={["btn_sucsess w-[130px] h-[48px]"] ++ [(if not @is_location_selected, do: "btn_delete w-[131px] h-[48px]")]}
-  >
-    Set Location
-  </button>
-</div>
-
+          <div
+            class={
+              ["tooltip"] ++ [if(@is_location_selected, do: "tooltip-success", else: "tooltip-error")]
+            }
+            data-tip={
+              if @is_location_selected,
+                do: "You have already selected a location.",
+                else: "You have not selected a location yet."
+            }
+          >
+            <button
+              id="select-location-button"
+              phx-disable-with="Selecting a location..."
+              phx-click="select_location"
+              class={
+                ["btn_sucsess w-[130px] h-[48px]"] ++
+                  [if(not @is_location_selected, do: "btn_delete w-[131px] h-[48px]")]
+              }
+            >
+              Set Location
+            </button>
+          </div>
         </:actions>
         <div class="flex flex-row items-start space-x-4">
           <%= for entry <- @uploads.pictures.entries do %>

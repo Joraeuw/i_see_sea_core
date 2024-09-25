@@ -58,7 +58,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%=gettext("Save")%>
+                <%= gettext("Save") %>
               </button>
 
               <button
@@ -67,7 +67,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%=gettext("Cancel")%>
+                <%= gettext("Cancel") %>
               </button>
             </div>
           </div>
@@ -78,7 +78,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-click="toggle_profile_view"
             phx-value-view="my_profile_view"
           >
-            <%=gettext("My Profile")%>
+            <%= gettext("My Profile") %>
           </button>
 
           <CommonComponents.filter_button
@@ -94,7 +94,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
           >
-            <%=gettext("My Reports")%>
+            <%= gettext("My Reports") %>
           </button>
         </div>
       </div>
@@ -125,9 +125,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
         </figure>
         <div class="card-body shadow-md rounded-md">
           <h2 class="card-title"><%= type %></h2>
-          <p><%=gettext("Count of your reports: ")%><%= count %></p>
+          <p><%= gettext("Count of your reports: ") %><%= count %></p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary"><%=gettext("See Reports")%></button>
+            <button class="btn btn-primary"><%= gettext("See Reports") %></button>
           </div>
         </div>
       </div>

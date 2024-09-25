@@ -60,7 +60,7 @@ defmodule ISeeSeaWeb.HomeLive do
     new_socket =
       assign(socket,
         is_selecting_location: false,
-        current_user: socket.assigns.current_user || %{email: "not_logged_in"},
+        current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         create_report_images: create_report_images,
         filters: to_form(filters),
@@ -89,7 +89,8 @@ defmodule ISeeSeaWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-10/12 h-full">
-      <h1><%= @current_user.email %></h1>
+
+
       <div id="map_wrapper" class="absolute h-full w-full self-start" phx-update="ignore">
         <div
           id="map"
@@ -101,14 +102,31 @@ defmodule ISeeSeaWeb.HomeLive do
       </div>
 
       <%!-- Desktop Design --%>
-      <HomeComponents.report_toolbox
-        create_report_toolbox_is_open={@create_report_toolbox_is_open}
-        create_report_images={@create_report_images}
-        create_report_type={@create_report_type}
-        supports_touch={@supports_touch}
-        current_user={@current_user}
-        is_selecting_location={@is_selecting_location}
-      />
+
+
+      <div :if={@current_user == nil} class="tooltip tooltip-error" data-tip="You need to log in first">
+    <HomeComponents.report_toolbox
+      create_report_toolbox_is_open={@create_report_toolbox_is_open}
+      create_report_images={@create_report_images}
+      create_report_type={@create_report_type}
+      supports_touch={@supports_touch}
+      current_user={@current_user}
+      is_selecting_location={@is_selecting_location}
+    />
+    </div>
+
+
+
+      <div :if={@current_user != nil}>
+        <HomeComponents.report_toolbox
+          create_report_toolbox_is_open={@create_report_toolbox_is_open}
+          create_report_images={@create_report_images}
+          create_report_type={@create_report_type}
+          supports_touch={@supports_touch}
+          current_user={@current_user}
+          is_selecting_location={@is_selecting_location}
+        />
+      </div>
 
       <div :if={@is_selecting_location}>CLICK TO SELECT A LOCATION</div>
     </div>
@@ -147,21 +165,26 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("toggle_report", %{"type" => report_type}, socket) do
-    cond do
-      socket.assigns.create_report_type == report_type &&
-          socket.assigns.create_report_toolbox_is_open ->
-        {:noreply, assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
+    if socket.assigns.current_user == nil do
+      {:noreply, push_redirect(socket, to: "/login")}
+    else
+      cond do
+        socket.assigns.create_report_type == report_type &&
+            socket.assigns.create_report_toolbox_is_open ->
+          {:noreply, assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
 
-      socket.assigns.create_report_type != report_type &&
-          socket.assigns.create_report_toolbox_is_open ->
-        {:noreply,
-         assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+        socket.assigns.create_report_type != report_type &&
+            socket.assigns.create_report_toolbox_is_open ->
+          {:noreply,
+           assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
 
-      not socket.assigns.create_report_toolbox_is_open ->
-        {:noreply,
-         assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+        not socket.assigns.create_report_toolbox_is_open ->
+          {:noreply,
+           assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+      end
     end
   end
+
 
   def handle_event("exit_dialog", %{"element_id" => element_id}, socket) do
     if(

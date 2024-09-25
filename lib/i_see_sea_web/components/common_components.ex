@@ -58,7 +58,9 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_button(assigns) do
     ~H"""
-    <button class={@class || "btn"} onclick="filter_modal.showModal()"><%=gettext("Filters")%></button>
+    <button class={@class || "btn"} onclick="filter_modal.showModal()">
+      <%= gettext("Filters") %>
+    </button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
@@ -92,10 +94,9 @@ defmodule ISeeSeaWeb.CommonComponents do
           </:actions>
         </CoreComponents.simple_form>
 
-
         <div class="modal-action">
           <form method="dialog">
-            <button class="btn"><%=gettext("Close")%></button>
+            <button class="btn"><%= gettext("Close") %></button>
           </form>
         </div>
       </div>

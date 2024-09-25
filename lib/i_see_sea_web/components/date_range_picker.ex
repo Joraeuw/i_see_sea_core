@@ -67,7 +67,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
 
           <div id="click_today" class="text-sm text-center">
             <.link phx-click="today" phx-target={@myself} class="text-gray-700 hover:text-gray-500">
-              <%=gettext("Today")%>
+              <%= gettext("Today") %>
             </.link>
           </div>
 

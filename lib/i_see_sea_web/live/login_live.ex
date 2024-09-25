@@ -6,13 +6,13 @@ defmodule ISeeSeaWeb.LoginLive do
     ~H"""
     <div class="flex flex-col items-center rounded-xl shadow-lg shadow-top-bottom  mx-auto w-8/12 sm:w-96">
       <.header class="text-center">
-      <%=gettext("Log in to account")%>
+        <%= gettext("Log in to account") %>
         <:subtitle>
-          <%=gettext("Don't have an account?")%>
+          <%= gettext("Don't have an account?") %>
           <.link navigate={~p"/register"} class="font-semibold text-brand hover:underline">
-            <%=gettext("Sign up")%>
+            <%= gettext("Sign up") %>
           </.link>
-          <%=gettext("for an account now.")%>
+          <%= gettext("for an account now.") %>
         </:subtitle>
       </.header>
       <div class="w-full">
@@ -29,12 +29,12 @@ defmodule ISeeSeaWeb.LoginLive do
           <:actions>
             <.input field={@form[:remember_me]} type="checkbox" label={gettext("Keep me logged in")} />
             <.link href={~p"/reset_password"} class="text-sm font-semibold">
-              <%=gettext("Forgot your password?")%>
+              <%= gettext("Forgot your password?") %>
             </.link>
           </:actions>
           <:actions>
             <.button phx-disable-with={gettext("Logging in...")} class="w-full">
-              <%=gettext("Log in ")%><span aria-hidden="true">→</span>
+              <%= gettext("Log in ") %><span aria-hidden="true">→</span>
             </.button>
           </:actions>
         </.simple_form>
