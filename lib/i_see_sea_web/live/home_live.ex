@@ -22,7 +22,7 @@ defmodule ISeeSeaWeb.HomeLive do
   def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
-        # ISeeSeaWeb.Endpoint.subscribe("reports:updates")
+        ISeeSeaWeb.Endpoint.subscribe("reports:updates")
 
         socket
         |> get_connect_params()
@@ -50,7 +50,7 @@ defmodule ISeeSeaWeb.HomeLive do
     {:ok, reports, pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         report_type,
-        %{page: 1, page_size: 10},
+        %{page: 1, page_size: 1000},
         filters
       )
 
@@ -197,6 +197,11 @@ defmodule ISeeSeaWeb.HomeLive do
         filters
       )
 
+    {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
+
+    stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
+
+    IO.inspect(filters)
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: page, total_pages: total_pages}
 
@@ -205,7 +210,7 @@ defmodule ISeeSeaWeb.HomeLive do
       |> assign(:pagination, pagination)
       |> assign(:reports, reports)
       |> push_event("filters_updated", %{
-        stop_live_tracker: false,
+        stop_live_tracker: stop_live_tracker,
         reports: Focus.view(reports, %Lens{view: Lens.expanded()})
       })
 
@@ -221,17 +226,15 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
-  def handle_event("location_selected", _params, socket) do
-    {:noreply,
-     assign(socket,
-       create_report_toolbox_is_open: true,
-       is_selecting_location: false
-     )}
-  end
-
   @impl true
   def handle_info(%{event: "add_marker", payload: report}, socket) do
     socket = push_event(socket, "add_marker", report)
+
+    {:noreply, socket}
+  end
+
+  def handle_info(%{event: "delete_marker", payload: report}, socket) do
+    socket = push_event(socket, "delete_marker", report)
 
     {:noreply, socket}
   end
@@ -244,5 +247,14 @@ defmodule ISeeSeaWeb.HomeLive do
       |> put_flash(flash_type, msg)
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:location_selected, socket) do
+    {:noreply,
+     assign(socket,
+       create_report_toolbox_is_open: true,
+       is_selecting_location: false
+     )}
   end
 end

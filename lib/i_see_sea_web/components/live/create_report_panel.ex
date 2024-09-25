@@ -1,4 +1,5 @@
 defmodule ISeeSeaWeb.Live.CreateReportPanel do
+  alias ISeeSea.Helpers.Broadcaster
   alias ISeeSea.DB.Logic.ReportOperations
   use ISeeSeaWeb, :live_component
 
@@ -260,13 +261,13 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     """
   end
 
-  #! CREATE EXESIVE VERIFICATION OF EACH REPORT TYPE POSSIBLY USING THE CHANGESETS IN PARAMS
-  # ? 2h create report working
-  # ? 1h lookout for broadcast
+  # CREATE EXESIVE VERIFICATION OF EACH REPORT TYPE POSSIBLY USING THE CHANGESETS IN PARAMS
+  # 2h create report working
+  # 30m select location pin?
   # ? 30m warning and errors for unverified users
+  # ? 1h lookout for broadcast
 
   # ? 20m profile click on see reports filter
-  # ? 30m select location pin?
 
   # ? 2h setup email verification
   # ? 30m-1h setup locale for language tracking (consider localstorage)
@@ -318,17 +319,28 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
           images
         )
         |> case do
-          {:ok, _} ->
+          {:ok, report} ->
             send(self(), {:update_flash, {:info, "Report created successfully!"}})
+
+            socket =
+              socket
+              |> assign(form: to_form(%{}, as: "report_params"))
+              |> push_event("report_created", %{})
+
+            Broadcaster.broadcast!("reports:updates", "add_marker", report)
+
+            {:noreply, socket}
 
           _ ->
             send(
               self(),
-              {:update_flash, {:error, "Something went wrong when creating your report!"}}
+              {:update_flash,
+               {:error,
+                "Something went wrong when creating your report. Please try again. If the error persist contact us."}}
             )
-        end
 
-        {:noreply, assign(socket, form: to_form(%{}, as: "report_params"))}
+            {:noreply, assign(socket, form: to_form(%{}, as: "report_params"))}
+        end
     end
   end
 
@@ -354,11 +366,11 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
     changeset = Report.changeset(changeset_signature, params)
 
+    send(self(), :location_selected)
+
     socket =
       assign(socket,
-        form: to_form(Map.put(changeset, :action, :validate), as: "report_params"),
-        create_report_toolbox_is_open: true,
-        is_selecting_location: false
+        form: to_form(Map.put(changeset, :action, :validate), as: "report_params")
       )
 
     {:noreply, socket}
