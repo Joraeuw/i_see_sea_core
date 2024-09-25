@@ -63,7 +63,7 @@ defmodule ISeeSeaWeb.CommonComponents do
     </button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
-        <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
+      <CoreComponents.simple_form for={@filters} phx-submit="filter_reports" class="flex flex-col items-center mt-10 space-y-8 bg-white" onsubmit="document.getElementById('filter_modal').close()">
           <.filter_base name={gettext("Date Range")}>
             <div class="relative z-30">
               <CoreComponents.date_range_picker
@@ -88,17 +88,15 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select> --%>
           </.filter_base>
           <:actions>
-            <CoreComponents.button phx-disable-with={gettext("Applying Filters...")} class="w-full">
+
+            <CoreComponents.button phx-disable-with={gettext("Applying Filters...")} class="btn">
               Apply
             </CoreComponents.button>
+
           </:actions>
         </CoreComponents.simple_form>
 
-        <div class="modal-action">
-          <form method="dialog">
-            <button class="btn"><%= gettext("Close") %></button>
-          </form>
-        </div>
+
       </div>
       <form method="dialog" class="modal-backdrop">
         <button class="z-30">hidden button</button>

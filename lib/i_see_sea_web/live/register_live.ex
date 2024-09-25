@@ -38,7 +38,7 @@ defmodule ISeeSeaWeb.RegisterLive do
         <.input field={@form[:password]} type="password" label={gettext("Password")} required />
 
         <:actions>
-          <.button phx-disable-with={gettext("Creating account...")} class="w-full">
+          <.button phx-disable-with={gettext("Creating account...")} class="btn mb-1">
             <%= gettext("Create an account") %>
           </.button>
         </:actions>

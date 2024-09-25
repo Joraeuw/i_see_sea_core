@@ -22,6 +22,7 @@ defmodule ISeeSeaWeb.LoginLive do
           action={~p"/login"}
           phx-update="ignore"
           class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
+          inner_class="w-12/12"
         >
           <.input field={@form[:email]} type="email" label={gettext("Email")} required />
           <.input field={@form[:password]} type="password" label={gettext("Password")} required />
@@ -33,7 +34,7 @@ defmodule ISeeSeaWeb.LoginLive do
             </.link>
           </:actions>
           <:actions>
-            <.button phx-disable-with={gettext("Logging in...")} class="w-full">
+            <.button phx-disable-with={gettext("Logging in...")} class="btn mb-3">
               <%= gettext("Log in ") %><span aria-hidden="true">→</span>
             </.button>
           </:actions>

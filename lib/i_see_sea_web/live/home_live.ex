@@ -34,7 +34,7 @@ defmodule ISeeSeaWeb.HomeLive do
     report_type = "all"
 
     filters = %{
-      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -21)),
+      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -22)),
       "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
       "report_type" => report_type
     }
@@ -104,7 +104,7 @@ defmodule ISeeSeaWeb.HomeLive do
       <%!-- Desktop Design --%>
 
 
-      <div :if={@current_user == nil} class="tooltip tooltip-error" data-tip="You need to log in first">
+      <div :if={@current_user == nil} class="tooltip tooltip-error" data-tip="You need to log in first" data-tooltip-style="light">
     <HomeComponents.report_toolbox
       create_report_toolbox_is_open={@create_report_toolbox_is_open}
       create_report_images={@create_report_images}
