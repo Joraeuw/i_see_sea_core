@@ -1,5 +1,4 @@
 window.openFullscreenModal = (imageSrc) => {
-  console.log("hello");
   const fullscreen_modal = document.getElementById(
     "modal_fullscreen_image_slider"
   );
@@ -21,8 +20,14 @@ window.openFullscreenModal = (imageSrc) => {
     const rect = modalBox.getBoundingClientRect();
 
     // Check if click is outside modal content
-    if (!(event.clientX >= rect.left && event.clientX <= rect.right &&
-          event.clientY >= rect.top && event.clientY <= rect.bottom)) {
+    if (
+      !(
+        event.clientX >= rect.left &&
+        event.clientX <= rect.right &&
+        event.clientY >= rect.top &&
+        event.clientY <= rect.bottom
+      )
+    ) {
       fullscreen_modal.removeAttribute("open"); // Close the modal
     }
   });
@@ -48,8 +53,7 @@ const createImageSlider = (pictures) => {
       
       </div>
       `
-    )
-    .join("");
+    )[0];
 
   return `
     <div class="swiper-container">
