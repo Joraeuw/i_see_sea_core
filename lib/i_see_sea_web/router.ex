@@ -40,7 +40,8 @@ defmodule ISeeSeaWeb.Router do
 
   scope "/", ISeeSeaWeb do
     pipe_through [:browser]
-
+    live "/forgot_password", ForgotLive, :index
+    live "/change_password", ChangeLive, :index
     get "/privacy-policy", PageController, :privacy_policy
     get "/terms-and-conditions", PageController, :terms_and_conditions
     get "/contacts", PageController, :contacts

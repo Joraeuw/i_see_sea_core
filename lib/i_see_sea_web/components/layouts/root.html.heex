@@ -148,40 +148,39 @@
             </div>
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
-              <div class="slider-container">
-                <!-- Left arrow -->
-                <button class="arrow-left hidden">
-                  <img src="/images/home-icons/left-arrow-icon.svg" />
-                </button>
-                <!-- The slider itself -->
-                <div class="slider-wrapper">
-                  <.link class="z-10 slider-item" navigate={~p"/"}>
+              <details class="dropdown w-8/12 z-50">
+                <summary class="btn m-1 w-[130px]"> <%= gettext("Menu") %></summary>
+                <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
+                  <li><.link class="z-50 " navigate={~p"/"}>
                     <%= gettext("Home") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/profile"}>
+                  </.link></li>
+                  <li><.link class="z-50 " navigate={~p"/profile"}>
                     <%= gettext("Profile") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/reports-list"}>
+                  </.link></li>
+                  <li><.link class="z-50 " navigate={~p"/reports-list"}>
                     <%= gettext("Reports") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/about"}>
+                  </.link></li>
+                  <li><.link class="z-50 " navigate={~p"/about"}>
                     <%= gettext("Our purpose") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/terms-and-conditions"}>
+                  </.link></li>
+                  <li><.link class="z-50 " navigate={~p"/terms-and-conditions"}>
                     <%= gettext("Terms of use") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/privacy-policy"}>
+                  </.link></li>
+                  <li><.link class="z-50 " navigate={~p"/privacy-policy"}>
                     <%= gettext("Privacy Policy") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/contacts"}>
+                  </.link></li>
+                  <li><.link class="z-50 " navigate={~p"/contacts"}>
                     <%= gettext("Contacts") %>
-                  </.link>
-                </div>
+                  </.link></li>
+                </ul>
+              </details>
+              
+                <!-- The slider itself -->
+                
+                 
+               
                 <!-- Right arrow -->
-                <button class="arrow-right">
-                  <img src="/images/home-icons/right-arrow-icon.svg" />
-                </button>
-              </div>
+              
             </div>
           </div>
           <!-- User and login images -->
@@ -198,16 +197,14 @@
         </button>
         <!-- Login Button -->
         <.link
-        
           class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
           navigate={~p"/login"}
         >
-           <%= if assigns[:current_user] do %>
-              <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
-            <% else %>
-             <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
-            <% end %>
-          
+          <%= if assigns[:current_user] do %>
+            <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
+          <% else %>
+            <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
+          <% end %>
         </.link>
       </div>
     </nav>

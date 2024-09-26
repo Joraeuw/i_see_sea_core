@@ -194,6 +194,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :class, :string, default: nil
   attr :form_class, :string, default: nil
   attr :inner_class, :string, default: ""
+
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
     doc: "the arbitrary HTML attributes to apply to the form tag"
@@ -206,7 +207,10 @@ defmodule ISeeSeaWeb.CoreComponents do
     <.form :let={f} for={@for} as={@as} {@rest} class={@form_class}>
       <div class={@class || "mt-10 space-y-8 bg-white"}>
         <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class={["mt-2 flex items-center justify-between gap-6 w-8/12" , @inner_class]}>
+        <div
+          :for={action <- @actions}
+          class={["mt-2 flex items-center justify-between gap-6 w-[90%]", @inner_class]}
+        >
           <%= render_slot(action, f) %>
         </div>
       </div>

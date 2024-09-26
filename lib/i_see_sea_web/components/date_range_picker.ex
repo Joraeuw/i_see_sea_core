@@ -23,7 +23,10 @@ defmodule ISeeSeaWeb.DateRangePicker do
           type="text"
           value={date_range_display(@range_start, @range_end)}
         />
-        <.icon name="hero-calendar" class="absolute top-2 right-3 flex text-gray-400 mt-[9px] mr-[7px]" />
+        <.icon
+          name="hero-calendar"
+          class="absolute top-2 right-3 flex text-gray-400 mt-[9px] mr-[7px]"
+        />
       </div>
 
       <div
