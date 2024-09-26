@@ -29,7 +29,7 @@ defmodule ISeeSeaWeb.LoginLive do
 
           <:actions>
             <.input field={@form[:remember_me]} type="checkbox" label={gettext("Keep me logged in")} />
-            <.link href={~p"/reset_password"} class="text-sm font-semibold">
+            <.link href={~p"/forgot_password"} class="text-sm font-semibold">
               <%= gettext("Forgot your password?") %>
             </.link>
           </:actions>
