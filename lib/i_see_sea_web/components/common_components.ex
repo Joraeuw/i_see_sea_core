@@ -111,7 +111,7 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_base(assigns) do
     ~H"""
-    <div class="flex flex-row z-30 justify-center align-middle">
+    <div class="flex flex-row justify-center align-middle">
       <div class="relative w-72 p-4 border border-gray-400 rounded-md">
         <span class="absolute -top-3 left-4 bg-white px-1 text-gray-500 text-sm"><%= @name %></span>
         <%= render_slot(@inner_block) %>
