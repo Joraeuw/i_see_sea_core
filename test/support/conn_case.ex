@@ -45,6 +45,7 @@ defmodule ISeeSeaWeb.ConnCase do
     api_spec = ISeeSeaWeb.ApiSpec.spec()
 
     conn = Phoenix.ConnTest.build_conn()
+
     user = insert!(:user)
     {:ok, %Role{id: admin_role_id}} = Role.get(:admin)
     admin = insert!(:user, role_id: admin_role_id)

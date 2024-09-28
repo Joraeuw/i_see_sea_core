@@ -23,6 +23,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       )
       |> assign(
         form: to_form(%{}, as: "report_params"),
+        report_type: ReportType.jellyfish(),
         check_errors: false,
         is_location_selected: false
       )
@@ -47,7 +48,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       <CoreComponents.simple_form
         for={@form}
         form_class="flex justify-center"
-        id="registration_form"
+        id="create-report-form"
         phx-submit="create_report"
         phx-change="verify_create_report_params"
         phx-target={@myself}
@@ -94,9 +95,12 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
             }
           >
             <button
+              type="button"
               id="select-location-button"
               phx-disable-with="Selecting a location..."
               phx-click="select_location"
+              phx-hook="LeafletUserLocationHook"
+              phx-target={@myself}
               class={
                 ["btn_sucsess w-[130px] h-[48px]"] ++
                   [if(not @is_location_selected, do: "btn_delete w-[131px] h-[48px]")]
@@ -291,11 +295,11 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   # ? +2h
 
   # Ivan
-  # ? 1h add delete button for admins + functionality
+  # 1h add delete button for admins + functionality
   # ? +4h tests
 
   # Steli
-  # ? 2h gettext translation
+  # 2h gettext translation
   # ? +4h tests
   @impl true
   def handle_event("create_report", %{"report_params" => params}, socket) do
@@ -373,6 +377,12 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     {:noreply, cancel_upload(socket, :pictures, ref)}
   end
 
+  def handle_event("select_location", _params, socket) do
+    send(self(), :select_location)
+
+    {:noreply, socket}
+  end
+
   def handle_event("location_selected", %{"lat" => lat, "lng" => lng}, socket) do
     params =
       socket.assigns.form.params
@@ -386,8 +396,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
     socket =
       assign(socket,
-        form: to_form(Map.put(changeset, :action, :validate), as: "report_params"),
-        is_location_selected: true
+        form: to_form(Map.put(changeset, :action, :validate), as: "report_params")
       )
 
     {:noreply, socket}
