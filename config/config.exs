@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :linguist, pluralization_key: :count
+
 config :i_see_sea,
   ecto_repos: [ISeeSea.Repo],
   generators: [timestamp_type: :utc_datetime]

@@ -8,15 +8,15 @@ defmodule ISeeSeaWeb.Gettext do
       import ISeeSeaWeb.Gettext
 
       # Simple translation
-      gettext("Here is the string to translate")
+      t!("Here is the string to translate")
 
       # Plural translation
-      ngettext("Here is the string to translate",
+      nt!("Here is the string to translate",
                "Here are the strings to translate",
                3)
 
       # Domain-based translation
-      dgettext("errors", "Here is the error message to translate")
+      dt!("errors", "Here is the error message to translate")
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """

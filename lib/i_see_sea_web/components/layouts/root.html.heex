@@ -104,43 +104,43 @@
             <div class="hidden sm:flex w-5/5 justify-around space-x-1">
               <.link class="z-10" navigate={~p"/"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Home") %>
+                  <%= t!(@locale,"nav.home") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/profile"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Profile") %>
+                  <%= t!(@locale,"nav.profile") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/reports-list"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Reports") %>
+                  <%= t!(@locale,"nav.reports") %>
                 </button>
               </.link>
               <div class="dropdown dropdown-bottom">
-                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">More</div>
+                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32"><%= t!(@locale,"nav.more") %></div>
                 <ul
                   tabindex="0"
                   class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow"
                 >
                   <li>
                     <.link class="z-10" navigate={~p"/terms-and-conditions"}>
-                      <%= gettext("Terms of use") %>
+                      <%= t!(@locale,"nav.terms_of_use") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/about"}>
-                      <%= gettext("Our purpose") %>
+                      <%= t!(@locale,"nav.our_purpose") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/contacts"}>
-                      <%= gettext("Contacts") %>
+                      <%= t!(@locale,"nav.contacts") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/privacy-policy"}>
-                      <%= gettext("Privacy and policy") %>
+                      <%= t!(@locale,"nav.privacy_and_policy") %>
                     </.link>
                   </li>
                 </ul>
@@ -156,25 +156,25 @@
                 <!-- The slider itself -->
                 <div class="slider-wrapper">
                   <.link class="z-10 slider-item" navigate={~p"/"}>
-                    <%= gettext("Home")%>
+                    <%= t!(@locale,"nav.home")%>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/profile"}>
-                    <%= gettext("Profile")%>
+                    <%= t!(@locale,"nav.profile")%>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/reports-list"}>
-                    <%= gettext("Reports")%>
+                    <%= t!(@locale,"nav.reports")%>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/about"}>
-                    <%= gettext("Our purpose")%>
+                    <%= t!(@locale,"nav.our_purpose")%>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/terms-and-conditions"}>
-                    <%= gettext("Terms of use")%>
+                    <%= t!(@locale,"nav.terms_of_use")%>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/privacy-policy"}>
-                    <%= gettext("Privacy Policy")%>
+                    <%= t!(@locale,"nav.privacy_policy")%>
                   </.link>
                   <.link class="z-10 slider-item" navigate={~p"/contacts"}>
-                    <%= gettext("Contacts")%>
+                    <%= t!(@locale,"nav.contacts")%>
                   </.link>
                 </div>
                 <!-- Right arrow -->

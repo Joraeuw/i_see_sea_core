@@ -47,7 +47,8 @@ defmodule ISeeSeaWeb do
         layouts: [html: ISeeSeaWeb.Layouts]
 
       import Plug.Conn
-      import ISeeSeaWeb.Gettext
+      use Gettext.Backend, otp_app: :i_see_sea
+
       import ISeeSeaWeb.Responses
 
       use ISeeSeaWeb.Utils.EnsureRequiredModules, __MODULE__
@@ -108,6 +109,7 @@ defmodule ISeeSeaWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import ISeeSeaWeb.CoreComponents
+      import ISeeSeaWeb.Trans
       import ISeeSeaWeb.Gettext
 
       # Shortcut for generating JS commands

@@ -60,6 +60,7 @@ defmodule ISeeSeaWeb.HomeComponents do
   attr :stats_panel_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
   attr :filters, :map, required: true
+  attr :locale, :string, default: ""  # Set default locale
 
   def stat_home(assigns) do
     ~H"""
@@ -98,7 +99,7 @@ defmodule ISeeSeaWeb.HomeComponents do
           </button>
           <!-- Stats Content -->
           <div class="stat">
-            <CommonComponents.filter_button filters={@filters} />
+            <CommonComponents.filter_button filters={@filters} locale={@locale} />
           </div>
           <div class="stat">
             <div class="stat-title">Downloads</div>

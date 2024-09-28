@@ -59,6 +59,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
     new_socket =
       assign(socket,
+        locale: "bg",
         is_selecting_location: false,
         current_user: socket.assigns.current_user || %{email: "not_logged_in"},
         supports_touch: supports_touch,
@@ -110,12 +111,13 @@ defmodule ISeeSeaWeb.HomeLive do
         is_selecting_location={@is_selecting_location}
       />
 
-      <div :if={@is_selecting_location}>CLICK TO SELECT A LOCATION</div>
+      <div :if={@is_selecting_location}>t!(@locale,"home.select_location")</div>
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
       filters={@filters}
       stats_panel_is_open={@stats_panel_is_open}
+      locale={@locale}
     />
     """
   end

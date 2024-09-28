@@ -2,6 +2,9 @@ defmodule ISeeSeaWeb.ProfileLive do
   alias ISeeSea.DB.Models.BaseReport
   use ISeeSeaWeb, :live_view
 
+  import ISeeSeaWeb.Trans
+  import ISeeSeaWeb.Gettext
+
   alias ISeeSeaWeb.ProfileComponents
 
   defmacro my_profile_view, do: "my_profile_view"
@@ -14,6 +17,7 @@ defmodule ISeeSeaWeb.ProfileLive do
   def render(assigns) do
     ~H"""
     <ProfileComponents.index
+      locale={@locale}
       pagination={@pagination}
       view={@profile_view}
       username={@current_user.username}
@@ -75,6 +79,7 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     new_socket =
       assign(socket,
+        locale: "bg",
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         filters: to_form(filters),

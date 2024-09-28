@@ -2,6 +2,7 @@ defmodule ISeeSeaWeb.CommonComponents do
   alias ISeeSea.Constants.ReportType
   alias ISeeSeaWeb.CoreComponents
 
+  import ISeeSeaWeb.Trans
   import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
@@ -55,14 +56,15 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   attr :class, :string, default: nil
   attr :filters, :map, required: true
+  attr :locale, :string, default: ""
 
   def filter_button(assigns) do
     ~H"""
-    <button class={@class || "btn"} onclick="filter_modal.showModal()"><%=gettext("Filters")%></button>
+    <button class={@class || "btn"} onclick="filter_modal.showModal()"><%= t!(@locale,"home.filters")%></button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
-          <.filter_base name={gettext("Date Range")}>
+          <.filter_base name={t!(@locale,"home.date_range")}>
             <div class="relative z-30">
               <CoreComponents.date_range_picker
                 id="date_range_picker"
@@ -73,7 +75,7 @@ defmodule ISeeSeaWeb.CommonComponents do
               />
             </div>
           </.filter_base>
-          <.filter_base name={gettext("Report Type")}>
+          <.filter_base name={t!(@locale,"home.report_type")}>
             <CoreComponents.input
               type="select"
               field={@filters[:report_type]}
@@ -86,7 +88,7 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select> --%>
           </.filter_base>
           <:actions>
-            <CoreComponents.button phx-disable-with={gettext("Applying Filters...")} class="w-full">
+            <CoreComponents.button phx-disable-with={t!(@locale,"home.applying_filters")} class="w-full">
               Apply
             </CoreComponents.button>
           </:actions>
