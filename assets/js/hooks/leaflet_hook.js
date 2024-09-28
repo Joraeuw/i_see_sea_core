@@ -14,7 +14,7 @@ const LeafletMap = {
     const southWest = L.latLng(43.128774079271025, 28.251514434814457);
     const bounds = L.latLngBounds(southWest, northEast);
 
-    this.map = L.map("map", {
+    window.map = L.map("map", {
       zoomControl: false,
       zoom: 13,
       // minZoom: 10,
@@ -25,10 +25,10 @@ const LeafletMap = {
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution:
         '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(this.map);
+    }).addTo(window.map);
 
     this.markerClusterGroup = L.markerClusterGroup();
-    this.map.addLayer(this.markerClusterGroup);
+    window.map.addLayer(this.markerClusterGroup);
 
     this.markers = {};
 
@@ -44,12 +44,12 @@ const LeafletMap = {
     this.handleEvent("delete_marker", (marker) => {
       this.deleteMarker(marker.report_id);
     });
-    
+
     this.handleEvent("filters_updated", (params) => {
       console.log(params);
 
       let { reports, stop_live_tracker } = params;
-      stop_live_tracker=false;
+      stop_live_tracker = false;
       if (stop_live_tracker) {
         this.removeEventListener("add_marker", this.addMarker);
         this.trackingNewMarkers = false;
@@ -63,50 +63,15 @@ const LeafletMap = {
       this.renderMarkers(reports);
     });
 
-    this.hasDetectedUserLocation();
-    this.addMarkerOnClick();
-
     this.handleEvent(
       "report_created",
       () => true
-      // this.map.removeLayer(this.lastSelectedLocation)
+      // window.map.removeLayer(this.lastSelectedLocation)
     );
 
     setTimeout(() => {
-      this.map.invalidateSize();
+      window.map.invalidateSize();
     }, 100);
-  },
-
-  addMarkerOnClick() {
-    let mapContainer = this.map.getContainer();
-
-    this.handleEvent("enable_pin_mode", () => {
-      if (!this.hasDetectedUserLocation()) {
-      }
-
-      this.map.on("click", this.onMapClick.bind(this));
-      this.map.on("touch", this.onMapClick.bind(this));
-    });
-  },
-
-  onMapClick(e) {
-    const { lat, lng } = e.latlng;
-
-    if (this.lastSelectedLocation) {
-      this.map.removeLayer(this.lastSelectedLocation);
-    }
-
-    this.lastSelectedLocation = L.marker([lat, lng], {
-      icon: newReportMarkerIcon,
-    }).addTo(this.map);
-
-    this.pushEventTo("#select-location-button", "location_selected", {
-      lat,
-      lng,
-    });
-
-    this.map.off("click");
-    this.map.off("touch");
   },
 
   addMarker(markerData) {
@@ -146,29 +111,6 @@ const LeafletMap = {
       this.markerClusterGroup.clearLayers();
     }
     this.markers = {};
-  },
-
-  hasDetectedUserLocation() {
-    if ("geolocation" in navigator) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords;
-          L.marker([latitude, longitude], {
-            icon: userLocationMarkerIcon,
-          })
-            .addTo(this.map)
-            .bindPopup("You are here!");
-
-          this.pushEvent("user_selected_location", { latitude, longitude });
-          return true;
-        },
-        (error) => {
-          return false;
-        }
-      );
-    } else {
-      return false;
-    }
   },
 };
 

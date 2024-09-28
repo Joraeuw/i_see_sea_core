@@ -46,7 +46,7 @@ defmodule ISeeSeaWeb.HomeComponents do
       </div>
       <!-- Create Report Panel -->
       <.live_component
-        id="create-report-panel"
+        id="create-report-panel-wrapper"
         module={CreateReportPanel}
         create_report_toolbox_is_open={@create_report_toolbox_is_open}
         report_type={@create_report_type}
