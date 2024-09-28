@@ -63,7 +63,12 @@ defmodule ISeeSeaWeb.CommonComponents do
     <button class={@class || "btn"} onclick="filter_modal.showModal()"><%= t!(@locale,"home.filters")%></button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
-        <CoreComponents.simple_form for={@filters} phx-submit="filter_reports">
+        <CoreComponents.simple_form
+          for={@filters}
+          phx-submit="filter_reports"
+          class="flex flex-col items-center mt-10 space-y-8 bg-white"
+          onsubmit="document.getElementById('filter_modal').close()"
+        >
           <.filter_base name={t!(@locale,"home.date_range")}>
             <div class="relative z-30">
               <CoreComponents.date_range_picker
@@ -88,18 +93,11 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select> --%>
           </.filter_base>
           <:actions>
-            <CoreComponents.button phx-disable-with={t!(@locale,"home.applying_filters")} class="w-full">
+            <CoreComponents.button phx-disable-with={t!(@locale,"home.applying_filters")} class="btn">
               Apply
             </CoreComponents.button>
           </:actions>
         </CoreComponents.simple_form>
-
-
-        <div class="modal-action">
-          <form method="dialog">
-            <button class="btn"><%=gettext("Close")%></button>
-          </form>
-        </div>
       </div>
       <form method="dialog" class="modal-backdrop">
         <button class="z-30">hidden button</button>
@@ -113,7 +111,7 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_base(assigns) do
     ~H"""
-    <div class="flex flex-row z-30 justify-center align-middle">
+    <div class="flex flex-row justify-center align-middle">
       <div class="relative w-72 p-4 border border-gray-400 rounded-md">
         <span class="absolute -top-3 left-4 bg-white px-1 text-gray-500 text-sm"><%= @name %></span>
         <%= render_slot(@inner_block) %>

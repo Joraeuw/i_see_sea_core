@@ -23,6 +23,7 @@ defmodule ISeeSeaWeb.LoginLive do
           action={~p"/login"}
           phx-update="ignore"
           class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
+          inner_class="w-12/12"
         >
           <.input field={@form[:email]} type="email" label={t!(@locale,"login.email")} required />
           <.input field={@form[:password]} type="password" label={t!(@locale,"login.password")} required />
@@ -34,7 +35,7 @@ defmodule ISeeSeaWeb.LoginLive do
             </.link>
           </:actions>
           <:actions>
-            <.button phx-disable-with={t!(@locale,"login.logging_in")} class="w-full">
+            <.button phx-disable-with={t!(@locale,"login.logging_in")} class="btn mb-3">
               <%=t!(@locale,"login.log_in")%><span aria-hidden="true">→</span>
             </.button>
           </:actions>

@@ -22,7 +22,7 @@ defmodule ISeeSeaWeb.HomeLive do
   def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
-        # ISeeSeaWeb.Endpoint.subscribe("reports:updates")
+        ISeeSeaWeb.Endpoint.subscribe("reports:updates")
 
         socket
         |> get_connect_params()
@@ -34,7 +34,7 @@ defmodule ISeeSeaWeb.HomeLive do
     report_type = "all"
 
     filters = %{
-      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -21)),
+      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -22)),
       "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
       "report_type" => report_type
     }
@@ -44,13 +44,13 @@ defmodule ISeeSeaWeb.HomeLive do
       {"meteorological", "/images/create-report/meteorological_report.png"},
       {"atypical_activity", "/images/create-report/atypical_report.png"},
       {"pollution", "/images/create-report/pollution_report.png"},
-      {"other", "/images/create-report/other_report.png"}
+      {"other", "/images/create-report/others1.png"}
     ]
 
     {:ok, reports, pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         report_type,
-        %{page: 1, page_size: 10},
+        %{page: 1, page_size: 1000},
         filters
       )
 
@@ -61,7 +61,7 @@ defmodule ISeeSeaWeb.HomeLive do
       assign(socket,
         locale: "bg",
         is_selecting_location: false,
-        current_user: socket.assigns.current_user || %{email: "not_logged_in"},
+        current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         create_report_images: create_report_images,
         filters: to_form(filters),
@@ -90,7 +90,6 @@ defmodule ISeeSeaWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-10/12 h-full">
-      <h1><%= @current_user.email %></h1>
       <div id="map_wrapper" class="absolute h-full w-full self-start" phx-update="ignore">
         <div
           id="map"
@@ -102,14 +101,33 @@ defmodule ISeeSeaWeb.HomeLive do
       </div>
 
       <%!-- Desktop Design --%>
-      <HomeComponents.report_toolbox
-        create_report_toolbox_is_open={@create_report_toolbox_is_open}
-        create_report_images={@create_report_images}
-        create_report_type={@create_report_type}
-        supports_touch={@supports_touch}
-        current_user={@current_user}
-        is_selecting_location={@is_selecting_location}
-      />
+
+      <div
+        :if={@current_user == nil}
+        class="tooltip tooltip-error"
+        data-tip="You need to log in first"
+        data-tooltip-style="light"
+      >
+        <HomeComponents.report_toolbox
+          create_report_toolbox_is_open={@create_report_toolbox_is_open}
+          create_report_images={@create_report_images}
+          create_report_type={@create_report_type}
+          supports_touch={@supports_touch}
+          current_user={@current_user}
+          is_selecting_location={@is_selecting_location}
+        />
+      </div>
+
+      <div :if={@current_user != nil}>
+        <HomeComponents.report_toolbox
+          create_report_toolbox_is_open={@create_report_toolbox_is_open}
+          create_report_images={@create_report_images}
+          create_report_type={@create_report_type}
+          supports_touch={@supports_touch}
+          current_user={@current_user}
+          is_selecting_location={@is_selecting_location}
+        />
+      </div>
 
       <div :if={@is_selecting_location}>t!(@locale,"home.select_location")</div>
     </div>
@@ -149,19 +167,24 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("toggle_report", %{"type" => report_type}, socket) do
-    cond do
-      socket.assigns.create_report_type == report_type &&
-          socket.assigns.create_report_toolbox_is_open ->
-        {:noreply, assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
+    if socket.assigns.current_user == nil do
+      {:noreply, push_redirect(socket, to: "/login")}
+    else
+      cond do
+        socket.assigns.create_report_type == report_type &&
+            socket.assigns.create_report_toolbox_is_open ->
+          {:noreply,
+           assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
 
-      socket.assigns.create_report_type != report_type &&
-          socket.assigns.create_report_toolbox_is_open ->
-        {:noreply,
-         assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+        socket.assigns.create_report_type != report_type &&
+            socket.assigns.create_report_toolbox_is_open ->
+          {:noreply,
+           assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
 
-      not socket.assigns.create_report_toolbox_is_open ->
-        {:noreply,
-         assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+        not socket.assigns.create_report_toolbox_is_open ->
+          {:noreply,
+           assign(socket, create_report_toolbox_is_open: true, create_report_type: report_type)}
+      end
     end
   end
 
@@ -199,6 +222,11 @@ defmodule ISeeSeaWeb.HomeLive do
         filters
       )
 
+    {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
+
+    stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
+
+    IO.inspect(filters)
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: page, total_pages: total_pages}
 
@@ -207,7 +235,7 @@ defmodule ISeeSeaWeb.HomeLive do
       |> assign(:pagination, pagination)
       |> assign(:reports, reports)
       |> push_event("filters_updated", %{
-        stop_live_tracker: false,
+        stop_live_tracker: stop_live_tracker,
         reports: Focus.view(reports, %Lens{view: Lens.expanded()})
       })
 
@@ -223,14 +251,6 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
-  def handle_event("location_selected", _params, socket) do
-    {:noreply,
-     assign(socket,
-       create_report_toolbox_is_open: true,
-       is_selecting_location: false
-     )}
-  end
-
   @impl true
   def handle_info(%{event: "add_marker", payload: report}, socket) do
     socket = push_event(socket, "add_marker", report)
@@ -238,8 +258,28 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
+  def handle_info(%{event: "delete_marker", payload: report}, socket) do
+    socket = push_event(socket, "delete_marker", report)
+
+    {:noreply, socket}
+  end
+
   @impl true
   def handle_info({:update_flash, {flash_type, msg}}, socket) do
-    {:noreply, put_flash(socket, flash_type, msg)}
+    socket =
+      socket
+      |> assign(create_report_toolbox_is_open: false)
+      |> put_flash(flash_type, msg)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(:location_selected, socket) do
+    {:noreply,
+     assign(socket,
+       create_report_toolbox_is_open: true,
+       is_selecting_location: false
+     )}
   end
 end

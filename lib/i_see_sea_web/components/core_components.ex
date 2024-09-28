@@ -197,6 +197,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
   attr :class, :string, default: nil
   attr :form_class, :string, default: nil
+  attr :inner_class, :string, default: ""
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -208,10 +209,13 @@ defmodule ISeeSeaWeb.CoreComponents do
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest} form_class={@form_class}>
+    <.form :let={f} for={@for} as={@as} {@rest} class={@form_class}>
       <div class={@class || "mt-10 space-y-8 bg-white"}>
         <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div
+          :for={action <- @actions}
+          class={["mt-2 flex items-center justify-between gap-6 w-[90%]", @inner_class]}
+        >
           <%= render_slot(action, f) %>
         </div>
       </div>
@@ -237,10 +241,12 @@ defmodule ISeeSeaWeb.CoreComponents do
     ~H"""
     <button
       type={@type}
-      class={[
-        "btn w-[250px] mb-2",
-        @class
-      ]}
+      class={
+        @class ||
+          [
+            "btn w-[250px] mb-2"
+          ]
+      }
       {@rest}
     >
       <%= render_slot(@inner_block) %>
@@ -373,13 +379,15 @@ defmodule ISeeSeaWeb.CoreComponents do
       <textarea
         id={@id}
         name={@name}
-        class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400",
-          @class
-        ]}
+        class={
+          @class ||
+            [
+              "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+              "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+              @errors == [] && "border-zinc-300 focus:border-zinc-400",
+              @errors != [] && "border-rose-400 focus:border-rose-400"
+            ]
+        }
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}><%= msg %></.error>

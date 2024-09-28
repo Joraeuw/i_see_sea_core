@@ -4,6 +4,7 @@ import "leaflet.markercluster";
 import {
   markerIconByReportType,
   userLocationMarkerIcon,
+  newReportMarkerIcon,
 } from "../leaflet_icons";
 import { getMarkerContent } from "../leaflet_markers";
 
@@ -43,18 +44,18 @@ const LeafletMap = {
     this.handleEvent("delete_marker", (marker) => {
       this.deleteMarker(marker.report_id);
     });
-
+    
     this.handleEvent("filters_updated", (params) => {
       console.log(params);
 
       let { reports, stop_live_tracker } = params;
+      stop_live_tracker=false;
       if (stop_live_tracker) {
-        this.removeEventListener("add_marker");
+        this.removeEventListener("add_marker", this.addMarker);
+        this.trackingNewMarkers = false;
       } else {
         if (!this.trackingNewMarkers) {
-          this.handleEvent("add_marker", (marker) => {
-            this.addMarker(marker);
-          });
+          this.handleEvent("add_marker", this.addMarker);
           this.trackingNewMarkers = true;
         }
       }
@@ -62,8 +63,14 @@ const LeafletMap = {
       this.renderMarkers(reports);
     });
 
-    this.detectUserLocation();
+    this.hasDetectedUserLocation();
     this.addMarkerOnClick();
+
+    this.handleEvent(
+      "report_created",
+      () => true
+      // this.map.removeLayer(this.lastSelectedLocation)
+    );
 
     setTimeout(() => {
       this.map.invalidateSize();
@@ -73,32 +80,33 @@ const LeafletMap = {
   addMarkerOnClick() {
     let mapContainer = this.map.getContainer();
 
-    console.log(mapContainer);
     this.handleEvent("enable_pin_mode", () => {
-      mapContainer.style.cursor = `url(${this.el.dataset.pinUrl}), auto`;
+      if (!this.hasDetectedUserLocation()) {
+      }
+
       this.map.on("click", this.onMapClick.bind(this));
       this.map.on("touch", this.onMapClick.bind(this));
     });
   },
 
   onMapClick(e) {
-    // Get the clicked location's lat and lng
-    console.log("click_is_called");
     const { lat, lng } = e.latlng;
 
-    // Add a marker at the selected location
-    // L.marker([lat, lng]).addTo(this.map);
+    if (this.lastSelectedLocation) {
+      this.map.removeLayer(this.lastSelectedLocation);
+    }
 
-    // Send the location back to LiveView
-    this.pushEvent("location_selected", {});
+    this.lastSelectedLocation = L.marker([lat, lng], {
+      icon: newReportMarkerIcon,
+    }).addTo(this.map);
+
     this.pushEventTo("#select-location-button", "location_selected", {
       lat,
       lng,
     });
 
-    // Reset the map interaction
     this.map.off("click");
-    this.map.getContainer().style.cursor = "";
+    this.map.off("touch");
   },
 
   addMarker(markerData) {
@@ -122,7 +130,7 @@ const LeafletMap = {
 
   async renderMarkers(markers) {
     this.clearMarkers();
-    console.log(markers)
+    console.log(markers);
     markers.forEach((markerData) => {
       const { report_id, report_type, latitude, longitude } = markerData;
       const marker = L.marker([latitude, longitude], {
@@ -140,41 +148,27 @@ const LeafletMap = {
     this.markers = {};
   },
 
-  detectUserLocation() {
+  hasDetectedUserLocation() {
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
           L.marker([latitude, longitude], {
             icon: userLocationMarkerIcon,
-          }).addTo(this.map);
+          })
+            .addTo(this.map)
+            .bindPopup("You are here!");
 
           this.pushEvent("user_selected_location", { latitude, longitude });
+          return true;
         },
         (error) => {
-          console.error("Geolocation error: ", error);
-          this.enableManualLocationSelection();
+          return false;
         }
       );
     } else {
-      this.enableManualLocationSelection();
+      return false;
     }
-  },
-
-  enableManualLocationSelection() {
-    this.map.on("click", (e) => {
-      const { lat, lng } = e.latlng;
-      L.marker([lat, lng], { icon: userLocationMarkerIcon })
-        .addTo(this.map)
-        .bindPopup("You selected this location.")
-        .openPopup();
-
-      // Optionally send the selected location to Phoenix LiveView
-      this.pushEvent("user_selected_location", {
-        latitude: lat,
-        longitude: lng,
-      });
-    });
   },
 };
 

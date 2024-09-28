@@ -31,9 +31,12 @@ defmodule ISeeSea.DB.Models.PollutionReport do
     alias ISeeSeaWeb.Lens
 
     def view(
-          %{base_report: base, pollution_types: pollution_types} = pollution_report,
+          pollution_report,
           %Lens{view: Lens.expanded()} = lens
         ) do
+      %{base_report: base, pollution_types: pollution_types} =
+        Repo.preload(pollution_report, :pollution_types)
+
       pollution_report
       |> Map.from_struct()
       |> Map.take([:pollution_types, :report_id])
@@ -47,9 +50,12 @@ defmodule ISeeSea.DB.Models.PollutionReport do
     end
 
     def view(
-          %{pollution_types: pollution_types} = pollution_report,
+          pollution_report,
           %Lens{view: Lens.from_base()} = lens
         ) do
+      %{pollution_types: pollution_types} =
+        Repo.preload(pollution_report, :pollution_types)
+
       pollution_report
       |> Map.from_struct()
       |> Map.take([:pollution_types, :report_id])

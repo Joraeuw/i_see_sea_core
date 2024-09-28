@@ -14,6 +14,9 @@ module.exports = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'], // Add your Google Font here
+      },
       perspective: {
         8: "800px",
         10: "1000px",

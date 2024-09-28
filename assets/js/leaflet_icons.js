@@ -1,30 +1,73 @@
 import L from "leaflet";
 
-const original_width = 1322;
-const original_height = 1945;
-const w = 26;
+const iconBuilder = (original_width, original_height, w, fun) => {
+  const aspect_ratio = original_width / original_height;
+  const h = w / aspect_ratio;
+  const iconSize_w = Math.round(w, 2);
+  const iconSize_h = Math.round(h, 2);
+  const iconAnchor_w = Math.round(iconSize_w / 2, 2);
+  const iconAnchor_h = iconSize_h;
 
-const aspect_ratio = original_width / original_height;
-const h = w / aspect_ratio;
-const iconSize_w = Math.round(w, 2);
-const iconSize_h = Math.round(h, 2);
-const iconAnchor_w = Math.round(iconSize_w / 2, 2);
-const iconAnchor_h = iconSize_h;
+  return fun({ iconSize_w, iconSize_h, iconAnchor_w, iconAnchor_h });
+};
 
-const markerIconByReportType = (report_type) =>
+const markerIconByReportTypeHighOrder =
+  ({ iconSize_w, iconSize_h, iconAnchor_w, iconAnchor_h }) =>
+  (report_type) =>
+    L.icon({
+      iconUrl: `/images/marker-icons/${report_type}_report.png`,
+      iconSize: [iconSize_w, iconSize_h],
+      iconAnchor: [iconAnchor_w, iconAnchor_h],
+      popupAnchor: [0, -iconSize_h],
+    });
+
+const userLocationMarkerIconHighOrder = ({
+  iconSize_w,
+  iconSize_h,
+  iconAnchor_w,
+  iconAnchor_h,
+}) =>
   L.icon({
-    iconUrl: `/images/marker-icons/${report_type}_report.png`,
+    iconUrl: `/images/marker-icons/user_location_icon.png`,
+
     iconSize: [iconSize_w, iconSize_h],
     iconAnchor: [iconAnchor_w, iconAnchor_h],
     popupAnchor: [0, -iconSize_h],
   });
 
-const userLocationMarkerIcon = L.icon({
-  iconUrl: `/images/marker-icons/user_location_icon.png`,
+const newReportMarkerIconHighOrder = ({
+  iconSize_w,
+  iconSize_h,
+  iconAnchor_w,
+  iconAnchor_h,
+}) =>
+  L.icon({
+    iconUrl: `/images/marker-icons/new_report_location_icon.png`,
 
-  iconSize: [40, 40],
-  iconAnchor: [40 / 2, 40],
-  popupAnchor: [0, -37],
-});
+    iconSize: [iconSize_w, iconSize_h],
+    iconAnchor: [iconAnchor_w, iconAnchor_h],
+    popupAnchor: [0, -iconSize_h],
+  });
 
-export { markerIconByReportType, userLocationMarkerIcon };
+const markerIconByReportType = iconBuilder(
+  1322,
+  1945,
+  29,
+  markerIconByReportTypeHighOrder
+);
+
+const userLocationMarkerIcon = iconBuilder(
+  3131,
+  3940,
+  28,
+  userLocationMarkerIconHighOrder
+);
+
+const newReportMarkerIcon = iconBuilder(
+  3118,
+  4504,
+  24,
+  newReportMarkerIconHighOrder
+);
+
+export { markerIconByReportType, userLocationMarkerIcon, newReportMarkerIcon };

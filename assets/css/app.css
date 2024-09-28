@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
@@ -37,9 +38,21 @@
 .transform-style-preserve-3d {
   transform-style: preserve-3d;
 }
+.tooltip-error{
+  --tooltip-color: rgb(238, 0, 0);
+  --tooltip-text-color: rgb(255, 255, 255);
+  --tooltip-font-weight: bold;
+}
+
 
 .btn {
   @apply flex-1 z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(24,158,180)] transition duration-100 hover:bg-[rgb(117,230,218)] active:translate-y-1 active:shadow-none;
+}
+.btn_delete {
+  @apply flex-1 z-20 text-center font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(255,20,60)] transition duration-100 hover:bg-[rgb(255,65,95)] active:translate-y-1 active:shadow-none;
+}
+.btn_sucsess{
+  @apply flex-1 z-20 text-center text-lg  font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(7,204,73)] transition duration-100 hover:bg-[rgb(41,243,23)] active:translate-y-1 active:shadow-none;
 }
 .p_card {
   @apply flex flex-row justify-between w-6/12;
@@ -48,7 +61,7 @@
 .conteiner {
   display: block;
   height: auto;
-  width:80%;
+  width: 80%;
 }
 
 .bolded_blue {
@@ -108,30 +121,28 @@
   display: none;
 }
 
-.btn_delete{
+.btn_delete {
   @apply flex-1 z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(255,20,60)] transition duration-100 hover:bg-[rgb(255,65,95)] active:translate-y-1 active:shadow-none;
 }
-.leaflet-popup-content-wrapper{
-  @apply bg-base-100
+.leaflet-popup-content-wrapper {
+  @apply bg-base-100;
 }
-.leaflet-popup-close-button{
-  @apply hidden
+
+.leaflet-popup-tip {
+  @apply bg-base-100;
 }
-.leaflet-popup-tip{
-  @apply bg-base-100
+.leaflet-popup-content {
+  width: 200px;
 }
-.leaflet-popup-content{
-  width: 200px; 
+.p_card_map {
+  @apply flex my-0 mx-0 items-center bg-accent px-1 py-1 w-full rounded-md;
 }
-.p_card_map{
-  @apply flex my-0 mx-0 items-center bg-accent px-1 py-1 w-full rounded-md
+.p_card_map_comment {
+  @apply my-0 mx-0 bg-accent w-full rounded-md;
 }
-.p_card_map_comment{
-  @apply my-0 mx-0 bg-accent w-full rounded-md
+.p_card_name {
+  @apply mt-5 mx-0 text-center items-center text-lg  px-1 py-1 w-full rounded-md;
 }
-.p_card_name{
-  @apply mt-5 mx-0 text-center items-center text-lg  px-1 py-1 w-full rounded-md
-}
-.leaflet-popup-content p{
+.leaflet-popup-content p {
   margin: 0;
 }
