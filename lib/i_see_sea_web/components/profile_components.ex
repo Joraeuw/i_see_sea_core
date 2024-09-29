@@ -60,7 +60,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%=t!(@locale,"profile.save")%>
+                <%= t!(@locale, "profile.save") %>
               </button>
 
               <button
@@ -69,7 +69,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%=t!(@locale,"profile.cancel")%>
+                <%= t!(@locale, "profile.cancel") %>
               </button>
             </div>
           </div>
@@ -80,7 +80,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-click="toggle_profile_view"
             phx-value-view="my_profile_view"
           >
-            <%=t!(@locale,"profile.my_profile")%>
+            <%= t!(@locale, "profile.my_profile") %>
           </button>
 
           <CommonComponents.filter_button
@@ -96,7 +96,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
           >
-            <%=t!(@locale,"profile.my_reports")%>
+            <%= t!(@locale, "profile.my_reports") %>
           </button>
         </div>
       </div>
@@ -129,9 +129,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
         </figure>
         <div class="card-body shadow-md rounded-md">
           <h2 class="card-title"><%= type %></h2>
-          <p><%=t!(@locale,"profile.count_of_reports")%><%= count %></p>
+          <p><%= t!(@locale, "profile.count_of_reports") %><%= count %></p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary"><%=t!(@locale,"profile.see_reports")%></button>
+            <button class="btn btn-primary"><%= t!(@locale, "profile.see_reports") %></button>
           </div>
         </div>
       </div>
@@ -155,6 +155,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
           pictures={pictures}
           report={report}
           locale={@locale}
+          user_is_admin={false}
         />
       <% end %>
     </div>

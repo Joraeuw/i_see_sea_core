@@ -39,7 +39,7 @@ defmodule ISeeSeaWeb.ProfileLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     supports_touch =
       if connected?(socket) do
         socket
@@ -77,9 +77,11 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     pagination = %{page: 1, total_pages: 10}
 
+    locale = Map.get(session, "preferred_locale") || "bg"
+
     new_socket =
       assign(socket,
-        locale: "bg",
+        locale: locale,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         filters: to_form(filters),

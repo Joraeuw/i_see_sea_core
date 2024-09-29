@@ -19,7 +19,7 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     supports_touch =
       if connected?(socket) do
         ISeeSeaWeb.Endpoint.subscribe("reports:updates")
@@ -57,9 +57,11 @@ defmodule ISeeSeaWeb.HomeLive do
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: pagination.page, total_pages: total_pages}
 
+    locale = Map.get(session, "preferred_locale") || "bg"
+
     new_socket =
       assign(socket,
-        locale: "bg",
+        locale: locale,
         is_selecting_location: false,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
@@ -103,10 +105,9 @@ defmodule ISeeSeaWeb.HomeLive do
       <%!-- Desktop Design --%>
 
       <div
-        :if={@current_user == nil}
-        class="tooltip tooltip-error"
-        data-tip="You need to log in first"
-        data-tooltip-style="light"
+        class={if @current_user == nil, do: "tooltip tooltip-error", else: ""}
+        data-tip={if @current_user == nil, do: "You need to log in first", else: nil}
+        data-tooltip-style={if @current_user == nil, do: "light", else: nil}
       >
         <HomeComponents.report_toolbox
           create_report_toolbox_is_open={@create_report_toolbox_is_open}
@@ -115,17 +116,7 @@ defmodule ISeeSeaWeb.HomeLive do
           supports_touch={@supports_touch}
           current_user={@current_user}
           is_selecting_location={@is_selecting_location}
-        />
-      </div>
-
-      <div :if={@current_user != nil}>
-        <HomeComponents.report_toolbox
-          create_report_toolbox_is_open={@create_report_toolbox_is_open}
-          create_report_images={@create_report_images}
-          create_report_type={@create_report_type}
-          supports_touch={@supports_touch}
-          current_user={@current_user}
-          is_selecting_location={@is_selecting_location}
+          locale={@locale}
         />
       </div>
 

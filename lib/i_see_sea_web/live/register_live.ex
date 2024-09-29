@@ -9,11 +9,11 @@ defmodule ISeeSeaWeb.RegisterLive do
     <div class="flex flex-col align-middle rounded-xl shadow-lg shadow-top-bottom mx-auto w-8/12 sm:w-96">
       <.header locale={@locale} class="text-center">
         <:subtitle>
-          <%= t!(@locale,"register.already_registered") %>
+          <%= t!(@locale, "register.already_registered") %>
           <.link navigate={~p"/login"} class="font-semibold text-brand hover:underline text-primary">
-            <%= t!(@locale,"register.log_in") %>
+            <%= t!(@locale, "register.log_in") %>
           </.link>
-          <%= t!(@locale,"register.account_now") %>
+          <%= t!(@locale, "register.account_now") %>
         </:subtitle>
       </.header>
 
@@ -29,18 +29,38 @@ defmodule ISeeSeaWeb.RegisterLive do
         class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full mt-3 space-y-2 shadow-bottom"
       >
         <.error :if={@check_errors}>
-          <%= t!(@locale,"register.sth_went_wrong_check_errors") %>
+          <%= t!(@locale, "register.sth_went_wrong_check_errors") %>
         </.error>
 
-        <.input field={@form[:first_name]} type="text" label={t!(@locale,"register.first_name")} required />
-        <.input field={@form[:last_name]} type="text" label={t!(@locale,"register.last_name")} required />
-        <.input field={@form[:username]} type="text" label={t!(@locale,"register.username")} required />
-        <.input field={@form[:email]} type="email" label={t!(@locale,"register.email")} required />
-        <.input field={@form[:password]} type="password" label={t!(@locale,"register.password")} required />
+        <.input
+          field={@form[:first_name]}
+          type="text"
+          label={t!(@locale, "register.first_name")}
+          required
+        />
+        <.input
+          field={@form[:last_name]}
+          type="text"
+          label={t!(@locale, "register.last_name")}
+          required
+        />
+        <.input
+          field={@form[:username]}
+          type="text"
+          label={t!(@locale, "register.username")}
+          required
+        />
+        <.input field={@form[:email]} type="email" label={t!(@locale, "register.email")} required />
+        <.input
+          field={@form[:password]}
+          type="password"
+          label={t!(@locale, "register.password")}
+          required
+        />
 
         <:actions>
-          <.button phx-disable-with={t!(@locale,"register.creating_account")} class="btn mb-1">
-            <%= t!(@locale,"register.create_account") %>
+          <.button phx-disable-with={t!(@locale, "register.creating_account")} class="btn mb-1">
+            <%= t!(@locale, "register.create_account") %>
           </.button>
         </:actions>
       </.simple_form>
@@ -49,7 +69,7 @@ defmodule ISeeSeaWeb.RegisterLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     changeset = ISeeSeaWeb.Params.Session.changeset(:register)
 
     socket =
@@ -57,7 +77,9 @@ defmodule ISeeSeaWeb.RegisterLive do
       |> assign(trigger_submit: false, check_errors: false)
       |> assign_form(changeset)
 
-    {:ok, assign(socket, locale: "bg"), temporary_assigns: [form: nil]}
+    locale = Map.get(session, "preferred_locale") || "bg"
+
+    {:ok, assign(socket, locale: locale), temporary_assigns: [form: nil]}
   end
 
   @impl true

@@ -10,6 +10,7 @@ defmodule ISeeSeaWeb.HomeComponents do
   attr :create_report_images, :map, required: true
   attr :create_report_type, :string, required: true
   attr :current_user, :map, required: true
+  attr :locale, :string, required: true
 
   def report_toolbox(assigns) do
     ~H"""
@@ -52,6 +53,7 @@ defmodule ISeeSeaWeb.HomeComponents do
         report_type={@create_report_type}
         is_selecting_location={@is_selecting_location}
         current_user={@current_user}
+        locale={@locale}
       />
     </div>
     """
@@ -59,8 +61,8 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   attr :stats_panel_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
-  attr :filters, :map, required: true
-  attr :locale, :string, default: ""  # Set default locale
+  # Set default locale
+  attr :locale, :string, required: true
 
   def stat_home(assigns) do
     ~H"""

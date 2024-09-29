@@ -58,7 +58,13 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   end
 
   defp retrieve_reports_with_live_view_filters(report_type, pagination, [], built_filter) do
-    BaseReport.get_filtered_paginated_reports(report_type, %{filters: built_filter}, pagination)
+    not_deleted_filter = %{"field" => "deleted", "value" => false}
+
+    BaseReport.get_filtered_paginated_reports(
+      report_type,
+      %{filters: [not_deleted_filter | built_filter]},
+      pagination
+    )
   end
 
   defp parse_live_view_filter({"start_date", value}) do

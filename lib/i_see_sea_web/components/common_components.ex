@@ -10,7 +10,20 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def pagination(assigns) do
     ~H"""
-    <div class="join">
+    <div :if={@pagination.total_pages not in [0, 1] && @pagination.total_pages < 3} class="join">
+      <%= for page <- 1..@pagination.total_pages do %>
+        <button
+          class={"join-item btn #{if page == @pagination.page, do: "btn-primary", else: ""}"}
+          phx-click="change_page"
+          phx-value-page={page}
+          disabled={page == @pagination.page || page > @pagination.total_pages}
+        >
+          <%= page %>
+        </button>
+      <% end %>
+    </div>
+
+    <div :if={@pagination.total_pages >= 3} class="join">
       <button
         class="join-item btn"
         phx-click="change_page"
@@ -19,7 +32,12 @@ defmodule ISeeSeaWeb.CommonComponents do
       >
         «
       </button>
-      <button class="join-item btn" phx-click="change_page" phx-value-page={1}>
+      <button
+        class="join-item btn"
+        phx-click="change_page"
+        phx-value-page={1}
+        disabled={@pagination.page == 1}
+      >
         1
       </button>
       <%= if @pagination.page > 3 do %>
@@ -31,6 +49,7 @@ defmodule ISeeSeaWeb.CommonComponents do
           class={"join-item btn #{if page == @pagination.page, do: "btn-primary", else: ""}"}
           phx-click="change_page"
           phx-value-page={page}
+          disabled={@pagination.page == page}
         >
           <%= page %>
         </button>
@@ -39,7 +58,12 @@ defmodule ISeeSeaWeb.CommonComponents do
       <%= if @pagination.page < @pagination.total_pages - 2 do %>
         <button class="join-item btn btn-disabled">...</button>
       <% end %>
-      <button class="join-item btn" phx-click="change_page" phx-value-page={@pagination.total_pages}>
+      <button
+        class="join-item btn"
+        phx-click="change_page"
+        phx-value-page={@pagination.total_pages}
+        disabled={@pagination.page == @pagination.total_pages}
+      >
         <%= @pagination.total_pages %>
       </button>
       <button
@@ -60,16 +84,18 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_button(assigns) do
     ~H"""
-    <button class={@class || "btn"} onclick="filter_modal.showModal()"><%= t!(@locale,"home.filters")%></button>
+    <button class={@class || "btn"} onclick="filter_modal.showModal()">
+      <%= t!(@locale, "home.filters") %>
+    </button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form
           for={@filters}
-          phx-submit="filter_reports"
+          phx-submit="apply_filter"
           class="flex flex-col items-center mt-10 space-y-8 bg-white"
           onsubmit="document.getElementById('filter_modal').close()"
         >
-          <.filter_base name={t!(@locale,"home.date_range")}>
+          <.filter_base name={t!(@locale, "home.date_range")}>
             <div class="relative z-30">
               <CoreComponents.date_range_picker
                 id="date_range_picker"
@@ -80,7 +106,7 @@ defmodule ISeeSeaWeb.CommonComponents do
               />
             </div>
           </.filter_base>
-          <.filter_base name={t!(@locale,"home.report_type")}>
+          <.filter_base name={t!(@locale, "home.report_type")}>
             <CoreComponents.input
               type="select"
               field={@filters[:report_type]}
@@ -93,7 +119,7 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select> --%>
           </.filter_base>
           <:actions>
-            <CoreComponents.button phx-disable-with={t!(@locale,"home.applying_filters")} class="btn">
+            <CoreComponents.button phx-disable-with={t!(@locale, "home.applying_filters")} class="btn">
               Apply
             </CoreComponents.button>
           </:actions>

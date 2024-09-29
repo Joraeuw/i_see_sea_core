@@ -62,7 +62,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         <CoreComponents.input field={@form[:report_type]} value={@report_type} type="hidden" />
         <CoreComponents.input field={@form[:longitude]} type="hidden" required />
         <CoreComponents.input field={@form[:latitude]} type="hidden" required />
-        <.create_report_window form={@form} report_type={@report_type} />
+        <.create_report_window form={@form} report_type={@report_type} locale={@locale} />
 
         <CoreComponents.input
           type="textarea"
@@ -136,6 +136,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   attr :report_type, :string, required: true
   attr :form, :map, required: true
+  attr :locale, :string, required: true
 
   def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
     ~H"""

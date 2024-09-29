@@ -105,7 +105,6 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :kind, :atom, values: [:info, :error], doc: "used for styling and flash lookup"
   attr :rest, :global, doc: "the arbitrary HTML attributes to add to the flash container"
 
-
   slot :inner_block, doc: "the optional inner block that renders the flash message"
 
   def flash(assigns) do
@@ -147,33 +146,32 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :flash, :map, required: true, doc: "the map of flash messages"
   attr :id, :string, default: "flash-group", doc: "the optional id of flash container"
 
-
   def flash_group(assigns) do
     ~H"""
     <div id={@id}>
-      <.flash kind={:info} title={t!(@locale,"home.success")} flash={@flash} />
-      <.flash kind={:error} title={t!(@locale,"home.error")} flash={@flash} />
+      <.flash kind={:info} title={t!(@locale, "home.success")} flash={@flash} />
+      <.flash kind={:error} title={t!(@locale, "home.error")} flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
-        title={t!(@locale,"home.no_internet")}
+        title={t!(@locale, "home.no_internet")}
         phx-disconnected={show(".phx-client-error #client-error")}
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= t!(@locale,"home.attempt_to_reconnect") %>
+        <%= t!(@locale, "home.attempt_to_reconnect") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={t!(@locale,"home.sth_went_wrong")}
+        title={t!(@locale, "home.sth_went_wrong")}
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%=t!(@locale,"home.back_on_track") %>
+        <%= t!(@locale, "home.back_on_track") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -214,7 +212,7 @@ defmodule ISeeSeaWeb.CoreComponents do
         <%= render_slot(@inner_block, f) %>
         <div
           :for={action <- @actions}
-          class={["mt-2 flex items-center justify-between gap-6 w-[90%]", @inner_class]}
+          class={["mt-2 flex items-center justify-between gap-6 w-8/12 w-[90%]", @inner_class]}
         >
           <%= render_slot(action, f) %>
         </div>
@@ -509,8 +507,6 @@ defmodule ISeeSeaWeb.CoreComponents do
 
   slot :action, doc: "the slot for showing user actions in the last table column"
 
-
-
   def table(assigns) do
     assigns =
       with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
@@ -524,7 +520,7 @@ defmodule ISeeSeaWeb.CoreComponents do
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= t!(@locale,"home.actions") %></span>
+              <span class="sr-only"><%= t!(@locale, "home.actions") %></span>
             </th>
           </tr>
         </thead>

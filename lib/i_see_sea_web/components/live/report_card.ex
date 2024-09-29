@@ -39,16 +39,16 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
               <button
                 phx-click="toggle_flip"
                 phx-target={@myself}
-                class={"btn btn-primary " <> (if @show_extra_button, do: "col-span-9", else: "col-span-12")}
+                class={"btn btn-primary " <> (if @user_is_admin, do: "col-span-9", else: "col-span-12")}
               >
                 Details
               </button>
 
-              <%= if @show_extra_button do %>
+              <%= if @user_is_admin do %>
                 <button
                   phx-click="delete_report"
                   phx-target={@myself}
-                  phx-value-id={@report.id}
+                  phx-value-report-id={@report.id}
                   class="btn_delete flex items-center justify-center col-span-3"
                 >
                   <img class="bg-contain h-[31px] w-[36px]" src="/images/report_icons/trash_icon.svg" />
@@ -75,7 +75,13 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
   @impl true
   def mount(socket) do
-    {:ok, assign(socket, :is_back, false)}
+    {:ok, assign(socket, is_back: false)}
+  end
+
+  @impl true
+  def update(assigns, socket) do
+    user_is_admin = Map.get(assigns, :user_is_admin, false)
+    {:ok, assign(socket, Map.put(assigns, :user_is_admin, user_is_admin))}
   end
 
   @impl true
@@ -83,32 +89,22 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
     {:noreply, assign(socket, :is_back, !socket.assigns.is_back)}
   end
 
-  def update(assigns, socket) do
-    show_extra_button = Map.get(assigns, :show_extra_button, false)
-    {:ok, assign(socket, assigns |> Map.put(:show_extra_button, show_extra_button))}
-  end
-
   @impl true
-  def handle_event("delete_report", %{"id" => id}, socket) do
-    case BaseReport.soft_delete(id) do
-      {:ok, report} ->
-        Broadcaster.broadcast!("reports:updates", "delete_marker", %{report_id: report.id})
-        # Set a success flash message
+  def handle_event("delete_report", %{"report-id" => report_id}, socket) do
+    case BaseReport.soft_delete(report_id) do
+      {:ok, _} ->
+        Broadcaster.broadcast!("reports:updates", "delete_marker", %{report_id: report_id})
+
         socket =
           socket
           |> put_flash(:info, "Report deleted successfully.")
-          # Change to the correct route
-          |> push_patch(to: "/reports")
 
         {:noreply, socket}
 
       {:error, :not_found, BaseReport} ->
-        # Set an error flash message
         socket =
           socket
           |> put_flash(:error, "Report not found.")
-          # Change to the correct route
-          |> push_patch(to: "/reports")
 
         {:noreply, socket}
     end
@@ -337,6 +333,17 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
       </div>
       <div class="flex justify-end w-11/12 mb-[10px]"><%= formatted_date %></div>
     </div>
+    """
+  end
+
+  defp back_of_report(
+         %{
+           report: report
+         } = assigns
+       ) do
+    IO.inspect(report)
+
+    ~H"""
     """
   end
 end

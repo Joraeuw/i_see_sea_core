@@ -5,6 +5,6 @@ defmodule ISeeSeaWeb.Trans do
   @default_locale "bg"
   use Linguist.Vocabulary
 
-  locale "en", Path.join([__DIR__, "/trans/en.exs"])
-  locale "bg", Path.join([__DIR__, "/trans/bg.exs"])
+  locale("en", Path.join([__DIR__, "/trans/en.exs"]))
+  locale("bg", Path.join([__DIR__, "/trans/bg.exs"]))
 end

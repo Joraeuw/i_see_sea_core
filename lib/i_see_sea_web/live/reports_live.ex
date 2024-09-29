@@ -1,12 +1,19 @@
 defmodule ISeeSeaWeb.ReportsLive do
-  alias ISeeSeaWeb.HomeComponents
-  alias ISeeSea.DB.Models.BaseReport
   use ISeeSeaWeb, :live_view
 
+  alias ISeeSeaWeb.CommonComponents
+  alias ISeeSeaWeb.HomeComponents
+
+  alias ISeeSea.DB.Logic.ReportOperations
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.DB.Models.BaseReport
+
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     supports_touch =
       if connected?(socket) do
+        ISeeSeaWeb.Endpoint.subscribe("reports:updates")
+
         socket
         |> get_connect_params()
         |> Map.get("supports_touch", false)
@@ -24,23 +31,26 @@ defmodule ISeeSeaWeb.ReportsLive do
 
     reports_pagination = %{page_size: 100, page: 1}
 
-    reports =
-      BaseReport.all!([
-        :jellyfish_report,
-        :meteorological_report,
-        :atypical_activity_report,
-        :other_report,
-        :pictures,
-        :user,
-        pollution_report: :pollution_types
-      ])
+    {:ok, reports, pagination} =
+      ReportOperations.retrieve_reports_with_live_view_filters(
+        report_type,
+        reports_pagination,
+        filters
+      )
+
+    total_pages = ReportOperations.get_total_pages(pagination)
+    pagination = %{page: pagination.page, total_pages: total_pages}
+
+    locale = Map.get(session, "preferred_locale") || "bg"
 
     new_socket =
       assign(socket,
+        locale: locale,
+        current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         stats_panel_is_open: false,
         filters: to_form(filters),
-        pagination: reports_pagination,
+        pagination: pagination,
         reports: reports,
         sidebar_open: true,
         filter_menu_is_open: false
@@ -53,9 +63,9 @@ defmodule ISeeSeaWeb.ReportsLive do
   def render(assigns) do
     ~H"""
     <div class="flex flex-col items-center justify-start">
+      <CommonComponents.pagination pagination={@pagination} />
       <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto">
         <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @reports do %>
-          <!-- Polaroid card container with perspective for 3D effect -->
           <.live_component
             module={ISeeSeaWeb.ReportCardLiveComponent}
             id={report.id}
@@ -63,10 +73,11 @@ defmodule ISeeSeaWeb.ReportsLive do
             comment={comment}
             pictures={pictures}
             report={report}
-            show_extra_button={true}
+            user_is_admin={User.is_admin?(@current_user)}
           />
         <% end %>
       </div>
+      <CommonComponents.pagination pagination={@pagination} />
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
@@ -85,5 +96,70 @@ defmodule ISeeSeaWeb.ReportsLive do
   @impl true
   def handle_event("toggle_filters", _params, socket) do
     {:noreply, assign(socket, :filter_menu_is_open, !socket.assigns.filter_menu_is_open)}
+  end
+
+  @impl true
+  def handle_event("filter_reports", filters, socket) do
+    {:ok, reports, %{page: page} = pagination} =
+      ReportOperations.retrieve_reports_with_live_view_filters(
+        filters["report_type"],
+        socket.assigns.pagination,
+        filters
+      )
+
+    {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
+
+    stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
+
+    total_pages = ReportOperations.get_total_pages(pagination)
+    pagination = %{page: page, total_pages: total_pages}
+
+    socket =
+      socket
+      |> assign(:pagination, pagination)
+      |> assign(:reports, reports)
+      |> push_event("filters_updated", %{
+        stop_live_tracker: stop_live_tracker,
+        reports: Focus.view(reports, %Lens{view: Lens.expanded()})
+      })
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("change_page", %{"page" => page}, socket) do
+    page = String.to_integer(page)
+
+    pagination = %{socket.assigns.pagination | page: page}
+
+    IO.inspect(socket.assigns.filters)
+
+    {:ok, new_reports, new_pagination} =
+      ReportOperations.retrieve_reports_with_live_view_filters(
+        socket.assigns.filters["report_type"],
+        pagination,
+        socket.assigns.filters.params
+      )
+
+    socket = assign(socket, reports: new_reports, pagination: new_pagination)
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(%{event: "add_marker", payload: report}, socket) do
+    {:noreply, assign(socket, reports: [report | socket.assigns.reports])}
+  end
+
+  @impl true
+  def handle_info(%{event: "delete_marker", payload: %{report_id: deleted_report_id}}, socket) do
+    IO.inspect("called delete")
+
+    reports =
+      Enum.reject(socket.assigns.reports, fn %{id: report_id} ->
+        report_id === String.to_integer(deleted_report_id)
+      end)
+
+    {:noreply, assign(socket, reports: reports)}
   end
 end
