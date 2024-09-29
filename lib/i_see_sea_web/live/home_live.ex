@@ -89,8 +89,6 @@ defmodule ISeeSeaWeb.HomeLive do
   def render(assigns) do
     ~H"""
     <div class="relative md:inline flex flex-col mt-2 mx-4 md:mx-28 w-10/12 h-full">
-
-
       <div id="map_wrapper" class="absolute h-full w-full self-start" phx-update="ignore">
         <div
           id="map"
@@ -103,19 +101,21 @@ defmodule ISeeSeaWeb.HomeLive do
 
       <%!-- Desktop Design --%>
 
-
-      <div :if={@current_user == nil} class="tooltip tooltip-error" data-tip="You need to log in first" data-tooltip-style="light">
-    <HomeComponents.report_toolbox
-      create_report_toolbox_is_open={@create_report_toolbox_is_open}
-      create_report_images={@create_report_images}
-      create_report_type={@create_report_type}
-      supports_touch={@supports_touch}
-      current_user={@current_user}
-      is_selecting_location={@is_selecting_location}
-    />
-    </div>
-
-
+      <div
+        :if={@current_user == nil}
+        class="tooltip tooltip-error"
+        data-tip="You need to log in first"
+        data-tooltip-style="light"
+      >
+        <HomeComponents.report_toolbox
+          create_report_toolbox_is_open={@create_report_toolbox_is_open}
+          create_report_images={@create_report_images}
+          create_report_type={@create_report_type}
+          supports_touch={@supports_touch}
+          current_user={@current_user}
+          is_selecting_location={@is_selecting_location}
+        />
+      </div>
 
       <div :if={@current_user != nil}>
         <HomeComponents.report_toolbox
@@ -171,7 +171,8 @@ defmodule ISeeSeaWeb.HomeLive do
       cond do
         socket.assigns.create_report_type == report_type &&
             socket.assigns.create_report_toolbox_is_open ->
-          {:noreply, assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
+          {:noreply,
+           assign(socket, create_report_toolbox_is_open: false, create_report_type: nil)}
 
         socket.assigns.create_report_type != report_type &&
             socket.assigns.create_report_toolbox_is_open ->
@@ -184,7 +185,6 @@ defmodule ISeeSeaWeb.HomeLive do
       end
     end
   end
-
 
   def handle_event("exit_dialog", %{"element_id" => element_id}, socket) do
     if(

@@ -63,4 +63,13 @@ defmodule ISeeSea.DB.Models.User do
   end
 
   defp put_password_hash(changeset), do: changeset
+
+  def is_admin?(%__MODULE__{id: user_id, role_id: user_role_id}) do
+    {:ok, admin} = Role.get_by(%{name: "admin"})
+
+    IO.inspect(user_id)
+    user_role_id === admin.id
+  end
+
+  def is_admin?(nil), do: false
 end

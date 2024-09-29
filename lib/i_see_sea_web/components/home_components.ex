@@ -59,7 +59,6 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   attr :stats_panel_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
-  attr :filters, :map, required: true
 
   def stat_home(assigns) do
     ~H"""

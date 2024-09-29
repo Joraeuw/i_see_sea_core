@@ -151,6 +151,20 @@ defmodule ISeeSea.DB.DefaultModel do
         end
       end
 
+      defp process_binding({:pollution_report, :pollution_types}, q) do
+        join(
+          q,
+          :left,
+          [br],
+          entity in assoc(br, :pollution_report),
+          as: :pollution_report
+        )
+        |> join(:left, [pollution_report: pr], rt in assoc(pr, :pollution_types),
+          as: :pollution_types
+        )
+        |> IO.inspect()
+      end
+
       defp process_binding(current_binding, q) do
         join(q, :left, [current_binding], entity in assoc(current_binding, ^current_binding),
           as: ^current_binding

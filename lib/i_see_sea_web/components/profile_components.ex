@@ -149,6 +149,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
           comment={comment}
           pictures={pictures}
           report={report}
+          user_is_admin={false}
         />
       <% end %>
     </div>
