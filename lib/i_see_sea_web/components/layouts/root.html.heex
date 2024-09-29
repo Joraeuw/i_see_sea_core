@@ -149,7 +149,7 @@
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
               <details class="dropdown w-8/12 z-50">
-                <summary class="btn m-1 w-[130px]"><%= gettext("Menu") %></summary>
+                <summary class="btn m-1 w-[130px]"><%= t!(@locale,"nav.menu") %></summary>
                 <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
                   <li>
                     <.link class="z-50 " navigate={~p"/"}>

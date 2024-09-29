@@ -2,7 +2,7 @@ defmodule ISeeSeaWeb.Trans do
   @moduledoc """
   Translates the text based on locale from session
   """
-
+  @default_locale "bg"
   use Linguist.Vocabulary
 
   locale "en", Path.join([__DIR__, "/trans/en.exs"])
