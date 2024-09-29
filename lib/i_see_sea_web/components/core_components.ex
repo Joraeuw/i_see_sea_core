@@ -17,6 +17,8 @@ defmodule ISeeSeaWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
+
+  import ISeeSeaWeb.Trans
   import ISeeSeaWeb.Gettext
 
   @doc """
@@ -147,29 +149,29 @@ defmodule ISeeSeaWeb.CoreComponents do
   def flash_group(assigns) do
     ~H"""
     <div id={@id}>
-      <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
-      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash kind={:info} title={t!(@locale, "home.success")} flash={@flash} />
+      <.flash kind={:error} title={t!(@locale, "home.error")} flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
-        title={gettext("We can't find the internet")}
+        title={t!(@locale, "home.no_internet")}
         phx-disconnected={show(".phx-client-error #client-error")}
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        <%= t!(@locale, "home.attempt_to_reconnect") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={gettext("Something went wrong!")}
+        title={t!(@locale, "home.sth_went_wrong")}
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        <%= t!(@locale, "home.back_on_track") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -201,6 +203,7 @@ defmodule ISeeSeaWeb.CoreComponents do
 
   slot :inner_block, required: true
   slot :actions, doc: "the slot for form actions, such as a submit button"
+  attr :locale, :string, default: "bg"
 
   def simple_form(assigns) do
     ~H"""
@@ -209,7 +212,7 @@ defmodule ISeeSeaWeb.CoreComponents do
         <%= render_slot(@inner_block, f) %>
         <div
           :for={action <- @actions}
-          class={["mt-2 flex items-center justify-between gap-6 w-8/12", @inner_class]}
+          class={["mt-2 flex items-center justify-between gap-6 w-8/12 w-[90%]", @inner_class]}
         >
           <%= render_slot(action, f) %>
         </div>
@@ -457,6 +460,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   Renders a header with title.
   """
   attr :class, :string, default: nil
+  attr :locale, :string, default: "bg"
 
   slot :inner_block, required: true
   slot :subtitle
@@ -516,7 +520,7 @@ defmodule ISeeSeaWeb.CoreComponents do
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only"><%= t!(@locale, "home.actions") %></span>
             </th>
           </tr>
         </thead>

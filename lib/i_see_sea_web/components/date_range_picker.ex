@@ -23,7 +23,10 @@ defmodule ISeeSeaWeb.DateRangePicker do
           type="text"
           value={date_range_display(@range_start, @range_end)}
         />
-        <.icon name="hero-calendar" class="absolute top-2 right-3 flex text-gray-400 mt-[9px] mr-[7px]" />
+        <.icon
+          name="hero-calendar"
+          class="absolute top-2 right-3 flex text-gray-400 mt-[9px] md:mr-[7px]"
+        />
       </div>
 
       <div
@@ -67,7 +70,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
 
           <div id="click_today" class="text-sm text-center">
             <.link phx-click="today" phx-target={@myself} class="text-gray-700 hover:text-gray-500">
-              <%= gettext("Today") %>
+              <%= t!(@locale, "home.today") %>
             </.link>
           </div>
 

@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.CommonComponents
 
+  import ISeeSeaWeb.Trans
   import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
@@ -19,6 +20,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   attr :stats_panel_is_open, :boolean, required: true
 
   attr :pagination, :map, required: true
+  attr :locale, :string, default: "bg"
 
   def index(assigns) do
     ~H"""
@@ -58,7 +60,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%= gettext("Save") %>
+                <%= t!(@locale, "profile.save") %>
               </button>
 
               <button
@@ -67,7 +69,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%= gettext("Cancel") %>
+                <%= t!(@locale, "profile.cancel") %>
               </button>
             </div>
           </div>
@@ -78,7 +80,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-click="toggle_profile_view"
             phx-value-view="my_profile_view"
           >
-            <%= gettext("My Profile") %>
+            <%= t!(@locale, "profile.my_profile") %>
           </button>
 
           <CommonComponents.filter_button
@@ -94,7 +96,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
           >
-            <%= gettext("My Reports") %>
+            <%= t!(@locale, "profile.my_reports") %>
           </button>
         </div>
       </div>
@@ -102,6 +104,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
       <.my_report_summary_view
         :if={@view === "my_profile_view"}
         user_report_summary={@user_report_summary}
+        locale={@locale}
       />
 
       <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
@@ -112,6 +115,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   end
 
   attr :user_report_summary, :list, required: true
+  attr :locale, :string, default: "bg"
 
   def my_report_summary_view(assigns) do
     ~H"""
@@ -125,9 +129,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
         </figure>
         <div class="card-body shadow-md rounded-md">
           <h2 class="card-title"><%= type %></h2>
-          <p><%= gettext("Count of your reports: ") %><%= count %></p>
+          <p><%= t!(@locale, "profile.count_of_reports") %><%= count %></p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary"><%= gettext("See Reports") %></button>
+            <button class="btn btn-primary"><%= t!(@locale, "profile.see_reports") %></button>
           </div>
         </div>
       </div>
@@ -136,6 +140,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   end
 
   attr :user_reports, :list, required: true
+  attr :locale, :string, default: "bg"
 
   def my_report_view(assigns) do
     ~H"""
@@ -149,6 +154,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
           comment={comment}
           pictures={pictures}
           report={report}
+          locale={@locale}
           user_is_admin={false}
         />
       <% end %>

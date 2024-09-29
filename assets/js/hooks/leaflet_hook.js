@@ -44,19 +44,18 @@ const LeafletMap = {
     this.handleEvent("delete_marker", (marker) => {
       this.deleteMarker(marker.report_id);
     });
-
+    
     this.handleEvent("filters_updated", (params) => {
       console.log(params);
 
       let { reports, stop_live_tracker } = params;
+      stop_live_tracker=false;
       if (stop_live_tracker) {
-        this.removeEventListener("add_marker");
+        this.removeEventListener("add_marker", this.addMarker);
         this.trackingNewMarkers = false;
       } else {
         if (!this.trackingNewMarkers) {
-          this.handleEvent("add_marker", (marker) => {
-            this.addMarker(marker);
-          });
+          this.handleEvent("add_marker", this.addMarker);
           this.trackingNewMarkers = true;
         }
       }

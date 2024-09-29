@@ -104,43 +104,45 @@
             <div class="hidden sm:flex w-5/5 justify-around space-x-1">
               <.link class="z-10" navigate={~p"/"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Home") %>
+                  <%= t!(@locale, "nav.home") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/profile"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Profile") %>
+                  <%= t!(@locale, "nav.profile") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/reports-list"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Reports") %>
+                  <%= t!(@locale, "nav.reports") %>
                 </button>
               </.link>
               <div class="dropdown dropdown-bottom">
-                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">More</div>
+                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">
+                  <%= t!(@locale, "nav.more") %>
+                </div>
                 <ul
                   tabindex="0"
                   class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow"
                 >
                   <li>
                     <.link class="z-10" navigate={~p"/terms-and-conditions"}>
-                      <%= gettext("Terms of use") %>
+                      <%= t!(@locale, "nav.terms_of_use") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/about"}>
-                      <%= gettext("Our purpose") %>
+                      <%= t!(@locale, "nav.our_purpose") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/contacts"}>
-                      <%= gettext("Contacts") %>
+                      <%= t!(@locale, "nav.contacts") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/privacy-policy"}>
-                      <%= gettext("Privacy and policy") %>
+                      <%= t!(@locale, "nav.privacy_and_policy") %>
                     </.link>
                   </li>
                 </ul>
@@ -148,40 +150,51 @@
             </div>
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
-              <div class="slider-container">
-                <!-- Left arrow -->
-                <button class="arrow-left hidden">
-                  <img src="/images/home-icons/left-arrow-icon.svg" />
-                </button>
-                <!-- The slider itself -->
-                <div class="slider-wrapper">
-                  <.link class="z-10 slider-item" navigate={~p"/"}>
-                    <%= gettext("Home") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/profile"}>
-                    <%= gettext("Profile") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/reports-list"}>
-                    <%= gettext("Reports") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/about"}>
-                    <%= gettext("Our purpose") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/terms-and-conditions"}>
-                    <%= gettext("Terms of use") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/privacy-policy"}>
-                    <%= gettext("Privacy Policy") %>
-                  </.link>
-                  <.link class="z-10 slider-item" navigate={~p"/contacts"}>
-                    <%= gettext("Contacts") %>
-                  </.link>
-                </div>
+              <details class="dropdown w-8/12 z-50">
+                <summary class="btn m-1 w-[130px]"><%= gettext("Menu") %></summary>
+                <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
+                  <li>
+                    <.link class="z-50 " navigate={~p"/"}>
+                      <%= t!(@locale, "nav.home") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/profile"}>
+                      <%= t!(@locale, "nav.profile") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/reports-list"}>
+                      <%= t!(@locale, "nav.reports") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/about"}>
+                      <%= t!(@locale, "nav.our_purpose") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/terms-and-conditions"}>
+                      <%= t!(@locale, "nav.terms_of_use") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/privacy-policy"}>
+                      <%= t!(@locale, "nav.privacy_policy") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/contacts"}>
+                      <%= t!(@locale, "nav.contacts") %>
+                    </.link>
+                  </li>
+                </ul>
+              </details>
+              <!-- The slider itself -->
+                
+                 
+               
                 <!-- Right arrow -->
-                <button class="arrow-right">
-                  <img src="/images/home-icons/right-arrow-icon.svg" />
-                </button>
-              </div>
             </div>
           </div>
           <!-- User and login images -->
@@ -198,16 +211,14 @@
         </button>
         <!-- Login Button -->
         <.link
-        
           class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
           navigate={~p"/login"}
         >
-           <%= if assigns[:current_user] do %>
-              <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
-            <% else %>
-             <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
-            <% end %>
-          
+          <%= if assigns[:current_user] do %>
+            <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
+          <% else %>
+            <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
+          <% end %>
         </.link>
       </div>
     </nav>

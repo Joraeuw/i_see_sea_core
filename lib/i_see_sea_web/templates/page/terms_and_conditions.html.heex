@@ -1,8 +1,8 @@
 <div class="conteiner">
-  <h1 class="header"><%= gettext("TERMS OF USE") %></h1>
-  <p class="bold_blue"><%= gettext("1. AGREEMENT TO TERMS") %></p>
+  <h1 class="header"><%= t!(@locale, "TERMS OF USE") %></h1>
+  <p class="bold_blue"><%= t!(@locale, "1. AGREEMENT TO TERMS") %></p>
   <p class="nor_blue">
-    <%= gettext("These Terms of Use constitute a legally binding agreement made between you,
+    <%= t!(@locale, "These Terms of Use constitute a legally binding agreement made between you,
     whether personally or on behalf of an entity (\"you\") and (\"Company\" \"we,\"
     \"us,\" or \"our\"), concerning your access to and use of the www.icc.com website
     as well as any other media form, media channel, mobile website or mobile
@@ -35,9 +35,9 @@
     a minor, you must have your parent or guardian read and agree to these Terms
     of Use prior to you using the Site") %>
   </p>
-  <p class="bold_blue"><%= gettext("2. INTELLECTUAL PROPERTY RIGHTS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "2. INTELLECTUAL PROPERTY RIGHTS") %></p>
   <p class="nor_blue">
-    <%= gettext("Unless otherwise indicated, the Site is our proprietary property and all
+    <%= t!(@locale, "Unless otherwise indicated, the Site is our proprietary property and all
     source code, databases, functionality, software, website designs, audio,
     video, text, photographs, and graphics on the Site (collectively, the
     \"Content\") and the trademarks, service marks, and logos contained therein
@@ -57,9 +57,9 @@
     your personal, non-commercial use. We reserve all rights not expressly
     granted to you in and to the Site, the Content and the Marks.") %>
   </p>
-  <p class="bold_blue"><%= gettext("3. USER REPRESENTATIONS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "3. USER REPRESENTATIONS") %></p>
   <p class="nor_blue">
-    <%= gettext("By using the Site, you represent and warrant that: (1) all registration
+    <%= t!(@locale, "By using the Site, you represent and warrant that: (1) all registration
     information you submit will be true, accurate, current, and complete; (2)
     you will maintain the accuracy of such information and promptly update such
     registration information as necessary; (3) you have the legal capacity and
@@ -74,55 +74,58 @@
     terminate your account and refuse any and all current or future use of the
     Site (or any portion thereof).") %>
   </p>
-  <p class="bold_blue"><%= gettext("4. USER REGISTRATION") %></p>
+  <p class="bold_blue"><%= t!(@locale, "4. USER REGISTRATION") %></p>
   <p class="nor_blue">
-    <%= gettext("You may be required to register with the Site. You agree to keep your
+    <%= t!(@locale, "You may be required to register with the Site. You agree to keep your
     password confidential and will be responsible for all use of your account
     and password. We reserve the right to remove, reclaim, or change a username
     you select if we determine, in our sole discretion, that such username is
     inappropriate, obscene, or otherwise objectionable.") %>
   </p>
-  <p class="bold_blue"><%= gettext("5. PROHIBITED ACTIVITIES") %></p>
+  <p class="bold_blue"><%= t!(@locale, "5. PROHIBITED ACTIVITIES") %></p>
   <ul class="ul1">
     <li>
-      <%= gettext("You may not access or use the Site for any purpose other than that for
+      <%= t!(@locale, "You may not access or use the Site for any purpose other than that for
       which we make the Site available. The Site may not be used in connection
       with any commercial endeavors except those that are specifically endorsed
       or approved by us. As a user of the Site, you agree not to:") %>
     </li>
     <li>
-      <%= gettext("Systematically retrieve data or other content from the Site to create or
+      <%= t!(@locale, "Systematically retrieve data or other content from the Site to create or
       compile, directly or indirectly, a collection, compilation, database, or
       directory without written permission from us.") %>
     </li>
     <li>
-      <%= gettext("Trick, defraud, or mislead us and other users, especially in any attempt
+      <%= t!(@locale, "Trick, defraud, or mislead us and other users, especially in any attempt
       to learn sensitive account information such as user passwords.") %>
     </li>
     <li>
-      <%= gettext("ircumvent, disable, or otherwise interfere with security-related features
+      <%= t!(@locale, "ircumvent, disable, or otherwise interfere with security-related features
       of the Site, including features that prevent or restrict the use or
       copying of any Content or enforce limitations on the use of the Site
       and/or the Content contained therein.") %>
     </li>
     <li>
-      <%= gettext("Disparage, tarnish, or otherwise harm, in our opinion, us and/or the Site.") %>
+      <%= t!(
+        @locale,
+        "Disparage, tarnish, or otherwise harm, in our opinion, us and/or the Site."
+      ) %>
     </li>
     <li>
-      <%= gettext("Use any information obtained from the Site in order to harass, abuse, or
+      <%= t!(@locale, "Use any information obtained from the Site in order to harass, abuse, or
       harm another person.") %>
     </li>
     <li>
-      <%= gettext("Make improper use of our support services or submit false reports of abuse
+      <%= t!(@locale, "Make improper use of our support services or submit false reports of abuse
       or misconduct.") %>
     </li>
     <li>
-      <%= gettext("Use the Site in a manner inconsistent with any applicable laws or
+      <%= t!(@locale, "Use the Site in a manner inconsistent with any applicable laws or
       regulations.") %>
     </li>
-    <li><%= gettext("Engage in unauthorized framing of or linking to the Site.") %></li>
+    <li><%= t!(@locale, "Engage in unauthorized framing of or linking to the Site.") %></li>
     <li>
-      <%= gettext("Upload or transmit (or attempt to upload or transmit) viruses, Trojan
+      <%= t!(@locale, "Upload or transmit (or attempt to upload or transmit) viruses, Trojan
       horses, or other material, including excessive use of capital letters and
       spamming (continuous posting of repetitive text), that interferes with any
       party's uninterrupted use and enjoyment of the Site or modifies, impairs,
@@ -130,19 +133,19 @@
       operation, or maintenance of the Site.") %>
     </li>
     <li>
-      <%= gettext("Engage in any automated use of the system, such as using scripts to send
+      <%= t!(@locale, "Engage in any automated use of the system, such as using scripts to send
       comments or messages, or using any data mining, robots, or similar data
       gathering and extraction tools.") %>
     </li>
     <li>
-      <%= gettext("Delete the copyright or other proprietary rights notice from any Content.") %>
+      <%= t!(@locale, "Delete the copyright or other proprietary rights notice from any Content.") %>
     </li>
     <li>
-      <%= gettext("Attempt to impersonate another user or person or use the username of
+      <%= t!(@locale, "Attempt to impersonate another user or person or use the username of
       another user.") %>
     </li>
     <li>
-      <%= gettext("Upload or transmit (or attempt to upload or transmit) any material that
+      <%= t!(@locale, "Upload or transmit (or attempt to upload or transmit) any material that
       acts as a passive or active information collection or transmission
       mechanism, including, without limitation, clear graphics interchange
       formats (\"gifs\"), 1x1 pixels, web bugs, cookies, or other similar devices
@@ -150,53 +153,53 @@
       \"pcms\").") %>
     </li>
     <li>
-      <%= gettext("Interfere with, disrupt, or create an undue burden on the Site or the
+      <%= t!(@locale, "Interfere with, disrupt, or create an undue burden on the Site or the
       networks or services connected to the Site.") %>
     </li>
     <li>
-      <%= gettext("Harass, annoy, intimidate, or threaten any of our employees or agents
+      <%= t!(@locale, "Harass, annoy, intimidate, or threaten any of our employees or agents
       engaged in providing any portion of the Site to you.") %>
     </li>
     <li>
-      <%= gettext("Attempt to bypass any measures of the Site designed to prevent or restrict
+      <%= t!(@locale, "Attempt to bypass any measures of the Site designed to prevent or restrict
       access to the Site, or any portion of the Site.") %>
     </li>
     <li>
-      <%= gettext("Copy or adapt the Site's software, including but not limited to Flash,
+      <%= t!(@locale, "Copy or adapt the Site's software, including but not limited to Flash,
       PHP, HTML, JavaScript, or other code.") %>
     </li>
     <li>
-      <%= gettext("Except as permitted by applicable law, decipher, decompile, disassemble,
+      <%= t!(@locale, "Except as permitted by applicable law, decipher, decompile, disassemble,
       or reverse engineer any of the software comprising or in any way making up
       a part of the Site.") %>
     </li>
     <li>
-      <%= gettext("Except as may be the result of standard search engine or Internet browser
+      <%= t!(@locale, "Except as may be the result of standard search engine or Internet browser
       usage, use, launch, develop, or distribute any automated system,
       including, without limitation, any spider, robot, cheat utility, scraper,
       or offline reader that accesses the Site, or using or launching any
       unauthorized script or other software.") %>
     </li>
     <li>
-      <%= gettext("Use a buying agent or purchasing agent to make purchases on the Site.") %>
+      <%= t!(@locale, "Use a buying agent or purchasing agent to make purchases on the Site.") %>
     </li>
     <li>
-      <%= gettext("Make any unauthorized use of the Site, including collecting usernames
+      <%= t!(@locale, "Make any unauthorized use of the Site, including collecting usernames
       and/or email addresses of users by electronic or other means for the
       purpose of sending unsolicited email, or creating user accounts by
       automated means or under false pretenses.") %>
     </li>
     <li>
-      <%= gettext("Use the Site as part of any effort to compete with us or otherwise use the
+      <%= t!(@locale, "Use the Site as part of any effort to compete with us or otherwise use the
       Site and/or the Content for any revenue-generating endeavor or commercial
       enterprise.") %>
     </li>
-    <li><%= gettext("Use the Site to advertise or offer to sell goods and services.") %></li>
-    <li><%= gettext("Sell or otherwise transfer your profile.") %></li>
+    <li><%= t!(@locale, "Use the Site to advertise or offer to sell goods and services.") %></li>
+    <li><%= t!(@locale, "Sell or otherwise transfer your profile.") %></li>
   </ul>
-  <p class="bold_blue"><%= gettext("6. USER GENERATED CONTRIBUTIONS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "6. USER GENERATED CONTRIBUTIONS") %></p>
   <p class="nor_blue">
-    <%= gettext("The Site may invite you to chat, contribute to, or participate in blogs,
+    <%= t!(@locale, "The Site may invite you to chat, contribute to, or participate in blogs,
     message boards, online forums, and other functionality, and may provide you
     with the opportunity to create, submit, post, display, transmit, perform,
     publish, distribute, or broadcast content and materials to us or on the
@@ -212,64 +215,67 @@
   <br />
   <ul class="ul1">
     <li>
-      <%= gettext("The creation, distribution, transmission, public display, or performance,
+      <%= t!(@locale, "The creation, distribution, transmission, public display, or performance,
       and the accessing, downloading, or copying of your Contributions do not
       and will not infringe the proprietary rights, including but not limited to
       the copyright, patent, trademark, trade secret, or moral rights of any
       third party.") %>
     </li>
     <li>
-      <%= gettext("You are the creator and owner of or have the necessary licenses, rights,
+      <%= t!(@locale, "You are the creator and owner of or have the necessary licenses, rights,
       consents, releases, and permissions to use and to authorize us, the Site,
       and other users of the Site to use your Contributions in any manner
       contemplated by the Site and these Terms of Use.") %>
     </li>
     <li>
-      <%= gettext("You have the written consent, release, and/or permission of each and every
+      <%= t!(@locale, "You have the written consent, release, and/or permission of each and every
       identifiable individual person in your Contributions to use the name or
       likeness of each and every such identifiable individual person to enable
       inclusion and use of your Contributions in any manner contemplated by the
       Site and these Terms of Use.") %>
     </li>
-    <li><%= gettext("Your Contributions are not false, inaccurate, or misleading.") %></li>
+    <li><%= t!(@locale, "Your Contributions are not false, inaccurate, or misleading.") %></li>
     <li>
-      <%= gettext("Your Contributions are not unsolicited or unauthorized advertising,
+      <%= t!(@locale, "Your Contributions are not unsolicited or unauthorized advertising,
       promotional materials, pyramid schemes, chain letters, spam, mass
       mailings, or other forms of solicitation.") %>
     </li>
     <li>
-      <%= gettext("Your Contributions are not obscene, lewd, lascivious, filthy, violent,
+      <%= t!(@locale, "Your Contributions are not obscene, lewd, lascivious, filthy, violent,
       harassing, libelous, slanderous, or otherwise objectionable (as determined
       by us).") %>
     </li>
     <li>
-      <%= gettext("Your Contributions do not ridicule, mock, disparage, intimidate, or abuse
+      <%= t!(@locale, "Your Contributions do not ridicule, mock, disparage, intimidate, or abuse
       anyone.") %>
     </li>
     <li>
-      <%= gettext("Your Contributions are not used to harass or threaten (in the legal sense
+      <%= t!(@locale, "Your Contributions are not used to harass or threaten (in the legal sense
       of those terms) any other person and to promote violence against a
       specific person or class of people.") %>
     </li>
     <li>
-      <%= gettext("Your Contributions do not violate any applicable law, regulation, or rule.") %>
+      <%= t!(
+        @locale,
+        "Your Contributions do not violate any applicable law, regulation, or rule."
+      ) %>
     </li>
     <li>
-      <%= gettext("Your Contributions do not violate the privacy or publicity rights of any
+      <%= t!(@locale, "Your Contributions do not violate the privacy or publicity rights of any
       third party.") %>
     </li>
     <li>
-      <%= gettext("Your Contributions do not violate any applicable law concerning child
+      <%= t!(@locale, "Your Contributions do not violate any applicable law concerning child
       pornography, or otherwise intended to protect the health or well-being of
       minors.") %>
     </li>
     <li>
-      <%= gettext("Your Contributions do not include any offensive comments that are
+      <%= t!(@locale, "Your Contributions do not include any offensive comments that are
       connected to race, national origin, gender, sexual preference, or physical
       handicap.") %>
     </li>
     <li>
-      <%= gettext("Your Contributions do not otherwise violate, or link to material that
+      <%= t!(@locale, "Your Contributions do not otherwise violate, or link to material that
       violates, any provision of these Terms of Use, or any applicable law or
       regulation.") %>
     </li>
@@ -277,13 +283,13 @@
   <br />
   <br />
   <p class="nor_blue">
-    <%= gettext("Any use of the Site in violation of the foregoing violates these Terms of
+    <%= t!(@locale, "Any use of the Site in violation of the foregoing violates these Terms of
     Use and may resuit in, among other things, termination or suspension of your
     rights to use the Site") %>
   </p>
-  <p class="bold_blue"><%= gettext("7. USER GENERATED CONTRIBUTIONS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "7. USER GENERATED CONTRIBUTIONS") %></p>
   <p class="nor_blue">
-    <%= gettext("You agree that we may access, store, process, and use any information and
+    <%= t!(@locale, "You agree that we may access, store, process, and use any information and
     personal data that you provide folloving the terms of the Privacy Policy and
     your choices (including settings). By submitting suggestions or other
     feedback regarding the Site you agree that we can use and share such
@@ -296,9 +302,9 @@
     Site and you expressly agree to exonerate us from any and all responsibility
     and to refrain from any legal action against us regarding your Contributions") %>
   </p>
-  <p class="bold_blue"><%= gettext("8. SUBMISSIONS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "8. SUBMISSIONS") %></p>
   <p class="nor_blue">
-    <%= gettext("You acknowledge and agree that any questions, comments, suggestions, ideas,
+    <%= t!(@locale, "You acknowledge and agree that any questions, comments, suggestions, ideas,
     feedback, or other information regarding the Site (\"Submissions\") provided
     by you to us are non-confidential and shall become our sole property. We
     shall own exclusive rights, including all intellectual property rights, and
@@ -311,9 +317,9 @@
     infringement or misappropriation of any proprietary right in your
     Submissions.") %>
   </p>
-  <p class="bold_blue"><%= gettext("9. SITE MANAGEMENT") %></p>
+  <p class="bold_blue"><%= t!(@locale, "9. SITE MANAGEMENT") %></p>
   <p class="nor_blue">
-    <%= gettext("We reserve the right, but not the obligation, to: (1) monitor the Site for
+    <%= t!(@locale, "We reserve the right, but not the obligation, to: (1) monitor the Site for
     violations of these Terms of Use; (2) take appropriate legal action against
     anyone who, in our sole discretion, violates the law or these Terms of Use,
     including without limitation, reporting such user to law enforcement
@@ -326,9 +332,9 @@
     otherwise manage the Site in a manner designed to protect our rights and
     property and to facilitate the proper functioning of the Site.") %>
   </p>
-  <p class="bold_blue"><%= gettext("10. TERM AND TERMINATION") %></p>
+  <p class="bold_blue"><%= t!(@locale, "10. TERM AND TERMINATION") %></p>
   <p class="nor_blue">
-    <%= gettext("These Terms of Use shall remain in full force and effect while you use the
+    <%= t!(@locale, "These Terms of Use shall remain in full force and effect while you use the
     Site. WITHOUT LIMITING ANY OTHER PROVISION OF THESE TERMS OF USE, WE RESERVE
     THE RIGHT TO, IN OUR SOLE DISCRETION AND WITHOUT NOTICE OR LIABILITY DENY
     ACCESS TO AND USE OF THE SITE (INCLUDING BLOCKING CERTAIN IP ADDRESSES), TO
@@ -344,9 +350,9 @@
     the right to take appropriate legal action, including without limitation
     pursuing civil, criminal, and injunctive redress.") %>
   </p>
-  <p class="bold_blue"><%= gettext("11. MODIFICATIONS AND INTERRUPTIONS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "11. MODIFICATIONS AND INTERRUPTIONS") %></p>
   <p class="nor_blue">
-    <%= gettext("We reserve the right to change, modify, or remove the contents of the Site
+    <%= t!(@locale, "We reserve the right to change, modify, or remove the contents of the Site
     at any time or for any reason at our sole discretion without notice.
     However, we have no obligation to update any information on our Site. We
     also reserve the right to modify or discontinue all or part of the Site
@@ -364,17 +370,17 @@
     Site or to supply any corrections, updates, or releases in connection
     therewith.") %>
   </p>
-  <p class="bold_blue"><%= gettext("12. CORRECTIONS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "12. CORRECTIONS") %></p>
   <p class="nor_blue">
-    <%= gettext("There may be information on the Site that contains typographical errors,
+    <%= t!(@locale, "There may be information on the Site that contains typographical errors,
     inaccuracies, or omissions, including descriptions, pricing, availability,
     and various other information. We reserve the right to correct any errors,
     inaccuracies, or omissions and to change or update the information on the
     Site at any time, without prior notice.") %>
   </p>
-  <p class="bold_blue"><%= gettext("13. DISCLAIMER") %></p>
+  <p class="bold_blue"><%= t!(@locale, "13. DISCLAIMER") %></p>
   <p class="nor_blue">
-    <%= gettext("THE SITE IS PROVIDED ON AN AS-IS AND AS-AVAILABLE BASIS. YOU AGREE THAT YOUR
+    <%= t!(@locale, "THE SITE IS PROVIDED ON AN AS-IS AND AS-AVAILABLE BASIS. YOU AGREE THAT YOUR
     USE OF THE SITE AND OUR SERVICES WILL BE AT YOUR SOLE RISK. TO THE FULLEST
     EXTENT PERMITTED BY LAW WE DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, IN
     CONNECTION WITH THE SITE AND YOUR USE THEREOF INCLUDING WITHOUT LIMITATION,
@@ -402,9 +408,9 @@
     ENVIRONMENT YOU SHOULD USE YOUR BEST JUDGMENT AND EXERCISE CAUTION WHERE
     APPROPRIATE") %>
   </p>
-  <p class="bold_blue"><%= gettext("14. LIMITATIONS OF LIABILITY") %></p>
+  <p class="bold_blue"><%= t!(@locale, "14. LIMITATIONS OF LIABILITY") %></p>
   <p class="nor_blue">
-    <%= gettext("IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU
+    <%= t!(@locale, "IN NO EVENT WILL WE OR OUR DIRECTORS, EMPLOYEES, OR AGENTS BE LIABLE TO YOU
     OR ANY THIRD PARTY FOR ANY DIRECT, INDIRECT, CONSEQUENTIAL, EXEMPLARY,
     INCIDENTAL, SPECIAL, OR PUNITIVE DAMAGES, INCLUDING LOST PROFIT, LOST
     REVENUE, LOSS OF DATA, OR OTHER DAMAGES ARISING FROM YOUR USE OF THE SITE,
@@ -417,9 +423,9 @@
     DAMAGES. IF THESE LAWS APPLY TO YOU, SOME OR ALL OF THE ABOVE DISCLAIMERS OR
     LIMITATIONS MAY NOT APPLY TO YOU, AND YOU MAY HAVE ADDITIONAL RIGHTS.") %>
   </p>
-  <p class="bold_blue"><%= gettext("15. INDEMNIFICATION") %></p>
+  <p class="bold_blue"><%= t!(@locale, "15. INDEMNIFICATION") %></p>
   <p class="nor_blue">
-    <%= gettext("You agree to defend, indemnify and hold us harmless, including our
+    <%= t!(@locale, "You agree to defend, indemnify and hold us harmless, including our
     subsidiaries, affiliates, and all of our respective officers agents,
     partners, and employees, from and against any loss, damage, liability,
     claim, or demand, including reasonable attorneys' fees and expenses, made by
@@ -435,9 +441,9 @@
     notify you of any such claim, action, or proceeding which is subject to this
     indemnification upon becoming aware of it.") %>
   </p>
-  <p class="bold_blue"><%= gettext("16. USER DATA") %></p>
+  <p class="bold_blue"><%= t!(@locale, "16. USER DATA") %></p>
   <p class="nor_blue">
-    <%= gettext("We will maintain certain data that you transmit to the Site for the purpose
+    <%= t!(@locale, "We will maintain certain data that you transmit to the Site for the purpose
     of managing the performance of the Site, as well as data relating to your
     use of the Site. Although we perform regular routine backups of data, you
     are solely responsible for all data that you transmit or that relates to any
@@ -447,10 +453,10 @@
     corruption of such data.") %>
   </p>
   <p class="bold_blue">
-    <%= gettext("17. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES") %>
+    <%= t!(@locale, "17. ELECTRONIC COMMUNICATIONS, TRANSACTIONS, AND SIGNATURES") %>
   </p>
   <p class="nor_blue">
-    <%= gettext("Visiting the Site, sending us emails, and completing online forms constitute
+    <%= t!(@locale, "Visiting the Site, sending us emails, and completing online forms constitute
     electronic communications. You consent to receive electronic communications,
     and you agree that all agreements, notices, disclosures, and other
     communications we provide to you electronically via email and on the Site,
@@ -463,9 +469,9 @@
     signature or delivery or retention of non-electronic records, or to payments
     or the granting of credits by any means other than electronic means.") %>
   </p>
-  <p class="bold_blue"><%= gettext("18. MISCELLANEOUS") %></p>
+  <p class="bold_blue"><%= t!(@locale, "18. MISCELLANEOUS") %></p>
   <p class="nor_blue">
-    <%= gettext("These Terms of Use and any policies or operating rules posted by us on the
+    <%= t!(@locale, "These Terms of Use and any policies or operating rules posted by us on the
     Site or in respect to the Site constitute the entire agreement and
     understanding between you and us. Our failure to exercise or enforce any
     right or provision of these Terms of Use shall not operate as a waiver of
