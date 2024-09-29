@@ -9,7 +9,7 @@ defmodule ISeeSeaWeb.ReportsLive do
   alias ISeeSea.DB.Models.BaseReport
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     supports_touch =
       if connected?(socket) do
         ISeeSeaWeb.Endpoint.subscribe("reports:updates")
@@ -41,8 +41,11 @@ defmodule ISeeSeaWeb.ReportsLive do
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: pagination.page, total_pages: total_pages}
 
+    locale = Map.get(session, "preferred_locale") || "bg"
+
     new_socket =
       assign(socket,
+        locale: locale,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         stats_panel_is_open: false,

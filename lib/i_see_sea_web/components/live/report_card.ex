@@ -75,14 +75,13 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
   @impl true
   def mount(socket) do
-    {:ok, assign(socket, :is_back, false)}
+    {:ok, assign(socket, is_back: false)}
   end
 
   @impl true
   def update(assigns, socket) do
     user_is_admin = Map.get(assigns, :user_is_admin, false)
-    IO.inspect(user_is_admin)
-    {:ok, assign(socket, assigns |> Map.put(:user_is_admin, user_is_admin))}
+    {:ok, assign(socket, Map.put(assigns, :user_is_admin, user_is_admin))}
   end
 
   @impl true

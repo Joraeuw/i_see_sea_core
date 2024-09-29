@@ -69,7 +69,7 @@ defmodule ISeeSeaWeb.RegisterLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     changeset = ISeeSeaWeb.Params.Session.changeset(:register)
 
     socket =
@@ -77,7 +77,9 @@ defmodule ISeeSeaWeb.RegisterLive do
       |> assign(trigger_submit: false, check_errors: false)
       |> assign_form(changeset)
 
-    {:ok, assign(socket, locale: "bg"), temporary_assigns: [form: nil]}
+    locale = Map.get(session, "preferred_locale") || "bg"
+
+    {:ok, assign(socket, locale: locale), temporary_assigns: [form: nil]}
   end
 
   @impl true
