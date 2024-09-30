@@ -84,6 +84,7 @@ defmodule ISeeSeaWeb.ReportsLive do
       filter_menu_is_open={@filter_menu_is_open}
       filters={@filters}
       stats_panel_is_open={@stats_panel_is_open}
+      locale={@locale}
     />
     """
   end

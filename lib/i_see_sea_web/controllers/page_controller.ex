@@ -12,11 +12,11 @@ defmodule ISeeSeaWeb.PageController do
   end
 
   def terms_and_conditions(conn, _params) do
-    render(conn, "terms_and_conditions.html")
+    render(conn, "terms_and_conditions.html", locale: "bg")
   end
 
   def contacts(conn, _params) do
-    render(conn, "contacts.html")
+    render(conn, "contacts.html", locale: "bg")
   end
 
   def about(conn, _params) do
