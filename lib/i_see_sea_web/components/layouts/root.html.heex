@@ -151,7 +151,7 @@
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
               <details class="dropdown w-8/12 z-50">
-                <summary class="btn m-1 w-[130px]"><%= t!(@locale,"nav.menu") %></summary>
+                <summary class="btn m-1 w-[130px]"><%= t!(@locale, "nav.menu") %></summary>
                 <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
                   <li>
                     <.link class="z-50 " navigate={~p"/"}>
@@ -202,7 +202,25 @@
       </div>
       <div class="flex flex-row justify-start w-3/12 mb-2 md:w-2/12 items-end">
         <!-- Language Button -->
-        <button class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]">
+        <div id="locale-handler" phx-hook="LocaleHook" hidden></div>
+        <button
+          :if={@locale === "bg"}
+          phx-click="change_locale"
+          phx-value-locale="en"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
+          <img
+            src="/images/home-icons/bulgarian_flag_transparent.png"
+            class="w-full h-full"
+            alt="Language Selection"
+          />
+        </button>
+        <button
+          :if={@locale === "en"}
+          phx-click="change_locale"
+          phx-value-locale="bg"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
           <img
             src="/images/home-icons/bulgarian_flag_transparent.png"
             class="w-full h-full"
@@ -210,16 +228,22 @@
           />
         </button>
         <!-- Login Button -->
-        <.link
-          class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
-          navigate={~p"/login"}
-        >
-          <%= if assigns[:current_user] do %>
+        <%= if assigns[:current_user] do %>
+          <.link
+            class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+            href={~p"/logout"}
+            method="delete"
+          >
             <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
-          <% else %>
+          </.link>
+        <% else %>
+          <.link
+            class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+            navigate={~p"/login"}
+          >
             <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
-          <% end %>
-        </.link>
+          </.link>
+        <% end %>
       </div>
     </nav>
     <div class="relative bg-white w-full h-4/6">

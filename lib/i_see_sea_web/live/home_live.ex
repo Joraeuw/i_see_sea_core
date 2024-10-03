@@ -79,12 +79,6 @@ defmodule ISeeSeaWeb.HomeLive do
         filter_menu_is_open: false
       )
 
-    new_socket =
-      if(!socket.assigns.current_user,
-        do: put_flash(new_socket, :error, "Please Login or create an account"),
-        else: new_socket
-      )
-
     {:ok, new_socket}
   end
 
@@ -240,6 +234,15 @@ defmodule ISeeSeaWeb.HomeLive do
       |> assign(is_selecting_location: true, create_report_toolbox_is_open: false)
 
     {:noreply, socket}
+  end
+
+  def handle_event("set_locale", %{"locale" => locale}, socket) do
+    {:noreply, assign(socket, :locale, locale)}
+  end
+
+  def handle_event("change_locale", %{"locale" => locale}, socket) do
+    push_event(socket, "update_locale", %{locale: locale})
+    {:noreply, assign(socket, :locale, locale)}
   end
 
   @impl true

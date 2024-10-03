@@ -30,7 +30,7 @@ defmodule ISeeSeaWeb.UserAuth do
   end
 
   defp renew_session(conn) do
-    preferred_locale = get_session(conn, :preferred_locale)
+    preferred_locale = get_session(conn, :preferred_locale, "en")
     delete_csrf_token()
 
     conn
@@ -41,6 +41,7 @@ defmodule ISeeSeaWeb.UserAuth do
 
   def log_out_user(conn) do
     user_token = get_session(conn, :user_token)
+    IO.inspect(user_token, label: "some_shit")
     user_token && Accounts.delete_user_session_token(user_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do
