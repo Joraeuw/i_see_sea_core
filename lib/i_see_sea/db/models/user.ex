@@ -67,7 +67,6 @@ defmodule ISeeSea.DB.Models.User do
   def is_admin?(%__MODULE__{id: user_id, role_id: user_role_id}) do
     {:ok, admin} = Role.get_by(%{name: "admin"})
 
-    IO.inspect(user_id)
     user_role_id === admin.id
   end
 

@@ -341,8 +341,6 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
            report: report
          } = assigns
        ) do
-    IO.inspect(report)
-
     ~H"""
     """
   end

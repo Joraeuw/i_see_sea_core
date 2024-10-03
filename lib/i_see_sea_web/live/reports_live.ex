@@ -29,7 +29,7 @@ defmodule ISeeSeaWeb.ReportsLive do
       "report_type" => report_type
     }
 
-    reports_pagination = %{page_size: 100, page: 1}
+    reports_pagination = %{page_size: 10, page: 1}
 
     {:ok, reports, pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
@@ -39,7 +39,7 @@ defmodule ISeeSeaWeb.ReportsLive do
       )
 
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: pagination.page, total_pages: total_pages}
+    pagination = Map.put(pagination, :total_pages, total_pages)
 
     locale = Map.get(session, "preferred_locale") || "bg"
 
@@ -64,7 +64,10 @@ defmodule ISeeSeaWeb.ReportsLive do
     ~H"""
     <div class="flex flex-col items-center justify-start">
       <CommonComponents.pagination pagination={@pagination} />
-      <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto">
+      <div
+        :if={not Enum.empty?(@reports)}
+        class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto"
+      >
         <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @reports do %>
           <.live_component
             module={ISeeSeaWeb.ReportCardLiveComponent}
@@ -76,6 +79,24 @@ defmodule ISeeSeaWeb.ReportsLive do
             user_is_admin={User.is_admin?(@current_user)}
           />
         <% end %>
+      </div>
+      <div
+        :if={Enum.empty?(@reports)}
+        class="flex flex-col items-center justify-center mt-10 p-6 bg-gray-50 border border-gray-200 rounded-md shadow-md"
+      >
+        <img
+          src="/images/report_icons/no_reports_found.svg"
+          alt="No Reports"
+          class="w-32 h-32 mb-4 opacity-75"
+        />
+        <p class="text-xl font-semibold text-gray-700">No Reports Found</p>
+        <p class="text-sm text-gray-500 mt-2 text-center mb-4">
+          It looks like there are no reports that match your filters. Try adjusting your filters.
+        </p>
+
+        <button class="btn w-full" onclick="filter_modal.showModal()">
+          <%= translate(@locale, "home.filters") %>
+        </button>
       </div>
       <CommonComponents.pagination pagination={@pagination} />
     </div>
@@ -101,10 +122,10 @@ defmodule ISeeSeaWeb.ReportsLive do
 
   @impl true
   def handle_event("filter_reports", filters, socket) do
-    {:ok, reports, %{page: page} = pagination} =
+    {:ok, reports, pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         filters["report_type"],
-        socket.assigns.pagination,
+        %{page: 1, page_size: socket.assigns.pagination.page_size},
         filters
       )
 
@@ -113,12 +134,11 @@ defmodule ISeeSeaWeb.ReportsLive do
     stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
 
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: page, total_pages: total_pages}
+    pagination = Map.put(pagination, :total_pages, total_pages)
 
     socket =
       socket
-      |> assign(:pagination, pagination)
-      |> assign(:reports, reports)
+      |> assign(reports: reports, pagination: pagination, filters: to_form(filters))
       |> push_event("filters_updated", %{
         stop_live_tracker: stop_live_tracker,
         reports: Focus.view(reports, %Lens{view: Lens.expanded()})
@@ -133,14 +153,15 @@ defmodule ISeeSeaWeb.ReportsLive do
 
     pagination = %{socket.assigns.pagination | page: page}
 
-    IO.inspect(socket.assigns.filters)
-
     {:ok, new_reports, new_pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
-        socket.assigns.filters["report_type"],
+        socket.assigns.filters.params["report_type"],
         pagination,
         socket.assigns.filters.params
       )
+
+    total_pages = ReportOperations.get_total_pages(new_pagination)
+    new_pagination = Map.put(new_pagination, :total_pages, total_pages)
 
     socket = assign(socket, reports: new_reports, pagination: new_pagination)
 
@@ -154,8 +175,6 @@ defmodule ISeeSeaWeb.ReportsLive do
 
   @impl true
   def handle_info(%{event: "delete_marker", payload: %{report_id: deleted_report_id}}, socket) do
-    IO.inspect("called delete")
-
     reports =
       Enum.reject(socket.assigns.reports, fn %{id: report_id} ->
         report_id === String.to_integer(deleted_report_id)

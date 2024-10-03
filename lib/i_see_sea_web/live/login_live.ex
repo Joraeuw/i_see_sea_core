@@ -6,17 +6,17 @@ defmodule ISeeSeaWeb.LoginLive do
     ~H"""
     <div class="flex flex-col items-center rounded-xl shadow-lg shadow-top-bottom  mx-auto w-8/12 sm:w-96">
       <.header locale={@locale} class="text-center">
-        <%= t!(@locale, "login.log_in_to_account") %>
+        <%= translate(@locale, "login.log_in_to_account") %>
         <:subtitle>
-          <%= t!(@locale, "login.no_account") %>
+          <%= translate(@locale, "login.no_account") %>
           <.link
             navigate={~p"/register"}
             locale={@locale}
             class="font-semibold text-brand hover:underline"
           >
-            <%= t!(@locale, "login.sign_up") %>
+            <%= translate(@locale, "login.sign_up") %>
           </.link>
-          <%= t!(@locale, "login.account_now") %>
+          <%= translate(@locale, "login.account_now") %>
         </:subtitle>
       </.header>
       <div class="w-full">
@@ -29,11 +29,16 @@ defmodule ISeeSeaWeb.LoginLive do
           class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
           inner_class="w-12/12"
         >
-          <.input field={@form[:email]} type="email" label={t!(@locale, "login.email")} required />
+          <.input
+            field={@form[:email]}
+            type="email"
+            label={translate(@locale, "login.email")}
+            required
+          />
           <.input
             field={@form[:password]}
             type="password"
-            label={t!(@locale, "login.password")}
+            label={translate(@locale, "login.password")}
             required
           />
 
@@ -41,15 +46,15 @@ defmodule ISeeSeaWeb.LoginLive do
             <.input
               field={@form[:remember_me]}
               type="checkbox"
-              label={t!(@locale, "login.keep_me_logged")}
+              label={translate(@locale, "login.keep_me_logged")}
             />
             <.link href={~p"/reset_password"} class="text-sm font-semibold">
-              <%= t!(@locale, "login.forgot_password") %>
+              <%= translate(@locale, "login.forgot_password") %>
             </.link>
           </:actions>
           <:actions>
-            <.button phx-disable-with={t!(@locale, "login.logging_in")} class="btn mb-3">
-              <%= t!(@locale, "login.log_in") %><span aria-hidden="true">→</span>
+            <.button phx-disable-with={translate(@locale, "login.logging_in")} class="btn mb-3">
+              <%= translate(@locale, "login.log_in") %><span aria-hidden="true">→</span>
             </.button>
           </:actions>
         </.simple_form>

@@ -7,4 +7,15 @@ defmodule ISeeSeaWeb.Trans do
 
   locale("en", Path.join([__DIR__, "/trans/en.exs"]))
   locale("bg", Path.join([__DIR__, "/trans/bg.exs"]))
+
+  def translate(locale, path) do
+    t(locale, path)
+    |> case do
+      {:error, :no_translation} ->
+        path
+
+      {:ok, string} ->
+        string
+    end
+  end
 end

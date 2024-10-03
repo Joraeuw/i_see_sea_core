@@ -19,7 +19,7 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   @impl true
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
         ISeeSeaWeb.Endpoint.subscribe("reports:updates")
@@ -57,11 +57,9 @@ defmodule ISeeSeaWeb.HomeLive do
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: pagination.page, total_pages: total_pages}
 
-    locale = Map.get(session, "preferred_locale") || "bg"
-
     new_socket =
       assign(socket,
-        locale: locale,
+        locale: "bg",
         is_selecting_location: false,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
@@ -78,6 +76,8 @@ defmodule ISeeSeaWeb.HomeLive do
         stats_panel_is_open: not supports_touch,
         filter_menu_is_open: false
       )
+
+    new_socket = push_event(new_socket, "get_locale", %{})
 
     {:ok, new_socket}
   end
@@ -114,7 +114,7 @@ defmodule ISeeSeaWeb.HomeLive do
         />
       </div>
 
-      <div :if={@is_selecting_location}>t!(@locale,"home.select_location")</div>
+      <div :if={@is_selecting_location}>translate(@locale,"home.select_location")</div>
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
@@ -123,12 +123,6 @@ defmodule ISeeSeaWeb.HomeLive do
       locale={@locale}
     />
     """
-  end
-
-  @impl true
-  def handle_event("change_page", %{"page" => page}, socket) do
-    page = String.to_integer(page)
-    {:noreply, assign(socket, :page, page)}
   end
 
   @impl true
@@ -209,9 +203,9 @@ defmodule ISeeSeaWeb.HomeLive do
 
     {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
 
-    stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
+    stop_live_tracker =
+      Date.compare(Date.utc_today(), end_date) in [:gt, :eq]
 
-    IO.inspect(filters)
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: page, total_pages: total_pages}
 
@@ -237,11 +231,13 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   def handle_event("set_locale", %{"locale" => locale}, socket) do
+    IO.inspect(locale, label: "setting locale to")
     {:noreply, assign(socket, :locale, locale)}
   end
 
   def handle_event("change_locale", %{"locale" => locale}, socket) do
-    push_event(socket, "update_locale", %{locale: locale})
+    IO.inspect(locale, label: "changing locale to")
+    socket = push_event(socket, "update_locale", %{locale: locale})
     {:noreply, assign(socket, :locale, locale)}
   end
 

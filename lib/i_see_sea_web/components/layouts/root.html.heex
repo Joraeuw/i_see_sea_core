@@ -104,22 +104,22 @@
             <div class="hidden sm:flex w-5/5 justify-around space-x-1">
               <.link class="z-10" navigate={~p"/"}>
                 <button class="btn md:min-w-32">
-                  <%= t!(@locale, "nav.home") %>
+                  <%= translate(@locale, "nav.home") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/profile"}>
                 <button class="btn md:min-w-32">
-                  <%= t!(@locale, "nav.profile") %>
+                  <%= translate(@locale, "nav.profile") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/reports-list"}>
                 <button class="btn md:min-w-32">
-                  <%= t!(@locale, "nav.reports") %>
+                  <%= translate(@locale, "nav.reports") %>
                 </button>
               </.link>
               <div class="dropdown dropdown-bottom">
                 <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">
-                  <%= t!(@locale, "nav.more") %>
+                  <%= translate(@locale, "nav.more") %>
                 </div>
                 <ul
                   tabindex="0"
@@ -127,22 +127,22 @@
                 >
                   <li>
                     <.link class="z-10" navigate={~p"/terms-and-conditions"}>
-                      <%= t!(@locale, "nav.terms_of_use") %>
+                      <%= translate(@locale, "nav.terms_of_use") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/about"}>
-                      <%= t!(@locale, "nav.our_purpose") %>
+                      <%= translate(@locale, "nav.our_purpose") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/contacts"}>
-                      <%= t!(@locale, "nav.contacts") %>
+                      <%= translate(@locale, "nav.contacts") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/privacy-policy"}>
-                      <%= t!(@locale, "nav.privacy_and_policy") %>
+                      <%= translate(@locale, "nav.privacy_and_policy") %>
                     </.link>
                   </li>
                 </ul>
@@ -151,41 +151,41 @@
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
               <details class="dropdown w-8/12 z-50">
-                <summary class="btn m-1 w-[130px]"><%= t!(@locale, "nav.menu") %></summary>
+                <summary class="btn m-1 w-[130px]"><%= translate(@locale, "nav.menu") %></summary>
                 <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
                   <li>
                     <.link class="z-50 " navigate={~p"/"}>
-                      <%= t!(@locale, "nav.home") %>
+                      <%= translate(@locale, "nav.home") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/profile"}>
-                      <%= t!(@locale, "nav.profile") %>
+                      <%= translate(@locale, "nav.profile") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/reports-list"}>
-                      <%= t!(@locale, "nav.reports") %>
+                      <%= translate(@locale, "nav.reports") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/about"}>
-                      <%= t!(@locale, "nav.our_purpose") %>
+                      <%= translate(@locale, "nav.our_purpose") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/terms-and-conditions"}>
-                      <%= t!(@locale, "nav.terms_of_use") %>
+                      <%= translate(@locale, "nav.terms_of_use") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/privacy-policy"}>
-                      <%= t!(@locale, "nav.privacy_policy") %>
+                      <%= translate(@locale, "nav.privacy_policy") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/contacts"}>
-                      <%= t!(@locale, "nav.contacts") %>
+                      <%= translate(@locale, "nav.contacts") %>
                     </.link>
                   </li>
                 </ul>

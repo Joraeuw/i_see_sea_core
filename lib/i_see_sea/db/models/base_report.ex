@@ -26,6 +26,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
   @derive {Flop.Schema,
    filterable: [
      :name,
+     :user_id,
      :quantity,
      :species,
      :pollution_types,

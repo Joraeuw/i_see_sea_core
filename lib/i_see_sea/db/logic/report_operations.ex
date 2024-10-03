@@ -36,6 +36,18 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
     div(total_entries, page_size) + if rem(total_entries, page_size) > 0, do: 1, else: 0
   end
 
+  def retrieve_user_reports_with_live_view_filters(user, report_type, pagination, filters)
+      when is_map(filters) do
+    filters = Map.put(filters, "user_id", user.id)
+
+    retrieve_reports_with_live_view_filters(
+      report_type,
+      pagination,
+      Map.to_list(Map.drop(filters, ["report_type", "date_range_picker_display_value"])),
+      []
+    )
+  end
+
   def retrieve_reports_with_live_view_filters(report_type, pagination, filters)
       when is_map(filters) do
     retrieve_reports_with_live_view_filters(
@@ -73,6 +85,10 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
 
   defp parse_live_view_filter({"end_date", value}) do
     %{"field" => "inserted_at", "op" => "<=", "value" => value}
+  end
+
+  defp parse_live_view_filter({"user_id", value}) do
+    %{"field" => "user_id", "op" => "==", "value" => value}
   end
 
   defp create_specific_report(base_report_id, report_type, %{species: species} = validated_prams)

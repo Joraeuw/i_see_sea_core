@@ -85,17 +85,17 @@ defmodule ISeeSeaWeb.CommonComponents do
   def filter_button(assigns) do
     ~H"""
     <button class={@class || "btn"} onclick="filter_modal.showModal()">
-      <%= t!(@locale, "home.filters") %>
+      <%= translate(@locale, "home.filters") %>
     </button>
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form
           for={@filters}
-          phx-submit="apply_filter"
+          phx-submit="filter_reports"
           class="flex flex-col items-center mt-10 space-y-8 bg-white"
           onsubmit="document.getElementById('filter_modal').close()"
         >
-          <.filter_base name={t!(@locale, "home.date_range")}>
+          <.filter_base name={translate(@locale, "home.date_range")}>
             <div class="relative z-30">
               <CoreComponents.date_range_picker
                 id="date_range_picker"
@@ -106,7 +106,7 @@ defmodule ISeeSeaWeb.CommonComponents do
               />
             </div>
           </.filter_base>
-          <.filter_base name={t!(@locale, "home.report_type")}>
+          <.filter_base name={translate(@locale, "home.report_type")}>
             <CoreComponents.input
               type="select"
               field={@filters[:report_type]}
@@ -119,7 +119,10 @@ defmodule ISeeSeaWeb.CommonComponents do
             </select> --%>
           </.filter_base>
           <:actions>
-            <CoreComponents.button phx-disable-with={t!(@locale, "home.applying_filters")} class="btn">
+            <CoreComponents.button
+              phx-disable-with={translate(@locale, "home.applying_filters")}
+              class="btn"
+            >
               Apply
             </CoreComponents.button>
           </:actions>

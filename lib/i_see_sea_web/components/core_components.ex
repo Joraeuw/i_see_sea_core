@@ -149,29 +149,29 @@ defmodule ISeeSeaWeb.CoreComponents do
   def flash_group(assigns) do
     ~H"""
     <div id={@id}>
-      <.flash kind={:info} title={t!(@locale, "home.success")} flash={@flash} />
-      <.flash kind={:error} title={t!(@locale, "home.error")} flash={@flash} />
+      <.flash kind={:info} title={translate(@locale, "home.success")} flash={@flash} />
+      <.flash kind={:error} title={translate(@locale, "home.error")} flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
-        title={t!(@locale, "home.no_internet")}
+        title={translate(@locale, "home.no_internet")}
         phx-disconnected={show(".phx-client-error #client-error")}
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= t!(@locale, "home.attempt_to_reconnect") %>
+        <%= translate(@locale, "home.attempt_to_reconnect") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={t!(@locale, "home.sth_went_wrong")}
+        title={translate(@locale, "home.sth_went_wrong")}
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= t!(@locale, "home.back_on_track") %>
+        <%= translate(@locale, "home.back_on_track") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -520,7 +520,7 @@ defmodule ISeeSeaWeb.CoreComponents do
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= t!(@locale, "home.actions") %></span>
+              <span class="sr-only"><%= translate(@locale, "home.actions") %></span>
             </th>
           </tr>
         </thead>

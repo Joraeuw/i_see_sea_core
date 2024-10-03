@@ -41,7 +41,6 @@ defmodule ISeeSeaWeb.UserAuth do
 
   def log_out_user(conn) do
     user_token = get_session(conn, :user_token)
-    IO.inspect(user_token, label: "some_shit")
     user_token && Accounts.delete_user_session_token(user_token)
 
     if live_socket_id = get_session(conn, :live_socket_id) do

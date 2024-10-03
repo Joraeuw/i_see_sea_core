@@ -162,7 +162,6 @@ defmodule ISeeSea.DB.DefaultModel do
         |> join(:left, [pollution_report: pr], rt in assoc(pr, :pollution_types),
           as: :pollution_types
         )
-        |> IO.inspect()
       end
 
       defp process_binding(current_binding, q) do
