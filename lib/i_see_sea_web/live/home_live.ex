@@ -59,6 +59,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
     new_socket =
       assign(socket,
+        locale: "bg",
         is_selecting_location: false,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
@@ -76,11 +77,7 @@ defmodule ISeeSeaWeb.HomeLive do
         filter_menu_is_open: false
       )
 
-    new_socket =
-      if(!socket.assigns.current_user,
-        do: put_flash(new_socket, :error, "Please Login or create an account"),
-        else: new_socket
-      )
+    new_socket = push_event(new_socket, "get_locale", %{})
 
     {:ok, new_socket}
   end
@@ -102,10 +99,9 @@ defmodule ISeeSeaWeb.HomeLive do
       <%!-- Desktop Design --%>
 
       <div
-        :if={@current_user == nil}
-        class="tooltip tooltip-error"
-        data-tip="You need to log in first"
-        data-tooltip-style="light"
+        class={if @current_user == nil, do: "tooltip tooltip-error", else: ""}
+        data-tip={if @current_user == nil, do: "You need to log in first", else: nil}
+        data-tooltip-style={if @current_user == nil, do: "light", else: nil}
       >
         <HomeComponents.report_toolbox
           create_report_toolbox_is_open={@create_report_toolbox_is_open}
@@ -114,34 +110,19 @@ defmodule ISeeSeaWeb.HomeLive do
           supports_touch={@supports_touch}
           current_user={@current_user}
           is_selecting_location={@is_selecting_location}
+          locale={@locale}
         />
       </div>
 
-      <div :if={@current_user != nil}>
-        <HomeComponents.report_toolbox
-          create_report_toolbox_is_open={@create_report_toolbox_is_open}
-          create_report_images={@create_report_images}
-          create_report_type={@create_report_type}
-          supports_touch={@supports_touch}
-          current_user={@current_user}
-          is_selecting_location={@is_selecting_location}
-        />
-      </div>
-
-      <div :if={@is_selecting_location}>CLICK TO SELECT A LOCATION</div>
+      <div :if={@is_selecting_location}>translate(@locale,"home.select_location")</div>
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
       filters={@filters}
       stats_panel_is_open={@stats_panel_is_open}
+      locale={@locale}
     />
     """
-  end
-
-  @impl true
-  def handle_event("change_page", %{"page" => page}, socket) do
-    page = String.to_integer(page)
-    {:noreply, assign(socket, :page, page)}
   end
 
   @impl true
@@ -222,9 +203,9 @@ defmodule ISeeSeaWeb.HomeLive do
 
     {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
 
-    stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
+    stop_live_tracker =
+      Date.compare(Date.utc_today(), end_date) in [:gt, :eq]
 
-    IO.inspect(filters)
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = %{page: page, total_pages: total_pages}
 
@@ -247,6 +228,17 @@ defmodule ISeeSeaWeb.HomeLive do
       |> assign(is_selecting_location: true, create_report_toolbox_is_open: false)
 
     {:noreply, socket}
+  end
+
+  def handle_event("set_locale", %{"locale" => locale}, socket) do
+    IO.inspect(locale, label: "setting locale to")
+    {:noreply, assign(socket, :locale, locale)}
+  end
+
+  def handle_event("change_locale", %{"locale" => locale}, socket) do
+    IO.inspect(locale, label: "changing locale to")
+    socket = push_event(socket, "update_locale", %{locale: locale})
+    {:noreply, assign(socket, :locale, locale)}
   end
 
   @impl true

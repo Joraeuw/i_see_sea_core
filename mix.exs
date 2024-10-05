@@ -78,7 +78,8 @@ defmodule ISeeSea.MixProject do
       {:timex, "~> 3.7.11"},
       {:gen_smtp, "~> 1.0"},
       {:httpoison, "~> 1.8"},
-      {:ex_utils, "~> 0.1.7"}
+      {:ex_utils, "~> 0.1.7"},
+      {:linguist, "~> 0.4"}
     ]
   end
 

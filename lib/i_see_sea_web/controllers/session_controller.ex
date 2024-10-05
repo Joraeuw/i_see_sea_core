@@ -8,7 +8,7 @@ defmodule ISeeSeaWeb.SessionController do
 
   @permission_scope "i_see_sea:sessions"
   plug(AssertPermissions, ["#{@permission_scope}:refresh"] when action == :refresh)
-  plug(AssertPermissions, [] when action in [:register, :login])
+  plug(AssertPermissions, [] when action in [:register, :login, :logout])
   plug(EnsurePermitted)
 
   def login(conn, %{"_action" => "registered", "user" => user_params}) do

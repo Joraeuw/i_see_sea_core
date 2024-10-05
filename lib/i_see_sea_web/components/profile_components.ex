@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.CommonComponents
 
+  import ISeeSeaWeb.Trans
   import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
@@ -10,7 +11,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   attr :username, :string, required: true
   attr :email, :string, required: true
   attr :user_report_summary, :list, required: true
-  attr :user_reports, :list, required: true
+  attr :reports, :list, required: true
   attr :is_edit_mode, :boolean, default: false
 
   attr :supports_touch, :boolean, required: true
@@ -19,6 +20,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   attr :stats_panel_is_open, :boolean, required: true
 
   attr :pagination, :map, required: true
+  attr :locale, :string, default: "bg"
 
   def index(assigns) do
     ~H"""
@@ -26,7 +28,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
       <div class="relative flex flex-col md:flex-row items-center justify-center bg-secondary rounded-md p-2 m-2 mb-6">
         <div class="avatar placeholder m-2 md:mr-10">
           <div class="bg-neutral text-neutral-content w-20 h-20 md:w-24 md:h-24 rounded-full flex items-center justify-center">
-            <span class="text-3xl"><%= String.upcase(String.first(@username)) %></span>
+            <span class="text-3xl text-gray-200"><%= String.upcase(String.first(@username)) %></span>
           </div>
         </div>
         <!-- User Info -->
@@ -58,7 +60,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%= gettext("Save") %>
+                <%= translate(@locale, "profile.save") %>
               </button>
 
               <button
@@ -67,7 +69,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
                 phx-click="toggle_profile_view"
                 phx-value-view="my_profile_view"
               >
-                <%= gettext("Cancel") %>
+                <%= translate(@locale, "profile.cancel") %>
               </button>
             </div>
           </div>
@@ -78,7 +80,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-click="toggle_profile_view"
             phx-value-view="my_profile_view"
           >
-            <%= gettext("My Profile") %>
+            <%= translate(@locale, "profile.my_profile") %>
           </button>
 
           <CommonComponents.filter_button
@@ -94,7 +96,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
             phx-value-view="my_reports_view"
             disabled={@is_edit_mode}
           >
-            <%= gettext("My Reports") %>
+            <%= translate(@locale, "profile.my_reports") %>
           </button>
         </div>
       </div>
@@ -102,16 +104,18 @@ defmodule ISeeSeaWeb.ProfileComponents do
       <.my_report_summary_view
         :if={@view === "my_profile_view"}
         user_report_summary={@user_report_summary}
+        locale={@locale}
       />
 
       <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
-      <.my_report_view :if={@view === "my_reports_view"} user_reports={@user_reports} />
+      <.my_report_view :if={@view === "my_reports_view"} reports={@reports} />
       <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
     </div>
     """
   end
 
   attr :user_report_summary, :list, required: true
+  attr :locale, :string, default: "bg"
 
   def my_report_summary_view(assigns) do
     ~H"""
@@ -125,9 +129,15 @@ defmodule ISeeSeaWeb.ProfileComponents do
         </figure>
         <div class="card-body shadow-md rounded-md">
           <h2 class="card-title"><%= type %></h2>
-          <p><%= gettext("Count of your reports: ") %><%= count %></p>
+          <p><%= translate(@locale, "profile.count_of_reports") %><%= count %></p>
           <div class="card-actions justify-end">
-            <button class="btn btn-primary"><%= gettext("See Reports") %></button>
+            <button
+              class="btn btn-primary"
+              phx-click="show_specific_reports"
+              phx-value-report_type={type}
+            >
+              <%= translate(@locale, "profile.see_reports") %>
+            </button>
           </div>
         </div>
       </div>
@@ -135,12 +145,16 @@ defmodule ISeeSeaWeb.ProfileComponents do
     """
   end
 
-  attr :user_reports, :list, required: true
+  attr :reports, :list, required: true
+  attr :locale, :string, default: "bg"
 
   def my_report_view(assigns) do
     ~H"""
-    <div class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto">
-      <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @user_reports do %>
+    <div
+      :if={not Enum.empty?(@reports)}
+      class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto"
+    >
+      <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @reports do %>
         <!-- Polaroid card container with perspective for 3D effect -->
         <.live_component
           module={ISeeSeaWeb.ReportCardLiveComponent}
@@ -149,8 +163,25 @@ defmodule ISeeSeaWeb.ProfileComponents do
           comment={comment}
           pictures={pictures}
           report={report}
+          locale={@locale}
+          user_is_admin={false}
         />
       <% end %>
+    </div>
+
+    <div
+      :if={Enum.empty?(@reports)}
+      class="flex flex-col items-center justify-center mt-10 p-6 bg-gray-50 border border-gray-200 rounded-md shadow-md"
+    >
+      <img
+        src="/images/report_icons/no_reports_found.svg"
+        alt="No Reports"
+        class="w-32 h-32 mb-4 opacity-75"
+      />
+      <p class="text-xl font-semibold text-gray-700">No Reports Found</p>
+      <p class="text-sm text-gray-500 mt-2 text-center mb-4">
+        It looks like you haven't submitted any reports yet.
+      </p>
     </div>
     """
   end

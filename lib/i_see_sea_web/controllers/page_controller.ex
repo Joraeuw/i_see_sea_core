@@ -8,18 +8,18 @@ defmodule ISeeSeaWeb.PageController do
   end
 
   def privacy_policy(conn, _params) do
-    render(conn, "privacy_policy.html")
+    render(conn, "privacy_policy.html", locale: "bg")
   end
 
   def terms_and_conditions(conn, _params) do
-    render(conn, "terms_and_conditions.html")
+    render(conn, "terms_and_conditions.html", locale: "bg")
   end
 
   def contacts(conn, _params) do
-    render(conn, "contacts.html")
+    render(conn, "contacts.html", locale: "bg")
   end
 
   def about(conn, _params) do
-    render(conn, "about.html")
+    render(conn, "about.html", locale: "bg")
   end
 end

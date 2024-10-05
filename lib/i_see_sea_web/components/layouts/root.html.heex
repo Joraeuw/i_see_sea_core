@@ -104,43 +104,45 @@
             <div class="hidden sm:flex w-5/5 justify-around space-x-1">
               <.link class="z-10" navigate={~p"/"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Home") %>
+                  <%= translate(@locale, "nav.home") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/profile"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Profile") %>
+                  <%= translate(@locale, "nav.profile") %>
                 </button>
               </.link>
               <.link class="z-10" navigate={~p"/reports-list"}>
                 <button class="btn md:min-w-32">
-                  <%= gettext("Reports") %>
+                  <%= translate(@locale, "nav.reports") %>
                 </button>
               </.link>
               <div class="dropdown dropdown-bottom">
-                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">More</div>
+                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">
+                  <%= translate(@locale, "nav.more") %>
+                </div>
                 <ul
                   tabindex="0"
                   class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow"
                 >
                   <li>
                     <.link class="z-10" navigate={~p"/terms-and-conditions"}>
-                      <%= gettext("Terms of use") %>
+                      <%= translate(@locale, "nav.terms_of_use") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/about"}>
-                      <%= gettext("Our purpose") %>
+                      <%= translate(@locale, "nav.our_purpose") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/contacts"}>
-                      <%= gettext("Contacts") %>
+                      <%= translate(@locale, "nav.contacts") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-10" navigate={~p"/privacy-policy"}>
-                      <%= gettext("Privacy and policy") %>
+                      <%= translate(@locale, "nav.privacy_and_policy") %>
                     </.link>
                   </li>
                 </ul>
@@ -149,41 +151,41 @@
             <!-- Mobile Menu Button -->
             <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
               <details class="dropdown w-8/12 z-50">
-                <summary class="btn m-1 w-[130px]"><%= gettext("Menu") %></summary>
+                <summary class="btn m-1 w-[130px]"><%= translate(@locale, "nav.menu") %></summary>
                 <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
                   <li>
                     <.link class="z-50 " navigate={~p"/"}>
-                      <%= gettext("Home") %>
+                      <%= translate(@locale, "nav.home") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/profile"}>
-                      <%= gettext("Profile") %>
+                      <%= translate(@locale, "nav.profile") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/reports-list"}>
-                      <%= gettext("Reports") %>
+                      <%= translate(@locale, "nav.reports") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/about"}>
-                      <%= gettext("Our purpose") %>
+                      <%= translate(@locale, "nav.our_purpose") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/terms-and-conditions"}>
-                      <%= gettext("Terms of use") %>
+                      <%= translate(@locale, "nav.terms_of_use") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/privacy-policy"}>
-                      <%= gettext("Privacy Policy") %>
+                      <%= translate(@locale, "nav.privacy_policy") %>
                     </.link>
                   </li>
                   <li>
                     <.link class="z-50 " navigate={~p"/contacts"}>
-                      <%= gettext("Contacts") %>
+                      <%= translate(@locale, "nav.contacts") %>
                     </.link>
                   </li>
                 </ul>
@@ -200,7 +202,25 @@
       </div>
       <div class="flex flex-row justify-start w-3/12 mb-2 md:w-2/12 items-end">
         <!-- Language Button -->
-        <button class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]">
+        <div id="locale-handler" phx-hook="LocaleHook" hidden></div>
+        <button
+          :if={@locale === "bg"}
+          phx-click="change_locale"
+          phx-value-locale="en"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
+          <img
+            src="/images/home-icons/bulgarian_flag_transparent.png"
+            class="w-full h-full"
+            alt="Language Selection"
+          />
+        </button>
+        <button
+          :if={@locale === "en"}
+          phx-click="change_locale"
+          phx-value-locale="bg"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
           <img
             src="/images/home-icons/bulgarian_flag_transparent.png"
             class="w-full h-full"
@@ -208,91 +228,26 @@
           />
         </button>
         <!-- Login Button -->
-        <.link
-          class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
-          navigate={~p"/login"}
-        >
-          <%= if assigns[:current_user] do %>
+        <%= if assigns[:current_user] do %>
+          <.link
+            class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+            href={~p"/logout"}
+            method="delete"
+          >
             <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
-          <% else %>
+          </.link>
+        <% else %>
+          <.link
+            class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+            navigate={~p"/login"}
+          >
             <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
-          <% end %>
-        </.link>
+          </.link>
+        <% end %>
       </div>
     </nav>
     <div class="relative bg-white w-full h-4/6">
       <%= @inner_content %>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-        const wrapper = document.querySelector('.slider-wrapper');
-        const items = document.querySelectorAll('.slider-item');
-        const leftArrow = document.querySelector('.arrow-left');
-        const rightArrow = document.querySelector('.arrow-right');
-        let currentIndex = 0;
-
-        function showItem(index) {
-          const offset = -index * 100; // Calculate the offset for the current item
-          wrapper.style.transform = `translateX(${offset}%)`;
-          updateArrows(); // Update arrow visibility
-        }
-
-        // Left arrow click (swipe right)
-        leftArrow.addEventListener('click', () => {
-          if (currentIndex > 0) {
-            currentIndex--;
-            showItem(currentIndex);
-          }
-        });
-
-        // Right arrow click (swipe left)
-        rightArrow.addEventListener('click', () => {
-          if (currentIndex < items.length - 1) {
-            currentIndex++;
-            showItem(currentIndex);
-          }
-        });
-
-        // Handle swipe gestures for touchscreens
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        wrapper.addEventListener('touchstart', e => {
-          touchStartX = e.changedTouches[0].screenX;
-        });
-
-        wrapper.addEventListener('touchend', e => {
-          touchEndX = e.changedTouches[0].screenX;
-          handleSwipe();
-        });
-
-        function handleSwipe() {
-          if (touchEndX < touchStartX && currentIndex < items.length - 1) {
-            currentIndex++;
-            showItem(currentIndex);
-          } else if (touchEndX > touchStartX && currentIndex > 0) {
-            currentIndex--;
-            showItem(currentIndex);
-          }
-        }
-
-        // Show/hide the left and right arrows based on the current item
-        function updateArrows() {
-          if (currentIndex === 0) {
-            leftArrow.classList.add('hidden');
-          } else {
-            leftArrow.classList.remove('hidden');
-          }
-
-          if (currentIndex === items.length - 1) {
-            rightArrow.classList.add('hidden');
-          } else {
-            rightArrow.classList.remove('hidden');
-          }
-        }
-
-        showItem(currentIndex); // Initialize
-      });
-    </script>
   </body>
 </html>

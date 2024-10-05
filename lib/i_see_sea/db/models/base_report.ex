@@ -15,17 +15,18 @@ defmodule ISeeSea.DB.Models.BaseReport do
   use ISeeSea.DB.DefaultModel,
     default_preloads: [
       :jellyfish_report,
-      :pollution_report,
       :meteorological_report,
       :atypical_activity_report,
       :other_report,
       :pictures,
-      :user
+      :user,
+      pollution_report: :pollution_types
     ]
 
   @derive {Flop.Schema,
    filterable: [
      :name,
+     :user_id,
      :quantity,
      :species,
      :pollution_types,

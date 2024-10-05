@@ -30,7 +30,7 @@ defmodule ISeeSeaWeb.UserAuth do
   end
 
   defp renew_session(conn) do
-    preferred_locale = get_session(conn, :preferred_locale)
+    preferred_locale = get_session(conn, :preferred_locale, "en")
     delete_csrf_token()
 
     conn

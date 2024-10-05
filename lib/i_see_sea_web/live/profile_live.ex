@@ -1,6 +1,12 @@
 defmodule ISeeSeaWeb.ProfileLive do
+  require ISeeSea.Constants.ReportType
+  alias ISeeSea.Constants.ReportType
+  alias ISeeSea.DB.Logic.ReportOperations
   alias ISeeSea.DB.Models.BaseReport
   use ISeeSeaWeb, :live_view
+
+  import ISeeSeaWeb.Trans
+  import ISeeSeaWeb.Gettext
 
   alias ISeeSeaWeb.ProfileComponents
 
@@ -14,6 +20,7 @@ defmodule ISeeSeaWeb.ProfileLive do
   def render(assigns) do
     ~H"""
     <ProfileComponents.index
+      locale={@locale}
       pagination={@pagination}
       view={@profile_view}
       username={@current_user.username}
@@ -22,20 +29,14 @@ defmodule ISeeSeaWeb.ProfileLive do
       supports_touch={@supports_touch}
       filters={@filters}
       filter_menu_is_open={@filter_menu_is_open}
-      user_report_summary={[
-        {"jellyfish", "/images/create-report/jellyfish_report.png", 1},
-        {"meteorological", "/images/create-report/meteorological_report.png", 10},
-        {"atypical_activity", "/images/create-report/atypical_report.png", 12},
-        {"pollution", "/images/create-report/pollution_report.png", 51},
-        {"other", "/images/create-report/other_report.png", 3}
-      ]}
-      user_reports={@user_reports}
+      user_report_summary={@reports_summary}
+      reports={@reports}
     />
     """
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     supports_touch =
       if connected?(socket) do
         socket
@@ -50,48 +51,45 @@ defmodule ISeeSeaWeb.ProfileLive do
     report_type = "all"
 
     filters = %{
-      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -1)),
+      "start_date" => DateTime.to_iso8601(~U[2024-01-01 00:00:00Z]),
       "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
       "report_type" => report_type
     }
 
-    reports_pagination = %{page_size: 100, page: 1}
+    {:ok, reports, pagination} =
+      get_user_reports(current_user, report_type, filters)
 
-    {:ok, reports} =
-      get_user_reports(
-        Map.values(%{
-          start_date: %{
-            "field" => "inserted_at",
-            "op" => ">=",
-            "value" => Timex.shift(DateTime.utc_now(), days: -1)
-          },
-          end_date: %{"field" => "inserted_at", "op" => "<=", "value" => DateTime.utc_now()}
-        }),
-        current_user,
-        reports_pagination
-      )
+    locale = Map.get(session, "preferred_locale") || "bg"
 
-    pagination = %{page: 1, total_pages: 10}
+    all_report_types = [
+      {ReportType.jellyfish(), "/images/create-report/jellyfish_report.png"},
+      {ReportType.meteorological(), "/images/create-report/meteorological_report.png"},
+      {ReportType.atypical_activity(), "/images/create-report/atypical_report.png"},
+      {ReportType.pollution(), "/images/create-report/pollution_report.png"},
+      {ReportType.other(), "/images/create-report/other_report.png"}
+    ]
+
+    grouped_reports = reports |> Enum.group_by(& &1.report_type)
+
+    summary =
+      all_report_types
+      |> Enum.map(fn {type, image_path} ->
+        count = grouped_reports |> Map.get(type, []) |> length()
+        {type, image_path, count}
+      end)
 
     new_socket =
       assign(socket,
-        current_user: socket.assigns.current_user,
+        locale: locale,
+        current_user: current_user,
         supports_touch: supports_touch,
+        filter_report_type: report_type,
         filters: to_form(filters),
         pagination: pagination,
         reports: reports,
+        reports_summary: summary,
         stats_panel_is_open: true,
         profile_view: my_profile_view(),
-        user_reports:
-          BaseReport.all!([
-            :jellyfish_report,
-            :meteorological_report,
-            :atypical_activity_report,
-            :other_report,
-            :pictures,
-            :user,
-            pollution_report: :pollution_types
-          ]),
         filter_menu_is_open: false
       )
 
@@ -116,14 +114,66 @@ defmodule ISeeSeaWeb.ProfileLive do
   @impl true
   def handle_event("change_page", %{"page" => page}, socket) do
     page = String.to_integer(page)
-    {:noreply, assign(socket, :page, page)}
+
+    pagination = %{socket.assigns.pagination | page: page}
+
+    {:ok, new_reports, new_pagination} =
+      get_user_reports(
+        socket.assigns.current_user,
+        socket.assigns.filters["report_type"],
+        socket.assigns.filters.params,
+        pagination
+      )
+
+    socket = assign(socket, reports: new_reports, pagination: new_pagination)
+
+    {:noreply, socket}
   end
 
-  defp get_user_reports(filters, _user, pagination) do
-    with {:ok, reports, _} <-
-           BaseReport.get_with_filter(%{filters: filters}, pagination),
-         parsed_reports <- Focus.view(reports, %Lens{view: Lens.expanded()}) do
-      {:ok, parsed_reports}
-    end
+  @impl true
+  def handle_event("show_specific_reports", %{"report_type" => type}, socket) do
+    filters = %{
+      "start_date" => DateTime.to_iso8601(~U[2024-01-01 00:00:00Z]),
+      "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
+      "report_type" => type
+    }
+
+    {:ok, reports, pagination} =
+      get_user_reports(socket.assigns.current_user, type, filters)
+
+    socket =
+      assign(socket, pagination: pagination, reports: reports, profile_view: my_reports_view())
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("filter_reports", filters, socket) do
+    {:ok, reports, pagination} =
+      get_user_reports(socket.assigns.current_user, filters["report_type"], filters)
+
+    socket = assign(socket, pagination: pagination, reports: reports, filters: to_form(filters))
+
+    {:noreply, socket}
+  end
+
+  defp get_user_reports(
+         current_user,
+         report_type,
+         filters,
+         pagination \\ %{page: 1, page_size: 10}
+       ) do
+    {:ok, reports, pagination} =
+      ReportOperations.retrieve_user_reports_with_live_view_filters(
+        current_user,
+        report_type,
+        pagination,
+        filters
+      )
+
+    total_pages = ReportOperations.get_total_pages(pagination)
+    pagination = Map.put(pagination, :total_pages, total_pages)
+
+    {:ok, reports, pagination}
   end
 end
