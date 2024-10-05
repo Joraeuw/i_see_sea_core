@@ -25,7 +25,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         form: to_form(%{}, as: "report_params"),
         report_type: ReportType.jellyfish(),
         check_errors: false,
-        is_location_selected: false
+        is_location_selected: false,
       )
 
     {:ok, socket}
@@ -57,7 +57,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
             md:h-11/12 md:max-w-1/3 md:m-2 md:self-start p-3 rounded-md"
       >
         <.error :if={@check_errors}>
-          Oops, something went wrong! Please check the errors below.
+          You have not selected a location.
         </.error>
 
         <CoreComponents.input field={@form[:report_type]} value={@report_type} type="hidden" />
@@ -391,6 +391,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
     changeset = Report.changeset(changeset_signature, params)
+
 
     send(self(), :location_selected)
 

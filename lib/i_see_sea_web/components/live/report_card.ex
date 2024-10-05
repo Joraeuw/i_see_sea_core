@@ -15,7 +15,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="relative w-80 h-96 transform transition-transform duration-50s hover:scale-105">
+    <div id="report-card"class="relative w-80 h-96 transform transition-transform duration-50s hover:scale-105">
       <div class={[
         "relative transition-transform duration-[0.5] ease-[ease-in-out] transform-style-preserve-3d will-change-transform",
         if(@is_back, do: "rotate-y-180")
