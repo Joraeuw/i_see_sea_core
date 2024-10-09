@@ -147,7 +147,7 @@ defmodule ISeeSeaWeb.HomeLive do
   @impl true
   def handle_event("toggle_report", %{"type" => report_type}, socket) do
     if socket.assigns.current_user == nil do
-      {:noreply, push_redirect(socket, to: "/login")}
+      {:noreply, push_navigate(socket, to: "/login")}
     else
       cond do
         socket.assigns.create_report_type == report_type &&
@@ -189,7 +189,10 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon}, socket) do
+    IO.inspect(lat, label: "User Selected Location")
     {:noreply, assign(socket, :user_selected_location, %{lat: lat, lon: lon})}
+
+
   end
 
   @impl true
@@ -221,7 +224,7 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
-  def handle_event("select_location", _params, socket) do
+  def handle_info(:select_location, socket) do
     socket =
       socket
       |> push_event("enable_pin_mode", %{})

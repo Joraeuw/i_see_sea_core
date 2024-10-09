@@ -91,6 +91,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
 
           <button
             :if={@view === "my_profile_view"}
+            id="my_reports_button"
             class="btn ml-0 md:ml-3"
             phx-click="toggle_profile_view"
             phx-value-view="my_reports_view"

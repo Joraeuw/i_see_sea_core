@@ -85,6 +85,7 @@ function format_date(report_date) {
   ));
 }
 const jellyfishContent = ({
+  id,
   name,
   comment,
   pictures,
@@ -97,7 +98,7 @@ const jellyfishContent = ({
   const slider = createImageSlider(pictures);
   const formattedDate = format_date(report_date);
   return `
-   <div class="flex flex-col items-center w-full h-full ">
+   <div class="flex flex-col items-center w-full h-full id="report-id-${id}">
     <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>
     ${slider}
     <div class="flex flex-col items-center justify-between w-full h-[210px]">

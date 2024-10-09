@@ -8,4 +8,5 @@ export default Hooks = {
   DetectTouchSupport,
   DaterangeHover,
   LocaleHook,
+  LeafletUserLocationHook,
 };
