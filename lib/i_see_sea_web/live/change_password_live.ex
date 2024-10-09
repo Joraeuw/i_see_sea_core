@@ -7,7 +7,8 @@ defmodule ISeeSeaWeb.ChangeLive do
     {:ok,
      assign(socket,
        form_data: %{"new_password" => "", "confirm_password" => ""},
-       password_error: false
+       password_error: false,
+       locale: "bg"
      )}
   end
 

@@ -1,25 +1,67 @@
 defmodule ISeeSeaWeb.ForgotLive do
   use ISeeSeaWeb, :live_view
-  alias ISeeSeaWeb.HomeComponents
-  alias ISeeSea.DB.Models.BaseReport
+  alias ISeeSea.Repo
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.DB.Models.UserToken
+  alias ISeeSea.Emails
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, socket}
+    email = Phoenix.Flash.get(socket.assigns.flash, :email)
+    form = to_form(%{"email" => email}, as: "user")
+    {:ok, assign(socket, locale: "bg", form: form), temporary_assigns: [form: form]}
   end
 
   @impl true
   def render(assigns) do
-    ~L"""
-    <div class="flex flex-col items-center justify-start w-full h-screen p-5 box-border">
-    <div class="flex flex-col shadow-lg justify-between items-center h-auto max-h-[400px] w-full max-w-[600px] rounded-lg bg-no-repeat bg-cover p-5 box-border" style="background-image: url('/images/auth_icons/waveLoginReg.svg'); background-size: cover; background-position: center;">
-
-        <h1 class="text-[#189ab4] my-3 text-xl font-medium mb-5 text-center">Forgot password</h1>
+    ~H"""
+    <div class="flex flex-col items-center rounded-xl shadow-lg shadow-top-bottom mx-auto w-[400px] h-10/12 sm:w-96">
+      <.header locale={@locale} class="text-center">
         <p class="text-[#189ab4] my-3 text-center">Please enter your E-mail Address:</p>
-        <input class=" mt-2 block my-3 w-7/12 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 border-zinc-300 focus:border-zinc-400" type="text" />
-        <button class="btn my-4">Send email</button>
+      </.header>
+      <div class="w-full">
+        <.simple_form
+          locale={@locale}
+          for={@form}
+          id="forgot_password_form"
+          phx-submit="send_email"
+          phx-update="ignore"
+          class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
+          inner_class="w-12/12"
+        >
+          <.input
+            field={@form[:email]}
+            type="email"
+            label={translate(@locale, "login.email")}
+            required
+          />
+          <:actions>
+            <.button phx-disable-with={translate(@locale, "login.logging_in")} class="btn mb-3">
+              <%= translate(@locale, "login.log_in") %>
+            </.button>
+          </:actions>
+        </.simple_form>
       </div>
     </div>
     """
+  end
+
+  @impl true
+  def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do
+    IO.inspect("Handling send_email event", label: "DEBUG")
+    case Repo.get_by(User, email: email) do
+      nil ->
+
+        {:noreply, socket |> put_flash(:info, "If the email exists, a reset link has been sent.")}
+
+      user ->
+
+        {token, user_token} = UserToken.build_email_token(user, "reset_password")
+        Repo.insert!(user_token)
+
+        Emails.password_reset_email(user, token)
+
+        {:noreply, socket |> put_flash(:info, "If the email exists, a reset link has been sent.")}
+    end
   end
 end

@@ -48,7 +48,7 @@ defmodule ISeeSeaWeb.LoginLive do
               type="checkbox"
               label={translate(@locale, "login.keep_me_logged")}
             />
-            <.link href={~p"/reset_password"} class="text-sm font-semibold">
+            <.link href={~p"/forgot_password"} class="text-sm font-semibold">
               <%= translate(@locale, "login.forgot_password") %>
             </.link>
           </:actions>
