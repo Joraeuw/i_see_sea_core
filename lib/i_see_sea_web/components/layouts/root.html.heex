@@ -29,12 +29,6 @@
     </script>
   </head>
   <body class="bg-white h-screen w-screen">
-    <dialog id="modal_fullscreen_image_slider" class="modal">
-      <div class="modal-box relative">
-        <img src="${picture}" alt="Large Picture" class="w-full h-auto" />
-      </div>
-      <label class="modal-backdrop" for="modal_fullscreen_image_slider">Close</label>
-    </dialog>
     <nav class="flex relative pb-0.5 w-full shadow-md mb-4">
       <!-- SVG for wave background -->
       <svg
@@ -202,31 +196,41 @@
       </div>
       <div class="flex flex-row justify-start w-3/12 mb-2 md:w-2/12 items-end">
         <!-- Language Button -->
-        <div id="locale-handler" phx-hook="LocaleHook" hidden></div>
+        <div id="locale-handler" hidden></div>
+
         <button
-          :if={@locale === "bg"}
-          phx-click="change_locale"
-          phx-value-locale="en"
+          :if={@locale == "bg"}
+          onclick="changeLocale('en')"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
+          <img
+            src="/images/home-icons/british flag transparent.png"
+            class="w-full h-full"
+            alt="Switch to English"
+          />
+        </button>
+
+        <button
+          :if={@locale == "en"}
+          onclick="changeLocale('bg')"
           class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
         >
           <img
             src="/images/home-icons/bulgarian_flag_transparent.png"
             class="w-full h-full"
-            alt="Language Selection"
+            alt="Switch to Bulgarian"
           />
         </button>
-        <button
-          :if={@locale === "en"}
-          phx-click="change_locale"
-          phx-value-locale="bg"
-          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
-        >
-          <img
-            src="/images/home-icons/bulgarian_flag_transparent.png"
-            class="w-full h-full"
-            alt="Language Selection"
-          />
-        </button>
+
+        <script>
+          function changeLocale(locale) {
+            console.log(locale)
+            localStorage.setItem('locale', locale);
+            document.cookie = "locale=" + locale + "; path=/";
+            console.log(document.cookie)
+            window.location.reload();
+          }
+        </script>
         <!-- Login Button -->
         <%= if is_user_logged(assigns[:current_user]) do %>
           <.link

@@ -82,9 +82,7 @@ defmodule ISeeSeaWeb.RegisterLive do
       |> assign(trigger_submit: false, check_errors: false)
       |> assign_form(changeset)
 
-    locale = Map.get(session, "preferred_locale") || "bg"
-
-    {:ok, assign(socket, locale: locale), temporary_assigns: [form: nil]}
+    {:ok, socket, temporary_assigns: [form: nil]}
   end
 
   @impl true

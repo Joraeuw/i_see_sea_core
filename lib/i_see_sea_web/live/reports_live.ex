@@ -41,11 +41,8 @@ defmodule ISeeSeaWeb.ReportsLive do
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = Map.put(pagination, :total_pages, total_pages)
 
-    locale = Map.get(session, "preferred_locale") || "bg"
-
     new_socket =
       assign(socket,
-        locale: locale,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
         stats_panel_is_open: false,

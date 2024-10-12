@@ -59,8 +59,6 @@ defmodule ISeeSeaWeb.ProfileLive do
     {:ok, reports, pagination} =
       get_user_reports(current_user, report_type, filters)
 
-    locale = Map.get(session, "preferred_locale") || "bg"
-
     all_report_types = [
       {ReportType.jellyfish(), "/images/create-report/jellyfish_report.png"},
       {ReportType.meteorological(), "/images/create-report/meteorological_report.png"},
@@ -80,7 +78,6 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     new_socket =
       assign(socket,
-        locale: locale,
         current_user: current_user,
         supports_touch: supports_touch,
         filter_report_type: report_type,

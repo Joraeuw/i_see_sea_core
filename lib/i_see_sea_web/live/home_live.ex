@@ -17,7 +17,9 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    locale = Map.get(session, "locale")
+
     supports_touch =
       if connected?(socket) do
         ISeeSeaWeb.Endpoint.subscribe("reports:updates")
@@ -57,7 +59,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
     new_socket =
       assign(socket,
-        locale: "bg",
+        locale: locale,
         is_selecting_location: false,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
@@ -220,6 +222,15 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
+  def handle_event("set_locale", %{"locale" => locale}, socket) do
+    {:noreply, assign(socket, :locale, locale)}
+  end
+
+  def handle_event("change_locale", %{"locale" => locale}, socket) do
+    socket = push_event(socket, "update_locale", %{locale: locale})
+    {:noreply, assign(socket, :locale, locale)}
+  end
+
   def handle_info(:select_location, socket) do
     socket =
       socket
@@ -227,17 +238,6 @@ defmodule ISeeSeaWeb.HomeLive do
       |> assign(is_selecting_location: true, create_report_toolbox_is_open: false)
 
     {:noreply, socket}
-  end
-
-  def handle_event("set_locale", %{"locale" => locale}, socket) do
-    IO.inspect(locale, label: "setting locale to")
-    {:noreply, assign(socket, :locale, locale)}
-  end
-
-  def handle_event("change_locale", %{"locale" => locale}, socket) do
-    IO.inspect(locale, label: "changing locale to")
-    socket = push_event(socket, "update_locale", %{locale: locale})
-    {:noreply, assign(socket, :locale, locale)}
   end
 
   @impl true

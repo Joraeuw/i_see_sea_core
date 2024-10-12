@@ -11,6 +11,7 @@ defmodule ISeeSeaWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
+    plug ISeeSeaWeb.Plug.SetLocale
   end
 
   pipeline :api do
@@ -44,21 +45,22 @@ defmodule ISeeSeaWeb.Router do
     live "/change_password", ChangeLive, :index
     live "/verify-email/:token", VerifyEmailLive, :index
 
-    get "/privacy-policy", PageController, :privacy_policy
-    get "/terms-and-conditions", PageController, :terms_and_conditions
-    get "/contacts", PageController, :contacts
-    get "/about", PageController, :about
-
-    delete "/logout", SessionController, :logout
-
     live_session :current_user,
       on_mount: [
+        {ISeeSeaWeb.Plug.SetLocale, :mount_locale},
         {ISeeSeaWeb.UserAuth, {:maybe_ensure_authenticated, %{authorize: [:profile_index]}}}
       ] do
       live "/", HomeLive, :home_index
       live "/profile", ProfileLive, :profile_index
       live "/reports-list", ReportsLive, :reports_index
     end
+
+    get "/privacy-policy", PageController, :privacy_policy
+    get "/terms-and-conditions", PageController, :terms_and_conditions
+    get "/contacts", PageController, :contacts
+    get "/about", PageController, :about
+
+    delete "/logout", SessionController, :logout
   end
 
   scope "/api" do
