@@ -111,6 +111,7 @@ defmodule ISeeSeaWeb do
       import ISeeSeaWeb.CoreComponents
       import ISeeSeaWeb.Trans
       import ISeeSeaWeb.Gettext
+      import ISeeSeaWeb.Utils.UserUtils
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

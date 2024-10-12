@@ -8,18 +8,31 @@ defmodule ISeeSeaWeb.Live.JellyfishReportLiveTest do
   setup %{conn: conn} do
     user = insert!(:user, first_name: "gosho")
 
-    {:ok, %{
-      conn: conn,
-      user: user
-    }}
+    {:ok,
+     %{
+       conn: conn,
+       user: user
+     }}
   end
 
   test "displays correct count of active jellyfish reports", %{conn: conn} do
     # Insert reports into the database
-    insert!(:jellyfish_report, base_report: build(:base_report, report_date: now_utc(hours: -2), deleted: false))
-    insert!(:jellyfish_report, base_report: build(:base_report, report_date: now_utc(), deleted: false))
-    insert!(:jellyfish_report, base_report: build(:base_report, report_date: now_utc(days: -2), deleted: false))
-    insert!(:jellyfish_report, base_report: build(:base_report, report_date: now_utc(days: -1), deleted: true))  # Deleted report
+    insert!(:jellyfish_report,
+      base_report: build(:base_report, report_date: now_utc(hours: -2), deleted: false)
+    )
+
+    insert!(:jellyfish_report,
+      base_report: build(:base_report, report_date: now_utc(), deleted: false)
+    )
+
+    insert!(:jellyfish_report,
+      base_report: build(:base_report, report_date: now_utc(days: -2), deleted: false)
+    )
+
+    # Deleted report
+    insert!(:jellyfish_report,
+      base_report: build(:base_report, report_date: now_utc(days: -1), deleted: true)
+    )
 
     # Navigate to the LiveView page
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
@@ -32,6 +45,7 @@ defmodule ISeeSeaWeb.Live.JellyfishReportLiveTest do
     NaiveDateTime.utc_now()
     |> Timex.shift(shift)
     |> DateTime.from_naive!("Etc/UTC")
-    |> DateTime.truncate(:second)  # Remove microseconds
+    # Remove microseconds
+    |> DateTime.truncate(:second)
   end
 end

@@ -228,7 +228,7 @@
           />
         </button>
         <!-- Login Button -->
-        <%= if assigns[:current_user] do %>
+        <%= if is_user_logged(assigns[:current_user]) do %>
           <.link
             class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
             href={~p"/logout"}

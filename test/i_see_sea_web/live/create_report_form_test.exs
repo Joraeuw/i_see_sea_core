@@ -86,7 +86,7 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
 
     view
     |> form("#create-report-form",
-    report_params: params
+      report_params: params
     )
     |> render_submit()
 
@@ -107,6 +107,7 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
             ]} =
              JellyfishReport.all()
   end
+
   test "succesfully create an atypical report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
@@ -114,7 +115,6 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
       name: "new_storm",
       comment: "my comment",
       storm_type: "thunderstorm"
-
     }
 
     view
@@ -150,8 +150,9 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
                 }
               }
             ]} =
-              AtypicalActivityReport.all()
+             AtypicalActivityReport.all()
   end
+
   test "succesfully create a meteorological report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
@@ -161,7 +162,6 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
       fog_type: "very_thick",
       wind_type: "hurricane",
       sea_swell_type: "strong"
-
     }
 
     view
@@ -199,15 +199,15 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
                 }
               }
             ]} =
-              MeteorologicalReport.all()
+             MeteorologicalReport.all()
   end
+
   test "succesfully create an other report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
     params = %{
       name: "new_other",
       comment: "my comment"
-
     }
 
     view
@@ -242,8 +242,9 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
                 }
               }
             ]} =
-              OtherReport.all()
+             OtherReport.all()
   end
+
   test "succesfully create a pollution report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
@@ -251,7 +252,6 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
       pollution_type_oil: true,
       name: "new_pollution",
       comment: "my comment"
-
     }
 
     view
@@ -287,9 +287,8 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
                 }
               }
             ]} =
-              PollutionReport.all()
+             PollutionReport.all()
   end
-
 
   test "not selected location when creating an atypical report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
@@ -308,16 +307,15 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     |> element("#select-location-button")
     |> render_click()
 
-
     view
     |> form("#create-report-form",
       report_params: params
     )
     |> render_submit()
 
-
-   assert render(view) =~ "You have not selected a location."
+    assert render(view) =~ "You have not selected a location."
   end
+
   test "not selected location when creating a jellyfish report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
@@ -336,16 +334,15 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     |> element("#select-location-button")
     |> render_click()
 
-
     view
     |> form("#create-report-form",
       report_params: params
     )
     |> render_submit()
 
-
-   assert render(view) =~ "You have not selected a location."
+    assert render(view) =~ "You have not selected a location."
   end
+
   test "not selected location when creating a meteorological report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
@@ -365,15 +362,13 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     |> element("#select-location-button")
     |> render_click()
 
-
     view
     |> form("#create-report-form",
       report_params: params
     )
     |> render_submit()
 
-
-   assert render(view) =~ "You have not selected a location."
+    assert render(view) =~ "You have not selected a location."
   end
 
   test "not selected location when creating a pollution report", %{user_conn: conn} do
@@ -393,16 +388,15 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     |> element("#select-location-button")
     |> render_click()
 
-
     view
     |> form("#create-report-form",
       report_params: params
     )
     |> render_submit()
 
-
-   assert render(view) =~ "You have not selected a location."
+    assert render(view) =~ "You have not selected a location."
   end
+
   test "not selected location when creating a other report", %{user_conn: conn} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
@@ -419,15 +413,13 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     |> element("#select-location-button")
     |> render_click()
 
-
     view
     |> form("#create-report-form",
       report_params: params
     )
     |> render_submit()
 
-
-   assert render(view) =~ "You have not selected a location."
+    assert render(view) =~ "You have not selected a location."
   end
 
   test "reports in my reports view equal your reports", %{user_conn: conn} do
@@ -445,26 +437,26 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     # Now count how many report components are rendered in the view
     report_count =
       html
-      |> Floki.find("#my_reports_container #report-card")  # Adjust the class or identifier
+      # Adjust the class or identifier
+      |> Floki.find("#my_reports_container #report-card")
       |> length()
 
     # You can assert that the number of reports rendered is as expected
     assert report_count == 0
   end
 
-  test "reports in my reports view equal your reports after u made a report", %{user_conn: conn, user: user} do
-
-    insert!(:jellyfish_report, base_report: build(:base_report ,report_date: now(hours: -2)))
+  test "reports in my reports view equal your reports after u made a report", %{
+    user_conn: conn,
+    user: user
+  } do
+    insert!(:jellyfish_report, base_report: build(:base_report, report_date: now(hours: -2)))
     {:ok, view, _html} = live(conn, Routes.profile_path(conn, :profile_index))
-
 
     view
     |> element("#my_reports_button")
     |> render_click()
 
-
     html = render(view)
-
 
     report_count =
       html
@@ -474,89 +466,85 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
     assert report_count == 1
   end
 
-  #test "reports in my reports view equal your reports after u made a report", %{conn: conn, user: user} do
+  # test "reports in my reports view equal your reports after u made a report", %{conn: conn, user: user} do
 
-   # insert!(:jellyfish_report, base_report: build(:base_report,user: user ,report_date: now(hours: -2)))
+  # insert!(:jellyfish_report, base_report: build(:base_report,user: user ,report_date: now(hours: -2)))
   #  {:ok, view, _html} = live(conn, Routes.profile_path(conn, :profile_index))
 
+  # view
+  # |> element("#my_reports_button")
+  # |> render_click()
 
-   # view
-   # |> element("#my_reports_button")
-   # |> render_click()
+  # html = render(view)
 
+  # report_count =
+  #   html
+  #   |> Floki.find("#my_reports_container #report-card")
+  #  |> length()
 
-   # html = render(view)
-
-
-   # report_count =
-   #   html
-   #   |> Floki.find("#my_reports_container #report-card")
-    #  |> length()
-
-    #assert report_count == 1
+  # assert report_count == 1
   # end
   test "making reports as a non loged in user for jellyfish", %{conn: conn, user: user} do
-
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
-
 
     view
     |> element("#jellyfish_create_report_button")
     |> render_click()
 
     assert_redirect(view, Routes.login_path(conn, :index))
-
   end
-  test "making reports as a non loged in user for meteorological", %{conn: conn, user: user} do
 
+  test "making reports as a non loged in user for meteorological", %{conn: conn, user: user} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
+
     view
     |> element("#meteorological_create_report_button")
     |> render_click()
 
     assert_redirect(view, Routes.login_path(conn, :index))
-
   end
-  test "making reports as a non loged in user for atypical", %{conn: conn, user: user} do
 
+  test "making reports as a non loged in user for atypical", %{conn: conn, user: user} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
+
     view
     |> element("#atypical_activity_create_report_button")
     |> render_click()
 
     assert_redirect(view, Routes.login_path(conn, :index))
   end
-  test "making reports as a non loged in user for pollution", %{conn: conn, user: user} do
 
+  test "making reports as a non loged in user for pollution", %{conn: conn, user: user} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
+
     view
     |> element("#pollution_create_report_button")
     |> render_click()
 
     assert_redirect(view, Routes.login_path(conn, :index))
   end
-  test "making reports as a non loged in user for other", %{conn: conn, user: user} do
 
+  test "making reports as a non loged in user for other", %{conn: conn, user: user} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
+
     view
     |> element("#other_create_report_button")
     |> render_click()
 
     assert_redirect(view, Routes.login_path(conn, :index))
   end
-  test "trying to go to profile page as a non loged in user", %{conn: conn, user: user} do
 
+  test "trying to go to profile page as a non loged in user", %{conn: conn, user: user} do
     {:ok, view, _html} = live(conn, Routes.home_path(conn, :home_index))
 
     view
     |> element("[navigate='/profile']")
     |> render_click()
 
-
     assert_redirect(view, Routes.login_path(conn, :index))
   end
-  test "trying to register", %{conn: conn} do
 
+  test "trying to register", %{conn: conn} do
     params = %{
       "first_name" => "John",
       "last_name" => "Doe",
@@ -567,18 +555,18 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
 
     {:ok, view, _html} = live(conn, Routes.register_path(conn, :index))
 
-
     view
     |> form("#registration_form", user: params)
     |> render_submit()
 
     assert Repo.get_by(User, email: params["email"])
   end
+
   test "successful login", %{conn: conn} do
     user = insert!(:user, email: "johndoe@example.com", password: Bcrypt.hash_pwd_salt("A123456"))
 
-
     {:ok, view, _html} = live(conn, Routes.login_path(conn, :index))
+
     conn =
       post(conn, Routes.session_path(conn, :login), %{
         "user" => %{
@@ -586,35 +574,33 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
           "password" => "A123456"
         }
       })
-      IO.inspect(get_flash(conn))
 
+    IO.inspect(get_flash(conn))
 
     assert redirected_to(conn) == Routes.home_path(conn, :home_index)
   end
-  test "trying to access login page when already logged in", %{user_conn: conn, user: user} do
 
+  test "trying to access login page when already logged in", %{user_conn: conn, user: user} do
     conn = get(conn, Routes.session_path(conn, :login))
 
-
     assert redirected_to(conn) == Routes.home_path(conn, :home_index)
   end
+
   test "trying to access register page when already logged in", %{user_conn: conn, user: user} do
     conn = get(conn, Routes.register_path(conn, :index))
 
-
     assert redirected_to(conn) == Routes.home_path(conn, :home_index)
   end
 
-
   defp now(shift \\ []) do
-    DateTime.utc_now() |> Timex.shift(shift)
-    |> DateTime.truncate(:second)
-
-  end
-  defp now_utc(shift \\ []) do
     DateTime.utc_now()
     |> Timex.shift(shift)
     |> DateTime.truncate(:second)
   end
 
+  defp now_utc(shift \\ []) do
+    DateTime.utc_now()
+    |> Timex.shift(shift)
+    |> DateTime.truncate(:second)
+  end
 end

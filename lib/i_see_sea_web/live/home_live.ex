@@ -1,9 +1,7 @@
 defmodule ISeeSeaWeb.HomeLive do
-  alias ISeeSea.Helpers.Broadcaster
   alias ISeeSea.DB.Logic.ReportOperations
   use ISeeSeaWeb, :live_view
 
-  alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.HomeComponents
 
   defmacro main_view, do: "main_view"
@@ -99,9 +97,9 @@ defmodule ISeeSeaWeb.HomeLive do
       <%!-- Desktop Design --%>
 
       <div
-        class={if @current_user == nil, do: "tooltip tooltip-error", else: ""}
-        data-tip={if @current_user == nil, do: "You need to log in first", else: nil}
-        data-tooltip-style={if @current_user == nil, do: "light", else: nil}
+        class={if !is_user_logged(@current_user), do: "tooltip tooltip-error", else: ""}
+        data-tip={if !is_user_logged(@current_user), do: "You need to log in first", else: nil}
+        data-tooltip-style={if !is_user_logged(@current_user), do: "light", else: nil}
       >
         <HomeComponents.report_toolbox
           create_report_toolbox_is_open={@create_report_toolbox_is_open}
@@ -146,7 +144,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("toggle_report", %{"type" => report_type}, socket) do
-    if socket.assigns.current_user == nil do
+    if !is_user_logged(socket.assigns.current_user) do
       {:noreply, push_navigate(socket, to: "/login")}
     else
       cond do
@@ -191,8 +189,6 @@ defmodule ISeeSeaWeb.HomeLive do
   def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon}, socket) do
     IO.inspect(lat, label: "User Selected Location")
     {:noreply, assign(socket, :user_selected_location, %{lat: lat, lon: lon})}
-
-
   end
 
   @impl true

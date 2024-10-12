@@ -25,7 +25,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         form: to_form(%{}, as: "report_params"),
         report_type: ReportType.jellyfish(),
         check_errors: false,
-        is_location_selected: false,
+        is_location_selected: false
       )
 
     {:ok, socket}
@@ -56,6 +56,10 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         class="z-50 bg-white self-center flex flex-col items-center space-y-3
             md:h-11/12 md:max-w-1/3 md:m-2 md:self-start p-3 rounded-md"
       >
+        <.error :if={!is_user_verified(@current_user)}>
+          You cannot submit reports until you verify your account!<br />
+          Please check <%= @current_user.email %>.
+        </.error>
         <.error :if={@check_errors}>
           You have not selected a location.
         </.error>
@@ -63,24 +67,31 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         <CoreComponents.input field={@form[:report_type]} value={@report_type} type="hidden" />
         <CoreComponents.input field={@form[:longitude]} type="hidden" required />
         <CoreComponents.input field={@form[:latitude]} type="hidden" required />
-        <.create_report_window form={@form} report_type={@report_type} locale={@locale} />
+        <.create_report_window
+          form={@form}
+          report_type={@report_type}
+          locale={@locale}
+          is_user_verified={is_user_verified(@current_user)}
+        />
 
         <CoreComponents.input
           type="textarea"
           field={@form[:comment]}
           class="textarea h-25 w-[260px] md:w-[320px] max-h-40"
           placeholder="Comment..."
+          disabled={!is_user_verified(@current_user)}
         />
 
         <Phoenix.Component.live_file_input
           upload={@uploads.pictures}
           class="file-input w-full max-w-xs"
+          disabled={!is_user_verified(@current_user)}
         />
         <:actions>
           <CoreComponents.button
             phx-disable-with="Creating a report..."
             class="btn w-[130px]"
-            disabled={@current_user === nil}
+            disabled={!is_user_verified(@current_user)}
           >
             Submit
           </CoreComponents.button>
@@ -101,6 +112,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
               phx-click="select_location"
               phx-hook="LeafletUserLocationHook"
               phx-target={@myself}
+              disabled={!is_user_verified(@current_user)}
               class={
                 ["btn_sucsess w-[130px] h-[48px]"] ++
                   [if(not @is_location_selected, do: "btn_delete w-[131px] h-[48px]")]
@@ -141,6 +153,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   attr :report_type, :string, required: true
   attr :form, :map, required: true
   attr :locale, :string, required: true
+  attr :is_user_verified, :boolean, required: true
 
   def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
     ~H"""
@@ -151,6 +164,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       type="text"
       placeholder="Report Name"
       class="input w-full max-w-xs"
+      disabled={!@is_user_verified}
       required
     />
     <CoreComponents.input
@@ -159,6 +173,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:species]}
       prompt="Select Species"
       options={JellyfishSpecies.values()}
+      disabled={!@is_user_verified}
       required
     />
     <CoreComponents.input
@@ -167,6 +182,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:quantity]}
       prompt="Select Range"
       options={JellyfishQuantityRange.values()}
+      disabled={!@is_user_verified}
       required
     />
     """
@@ -180,6 +196,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:name]}
       placeholder="Report Name"
       class="input w-full max-w-xs"
+      disabled={!@is_user_verified}
       required
     />
     <CoreComponents.input
@@ -188,6 +205,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:storm_type]}
       prompt="Storm Type"
       options={StormType.values()}
+      disabled={!@is_user_verified}
       required
     />
     """
@@ -201,6 +219,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:name]}
       placeholder="Report Name"
       class="input w-full max-w-xs"
+      disabled={!@is_user_verified}
       required
     />
     <CoreComponents.input
@@ -209,6 +228,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:fog_type]}
       prompt="Fog Type"
       options={Constants.FogType.values()}
+      disabled={!@is_user_verified}
       required
     />
     <CoreComponents.input
@@ -217,6 +237,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:wind_type]}
       prompt="Wind Type"
       options={Constants.WindType.values()}
+      disabled={!@is_user_verified}
       required
     />
     <CoreComponents.input
@@ -225,6 +246,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:sea_swell_type]}
       prompt="Sea Swell Type"
       options={Constants.SeaSwellType.values()}
+      disabled={!@is_user_verified}
       required
     />
     """
@@ -238,6 +260,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:name]}
       placeholder="Report Name"
       class="input w-full max-w-xs"
+      disabled={!@is_user_verified}
       required
     />
     <div class="flex flex-row space-x-3">
@@ -246,6 +269,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         field={@form[:pollution_type_oil]}
         label="Oil"
         class="checkbox"
+        disabled={!@is_user_verified}
       />
 
       <CoreComponents.input
@@ -253,12 +277,14 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         field={@form[:pollution_type_plastic]}
         label="Plastic"
         class="checkbox"
+        disabled={!@is_user_verified}
       />
       <CoreComponents.input
         type="checkbox"
         field={@form[:pollution_type_biological]}
         label="Biological"
         class="checkbox"
+        disabled={!@is_user_verified}
       />
     </div>
     """
@@ -272,6 +298,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       field={@form[:name]}
       placeholder="Report Name"
       class="input w-full max-w-xs"
+      disabled={!@is_user_verified}
       required
     />
     """
@@ -392,7 +419,6 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
     changeset = Report.changeset(changeset_signature, params)
-
 
     send(self(), :location_selected)
 

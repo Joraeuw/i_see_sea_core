@@ -4,7 +4,6 @@ defmodule ISeeSeaWeb.ProfileComponents do
   alias ISeeSeaWeb.CommonComponents
 
   import ISeeSeaWeb.Trans
-  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   attr :view, :string, required: true
