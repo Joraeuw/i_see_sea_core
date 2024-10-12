@@ -48,7 +48,7 @@ defmodule ISeeSea.DB.Models.User do
 
   def confirm_changeset(user) do
     now = DateTime.utc_now() |> DateTime.truncate(:second)
-    change(user, confirmed_at: now)
+    change(user, verified_at: now, verified: true)
   end
 
   def valid_password?(%__MODULE__{password: hashed_password}, password)
@@ -64,7 +64,7 @@ defmodule ISeeSea.DB.Models.User do
 
   defp put_password_hash(changeset), do: changeset
 
-  def is_admin?(%__MODULE__{id: user_id, role_id: user_role_id}) do
+  def is_admin?(%__MODULE__{role_id: user_role_id}) do
     {:ok, admin} = Role.get_by(%{name: "admin"})
 
     user_role_id === admin.id

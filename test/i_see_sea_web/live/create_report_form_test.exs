@@ -575,8 +575,6 @@ defmodule ISeeSeaWeb.Test.CreateReportFormTest do
         }
       })
 
-    IO.inspect(get_flash(conn))
-
     assert redirected_to(conn) == Routes.home_path(conn, :home_index)
   end
 

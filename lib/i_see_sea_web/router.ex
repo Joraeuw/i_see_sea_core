@@ -42,6 +42,8 @@ defmodule ISeeSeaWeb.Router do
     pipe_through [:browser]
     live "/forgot_password", ForgotLive, :index
     live "/change_password", ChangeLive, :index
+    live "/verify-email/:token", VerifyEmailLive, :index
+
     get "/privacy-policy", PageController, :privacy_policy
     get "/terms-and-conditions", PageController, :terms_and_conditions
     get "/contacts", PageController, :contacts
@@ -69,14 +71,6 @@ defmodule ISeeSeaWeb.Router do
   scope "/api", ISeeSeaWeb do
     pipe_through :api
 
-    # post "/register", SessionController, :register
-    # get "/verify-email/:token", UserController, :verify_email
-
-    # scope "/users" do
-    #   post "/forgot-password", UserController, :forgot_password
-    #   post "/reset-password/:token", UserController, :reset_password
-    # end
-
     ## Constants
     scope "/constants" do
       get("/picture_type", ConstantsController, :picture_type)
@@ -99,27 +93,6 @@ defmodule ISeeSeaWeb.Router do
       get "/:picture_id", PictureController, :show
     end
   end
-
-  # scope "/api", ISeeSeaWeb do
-  #   pipe_through :authenticated
-
-  #   get "/refresh", SessionController, :refresh
-
-  #   ## Users
-  #   scope "/users" do
-  #     get "/me", UserController, :user_info
-  #     get "/reports/:report_type", UserController, :list_reports
-  #   end
-
-  #   ## Reports
-  #   scope "/reports" do
-  #     delete "/delete/:report_id", ReportController, :delete_report
-
-  #     pipe_through :image_uploading
-
-  #     post "/create/:report_type", ReportController, :create_report
-  #   end
-  # end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
   if Application.compile_env(:i_see_sea, :dev_routes) do

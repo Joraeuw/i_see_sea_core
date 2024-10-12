@@ -58,7 +58,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       >
         <.error :if={!is_user_verified(@current_user)}>
           You cannot submit reports until you verify your account!<br />
-          Please check <%= @current_user.email %>.
+          Please check <%= if is_user_logged(@current_user), do: @current_user.email %>.
         </.error>
         <.error :if={@check_errors}>
           You have not selected a location.

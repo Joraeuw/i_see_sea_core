@@ -50,8 +50,7 @@ defmodule ISeeSeaWeb do
       use Gettext.Backend, otp_app: :i_see_sea
 
       import ISeeSeaWeb.Responses
-
-      use ISeeSeaWeb.Utils.EnsureRequiredModules, __MODULE__
+      alias ISeeSeaWeb.Params
 
       alias ISeeSeaWeb.Plug.AssertPermissions
       alias ISeeSeaWeb.Plug.EnsurePermitted
