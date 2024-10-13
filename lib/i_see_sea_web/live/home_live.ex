@@ -1,8 +1,11 @@
 defmodule ISeeSeaWeb.HomeLive do
-  alias ISeeSea.DB.Logic.ReportOperations
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.DB.Models.BaseReport
   use ISeeSeaWeb, :live_view
 
   alias ISeeSeaWeb.HomeComponents
+  alias ISeeSea.DB.Logic.ReportOperations
+  alias ISeeSea.Helpers.DateUtils
 
   defmacro main_view, do: "main_view"
   defmacro my_profile_view, do: "my_profile_view"
@@ -54,12 +57,25 @@ defmodule ISeeSeaWeb.HomeLive do
         filters
       )
 
+    entries_count = pagination.total_count
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: pagination.page, total_pages: total_pages}
+    pagination = Map.put(pagination, :total_pages, total_pages)
+
+    %{beginning_of_time: beginning_of_time, total_entries: total_reports} =
+      BaseReport.total_reports()
+
+    stats = %{
+      total_entries_in_filter: entries_count,
+      total_entries: total_reports,
+      beginning_of_time: DateUtils.date_display(beginning_of_time),
+      verified_users: User.get_total_verified_users(),
+      filter_date_range: DateUtils.date_range_display(filters["start_date"], filters["end_date"])
+    }
 
     new_socket =
       assign(socket,
         locale: locale,
+        stats: stats,
         is_selecting_location: false,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
@@ -119,7 +135,9 @@ defmodule ISeeSeaWeb.HomeLive do
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
       filters={@filters}
+      current_user={@current_user}
       stats_panel_is_open={@stats_panel_is_open}
+      data={@stats}
       locale={@locale}
     />
     """
@@ -195,25 +213,32 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("filter_reports", filters, socket) do
-    {:ok, reports, %{page: page} = pagination} =
+    {:ok, reports, %{total_count: total_count} = pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         filters["report_type"],
         socket.assigns.pagination,
         filters
       )
 
+    stats = %{
+      socket.assigns.stats
+      | total_entries_in_filter: total_count,
+        filter_date_range:
+          DateUtils.date_range_display(filters["start_date"], filters["end_date"])
+    }
+
     {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
 
-    stop_live_tracker =
-      Date.compare(Date.utc_today(), end_date) in [:gt, :eq]
+    stop_live_tracker = Date.compare(Date.utc_today(), end_date) == :lt
 
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: page, total_pages: total_pages}
+    pagination = Map.put(pagination, :total_pages, total_pages)
 
     socket =
       socket
       |> assign(:pagination, pagination)
       |> assign(:reports, reports)
+      |> assign(:stats, stats)
       |> push_event("filters_updated", %{
         stop_live_tracker: stop_live_tracker,
         reports: Focus.view(reports, %Lens{view: Lens.expanded()})

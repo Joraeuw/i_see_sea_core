@@ -3,7 +3,6 @@ defmodule ISeeSeaWeb.CommonComponents do
   alias ISeeSeaWeb.CoreComponents
 
   import ISeeSeaWeb.Trans
-  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   attr :pagination, :map, required: true

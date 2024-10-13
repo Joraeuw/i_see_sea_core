@@ -56,6 +56,11 @@ defmodule ISeeSea.DB.Models.User do
     Bcrypt.verify_pass(password, hashed_password)
   end
 
+  def get_total_verified_users do
+    from(u in __MODULE__, where: u.verified == true, select: count(u.id))
+    |> Repo.one()
+  end
+
   defp put_password_hash(
          %Ecto.Changeset{valid?: true, changes: %{password: password}} = changeset
        ) do

@@ -1,5 +1,6 @@
 defmodule ISeeSeaWeb.HomeComponents do
   @moduledoc false
+  alias ISeeSea.DB.Models.User
   alias ISeeSeaWeb.Live.CreateReportPanel
   alias ISeeSeaWeb.CommonComponents
 
@@ -61,8 +62,9 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   attr :stats_panel_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
-  # Set default locale
+  attr :current_user, :map, required: true
   attr :locale, :string, required: true
+  attr :data, :map
 
   def stat_home(assigns) do
     ~H"""
@@ -103,22 +105,21 @@ defmodule ISeeSeaWeb.HomeComponents do
           <div class="stat">
             <CommonComponents.filter_button filters={@filters} locale={@locale} />
           </div>
-          <div class="stat">
-            <div class="stat-title">Downloads</div>
-            <div class="stat-value">31K</div>
-            <div class="stat-desc">Jan 1st - Feb 1st</div>
+          <div :if={true || User.is_admin?(@current_user)} class="stat">
+            <div class="stat-title">Total Verified Users</div>
+            <div class="stat-value"><%= @data.verified_users %></div>
           </div>
 
           <div class="stat">
-            <div class="stat-title">New Users</div>
-            <div class="stat-value">4,200</div>
-            <div class="stat-desc">↗︎ 400 (22%)</div>
+            <div class="stat-title">Total Reports</div>
+            <div class="stat-value"><%= @data.total_entries %></div>
+            <div class="stat-desc"><%= "#{@data.beginning_of_time} - now" %></div>
           </div>
 
           <div class="stat">
-            <div class="stat-title">New Registers</div>
-            <div class="stat-value">1,200</div>
-            <div class="stat-desc">↘︎ 90 (14%)</div>
+            <div class="stat-title">Filtered Reports</div>
+            <div class="stat-value"><%= @data.total_entries_in_filter %></div>
+            <div class="stat-desc"><%= @data.filter_date_range %></div>
           </div>
         </div>
       </div>
