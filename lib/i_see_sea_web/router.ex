@@ -33,8 +33,13 @@ defmodule ISeeSeaWeb.Router do
   scope "/", ISeeSeaWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    live "/register", RegisterLive, :index
-    live "/login", LoginLive, :index
+    live_session :sign_up,
+      on_mount: [
+        {ISeeSeaWeb.Plug.SetLocale, :mount_locale}
+      ] do
+      live "/register", RegisterLive, :index
+      live "/login", LoginLive, :index
+    end
 
     post "/login", SessionController, :login
   end

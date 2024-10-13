@@ -105,7 +105,7 @@ defmodule ISeeSeaWeb.HomeComponents do
           <div class="stat">
             <CommonComponents.filter_button filters={@filters} locale={@locale} />
           </div>
-          <div :if={true || User.is_admin?(@current_user)} class="stat">
+          <div :if={User.is_admin?(@current_user)} class="stat">
             <div class="stat-title">Total Verified Users</div>
             <div class="stat-value"><%= @data.verified_users %></div>
           </div>
