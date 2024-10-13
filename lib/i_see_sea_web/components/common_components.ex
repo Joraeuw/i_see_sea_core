@@ -78,14 +78,21 @@ defmodule ISeeSeaWeb.CommonComponents do
   end
 
   attr :class, :string, default: nil
-  attr :filters, :map, required: true
-  attr :locale, :string, default: ""
+  attr :locale, :string
 
   def filter_button(assigns) do
     ~H"""
     <button class={@class || "btn"} onclick="filter_modal.showModal()">
       <%= translate(@locale, "home.filters") %>
     </button>
+    """
+  end
+
+  attr :filters, :map, required: true
+  attr :locale, :string
+
+  def filter_dialog(assigns) do
+    ~H"""
     <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form
@@ -112,10 +119,6 @@ defmodule ISeeSeaWeb.CommonComponents do
               options={ReportType.filter_values()}
               value={@filters[:report_type].form.params["report_type"]}
             />
-            <%!-- <select class="select w-full max-w-xs" name="report_type">
-              <option selected disabled>Select a report type</option>
-              <option :for={type <- ReportType.values()} value={type}><%= type %></option>
-            </select> --%>
           </.filter_base>
           <:actions>
             <CoreComponents.button

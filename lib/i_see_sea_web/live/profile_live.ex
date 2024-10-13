@@ -32,11 +32,13 @@ defmodule ISeeSeaWeb.ProfileLive do
       user_report_summary={@reports_summary}
       reports={@reports}
     />
+
+    <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />
     """
   end
 
   @impl true
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
         socket

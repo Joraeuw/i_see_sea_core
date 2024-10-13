@@ -117,6 +117,8 @@ defmodule ISeeSeaWeb.ReportsLive do
       stats_panel_is_open={@stats_panel_is_open}
       locale={@locale}
     />
+
+    <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />
     """
   end
 
