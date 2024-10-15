@@ -3,6 +3,7 @@ defmodule ISeeSeaWeb.UserAuth do
 
   import Plug.Conn
   import Phoenix.Controller
+  import ISeeSeaWeb.Trans
 
   alias ISeeSeaWeb.Accounts
 
@@ -85,7 +86,7 @@ defmodule ISeeSeaWeb.UserAuth do
     else
       socket =
         socket
-        |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+        |> Phoenix.LiveView.put_flash(:error, translate(@locale, "user_auth.login_to_access"))
         |> Phoenix.LiveView.redirect(to: ~p"/login")
 
       {:halt, socket}
@@ -110,7 +111,7 @@ defmodule ISeeSeaWeb.UserAuth do
       true ->
         socket =
           socket
-          |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+          |> Phoenix.LiveView.put_flash(:error, translate(@locale, "user_auth.login_to_access"))
           |> Phoenix.LiveView.redirect(to: ~p"/login")
 
         {:halt, socket}
@@ -150,7 +151,7 @@ defmodule ISeeSeaWeb.UserAuth do
       conn
     else
       conn
-      |> put_flash(:error, "You must log in to access this page.")
+      |> put_flash(:error, translate(@locale, "user_auth.login_to_access"))
       |> maybe_store_return_to()
       |> redirect(to: ~p"/login")
       |> halt()

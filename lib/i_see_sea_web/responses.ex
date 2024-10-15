@@ -80,7 +80,7 @@ defmodule ISeeSeaWeb.Responses do
   end
 
   def error(conn, {:error, :not_found, reason}) when is_atom(reason) do
-    not_found(conn, @default_fail_msg, "Entity not found!")
+    not_found(conn, @default_fail_msg, translate(@locale, "responses.entity_not_found"))
   end
 
   def error(conn, {:error, :not_found, reason}) do
@@ -90,20 +90,20 @@ defmodule ISeeSeaWeb.Responses do
   defp unauthorized(
          conn,
          message,
-         reason \\ "Authentication credentials were missing or incorrect."
+         reason \\ translate(@locale, "responses.missing_credentials")
        ) do
     conn
     |> Conn.put_status(401)
     |> error_response(message, reason)
   end
 
-  defp forbidden(conn, message, reason \\ "No access rights to fullfil the requested action.") do
+  defp forbidden(conn, message, reason \\ translate(@locale, "responses.no_access")) do
     conn
     |> Conn.put_status(403)
     |> error_response(message, reason)
   end
 
-  defp bad_request(conn, message, reason \\ "Malformed request syntax.") do
+  defp bad_request(conn, message, reason \\ translate(@locale, "responses.wrong_syntax")) do
     conn
     |> Conn.put_status(400)
     |> error_response(message, reason)
@@ -112,7 +112,7 @@ defmodule ISeeSeaWeb.Responses do
   defp unprocessable_entity(conn, message) do
     conn
     |> Conn.put_status(422)
-    |> error_response(message, "Something went wrong.")
+    |> error_response(message, translate(@locale, "responses.sth_wrong"))
   end
 
   defp unprocessable_entity(conn, message, errors) do
@@ -132,7 +132,7 @@ defmodule ISeeSeaWeb.Responses do
     |> error_response(message, reason, errors)
   end
 
-  defp not_found(conn, message, reason \\ "The resource could not be found.") do
+  defp not_found(conn, message, reason \\ translate(@locale, "responses.no_resource")) do
     conn
     |> Conn.put_status(404)
     |> error_response(message, reason)

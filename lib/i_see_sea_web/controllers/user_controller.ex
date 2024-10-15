@@ -10,6 +10,8 @@ defmodule ISeeSeaWeb.UserController do
   alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.Params.Filter
 
+  import ISeeSeaWeb.Trans
+
   @permission_scope "i_see_sea:users"
   plug(AssertPermissions, ["#{@permission_scope}:list_reports"] when action == :list_reports)
 
@@ -84,7 +86,7 @@ defmodule ISeeSeaWeb.UserController do
   def reset_password(conn, params) do
     with {:ok, %{token: token, new_password: new_password}} <- validate(:reset_password, params),
          :ok <- PasswordResetWorker.reset_password(token, new_password) do
-      success_binary(conn, "Password Reset Successfully", "text")
+      success_binary(conn, translate(@locale, "u_c.password_reset"), "text")
     else
       error ->
         error(conn, error)

@@ -89,9 +89,9 @@ defmodule ISeeSeaWeb.ReportsLive do
           alt="No Reports"
           class="w-32 h-32 mb-4 opacity-75"
         />
-        <p class="text-xl font-semibold text-gray-700">No Reports Found</p>
+        <p class="text-xl font-semibold text-gray-700"><%= translate(@locale, "home.no_reports") %> </p>
         <p class="text-sm text-gray-500 mt-2 text-center mb-4">
-          It looks like there are no reports that match your filters. Try adjusting your filters.
+          <%= translate(@locale, "home.no_matching_reports")%>
         </p>
 
         <button class="btn w-full" onclick="filter_modal.showModal()">

@@ -100,7 +100,7 @@ defmodule ISeeSeaWeb.HomeLive do
 
       <div
         class={if @current_user == nil, do: "tooltip tooltip-error", else: ""}
-        data-tip={if @current_user == nil, do: "You need to log in first", else: nil}
+        data-tip={if @current_user == nil, do: translate(@locale, "home.login_first"), else: nil}
         data-tooltip-style={if @current_user == nil, do: "light", else: nil}
       >
         <HomeComponents.report_toolbox

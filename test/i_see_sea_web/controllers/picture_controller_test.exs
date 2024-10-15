@@ -6,6 +6,8 @@ defmodule ISeeSeaWeb.PictureControllerTest do
 
   alias ISeeSea.Constants.PictureTypes
 
+  import ISeeSeaWeb.Trans
+
   setup do
     pollution_report = insert!(:pollution_report)
     picture = insert!(:picture, base_report: pollution_report.base_report)
@@ -34,8 +36,8 @@ defmodule ISeeSeaWeb.PictureControllerTest do
         |> json_response(404)
 
       assert response == %{
-               "message" => "The requested action has failed.",
-               "reason" => "Entity not found!"
+               "message" => translate(@locale, "test_errors.action_failed"),
+               "reason" => translate(@locale, "test_errors.no_entity")
              }
     end
   end

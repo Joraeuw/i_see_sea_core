@@ -12,7 +12,10 @@
     sth_went_wrong: "Something went wrong!",
     back_on_track: "Hang in there while we get back on track",
     actions: "Actions",
-    today: "Today"
+    today: "Today",
+    login_first: "You need to log in first",
+    no_reports: "No Reports Found",
+    no_matching_reports: "It looks like there are no reports that match your filters. Try adjusting your filters."
   ],
   nav: [
     home: "Home",
@@ -180,5 +183,41 @@
     terms16: "Visiting the Site, sending us emails, and completing online forms constitute\n    electronic communications. You consent to receive electronic communications,\n    and you agree that all agreements, notices, disclosures, and other\n    communications we provide to you electronically via email and on the Site,\n    satisfy any legal requirement that such communication be in writing. YOU\n    HEREBY AGREE TO THE USE OF ELECTRONIC SIGNATURES, CONTRACTS, ORDERS, AND\n    OTHER RECORDS, AND TO ELECTRONIC DELIVERY OF NOTICES, POLICIES, AND RECORDS\n    OF TRANSACTIONS INITIATED OR COMPLETED BY US OR VIA THE SITE. You hereby\n    waive any rights or requirements under any statutes regulations, rules,\n    Ordinances, or other laws in any jurisdiction which require an original\n    signature or delivery or retention of non-electronic records, or to payments\n    or the granting of credits by any means other than electronic means.",
     some: "18. MISCELLANEOUS",
     terms17: "These Terms of Use and any policies or operating rules posted by us on the\n    Site or in respect to the Site constitute the entire agreement and\n    understanding between you and us. Our failure to exercise or enforce any\n    right or provision of these Terms of Use shall not operate as a waiver of\n    such right or provision. These Terms of Use operate to the fullest extent\n    permissible by law. We may assign any or all of our rights and obligations\n    to others at any time. We shall not be responsible or liable for any loss\n    damage, delay or failure to act caused by any cause beyond our reasonable\n    control. If any provision or part of a provision of these Terms of Use is\n    determined to be unlawful, void or unenforceable, that provision or part of\n    the provision is deemed severable from these Terms of Use and does not\n    affect the validity and enforce ability of any remaining provisions. There\n    is no joint venture partnership, employment or agency relationship created\n    between you and us as a result of these Terms of Use or use of the Site You\n    agree that these Terms of Use will not be construed against us by virtue of\n    having drafted them. You hereby waive any and all defenses you may have\n    based on the electronic form of these Terms of Use and the lack of signing\n    by the parties hereto to execute these Terms of Use"
+  ],
+  s_c: [ #session controller
+    acc_created: "Account created successfully!",
+    password_updated: "Password updated successfully!",
+    welcome_back: "Welcome back!",
+    invalid_info: "Invalid email or password",
+    logout: "Logged out successfully."
+  ],
+  u_c: [ #user controller
+    password_reset: "Password Reset Successfully"
+  ],
+  responses: [
+    failed_action: "The requested action has failed.",
+    entity_not_found: "Entity not found!",
+    missing_credentials: "Authentication credentials were missing or incorrect.",
+    no_access: "No access rights to fullfil the requested action.",
+    wrong_syntax: "Malformed request syntax.",
+    sth_wrong: "Something went wrong.",
+    no_resource: "The resource could not be found."
+  ],
+  telemetry: [
+    measurement_sum: "The sum of the other measurements",
+    time_spent_decoding: "The time spent decoding the data received from the database",
+    time_spent_executing: "The time spent executing the query",
+    time_spent_waiting: "The time spent waiting for a database connection",
+    time_spent_connection: "The time the connection spent waiting before being checked out for the query"
+  ],
+  user_auth: [
+    login_to_access: "You must log in to access this page."
+  ],
+  test_errors: [
+    not_found: "Not Found",
+    internal_server_error: "Internal Server Error",
+    peace_of_mind: "Peace of mind from prototype to production",
+    action_failed: "The requested action has failed.",
+    no_entity: "Entity not found!"
   ]
 ]
