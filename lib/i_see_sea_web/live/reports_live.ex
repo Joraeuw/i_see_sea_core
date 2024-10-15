@@ -1,4 +1,5 @@
 defmodule ISeeSeaWeb.ReportsLive do
+  alias ISeeSea.Helpers.DateUtils
   use ISeeSeaWeb, :live_view
 
   alias ISeeSeaWeb.CommonComponents
@@ -9,7 +10,7 @@ defmodule ISeeSeaWeb.ReportsLive do
   alias ISeeSea.DB.Models.BaseReport
 
   @impl true
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
         ISeeSeaWeb.Endpoint.subscribe("reports:updates")
@@ -38,15 +39,25 @@ defmodule ISeeSeaWeb.ReportsLive do
         filters
       )
 
+    entries_count = pagination.total_count
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = Map.put(pagination, :total_pages, total_pages)
 
-    locale = Map.get(session, "preferred_locale") || "bg"
+    %{beginning_of_time: beginning_of_time, total_entries: total_reports} =
+      BaseReport.total_reports()
+
+    stats = %{
+      total_entries_in_filter: entries_count,
+      total_entries: total_reports,
+      beginning_of_time: DateUtils.date_display(beginning_of_time),
+      verified_users: User.get_total_verified_users(),
+      filter_date_range: DateUtils.date_range_display(filters["start_date"], filters["end_date"])
+    }
 
     new_socket =
       assign(socket,
-        locale: locale,
         current_user: socket.assigns.current_user,
+        stats: stats,
         supports_touch: supports_touch,
         stats_panel_is_open: false,
         filters: to_form(filters),
@@ -68,13 +79,10 @@ defmodule ISeeSeaWeb.ReportsLive do
         :if={not Enum.empty?(@reports)}
         class="flex flex-wrap justify-center gap-10 py-6 md:px-6 bg-gray-50 rounded-md shadow-md  mt-3 mb-6 w-[calc(100vw-5em)] mx-10 h-auto"
       >
-        <%= for %BaseReport{name: name, comment: comment, pictures: pictures} = report <- @reports do %>
+        <%= for %BaseReport{id: report_id} = report <- @reports do %>
           <.live_component
             module={ISeeSeaWeb.ReportCardLiveComponent}
-            id={report.id}
-            name={name}
-            comment={comment}
-            pictures={pictures}
+            id={report_id}
             report={report}
             user_is_admin={User.is_admin?(@current_user)}
           />
@@ -101,12 +109,16 @@ defmodule ISeeSeaWeb.ReportsLive do
       <CommonComponents.pagination pagination={@pagination} />
     </div>
     <HomeComponents.stat_home
+      data={@stats}
       supports_touch={@supports_touch}
+      current_user={@current_user}
       filter_menu_is_open={@filter_menu_is_open}
       filters={@filters}
       stats_panel_is_open={@stats_panel_is_open}
       locale={@locale}
     />
+
+    <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />
     """
   end
 
@@ -122,27 +134,30 @@ defmodule ISeeSeaWeb.ReportsLive do
 
   @impl true
   def handle_event("filter_reports", filters, socket) do
-    {:ok, reports, pagination} =
+    {:ok, reports, %{total_count: total_count} = pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         filters["report_type"],
         %{page: 1, page_size: socket.assigns.pagination.page_size},
         filters
       )
 
-    {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
-
-    stop_live_tracker = DateTime.compare(DateTime.utc_now(), end_date) == :lt
+    stats = %{
+      socket.assigns.stats
+      | total_entries_in_filter: total_count,
+        filter_date_range:
+          DateUtils.date_range_display(filters["start_date"], filters["end_date"])
+    }
 
     total_pages = ReportOperations.get_total_pages(pagination)
     pagination = Map.put(pagination, :total_pages, total_pages)
 
     socket =
-      socket
-      |> assign(reports: reports, pagination: pagination, filters: to_form(filters))
-      |> push_event("filters_updated", %{
-        stop_live_tracker: stop_live_tracker,
-        reports: Focus.view(reports, %Lens{view: Lens.expanded()})
-      })
+      assign(socket,
+        reports: reports,
+        pagination: pagination,
+        filters: to_form(filters),
+        stats: stats
+      )
 
     {:noreply, socket}
   end

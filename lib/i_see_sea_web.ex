@@ -50,8 +50,7 @@ defmodule ISeeSeaWeb do
       use Gettext.Backend, otp_app: :i_see_sea
 
       import ISeeSeaWeb.Responses
-
-      use ISeeSeaWeb.Utils.EnsureRequiredModules, __MODULE__
+      alias ISeeSeaWeb.Params
 
       alias ISeeSeaWeb.Plug.AssertPermissions
       alias ISeeSeaWeb.Plug.EnsurePermitted
@@ -111,6 +110,7 @@ defmodule ISeeSeaWeb do
       import ISeeSeaWeb.CoreComponents
       import ISeeSeaWeb.Trans
       import ISeeSeaWeb.Gettext
+      import ISeeSeaWeb.Utils.UserUtils
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS

@@ -96,6 +96,14 @@ defmodule ISeeSea.Factory do
     }
   end
 
+  def build(:user_token) do
+    %Models.UserToken{
+      token: "token",
+      user: build(:user),
+      context: "session"
+    }
+  end
+
   def build(:pollution_type) do
     %Models.PollutionType{name: "oil"}
   end

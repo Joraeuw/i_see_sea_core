@@ -4,7 +4,6 @@ defmodule ISeeSeaWeb.ProfileComponents do
   alias ISeeSeaWeb.CommonComponents
 
   import ISeeSeaWeb.Trans
-  import ISeeSeaWeb.Gettext
   use Phoenix.Component
 
   attr :view, :string, required: true
@@ -20,7 +19,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   attr :stats_panel_is_open, :boolean, required: true
 
   attr :pagination, :map, required: true
-  attr :locale, :string, default: "bg"
+  attr :locale, :string
 
   def index(assigns) do
     ~H"""
@@ -86,11 +85,12 @@ defmodule ISeeSeaWeb.ProfileComponents do
           <CommonComponents.filter_button
             :if={@view === "my_reports_view"}
             class="btn ml-0 md:ml-3"
-            filters={@filters}
+            locale={@locale}
           />
 
           <button
             :if={@view === "my_profile_view"}
+            id="my_reports_button"
             class="btn ml-0 md:ml-3"
             phx-click="toggle_profile_view"
             phx-value-view="my_reports_view"

@@ -5,32 +5,8 @@ defmodule ISeeSeaWeb.Params.Report do
 
   use ISeeSeaWeb, :param
 
-  defmacro __using__(_) do
-    quote do
-      use ISeeSeaWeb, :param
-
-      defparams :create_base_report do
-        required(:report_type, :string, values: ReportType.values())
-        required(:name, :string)
-        required(:pictures, {:array, :map}, min: 1)
-
-        required(:longitude, :float,
-          greater_than_or_equal_to: -180.0,
-          less_than_or_equal_to: 180.0
-        )
-
-        required(:latitude, :float, greater_than_or_equal_to: -90.0, less_than_or_equal_to: 90.0)
-        optional(:comment, :string)
-      end
-
-      defparams :index do
-        required(:report_type, :string, values: ["all" | ReportType.values()])
-      end
-
-      defparams :delete_report do
-        required(:report_id, :string)
-      end
-    end
+  defparams :index do
+    required(:report_type, :string, values: ["all" | ReportType.values()])
   end
 
   defparams :create_jellyfish_report do

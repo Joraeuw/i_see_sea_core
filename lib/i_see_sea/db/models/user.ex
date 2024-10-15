@@ -48,12 +48,17 @@ defmodule ISeeSea.DB.Models.User do
 
   def confirm_changeset(user) do
     now = DateTime.utc_now() |> DateTime.truncate(:second)
-    change(user, confirmed_at: now)
+    change(user, verified_at: now, verified: true)
   end
 
   def valid_password?(%__MODULE__{password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Bcrypt.verify_pass(password, hashed_password)
+  end
+
+  def get_total_verified_users do
+    from(u in __MODULE__, where: u.verified == true, select: count(u.id))
+    |> Repo.one()
   end
 
   defp put_password_hash(
@@ -64,7 +69,7 @@ defmodule ISeeSea.DB.Models.User do
 
   defp put_password_hash(changeset), do: changeset
 
-  def is_admin?(%__MODULE__{id: user_id, role_id: user_role_id}) do
+  def is_admin?(%__MODULE__{role_id: user_role_id}) do
     {:ok, admin} = Role.get_by(%{name: "admin"})
 
     user_role_id === admin.id

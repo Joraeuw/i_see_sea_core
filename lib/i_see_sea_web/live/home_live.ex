@@ -1,10 +1,11 @@
 defmodule ISeeSeaWeb.HomeLive do
-  alias ISeeSea.Helpers.Broadcaster
-  alias ISeeSea.DB.Logic.ReportOperations
+  alias ISeeSea.DB.Models.User
+  alias ISeeSea.DB.Models.BaseReport
   use ISeeSeaWeb, :live_view
 
-  alias ISeeSea.DB.Models.BaseReport
   alias ISeeSeaWeb.HomeComponents
+  alias ISeeSea.DB.Logic.ReportOperations
+  alias ISeeSea.Helpers.DateUtils
 
   defmacro main_view, do: "main_view"
   defmacro my_profile_view, do: "my_profile_view"
@@ -19,7 +20,9 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
+    locale = Map.get(session, "locale")
+
     supports_touch =
       if connected?(socket) do
         ISeeSeaWeb.Endpoint.subscribe("reports:updates")
@@ -54,12 +57,25 @@ defmodule ISeeSeaWeb.HomeLive do
         filters
       )
 
+    entries_count = pagination.total_count
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: pagination.page, total_pages: total_pages}
+    pagination = Map.put(pagination, :total_pages, total_pages)
+
+    %{beginning_of_time: beginning_of_time, total_entries: total_reports} =
+      BaseReport.total_reports()
+
+    stats = %{
+      total_entries_in_filter: entries_count,
+      total_entries: total_reports,
+      beginning_of_time: DateUtils.date_display(beginning_of_time),
+      verified_users: User.get_total_verified_users(),
+      filter_date_range: DateUtils.date_range_display(filters["start_date"], filters["end_date"])
+    }
 
     new_socket =
       assign(socket,
-        locale: "bg",
+        locale: locale,
+        stats: stats,
         is_selecting_location: false,
         current_user: socket.assigns.current_user,
         supports_touch: supports_touch,
@@ -99,9 +115,9 @@ defmodule ISeeSeaWeb.HomeLive do
       <%!-- Desktop Design --%>
 
       <div
-        class={if @current_user == nil, do: "tooltip tooltip-error", else: ""}
-        data-tip={if @current_user == nil, do: translate(@locale, "home.login_first"), else: nil}
-        data-tooltip-style={if @current_user == nil, do: "light", else: nil}
+        class={if !is_user_logged(@current_user), do: "tooltip tooltip-error", else: ""}
+        data-tip={if !is_user_logged(@current_user), do: translate(@locale, "home.login_first"), else: nil}
+        data-tooltip-style={if !is_user_logged(@current_user), do: "light", else: nil}
       >
         <HomeComponents.report_toolbox
           create_report_toolbox_is_open={@create_report_toolbox_is_open}
@@ -119,9 +135,13 @@ defmodule ISeeSeaWeb.HomeLive do
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
       filters={@filters}
+      current_user={@current_user}
       stats_panel_is_open={@stats_panel_is_open}
+      data={@stats}
       locale={@locale}
     />
+
+    <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />
     """
   end
 
@@ -146,8 +166,8 @@ defmodule ISeeSeaWeb.HomeLive do
 
   @impl true
   def handle_event("toggle_report", %{"type" => report_type}, socket) do
-    if socket.assigns.current_user == nil do
-      {:noreply, push_redirect(socket, to: "/login")}
+    if !is_user_logged(socket.assigns.current_user) do
+      {:noreply, push_navigate(socket, to: "/login")}
     else
       cond do
         socket.assigns.create_report_type == report_type &&
@@ -189,30 +209,38 @@ defmodule ISeeSeaWeb.HomeLive do
   end
 
   def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon}, socket) do
+    IO.inspect(lat, label: "User Selected Location")
     {:noreply, assign(socket, :user_selected_location, %{lat: lat, lon: lon})}
   end
 
   @impl true
   def handle_event("filter_reports", filters, socket) do
-    {:ok, reports, %{page: page} = pagination} =
+    {:ok, reports, %{total_count: total_count} = pagination} =
       ReportOperations.retrieve_reports_with_live_view_filters(
         filters["report_type"],
         socket.assigns.pagination,
         filters
       )
 
+    stats = %{
+      socket.assigns.stats
+      | total_entries_in_filter: total_count,
+        filter_date_range:
+          DateUtils.date_range_display(filters["start_date"], filters["end_date"])
+    }
+
     {:ok, end_date, _} = DateTime.from_iso8601(filters["end_date"])
 
-    stop_live_tracker =
-      Date.compare(Date.utc_today(), end_date) in [:gt, :eq]
+    stop_live_tracker = Date.compare(Date.utc_today(), end_date) == :lt
 
     total_pages = ReportOperations.get_total_pages(pagination)
-    pagination = %{page: page, total_pages: total_pages}
+    pagination = Map.put(pagination, :total_pages, total_pages)
 
     socket =
       socket
       |> assign(:pagination, pagination)
       |> assign(:reports, reports)
+      |> assign(:stats, stats)
       |> push_event("filters_updated", %{
         stop_live_tracker: stop_live_tracker,
         reports: Focus.view(reports, %Lens{view: Lens.expanded()})
@@ -221,24 +249,22 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, socket}
   end
 
-  def handle_event("select_location", _params, socket) do
+  def handle_event("set_locale", %{"locale" => locale}, socket) do
+    {:noreply, assign(socket, :locale, locale)}
+  end
+
+  def handle_event("change_locale", %{"locale" => locale}, socket) do
+    socket = push_event(socket, "update_locale", %{locale: locale})
+    {:noreply, assign(socket, :locale, locale)}
+  end
+
+  def handle_info(:select_location, socket) do
     socket =
       socket
       |> push_event("enable_pin_mode", %{})
       |> assign(is_selecting_location: true, create_report_toolbox_is_open: false)
 
     {:noreply, socket}
-  end
-
-  def handle_event("set_locale", %{"locale" => locale}, socket) do
-    IO.inspect(locale, label: "setting locale to")
-    {:noreply, assign(socket, :locale, locale)}
-  end
-
-  def handle_event("change_locale", %{"locale" => locale}, socket) do
-    IO.inspect(locale, label: "changing locale to")
-    socket = push_event(socket, "update_locale", %{locale: locale})
-    {:noreply, assign(socket, :locale, locale)}
   end
 
   @impl true

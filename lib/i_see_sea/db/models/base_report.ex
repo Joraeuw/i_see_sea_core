@@ -173,6 +173,14 @@ defmodule ISeeSea.DB.Models.BaseReport do
     _ in Ecto.QueryError -> {:error, :bad_request}
   end
 
+  def total_reports do
+    from(br in __MODULE__,
+      where: br.deleted == false,
+      select: %{total_entries: count(br.id), beginning_of_time: min(br.report_date)}
+    )
+    |> Repo.one()
+  end
+
   defp determine_query(initial_from, "jellyfish") do
     q =
       initial_from

@@ -136,10 +136,10 @@ defmodule ISeeSea.Emails do
   end
 
   defp confirmation_url(token) do
-    "#{Environment.backend_url()}/api/verify-email/#{token}"
+    "#{Environment.backend_url()}/verify-email/#{token}"
   end
 
   defp password_reset_url(token) do
-    "#{Environment.frontend_url()}/change-password/?t=#{token}"
+    "#{Environment.frontend_url()}/change_password/?t=#{token}"
   end
 end

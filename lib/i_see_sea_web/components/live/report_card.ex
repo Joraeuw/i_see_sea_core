@@ -15,7 +15,10 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
   def render(assigns) do
     ~H"""
-    <div class="relative w-80 h-96 transform transition-transform duration-50s hover:scale-105">
+    <div
+      id={"report-card-#{@report.id}"}
+      class="relative w-80 h-96 transform transition-transform duration-50s hover:scale-105"
+    >
       <div class={[
         "relative transition-transform duration-[0.5] ease-[ease-in-out] transform-style-preserve-3d will-change-transform",
         if(@is_back, do: "rotate-y-180")
@@ -28,13 +31,13 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
           <figure class="object-cover h-48">
             <img
               class="w-full h-full"
-              src={Picture.get_uri!(List.first(@pictures, :not_provided))}
+              src={Picture.get_uri!(List.first(@report.pictures, :not_provided))}
               alt="Report Image"
             />
           </figure>
           <div class="card-body relative shadow-md rounded-md h-48">
-            <h2 class="card-title w-full line-clamp-1"><%= @name %></h2>
-            <p class="line-clamp-3 w-full"><%= @comment %></p>
+            <h2 class="card-title w-full line-clamp-1"><%= @report.name %></h2>
+            <p class="line-clamp-3 w-full"><%= @report.comment %></p>
             <div class="card-actions grid grid-cols-12 gap-2 w-full">
               <button
                 phx-click="toggle_flip"

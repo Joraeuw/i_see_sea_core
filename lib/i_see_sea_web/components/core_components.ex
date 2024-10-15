@@ -232,7 +232,6 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :type, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
-
   slot :inner_block, required: true
 
   def button(assigns) do

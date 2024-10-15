@@ -32,11 +32,13 @@ defmodule ISeeSeaWeb.ProfileLive do
       user_report_summary={@reports_summary}
       reports={@reports}
     />
+
+    <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />
     """
   end
 
   @impl true
-  def mount(_params, session, socket) do
+  def mount(_params, _session, socket) do
     supports_touch =
       if connected?(socket) do
         socket
@@ -59,8 +61,6 @@ defmodule ISeeSeaWeb.ProfileLive do
     {:ok, reports, pagination} =
       get_user_reports(current_user, report_type, filters)
 
-    locale = Map.get(session, "preferred_locale") || "bg"
-
     all_report_types = [
       {ReportType.jellyfish(), "/images/create-report/jellyfish_report.png"},
       {ReportType.meteorological(), "/images/create-report/meteorological_report.png"},
@@ -80,7 +80,6 @@ defmodule ISeeSeaWeb.ProfileLive do
 
     new_socket =
       assign(socket,
-        locale: locale,
         current_user: current_user,
         supports_touch: supports_touch,
         filter_report_type: report_type,

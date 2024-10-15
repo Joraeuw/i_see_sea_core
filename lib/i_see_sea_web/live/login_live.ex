@@ -48,7 +48,7 @@ defmodule ISeeSeaWeb.LoginLive do
               type="checkbox"
               label={translate(@locale, "login.keep_me_logged")}
             />
-            <.link href={~p"/reset_password"} class="text-sm font-semibold">
+            <.link href={~p"/forgot_password"} class="text-sm font-semibold">
               <%= translate(@locale, "login.forgot_password") %>
             </.link>
           </:actions>
@@ -67,6 +67,6 @@ defmodule ISeeSeaWeb.LoginLive do
   def mount(_params, _session, socket) do
     email = Phoenix.Flash.get(socket.assigns.flash, :email)
     form = to_form(%{"email" => email}, as: "user")
-    {:ok, assign(socket, locale: "bg", form: form), temporary_assigns: [form: form]}
+    {:ok, assign(socket, form: form), temporary_assigns: [form: form]}
   end
 end
