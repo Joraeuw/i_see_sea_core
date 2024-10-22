@@ -37,7 +37,7 @@ defmodule ISeeSeaWeb.HomeLive do
     report_type = "all"
 
     filters = %{
-      "start_date" => DateTime.to_iso8601(Timex.shift(DateTime.utc_now(), days: -22)),
+      "start_date" => DateTime.to_iso8601(Timex.beginning_of_year(DateTime.utc_now())),
       "end_date" => DateTime.to_iso8601(DateTime.utc_now()),
       "report_type" => report_type
     }
@@ -107,7 +107,9 @@ defmodule ISeeSeaWeb.HomeLive do
           id="map"
           class="relative flex items-center h-full md:mr-52 w-full z-0 rounded-md shadow-md"
           phx-hook="LeafletMap"
-          data-reports={Jason.encode!(Focus.view(@reports, %Lens{view: Lens.expanded()}))}
+          data-reports={
+            Jason.encode!(Focus.view(@reports, %Lens{view: Lens.expanded(), translate: true}))
+          }
           data-pin-url="/images/marker-icons/pin.svg"
         />
       </div>
@@ -116,7 +118,9 @@ defmodule ISeeSeaWeb.HomeLive do
 
       <div
         class={if !is_user_logged(@current_user), do: "tooltip tooltip-error", else: ""}
-        data-tip={if !is_user_logged(@current_user), do: translate(@locale, "home.login_first"), else: nil}
+        data-tip={
+          if !is_user_logged(@current_user), do: translate(@locale, "home.login_first"), else: nil
+        }
         data-tooltip-style={if !is_user_logged(@current_user), do: "light", else: nil}
       >
         <HomeComponents.report_toolbox

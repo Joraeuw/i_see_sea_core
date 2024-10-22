@@ -15,29 +15,24 @@ defmodule ISeeSeaWeb.ForgotLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col items-center rounded-xl shadow-lg shadow-top-bottom mx-auto w-[400px] h-10/12 sm:w-96">
+    <div class="flex flex-col items-center rounded-t-lg">
       <.header locale={@locale} class="text-center">
-        <p class="text-[#189ab4] my-3 text-center">Please enter your E-mail Address:</p>
+        <p class="text-[#189ab4] text-center my-1 mx-3">Please enter your E-mail Address:</p>
       </.header>
-      <div class="w-full">
+      <div class="w-full rounded-b-lg overflow-hidden">
         <.simple_form
           locale={@locale}
           for={@form}
           id="forgot_password_form"
           phx-submit="send_email"
           phx-update="ignore"
-          class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
+          class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center rounded-lg overflow-hidden bg-no-repeat w-full h-full space-y-2 shadow-bottom"
           inner_class="w-12/12"
         >
-          <.input
-            field={@form[:email]}
-            type="email"
-            label={translate(@locale, "login.email")}
-            required
-          />
+          <.input field={@form[:email]} type="email" required />
           <:actions>
             <.button phx-disable-with={translate(@locale, "login.logging_in")} class="btn mb-3">
-              <%= translate(@locale, "login.log_in") %>
+              <%= translate(@locale, "forgot_password.send_email") %>
             </.button>
           </:actions>
         </.simple_form>

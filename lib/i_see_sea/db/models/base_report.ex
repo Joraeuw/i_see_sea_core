@@ -248,7 +248,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
             pictures: pictures,
             user: %User{email: email}
           } = base,
-          %Lens{view: Lens.expanded()} = lens
+          %Lens{view: Lens.expanded(), translate: translate} = lens
         ) do
       lens = %Lens{lens | view: Lens.from_base()}
 
@@ -263,6 +263,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
         :comment,
         :inserted_at
       ])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "base_report",
+        ignore: [:name, :comment, :report_type]
+      )
       |> Map.merge(%{
         pictures: Enum.map(pictures, &Picture.get_uri!/1),
         user_email: email
