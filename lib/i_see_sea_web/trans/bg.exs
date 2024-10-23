@@ -277,5 +277,8 @@
   ],
   user_auth: [
     login_to_access: "Трябва да влезете в акаунта си, за да достъпите страницата."
+  ],
+  jellyfish_quantity_range: [
+    {:"1", "1"}
   ]
 ]
