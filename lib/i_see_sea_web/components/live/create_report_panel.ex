@@ -309,26 +309,6 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     """
   end
 
-  # CREATE EXESIVE VERIFICATION OF EACH REPORT TYPE POSSIBLY USING THE CHANGESETS IN PARAMS
-  # 2h create report working
-  # 30m select location pin?
-  # ? 30m warning and errors for unverified users
-  # ? 1h lookout for broadcast
-
-  # ? 20m profile click on see reports filter
-
-  # ? 2h setup email verification
-  # ? 30m-1h setup locale for language tracking (consider localstorage)
-
-  # ? +2h
-
-  # Ivan
-  # 1h add delete button for admins + functionality
-  # ? +4h tests
-
-  # Steli
-  # 2h gettext translation
-  # ? +4h tests
   @impl true
   def handle_event("create_report", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
@@ -375,7 +355,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
               |> assign(form: to_form(%{}, as: "report_params"))
               |> push_event("report_created", %{})
 
-            Broadcaster.broadcast!("reports:updates", "add_marker", report)
+            Broadcaster.broadcast!("reports:updates", "add_marker", report, translate: true)
 
             {:noreply, socket}
 

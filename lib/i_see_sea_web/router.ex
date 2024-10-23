@@ -46,9 +46,6 @@ defmodule ISeeSeaWeb.Router do
 
   scope "/", ISeeSeaWeb do
     pipe_through [:browser]
-    live "/forgot_password", ForgotLive, :index
-    live "/change_password", ChangeLive, :index
-    live "/verify-email/:token", VerifyEmailLive, :index
 
     live_session :current_user,
       on_mount: [
@@ -58,6 +55,10 @@ defmodule ISeeSeaWeb.Router do
       live "/", HomeLive, :home_index
       live "/profile", ProfileLive, :profile_index
       live "/reports-list", ReportsLive, :reports_index
+
+      live "/forgot_password", ForgotLive, :index
+      live "/change_password", ChangeLive, :index
+      live "/verify-email/:token", VerifyEmailLive, :index
     end
 
     get "/privacy-policy", PageController, :privacy_policy

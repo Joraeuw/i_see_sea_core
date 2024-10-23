@@ -115,7 +115,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   end
 
   attr :user_report_summary, :list, required: true
-  attr :locale, :string, default: "bg"
+  attr :locale, :string
 
   def my_report_summary_view(assigns) do
     ~H"""
@@ -128,7 +128,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
           <img class="bg-cover" src={image} alt="Shoes" />
         </figure>
         <div class="card-body shadow-md rounded-md">
-          <h2 class="card-title"><%= type %></h2>
+          <h2 class="card-title"><%= translate(@locale, "base_report.report_type.#{type}") %></h2>
           <p><%= translate(@locale, "profile.count_of_reports") %><%= count %></p>
           <div class="card-actions justify-end">
             <button

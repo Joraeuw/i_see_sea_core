@@ -85,6 +85,7 @@ defmodule ISeeSeaWeb.ReportsLive do
             id={report_id}
             report={report}
             user_is_admin={User.is_admin?(@current_user)}
+            locale={@locale}
           />
         <% end %>
       </div>
@@ -97,9 +98,11 @@ defmodule ISeeSeaWeb.ReportsLive do
           alt="No Reports"
           class="w-32 h-32 mb-4 opacity-75"
         />
-        <p class="text-xl font-semibold text-gray-700"><%= translate(@locale, "home.no_reports") %> </p>
+        <p class="text-xl font-semibold text-gray-700">
+          <%= translate(@locale, "home.no_reports") %>
+        </p>
         <p class="text-sm text-gray-500 mt-2 text-center mb-4">
-          <%= translate(@locale, "home.no_matching_reports")%>
+          <%= translate(@locale, "home.no_matching_reports") %>
         </p>
 
         <button class="btn w-full" onclick="filter_modal.showModal()">
