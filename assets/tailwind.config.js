@@ -7,15 +7,17 @@ const path = require("path");
 
 module.exports = {
   content: [
+    "../lib/**/*.*",
     "./js/**/*.js",
     "../lib/i_see_sea_web.ex",
     "../lib/i_see_sea_web/**/*.*ex",
     "./css/**/*.css",
+    "../lib/i_see_sea_web/components/layouts/app.html.heex",
   ],
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Roboto', 'sans-serif'], // Add your Google Font here
+        sans: ["Roboto", "sans-serif"],
       },
       perspective: {
         8: "800px",
@@ -106,7 +108,6 @@ module.exports = {
   plugins: [
     require("daisyui"),
     require("@tailwindcss/forms"),
-    require("@tailwindcss/line-clamp"),
     // Allows prefixing tailwind classes with LiveView classes to add rules
     // only when LiveView classes are applied, for example:
     //

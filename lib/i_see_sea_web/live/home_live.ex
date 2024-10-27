@@ -90,7 +90,8 @@ defmodule ISeeSeaWeb.HomeLive do
         current_view: main_view(),
         is_profile_edit_mode: false,
         stats_panel_is_open: not supports_touch,
-        filter_menu_is_open: false
+        filter_menu_is_open: false,
+        user_selected_location: nil
       )
 
     new_socket = push_event(new_socket, "get_locale", %{})
@@ -130,6 +131,7 @@ defmodule ISeeSeaWeb.HomeLive do
           supports_touch={@supports_touch}
           current_user={@current_user}
           is_selecting_location={@is_selecting_location}
+          user_selected_location={@user_selected_location}
           locale={@locale}
         />
       </div>

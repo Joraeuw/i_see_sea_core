@@ -32,6 +32,39 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   end
 
   @impl true
+  def update(assigns, socket) do
+    form_params = Map.get(socket.assigns.form, :params, %{})
+
+    updated_form_params =
+      if assigns.user_selected_location do
+        Map.merge(form_params, %{
+          "latitude" => assigns.user_selected_location.lat,
+          "longitude" => assigns.user_selected_location.lon
+        })
+      else
+        form_params
+      end
+
+    report_type = assigns.report_type || socket.assigns.report_type
+    changeset_signature = String.to_atom("create_#{report_type}_report")
+
+    changeset = Report.changeset(changeset_signature, updated_form_params)
+
+    new_socket =
+      assign(socket,
+        form: to_form(changeset, as: "report_params"),
+        is_location_selected: !!assigns.user_selected_location,
+        create_report_toolbox_is_open: assigns.create_report_toolbox_is_open,
+        current_user: assigns.current_user,
+        locale: assigns.locale,
+        report_type: report_type,
+        is_selecting_location: assigns.is_selecting_location
+      )
+
+    {:ok, new_socket}
+  end
+
+  @impl true
   def render(assigns) do
     ~H"""
     <div
@@ -404,7 +437,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
     socket =
       assign(socket,
-        form: to_form(Map.put(changeset, :action, :validate), as: "report_params")
+        form: to_form(Map.put(changeset, :action, :validate), as: "report_params"),
+        is_location_selected: true
       )
 
     {:noreply, socket}

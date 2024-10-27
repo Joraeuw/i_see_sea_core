@@ -53,6 +53,7 @@ defmodule ISeeSeaWeb.HomeComponents do
         create_report_toolbox_is_open={@create_report_toolbox_is_open}
         report_type={@create_report_type}
         is_selecting_location={@is_selecting_location}
+        user_selected_location={@user_selected_location}
         current_user={@current_user}
         locale={@locale}
       />
