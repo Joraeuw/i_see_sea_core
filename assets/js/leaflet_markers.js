@@ -1,71 +1,105 @@
-window.openFullscreenModal = (imageSrc) => {
+import Swiper from "swiper/bundle";
+import "swiper/css/bundle";
+
+window.openFullscreenModal = (pictures, startingIndex = 0) => {
   const fullscreen_modal = document.getElementById(
     "modal_fullscreen_image_slider"
   );
   const container = document.getElementById(
     "modal_fullscreen_image_slider_container"
   );
-  fullscreen_modal.setAttribute("open", ""); // Open the modal
 
-  // Optional: You could add functionality to display the selected image in the modal if you want
-  const selectedImageDiv = `
-    <div class="swiper-slide mt-3 z-40">
-      <img src="${imageSrc}" alt="Large Picture" class="w-[500px] h-[500px] z-30"/>
+  // Clear previous slides
+  container.innerHTML = "";
+
+  // Create slides for each picture
+  const slides = pictures
+    .map(
+      (picture) => `
+    <div class="swiper-slide">
+      <img src="${picture}" alt="Large Picture" class="w-full h-auto"/>
     </div>
-  `;
+  `
+    )
+    .join("");
 
-  container.innerHTML = selectedImageDiv;
-  fullscreen_modal.addEventListener("click", (event) => {
-    const modalBox = fullscreen_modal.querySelector(".modal-box");
-    const rect = modalBox.getBoundingClientRect();
+  container.innerHTML = slides;
 
-    // Check if click is outside modal content
-    if (
-      !(
-        event.clientX >= rect.left &&
-        event.clientX <= rect.right &&
-        event.clientY >= rect.top &&
-        event.clientY <= rect.bottom
-      )
-    ) {
-      fullscreen_modal.removeAttribute("open"); // Close the modal
-    }
+  // Destroy existing Swiper instance if it exists
+  if (window.fullscreenSwiper) {
+    window.fullscreenSwiper.destroy();
+    window.fullscreenSwiper = null;
+  }
+
+  // Initialize Swiper with navigation and pagination
+  window.fullscreenSwiper = new Swiper(".modal .swiper-container", {
+    initialSlide: startingIndex,
+    navigation: {
+      nextEl: ".modal .swiper-button-next",
+      prevEl: ".modal .swiper-button-prev",
+    },
+    pagination: {
+      el: ".modal .swiper-pagination",
+      clickable: true,
+    },
   });
+
+  fullscreen_modal.classList.add("modal-open");
+
+  // Close modal when clicking outside
+  const closeModalOnClickOutside = function (event) {
+    const modalBox = fullscreen_modal.querySelector(".modal-box");
+    if (!modalBox.contains(event.target)) {
+      closeFullscreenModal();
+      fullscreen_modal.removeEventListener("click", closeModalOnClickOutside);
+    }
+  };
+
+  fullscreen_modal.addEventListener("click", closeModalOnClickOutside);
+};
+
+window.closeFullscreenModal = () => {
+  const fullscreen_modal = document.getElementById(
+    "modal_fullscreen_image_slider"
+  );
+  fullscreen_modal.classList.remove("modal-open");
+
+  // Destroy Swiper instance to clean up
+  if (window.fullscreenSwiper) {
+    window.fullscreenSwiper.destroy(true, true);
+    window.fullscreenSwiper = null;
+  }
 };
 
 const createImageSlider = (pictures) => {
   if (!pictures || pictures.length === 0)
     return `<img class="h-40" src="/images/no_image_provided.svg"/>`;
 
-  const slides = pictures
-    .filter((picture) => picture)
-    .map(
-      (picture, index) => `
-      <div class="swiper-slide mt-3">
-        <label for="modal_fullscreen_image_slider">
-          
-        </label>
-        <!-- Modal Trigger -->
-        
-        <button onclick="window.openFullscreenModal('${picture}')">
-        <img class="h-40 cursor-pointer" src="${picture}" alt="Picture"/>
-        </button>
-      
-      </div>
-      `
-    )[0];
+  // Display only the first image
+  const firstPicture = pictures[0];
 
+  // Use data attributes to pass the pictures array
   return `
-    <div class="swiper-container">
-      <div class="swiper-wrapper">
-        ${slides}
-      </div>
-      <div class="swiper-pagination"></div>
-      <div class="swiper-button-next"></div>
-      <div class="swiper-button-prev"></div>
+    <div class="image-thumbnail">
+      <button class="open-modal-button" data-pictures='${encodeURIComponent(JSON.stringify(pictures))}' data-index='0'>
+        <img class="h-40 cursor-pointer" src="${firstPicture}" alt="Picture"/>
+      </button>
     </div>
   `;
 };
+
+document.addEventListener("click", function (event) {
+  const button = event.target.closest(".open-modal-button");
+  if (button) {
+    const picturesData = decodeURIComponent(
+      button.getAttribute("data-pictures")
+    );
+    const pictures = JSON.parse(picturesData);
+    const index = parseInt(button.getAttribute("data-index"), 10);
+
+    window.openFullscreenModal(pictures, index);
+  }
+});
 
 function format_date(report_date) {
   const timestamp = report_date;
@@ -98,7 +132,7 @@ const jellyfishContent = ({
   const slider = createImageSlider(pictures);
   const formattedDate = format_date(report_date);
   return `
-   <div class="flex flex-col items-center w-full h-full id="report-id-${id}">
+  <div class="flex flex-col items-center w-full h-full" id="report-id-${id}">
     <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>
     ${slider}
     <div class="flex flex-col items-center justify-between w-full h-[210px]">

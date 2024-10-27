@@ -127,4 +127,30 @@ defmodule ISeeSeaWeb.HomeComponents do
     </div>
     """
   end
+
+  def image_dialog(assigns) do
+    ~H"""
+    <div id="modal_fullscreen_image_slider" class="modal">
+      <div class="modal-box relative overflow-hidden">
+        <button
+          class="!bg-transparent absolute right-2 top-2 h-8 w-8"
+          onclick="closeFullscreenModal()"
+        >
+          <a class="leaflet-popup-close-button text-2xl" role="button">
+            <span arial-hidden="true">×</span>
+          </a>
+        </button>
+
+        <div class="swiper-container">
+          <div class="swiper-wrapper space-x-3" id="modal_fullscreen_image_slider_container">
+            <!-- Slides will be injected here by JavaScript -->
+          </div>
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-pagination"></div>
+        </div>
+      </div>
+    </div>
+    """
+  end
 end

@@ -147,6 +147,7 @@ defmodule ISeeSeaWeb.HomeLive do
       locale={@locale}
     />
 
+    <ISeeSeaWeb.HomeComponents.image_dialog />
     <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />
     """
   end
