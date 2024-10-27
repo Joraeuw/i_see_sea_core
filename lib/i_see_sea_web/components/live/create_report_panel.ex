@@ -12,6 +12,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   alias ISeeSea.DB.Models.JellyfishSpecies
   alias ISeeSeaWeb.Params.Report
 
+  import ISeeSeaWeb.Trans
+
   @impl true
   def mount(socket) do
     socket =
@@ -57,11 +59,11 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
             md:h-11/12 md:max-w-1/3 md:m-2 md:self-start p-3 rounded-md"
       >
         <.error :if={!is_user_verified(@current_user)}>
-          You cannot submit reports until you verify your account!<br />
-          Please check <%= if is_user_logged(@current_user), do: @current_user.email %>.
+          <%=translate(@locale, "create_report.no_verification_no_reports")%><br />
+          <%=translate(@locale, "create_report.please_check")%> <%= if is_user_logged(@current_user), do: @current_user.email %>.
         </.error>
         <.error :if={@check_errors}>
-          You have not selected a location.
+          <%=translate(@locale, "create_report.no_location")%>
         </.error>
 
         <CoreComponents.input field={@form[:report_type]} value={@report_type} type="hidden" />
@@ -93,7 +95,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
             class="btn w-[130px]"
             disabled={!is_user_verified(@current_user)}
           >
-            Submit
+            <%=translate(@locale, "create_report.submit")%>
           </CoreComponents.button>
           <div
             class={
@@ -118,7 +120,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
                   [if(not @is_location_selected, do: "btn_delete w-[131px] h-[48px]")]
               }
             >
-              Set Location
+              <%translate(@locale, "create_report.set_location")%>
             </button>
           </div>
         </:actions>
@@ -157,7 +159,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   def create_report_window(%{report_type: ReportType.jellyfish()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
+    <h2 class="text-2xl font-semibold mb-4"><%translate(@locale, "create_report.submit_a")%><%= @report_type %> <%translate(@locale, "create_report.report")%></h2>
 
     <CoreComponents.input
       field={@form[:name]}
@@ -190,7 +192,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   def create_report_window(%{report_type: ReportType.atypical_activity()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
+    <h2 class="text-2xl font-semibold mb-4"><%translate(@locale, "create_report.submit_a")%><%= @report_type %> <%translate(@locale, "create_report.report")%></h2>
     <CoreComponents.input
       type="text"
       field={@form[:name]}
@@ -213,7 +215,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   def create_report_window(%{report_type: ReportType.meteorological()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
+    <h2 class="text-2xl font-semibold mb-4"><%translate(@locale, "create_report.submit_a")%><%= @report_type %> <%translate(@locale, "create_report.report")%></h2>
     <CoreComponents.input
       type="text"
       field={@form[:name]}
@@ -254,7 +256,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   def create_report_window(%{report_type: ReportType.pollution()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
+    <h2 class="text-2xl font-semibold mb-4"><%translate(@locale, "create_report.submit_a")%><%= @report_type %> <%translate(@locale, "create_report.report")%></h2>
     <CoreComponents.input
       type="text"
       field={@form[:name]}
@@ -292,7 +294,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   def create_report_window(%{report_type: ReportType.other()} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-semibold mb-4">Submit a <%= @report_type %> report</h2>
+    <h2 class="text-2xl font-semibold mb-4"><%translate(@locale, "create_report.submit_a")%><%= @report_type %> <%translate(@locale, "create_report.report")%></h2>
     <CoreComponents.input
       type="text"
       field={@form[:name]}
@@ -309,6 +311,26 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     """
   end
 
+  # CREATE EXESIVE VERIFICATION OF EACH REPORT TYPE POSSIBLY USING THE CHANGESETS IN PARAMS
+  # 2h create report working
+  # 30m select location pin?
+  # ? 30m warning and errors for unverified users
+  # ? 1h lookout for broadcast
+
+  # ? 20m profile click on see reports filter
+
+  # ? 2h setup email verification
+  # ? 30m-1h setup locale for language tracking (consider localstorage)
+
+  # ? +2h
+
+  # Ivan
+  # 1h add delete button for admins + functionality
+  # ? +4h tests
+
+  # Steli
+  # 2h gettext translation
+  # ? +4h tests
   @impl true
   def handle_event("create_report", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")

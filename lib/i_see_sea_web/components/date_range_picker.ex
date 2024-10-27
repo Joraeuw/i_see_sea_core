@@ -2,6 +2,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
   use ISeeSeaWeb, :live_component
 
   import ISeeSea.Helpers.DateUtils
+  import ISeeSeaWeb.Trans
 
   @week_start_at :sunday
   @fsm %{
@@ -10,8 +11,9 @@ defmodule ISeeSeaWeb.DateRangePicker do
     reset: :set_start
   }
   @initial_state :set_start
-
+  attr :locale, :string, default: "bg"
   @impl true
+
   def render(assigns) do
     ~H"""
     <div class={["date-range-picker", @class]}>
@@ -72,7 +74,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
 
           <div id="click_today" class="text-sm text-center">
             <.link phx-click="today" phx-target={@myself} class="text-gray-700 hover:text-gray-500">
-              Today
+              <%=translate(@locale, "d_r_p.today")%>
             </.link>
           </div>
 
@@ -136,6 +138,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
       |> assign(:readonly, false)
       |> assign(:selected_date, nil)
       |> assign(:form, nil)
+
     }
   end
 

@@ -15,7 +15,11 @@
     today: "Today",
     login_first: "You need to log in first",
     no_reports: "No Reports Found",
-    no_matching_reports: "It looks like there are no reports that match your filters. Try adjusting your filters."
+    no_matching_reports: "It looks like there are no reports that match your filters. Try adjusting your filters.",
+    total_verified_users: "Total verified users",
+    apply: "Apply",
+    total_reports: "Total Reports",
+    filtered_reports: "Filtered Reports"
   ],
   nav: [
     home: "Home",
@@ -35,7 +39,9 @@
     my_profile: "My Profile",
     my_reports: "My reports",
     count_of_reports: "Count of your reports: ",
-    see_reports: "See Reports"
+    see_reports: "See Reports",
+    no_reports_found: "No Reports Found",
+    no_reports_yet: "It looks like you haven't submitted any reports yet."
   ],
   login: [
     log_in_to_account: "Log in to account",
@@ -285,5 +291,29 @@
     peace_of_mind: "Peace of mind from prototype to production",
     action_failed: "The requested action has failed.",
     no_entity: "Entity not found!"
+  ],
+  create_report: [
+    no_verification_no_reports: "You cannot submit reports until you verify your account!",
+    please_check: "Please check",
+    no_location: "You have not selected a location.",
+    set_location: "Set Location",
+    submit_a: "Submit a ",
+    report: "report",
+    submit: "Submit"
+  ],
+  report_card: [
+    quantity: "Quantity",
+    details: "Details:",
+    species: "Species",
+    fog_type: "Fog type",
+    wind_type: "Wind type",
+    ss_type: "Sea swell type",
+    plastic_pollution: "Plastic pollution",
+    biological_pollution: "Biological pollution",
+    storm_type: "Storm type",
+    oil_pollution: "Oil pollution",
+  ],
+  d_r_p: [
+    today: "Today"
   ]
 ]

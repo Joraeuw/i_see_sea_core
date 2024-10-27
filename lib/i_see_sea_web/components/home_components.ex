@@ -6,6 +6,8 @@ defmodule ISeeSeaWeb.HomeComponents do
 
   use Phoenix.Component
 
+  import ISeeSeaWeb.Trans
+
   attr :create_report_toolbox_is_open, :boolean, required: true
   attr :supports_touch, :boolean, required: true
   attr :create_report_images, :map, required: true
@@ -106,18 +108,18 @@ defmodule ISeeSeaWeb.HomeComponents do
             <CommonComponents.filter_button filters={@filters} locale={@locale} />
           </div>
           <div :if={User.is_admin?(@current_user)} class="stat">
-            <div class="stat-title">Total Verified Users</div>
+            <div class="stat-title"><%=translate(@locale, "home.total_verified_users")%></div>
             <div class="stat-value"><%= @data.verified_users %></div>
           </div>
 
           <div class="stat">
-            <div class="stat-title">Total Reports</div>
+            <div class="stat-title"><%=translate(@locale, "home.total_reports")%></div>
             <div class="stat-value"><%= @data.total_entries %></div>
             <div class="stat-desc"><%= "#{@data.beginning_of_time} - now" %></div>
           </div>
 
           <div class="stat">
-            <div class="stat-title">Filtered Reports</div>
+            <div class="stat-title"><%=translate(@locale, "home.filtered_reports")%></div>
             <div class="stat-value"><%= @data.total_entries_in_filter %></div>
             <div class="stat-desc"><%= @data.filter_date_range %></div>
           </div>

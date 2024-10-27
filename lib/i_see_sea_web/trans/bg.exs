@@ -1,5 +1,6 @@
 [
   home: [
+    login_first: "Първо влезте в акаунта си",
     select_location: "Избиране на локация",
     filters: "Филтри",
     report_type: "Вид доклад",
@@ -12,7 +13,13 @@
     sth_went_wrong: "Нещо се обърка!",
     back_on_track: "Изчакайте малко, докато се върнем на правия път",
     actions: "Действия",
-    today: "Днес"
+    today: "Днес",
+    total_verified_users: "Общо потвърдени потребители",
+    apply: "Приложи",
+    no_reports: "Не са намерени доклади",
+    no_matching_reports: "Изглежда, че няма доклади",
+    total_reports: "Общ брой доклади",
+    filtered_reports: "Филтрирани доклади"
   ],
   nav: [
     home: "Начало",
@@ -32,7 +39,9 @@
     my_profile: "Моят профил",
     my_reports: "Моите доклади",
     count_of_reports: "Брой на Вашите доклади: ",
-    see_reports: "Виж докладите"
+    see_reports: "Виж докладите",
+    no_reports_found: "Няма намерени доклади",
+    no_reports_yet: "Все още не сте създали доклад."
   ],
   login: [
     log_in_to_account: "Вход в акаунта",
@@ -278,7 +287,33 @@
   user_auth: [
     login_to_access: "Трябва да влезете в акаунта си, за да достъпите страницата."
   ],
+  create_report: [
+    no_verification_no_reports: "Не можете да израпращате доклади, докато не потвърдите акаунта си!",
+    please_check: "Моля проверете",
+    no_location: "Не сте избрали локация.",
+    set_location: "Set Location",
+    submit_a: "Submit a ",
+    report: "report",
+    submit: "Submit"
+  ],
+  report_card: [
+    quantity: "Quantity",
+    details: "Details:",
+    species: "Species",
+    fog_type: "Fog type",
+    wind_type: "Wind type",
+    ss_type: "Sea swell type",
+    plastic_pollution: "Plastic pollution",
+    biological_pollution: "Biological pollution",
+    storm_type: "Storm type",
+    oil_pollution: "Oil pollution",
+  ],
+  d_r_p: [
+    today: "Today"
+  ],
+
   jellyfish_quantity_range: [
-    {:"1", "1"}
+    {:"1", "1"},
+    {:"2 to 5", "2 do 5"}
   ]
 ]

@@ -39,7 +39,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
                 phx-target={@myself}
                 class={"btn btn-primary " <> (if @user_is_admin, do: "col-span-9", else: "col-span-12")}
               >
-                Details
+              <%translate(@locale, "create_report.details")%>
               </button>
 
               <%= if @user_is_admin do %>
@@ -122,19 +122,19 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
         ~H"""
         <div class="flex flex-col justify-around items-center h-full w-full">
-          <div class="flex flex-row justify-center text-center card-title">Details:</div>
+          <div class="flex flex-row justify-center text-center card-title"><%translate(@locale, "create_report.details")%></div>
           <div class="flex flex-row items-center w-11/12 p-3 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/quintity_icon.svg" />
             <p class="p_card">
               <%= quantity %>
-              <p class="opacity-50 text-[0.9em]">Quantity</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.quantity")%></p>
             </p>
           </div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/jelly_icon.svg" />
             <p class="p_card">
               <%= species_name %>
-              <p class="opacity-50 text-[0.9em]">Species</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.species")%></p>
             </p>
           </div>
           <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
@@ -160,12 +160,12 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
         ~H"""
         <div class="flex flex-col justify-around h-full w-full">
-          <div class="flex flex-row justify-center text-center card-title">Details:</div>
+          <div class="flex flex-row justify-center text-center card-title"><%translate(@locale, "create_report.details")%></div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/storm_type.svg" />
             <p class="p_card">
               <%= storm_type_name %>
-              <p class="opacity-50 text-[0.9em]">Storm type</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.storm_type")%></p>
             </p>
           </div>
           <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
@@ -196,26 +196,26 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
         ~H"""
         <div class="flex flex-col justify-around align-middle h-full w-full">
-          <div class="flex flex-row justify-center text-center card-title">Details:</div>
+          <div class="flex flex-row justify-center text-center card-title"><%translate(@locale, "create_report.details")%></div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/fog_type.svg" />
             <p class="p_card">
               <%= fog_type_name %>
-              <p class="opacity-50 text-[0.9em]">Fog type</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.fog_type")%></p>
             </p>
           </div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/wind_type.svg" />
             <p class="p_card">
               <%= wind_type_name %>
-              <p class="opacity-50 text-[0.9em]">Wind type</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.wind_type")%></p>
             </p>
           </div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/sea_swell.svg" />
             <p class="p_card">
               <%= sea_swell_type_name %>
-              <p class="opacity-50 text-[0.9em]">Sea swell type</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.ss_type")%></p>
             </p>
           </div>
           <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
@@ -249,26 +249,26 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
         ~H"""
         <div class="flex flex-col justify-around align-middle h-full w-full">
-          <div class="flex flex-row justify-center text-center card-title">Details:</div>
+          <div class="flex flex-row justify-center text-center card-title"><%translate(@locale, "create_report.details")%></div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[5px] bg-cover" src="/images/report_icons/oil_icon.svg" />
             <p class="p_card">
               <%= if has_oil, do: "Yes", else: "No" %>
-              <p class="opacity-50 text-[0.9em]">Oil pollution</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.oil_pollution")%></p>
             </p>
           </div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[5px] bg-cover" src="/images/report_icons/plastic_icon.svg" />
             <p class="p_card">
               <%= if has_plastic, do: "Yes", else: "No" %>
-              <p class="opacity-50 text-[0.9em]">Plastic pollution</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.plastic_pollution")%></p>
             </p>
           </div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/biological_icon.svg" />
             <p class="p_card">
               <%= if has_biological, do: "Yes", else: "No" %>
-              <p class="opacity-50 text-[0.9em]">Biological pollution</p>
+              <p class="opacity-50 text-[0.9em]"><%translate(@locale, "create_report.biological_pollution")%></p>
             </p>
           </div>
           <div class="flex flex-row p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
@@ -287,7 +287,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
       Ecto.assoc_loaded?(report.other_report) and not is_nil(report.other_report) ->
         ~H"""
         <div class="flex flex-col justify-around align-middle h-full w-full">
-          <div class="flex flex-row justify-center text-center card-title">Details:</div>
+          <div class="flex flex-row justify-center text-center card-title"><%translate(@locale, "create_report.details")%></div>
           <div class="flex flex-row align-middle p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <div class="flex flex-row h-3/3 w-2/12">
               <img class="mr-[10px]" src="/images/report_icons/comment.svg" />
