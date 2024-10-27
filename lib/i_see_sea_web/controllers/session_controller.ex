@@ -6,23 +6,21 @@ defmodule ISeeSeaWeb.SessionController do
   alias ISeeSea.Authentication.Auth
   alias ISeeSea.DB.Models.User
 
-  import ISeeSeaWeb.Trans
-
   @permission_scope "i_see_sea:sessions"
   plug(AssertPermissions, ["#{@permission_scope}:refresh"] when action == :refresh)
   plug(AssertPermissions, [] when action in [:register, :login, :logout])
   plug(EnsurePermitted)
 
   def login(conn, %{"_action" => "registered", "user" => user_params}) do
-    login(conn, user_params, translate(@locale, "s_c.acc_created"))
+    login(conn, user_params, "Account created successfully!")
   end
 
   def login(conn, %{"_action" => "password_updated", "user" => user_params}) do
-    login(conn, user_params, translate(@locale, "s_c.password_updated"))
+    login(conn, user_params, "Password updated successfully!")
   end
 
   def login(conn, %{"user" => user_params}) do
-    login(conn, user_params, translate(@locale, "s_c.wecome_back"))
+    login(conn, user_params, "Welcome back!")
   end
 
   def login(conn, params, push_message) do
@@ -36,7 +34,7 @@ defmodule ISeeSeaWeb.SessionController do
     else
       _ ->
         conn
-        |> put_flash(:error, translate(@locale, "s_c.invalid_info"))
+        |> put_flash(:error, "Invalid email or password")
         |> put_flash(:email, String.slice(email, 0, 160))
         |> redirect(to: ~p"/login")
     end
@@ -44,7 +42,7 @@ defmodule ISeeSeaWeb.SessionController do
 
   def logout(conn, _params) do
     conn
-    |> put_flash(:info, translate(@locale, "s_c.logout"))
+    |> put_flash(:info, "Logged out successfully.")
     |> UserAuth.log_out_user()
   end
 

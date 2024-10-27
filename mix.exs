@@ -98,8 +98,7 @@ defmodule ISeeSea.MixProject do
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
       "assets.build": ["tailwind i_see_sea", "esbuild i_see_sea"],
       "assets.deploy": [
-        "tailwind i_see_sea --minify",
-        "esbuild i_see_sea --minify",
+        "cmd --cd assets node build.js --deploy",
         "phx.digest"
       ],
       spec: ["openapi.spec.json --spec ISeeSeaWeb.ApiSpec"]

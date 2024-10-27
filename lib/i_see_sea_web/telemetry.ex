@@ -1,7 +1,6 @@
 defmodule ISeeSeaWeb.Telemetry do
   use Supervisor
   import Telemetry.Metrics
-  import ISeeSeaWeb.Trans
 
   def start_link(arg) do
     Supervisor.start_link(__MODULE__, arg, name: __MODULE__)
@@ -55,24 +54,24 @@ defmodule ISeeSeaWeb.Telemetry do
       # Database Metrics
       summary("i_see_sea.repo.query.total_time",
         unit: {:native, :millisecond},
-        description: translate(@locale, "telemetry.measurement_sum")
+        description: "The sum of the other measurements"
       ),
       summary("i_see_sea.repo.query.decode_time",
         unit: {:native, :millisecond},
-        description: translate(@locale, "telemetry.time_spent_decoding")
+        description: "The time spent decoding the data received from the database"
       ),
       summary("i_see_sea.repo.query.query_time",
         unit: {:native, :millisecond},
-        description: translate(@locale, "telemetry.time_spent_executing")
+        description: "The time spent executing the query"
       ),
       summary("i_see_sea.repo.query.queue_time",
         unit: {:native, :millisecond},
-        description: translate(@locale, "telemetry.time_spent_waiting")
+        description: "The time spent waiting for a database connection"
       ),
       summary("i_see_sea.repo.query.idle_time",
         unit: {:native, :millisecond},
         description:
-          translate(@locale, "telemetry.time_spent_connection")
+          "The time the connection spent waiting before being checked out for the query"
       ),
 
       # VM Metrics

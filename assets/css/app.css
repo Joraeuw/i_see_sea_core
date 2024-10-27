@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@100..900&display=swap");
+@import "leaflet/dist/leaflet.css";
+@import "swiper/swiper-bundle.min.css";
+
 @import "tailwindcss/base";
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
-@import "leaflet/dist/leaflet.css";
 
 @import "register.css";
 @import "about.css";
@@ -10,7 +12,6 @@
 @import "navbar.css";
 @import "term.css";
 @import "login.css";
-/* This file is for your main application CSS */
 
 .phx-connected {
   @apply w-full h-full relative;
@@ -38,12 +39,11 @@
 .transform-style-preserve-3d {
   transform-style: preserve-3d;
 }
-.tooltip-error{
+.tooltip-error {
   --tooltip-color: rgb(238, 0, 0);
   --tooltip-text-color: rgb(255, 255, 255);
   --tooltip-font-weight: bold;
 }
-
 
 .btn {
   @apply flex-1 z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(24,158,180)] transition duration-100 hover:bg-[rgb(117,230,218)] active:translate-y-1 active:shadow-none;
@@ -51,7 +51,7 @@
 .btn_delete {
   @apply flex-1 z-20 text-center font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(255,20,60)] transition duration-100 hover:bg-[rgb(255,65,95)] active:translate-y-1 active:shadow-none;
 }
-.btn_sucsess{
+.btn_sucsess {
   @apply flex-1 z-20 text-center text-lg  font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(7,204,73)] transition duration-100 hover:bg-[rgb(41,243,23)] active:translate-y-1 active:shadow-none;
 }
 .p_card {
