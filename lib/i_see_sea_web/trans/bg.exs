@@ -291,29 +291,61 @@
     no_verification_no_reports: "Не можете да израпращате доклади, докато не потвърдите акаунта си!",
     please_check: "Моля проверете",
     no_location: "Не сте избрали локация.",
-    set_location: "Set Location",
-    submit_a: "Submit a ",
-    report: "report",
-    submit: "Submit"
+    set_location: "Избери локация",
+    submit_a: "Изпрати ",
+    report: "доклад",
+    submit: "Изпрати"
   ],
   report_card: [
-    quantity: "Quantity",
-    details: "Details:",
-    species: "Species",
-    fog_type: "Fog type",
-    wind_type: "Wind type",
-    ss_type: "Sea swell type",
-    plastic_pollution: "Plastic pollution",
-    biological_pollution: "Biological pollution",
-    storm_type: "Storm type",
-    oil_pollution: "Oil pollution",
+    quantity: "Количество",
+    details: "Детайли:",
+    species: "Вид",
+    fog_type: "Вид мъгла",
+    wind_type: "Вид вятър",
+    ss_type: "Вид морско вълнение",
+    plastic_pollution: "Замърсяване с пластмаса",
+    biological_pollution: "Биологично замърсяване",
+    storm_type: "Вид буря",
+    oil_pollution: "Петролно замърсяване",
   ],
   d_r_p: [
-    today: "Today"
+    today: "Днес"
   ],
+  jellyfish_report: [
+    species: [
+    quantity: "Quantity",
 
-  jellyfish_quantity_range: [
+    dont_know: "Не знам",
+    aurelia_aurita: "Ушата медуза",
+    cotylorhiza_tuberculata: "Средиземноморска медуза",
+    pelagia_noctiluca: "Средиземноморска медуза",
+    beroe_ovata: "Берое Овата",
+    salp: "Салпа",
+    cassiopea_andromeda: "Обърната медуза",
+    cotylorhiza_erithrea: "Котилорхиза Еритрея",
+    marivagia_stellata: "Маривагия Стеллата",
+    cestus_veneris: "Венерин пояс",
+    porpita_porpita: "Син бутон/Порпита порпита",
+    chrysaora_pseudoocellata: "Крисаора Псевдоцелата",
+    aquorea_forskalea: "Акуорея Форскалея",
+    hydromedusae: "Хидромедуза",
+    other: "Други"
+    ],
+    quantity: [
     {:"1", "1"},
-    {:"2 to 5", "2 do 5"}
+    {:"2 to 5", "2 до 5"},
+    {:"6 to 10", "6 до 10"},
+    {:"11 to 99", "11 до 99"},
+    {:"100+", "100+"}
+    ]
+  ],
+  base_report: [
+    report_type: [
+      jellyfish: "Медузи",
+      meteorological: "Метеорологични",
+      atypical_activity: "Екстремно време",
+      pollution: "Замърсяване",
+      other: "Други"
+    ]
   ]
 ]

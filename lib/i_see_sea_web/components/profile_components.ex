@@ -178,9 +178,9 @@ defmodule ISeeSeaWeb.ProfileComponents do
         alt="No Reports"
         class="w-32 h-32 mb-4 opacity-75"
       />
-      <p class="text-xl font-semibold text-gray-700"><%= translate(@locale,"profile.no_reports_found") %></p>
+      <p class="text-xl font-semibold text-gray-700"><%= translate(@locale, "profile.no_reports_found") %></p>
       <p class="text-sm text-gray-500 mt-2 text-center mb-4">
-      <%= translate(@locale,"profile.no_reports_yet") %>
+      <%= translate(@locale, "profile.no_reports_yet") %>
       </p>
     </div>
     """

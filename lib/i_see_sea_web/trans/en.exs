@@ -315,5 +315,35 @@
   ],
   d_r_p: [
     today: "Today"
+  ],
+  jellyfish_report: [
+    species: [
+
+    dont_know: "Don't know",
+    aurelia_aurita: "Aurelia Aurita",
+    cotylorhiza_tuberculata: "Cotylorhiza Tuberculata",
+    pelagia_noctiluca: "Pelagia Noctiluca",
+    beroe_ovata: "Beroe Ovata",
+    salp: "Salp",
+    cassiopea_andromeda: "Cassiopea Andromeda",
+    cotylorhiza_erithrea: "Cotylorhiza Erithrea",
+    marivagia_stellata: "Marivagia Stellata",
+    cestus_veneris: "Cestus Veneris",
+    porpita_porpita: "Porpita Porpita",
+    chrysaora_pseudoocellata: "Chrysaora Pseudoocellata",
+    aquorea_forskalea: "Aquorea Forskalea",
+    hydromedusae: "Hydromedusae",
+    other: "Other"
+    ],
+    quantity: [quantity: "Quantity"]
+  ],
+  base_report: [
+    report_type: [
+      jellyfish: "Jellyfish",
+      meteorological: "Meteorological",
+      atypical_activity: "Extreme weather",
+      pollution: "Pollution",
+      other: "Other"
+    ]
   ]
 ]
