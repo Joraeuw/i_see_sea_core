@@ -15,12 +15,16 @@
     today: "Today",
     login_first: "You need to log in first",
     no_reports: "No Reports Found",
-    no_matching_reports: "It looks like there are no reports that match your filters. Try adjusting your filters.",
+    no_matching_reports:
+      "It looks like there are no reports that match your filters. Try adjusting your filters.",
     total_verified_users: "Total verified users",
     apply: "Apply",
     total_reports: "Total Reports",
-    filtered_reports: "Filtered Reports"
+    filtered_reports: "Filtered Reports",
+    drag_prompt: "Drag an image to upload or click to choose an image",
+    creating_report: "Creating a report..."
   ],
+  see_report: [details: "Details"],
   nav: [
     home: "Home",
     profile: "Profile",
@@ -254,16 +258,19 @@
     terms16:
       "Visiting the Site, sending us emails, and completing online forms constitute\n    electronic communications. You consent to receive electronic communications,\n    and you agree that all agreements, notices, disclosures, and other\n    communications we provide to you electronically via email and on the Site,\n    satisfy any legal requirement that such communication be in writing. YOU\n    HEREBY AGREE TO THE USE OF ELECTRONIC SIGNATURES, CONTRACTS, ORDERS, AND\n    OTHER RECORDS, AND TO ELECTRONIC DELIVERY OF NOTICES, POLICIES, AND RECORDS\n    OF TRANSACTIONS INITIATED OR COMPLETED BY US OR VIA THE SITE. You hereby\n    waive any rights or requirements under any statutes regulations, rules,\n    Ordinances, or other laws in any jurisdiction which require an original\n    signature or delivery or retention of non-electronic records, or to payments\n    or the granting of credits by any means other than electronic means.",
     some: "18. MISCELLANEOUS",
-    terms17: "These Terms of Use and any policies or operating rules posted by us on the\n    Site or in respect to the Site constitute the entire agreement and\n    understanding between you and us. Our failure to exercise or enforce any\n    right or provision of these Terms of Use shall not operate as a waiver of\n    such right or provision. These Terms of Use operate to the fullest extent\n    permissible by law. We may assign any or all of our rights and obligations\n    to others at any time. We shall not be responsible or liable for any loss\n    damage, delay or failure to act caused by any cause beyond our reasonable\n    control. If any provision or part of a provision of these Terms of Use is\n    determined to be unlawful, void or unenforceable, that provision or part of\n    the provision is deemed severable from these Terms of Use and does not\n    affect the validity and enforce ability of any remaining provisions. There\n    is no joint venture partnership, employment or agency relationship created\n    between you and us as a result of these Terms of Use or use of the Site You\n    agree that these Terms of Use will not be construed against us by virtue of\n    having drafted them. You hereby waive any and all defenses you may have\n    based on the electronic form of these Terms of Use and the lack of signing\n    by the parties hereto to execute these Terms of Use"
+    terms17:
+      "These Terms of Use and any policies or operating rules posted by us on the\n    Site or in respect to the Site constitute the entire agreement and\n    understanding between you and us. Our failure to exercise or enforce any\n    right or provision of these Terms of Use shall not operate as a waiver of\n    such right or provision. These Terms of Use operate to the fullest extent\n    permissible by law. We may assign any or all of our rights and obligations\n    to others at any time. We shall not be responsible or liable for any loss\n    damage, delay or failure to act caused by any cause beyond our reasonable\n    control. If any provision or part of a provision of these Terms of Use is\n    determined to be unlawful, void or unenforceable, that provision or part of\n    the provision is deemed severable from these Terms of Use and does not\n    affect the validity and enforce ability of any remaining provisions. There\n    is no joint venture partnership, employment or agency relationship created\n    between you and us as a result of these Terms of Use or use of the Site You\n    agree that these Terms of Use will not be construed against us by virtue of\n    having drafted them. You hereby waive any and all defenses you may have\n    based on the electronic form of these Terms of Use and the lack of signing\n    by the parties hereto to execute these Terms of Use"
   ],
-  s_c: [ #session controller
+  # session controller
+  s_c: [
     acc_created: "Account created successfully!",
     password_updated: "Password updated successfully!",
     welcome_back: "Welcome back!",
     invalid_info: "Invalid email or password",
     logout: "Logged out successfully."
   ],
-  u_c: [ #user controller
+  # user controller
+  u_c: [
     password_reset: "Password Reset Successfully"
   ],
   responses: [
@@ -280,7 +287,8 @@
     time_spent_decoding: "The time spent decoding the data received from the database",
     time_spent_executing: "The time spent executing the query",
     time_spent_waiting: "The time spent waiting for a database connection",
-    time_spent_connection: "The time the connection spent waiting before being checked out for the query"
+    time_spent_connection:
+      "The time the connection spent waiting before being checked out for the query"
   ],
   user_auth: [
     login_to_access: "You must log in to access this page."
@@ -299,7 +307,9 @@
     set_location: "Set Location",
     submit_a: "Submit a ",
     report: "report",
-    submit: "Submit"
+    submit: "Submit",
+    report_name: "Report Name...",
+    comment: "Comment..."
   ],
   report_card: [
     quantity: "Quantity",
@@ -311,31 +321,75 @@
     plastic_pollution: "Plastic pollution",
     biological_pollution: "Biological pollution",
     storm_type: "Storm type",
-    oil_pollution: "Oil pollution",
+    oil_pollution: "Oil pollution"
   ],
   d_r_p: [
     today: "Today"
   ],
   jellyfish_report: [
     species: [
-
-    dont_know: "Don't know",
-    aurelia_aurita: "Aurelia Aurita",
-    cotylorhiza_tuberculata: "Cotylorhiza Tuberculata",
-    pelagia_noctiluca: "Pelagia Noctiluca",
-    beroe_ovata: "Beroe Ovata",
-    salp: "Salp",
-    cassiopea_andromeda: "Cassiopea Andromeda",
-    cotylorhiza_erithrea: "Cotylorhiza Erithrea",
-    marivagia_stellata: "Marivagia Stellata",
-    cestus_veneris: "Cestus Veneris",
-    porpita_porpita: "Porpita Porpita",
-    chrysaora_pseudoocellata: "Chrysaora Pseudoocellata",
-    aquorea_forskalea: "Aquorea Forskalea",
-    hydromedusae: "Hydromedusae",
-    other: "Other"
+      title: "Select Species",
+      dont_know: "Don't know",
+      aurelia_aurita: "Aurelia Aurita",
+      cotylorhiza_tuberculata: "Cotylorhiza Tuberculata",
+      pelagia_noctiluca: "Pelagia Noctiluca",
+      beroe_ovata: "Beroe Ovata",
+      salp: "Salp",
+      cassiopea_andromeda: "Cassiopea Andromeda",
+      cotylorhiza_erithrea: "Cotylorhiza Erithrea",
+      marivagia_stellata: "Marivagia Stellata",
+      cestus_veneris: "Cestus Veneris",
+      porpita_porpita: "Porpita Porpita",
+      chrysaora_pseudoocellata: "Chrysaora Pseudoocellata",
+      aquorea_forskalea: "Aquorea Forskalea",
+      hydromedusae: "Hydromedusae",
+      other: "Other"
     ],
-    quantity: [quantity: "Quantity"]
+    quantity: [
+      {:title, "Select Range"},
+      {:"1", "1"},
+      {:"2 to 5", "2 to 5"},
+      {:"6 to 10", "6 to 10"},
+      {:"11 to 99", "11 to 99"},
+      {:"100+", "100+"}
+    ]
+  ],
+  atypical_report: [
+    storm_type_id: [
+      title: "Storm Type",
+      thunderstorm: "Thunderstorm",
+      rain: "Rain",
+      hailstorm: "Hailstorm",
+      no_storm: "No Storm"
+    ]
+  ],
+  meteorological_report: [
+    fog_type_id: [
+      title: "Fog Type",
+      very_thick: "Very Thick",
+      thick: "Thick",
+      moderate: "Moderate",
+      light: "Light",
+      no_fog: "No Fog"
+    ],
+    wind_type_id: [
+      title: "Wind Type",
+      hurricane: "Hurricane",
+      strong: "Strong",
+      moderate: "Moderate",
+      weak: "Weak",
+      no_wind: "No Wind"
+    ],
+    sea_swell_type_id: [
+      title: "Sea Swell Type",
+      strong: "Strong",
+      moderate: "Moderate",
+      weak: "Weak",
+      no_waves: "No Waves"
+    ]
+  ],
+  pollution_report: [
+    options: [oil: "Oil", plastic: "Plastic", bio: "Biological"]
   ],
   base_report: [
     report_type: [

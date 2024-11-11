@@ -74,7 +74,7 @@ defmodule ISeeSeaWeb.DateRangePicker do
 
           <div id="click_today" class="text-sm text-center">
             <.link phx-click="today" phx-target={@myself} class="text-gray-700 hover:text-gray-500">
-              <%=translate(@locale, "d_r_p.today")%>
+              <%= translate(@locale, "d_r_p.today") %>
             </.link>
           </div>
 
@@ -138,7 +138,6 @@ defmodule ISeeSeaWeb.DateRangePicker do
       |> assign(:readonly, false)
       |> assign(:selected_date, nil)
       |> assign(:form, nil)
-
     }
   end
 

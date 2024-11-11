@@ -39,14 +39,14 @@ defmodule ISeeSea.DB.Models.PollutionReport do
 
       pollution_report
       |> Map.from_struct()
-      |> Map.take([:pollution_types, :report_id])
+      |> Map.take([:report_id])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "pollution_report")
       |> Map.merge(%{
         pollution_types:
           pollution_types
           |> ISeeSeaWeb.Focus.view(lens)
           |> Enum.map(fn %{name: name} -> name end)
       })
-      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "pollution_report")
       |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
 
@@ -59,7 +59,8 @@ defmodule ISeeSea.DB.Models.PollutionReport do
 
       pollution_report
       |> Map.from_struct()
-      |> Map.take([:pollution_types, :report_id])
+      |> Map.take([:report_id])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "pollution_report")
       |> Map.merge(%{
         pollution_types:
           pollution_types
@@ -67,7 +68,6 @@ defmodule ISeeSea.DB.Models.PollutionReport do
           |> override_nil()
           |> Enum.map(fn %{name: name} -> name end)
       })
-      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "pollution_report")
     end
 
     defp override_nil(nil), do: []

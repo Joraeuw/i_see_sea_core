@@ -125,7 +125,7 @@ defmodule ISeeSeaWeb.CommonComponents do
               phx-disable-with={translate(@locale, "home.applying_filters")}
               class="btn"
             >
-            <%=translate(@locale, "home.apply")%>
+              <%= translate(@locale, "home.apply") %>
             </CoreComponents.button>
           </:actions>
         </CoreComponents.simple_form>

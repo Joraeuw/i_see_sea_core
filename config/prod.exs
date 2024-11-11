@@ -25,7 +25,7 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
 config :phoenix, :logger, false
 
 config :i_see_sea,
-  backend_url: "https://i-see-sea.fly.dev",
+  backend_url: "https://i-see-sea-dev.fly.dev",
   frontend_url: "https://i-see-sea-frontend.fly.dev",
   allowed_origins: [
     "https://i-see-sea-frontend.fly.dev"

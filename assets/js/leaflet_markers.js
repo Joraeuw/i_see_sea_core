@@ -131,17 +131,19 @@ const jellyfishContent = ({
 }) => {
   const slider = createImageSlider(pictures);
   const formattedDate = format_date(report_date);
+  const locale = localStorage.getItem("locale") || "en";
+
   return `
   <div class="flex flex-col items-center w-full h-full" id="report-id-${id}">
     <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>
     ${slider}
     <div class="flex flex-col items-center justify-between w-full h-[210px]">
-    <br><p class="p_card_map p_map_cards"><b>Quantity: </b> &nbsp;${quantity}</p>
-    <p class="p_card_map p_map_cards"><b>Species: </b> &nbsp;${species}</p>
-    <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
-    <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
+    <br><p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Количество: " : "Quantity: "}</b> &nbsp;${quantity}</p>
+    <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид: " : "Species: "}</b> &nbsp;${species}</p>
+    <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "}</b> &nbsp;${latitude}</p>
+    <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. д.: " : "Longitude: "}</b> &nbsp;${longitude}</p>
 <div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
-<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<p class="p_card_map_comment line-clamp-2"><b>${locale == "bg" ? "Коментар: " : "Comment: "}</b> &nbsp; ${comment}</p>
 </div>
     <p class="w-full text-end mt-6">${formattedDate}</p>
     </div>
@@ -159,10 +161,12 @@ const pollutionContent = ({
   report_date,
 }) => {
   const slider = createImageSlider(pictures);
+  console.log(pollution_types);
   const plastic = pollution_types.includes("plastic");
   const oil = pollution_types.includes("oil");
   const biological = pollution_types.includes("biological");
   const formattedDate = format_date(report_date);
+  const locale = localStorage.getItem("locale") || "en";
 
   return `
 <div class="flex flex-col justify-around items-center w-full h-full ">
@@ -194,6 +198,8 @@ const atypicalActivityContent = ({
 }) => {
   const slider = createImageSlider(pictures);
   const formattedDate = format_date(report_date);
+  const locale = localStorage.getItem("locale") || "en";
+
   return `
   <div class="flex flex-col justify-around items-center w-full h-full ">
    <p class="p_card_name p_map_cards s"><b>${name}</b></p>
@@ -222,6 +228,8 @@ const meteorologicalContent = ({
 }) => {
   const slider = createImageSlider(pictures);
   const formattedDate = format_date(report_date);
+  const locale = localStorage.getItem("locale") || "en";
+
   return `
   <div class="flex flex-col justify-around items-center w-full h-full ">
  <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>
@@ -250,6 +258,8 @@ const otherContent = ({
 }) => {
   const slider = createImageSlider(pictres);
   const formattedDate = format_date(report_date);
+  const locale = localStorage.getItem("locale") || "en";
+
   return `
   <div class="flex flex-col justify-around items-center w-full h-full ">
   <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>

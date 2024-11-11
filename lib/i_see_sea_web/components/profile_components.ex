@@ -108,7 +108,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
       />
 
       <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
-      <.my_report_view :if={@view === "my_reports_view"} reports={@reports} />
+      <.my_report_view :if={@view === "my_reports_view"} reports={@reports} locale={@locale} />
       <CommonComponents.pagination :if={@view === "my_reports_view"} pagination={@pagination} />
     </div>
     """
@@ -146,7 +146,7 @@ defmodule ISeeSeaWeb.ProfileComponents do
   end
 
   attr :reports, :list, required: true
-  attr :locale, :string, default: "en"
+  attr :locale, :string
 
   def my_report_view(assigns) do
     ~H"""
@@ -178,9 +178,11 @@ defmodule ISeeSeaWeb.ProfileComponents do
         alt="No Reports"
         class="w-32 h-32 mb-4 opacity-75"
       />
-      <p class="text-xl font-semibold text-gray-700"><%= translate(@locale, "profile.no_reports_found") %></p>
+      <p class="text-xl font-semibold text-gray-700">
+        <%= translate(@locale, "profile.no_reports_found") %>
+      </p>
       <p class="text-sm text-gray-500 mt-2 text-center mb-4">
-      <%= translate(@locale, "profile.no_reports_yet") %>
+        <%= translate(@locale, "profile.no_reports_yet") %>
       </p>
     </div>
     """
