@@ -46,8 +46,6 @@ const LeafletMap = {
     });
 
     this.handleEvent("filters_updated", (params) => {
-      console.log(params);
-
       let { reports, stop_live_tracker } = params;
       stop_live_tracker = false;
       if (stop_live_tracker) {
@@ -93,7 +91,6 @@ const LeafletMap = {
 
   async renderMarkers(markers) {
     this.clearMarkers();
-    console.log(markers);
     markers.forEach((markerData) => {
       const { report_id, report_type, latitude, longitude } = markerData;
       const marker = L.marker([latitude, longitude], {

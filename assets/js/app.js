@@ -24,28 +24,6 @@ import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 import Hooks from "./hooks";
 
-// // Select all the buttons
-// const buttons = document.querySelectorAll(".create_report_button");
-
-// buttons.forEach((button) => {
-//   button.addEventListener("click", (e) => {
-//     console.log("CLICKED");
-//     // Get the index of the clicked button
-//     const index = e.currentTarget.getAttribute("data-index");
-
-//     // Toggle the corresponding expand panel
-//     const expandPanel = document.getElementById(`expand-panel-${index}`);
-
-//     if (expandPanel.classList.contains("hidden")) {
-//       expandPanel.classList.remove("hidden");
-//       expandPanel.classList.add("block");
-//     } else {
-//       expandPanel.classList.add("hidden");
-//       expandPanel.classList.remove("block");
-//     }
-//   });
-// });
-
 Hooks.DetectClick = {
   mounted() {
     document.addEventListener("click", this.handleOutsideClick.bind(this));

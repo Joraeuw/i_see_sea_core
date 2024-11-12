@@ -7,6 +7,7 @@ const LocaleHook = {
     this.handleEvent("update_locale", ({ locale }) => {
       localStorage.setItem("locale", locale);
       document.cookie = `locale=${locale}; path=/; max-age=31536000`;
+      location.reload();
     });
   },
 };

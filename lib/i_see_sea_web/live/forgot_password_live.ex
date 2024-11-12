@@ -43,8 +43,6 @@ defmodule ISeeSeaWeb.ForgotLive do
 
   @impl true
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do
-    IO.inspect("Handling send_email event", label: "DEBUG")
-
     case Repo.get_by(User, email: email) do
       nil ->
         {:noreply, socket |> put_flash(:info, "If the email exists, a reset link has been sent.")}

@@ -224,10 +224,8 @@
 
         <script>
           function changeLocale(locale) {
-            console.log(locale)
             localStorage.setItem('locale', locale);
             document.cookie = "locale=" + locale + "; path=/";
-            console.log(document.cookie)
             window.location.reload();
           }
         </script>

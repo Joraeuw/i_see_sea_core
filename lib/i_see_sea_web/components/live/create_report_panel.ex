@@ -190,16 +190,28 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
           </div>
         </div>
         <:actions>
-          <CoreComponents.button
-            phx-disable-with={translate(@locale, "home.creating_report")}
-            class="btn w-[130px]"
-            disabled={!is_user_verified(@current_user)}
-          >
-            <%= translate(@locale, "create_report.submit") %>
-          </CoreComponents.button>
           <div
             class={
-              ["tooltip"] ++ [if(@is_location_selected, do: "tooltip-success", else: "tooltip-error")]
+              ["tooltip w-full"] ++
+                [if(@is_location_selected, do: "tooltip-success", else: "tooltip-error")]
+            }
+            data-tip={
+              if not @is_location_selected,
+                do: translate(@locale, "create_report.no_location")
+            }
+          >
+            <CoreComponents.button
+              phx-disable-with={translate(@locale, "home.creating_report")}
+              class="btn w-full"
+              disabled={!is_user_verified(@current_user) || !@is_location_selected}
+            >
+              <%= translate(@locale, "create_report.submit") %>
+            </CoreComponents.button>
+          </div>
+          <div
+            class={
+              ["tooltip"] ++
+                [if(@is_location_selected, do: "tooltip-success", else: "tooltip-error")]
             }
             data-tip={
               if not @is_location_selected,

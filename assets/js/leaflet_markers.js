@@ -161,7 +161,6 @@ const pollutionContent = ({
   report_date,
 }) => {
   const slider = createImageSlider(pictures);
-  console.log(pollution_types);
   const plastic = pollution_types.includes("plastic");
   const oil = pollution_types.includes("oil");
   const biological = pollution_types.includes("biological");

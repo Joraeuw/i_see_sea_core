@@ -30,7 +30,7 @@
     profile: "Profile",
     reports: "Reports",
     terms_of_use: "Terms of use",
-    our_purpose: "Our Purpose",
+    our_purpose: "About us",
     contacts: "Contacts",
     privacy_and_policy: "Privacy and policy",
     privacy_policy: "Privacy policy",

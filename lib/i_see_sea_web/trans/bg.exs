@@ -29,7 +29,7 @@
     profile: "Профил",
     reports: "Доклади",
     terms_of_use: "Условия за ползване",
-    our_purpose: "Нашата цел",
+    our_purpose: "За нас",
     contacts: "Контакти",
     privacy_and_policy: "Поверителност и политика",
     privacy_policy: "Политика за поверителност",
