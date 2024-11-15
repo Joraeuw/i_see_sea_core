@@ -43,7 +43,7 @@ defmodule ISeeSea.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2.4", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
@@ -96,9 +96,9 @@ defmodule ISeeSea.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind i_see_sea", "esbuild i_see_sea"],
+      "assets.build": ["esbuild i_see_sea", "tailwind i_see_sea"],
       "assets.deploy": [
-        "cmd --cd assets node build.js --deploy",
+        "tailwind default --minify",
         "phx.digest"
       ],
       spec: ["openapi.spec.json --spec ISeeSeaWeb.ApiSpec"]

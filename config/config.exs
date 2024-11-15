@@ -18,7 +18,8 @@ config :i_see_sea,
   frontend_url: "http://127.0.0.1:3000",
   allowed_origins: [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:4000"
   ]
 
 # Configures the endpoint
@@ -70,7 +71,7 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "3.4.0",
+  version: "3.4.6",
   i_see_sea: [
     args: ~w(
       --config=tailwind.config.js

@@ -79,8 +79,8 @@ RUN chown nobody /app
 ENV MIX_ENV="prod"
 
 # Copy the final release from the build stage
-COPY --from=builder --chown=nobody:root /app/_build/prod/rel/i_see_sea ./
-
+COPY --from=builder --chown=nobody:root /app/_build/${MIX_ENV}/rel/i_see_sea ./
+COPY --from=builder --chown=nobody:root /app/priv ./priv
 # Set the user to nobody
 USER nobody
 

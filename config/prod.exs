@@ -28,7 +28,9 @@ config :i_see_sea,
   backend_url: "https://i-see-sea-dev.fly.dev",
   frontend_url: "https://i-see-sea-frontend.fly.dev",
   allowed_origins: [
-    "https://i-see-sea-frontend.fly.dev"
+    "https://i-see-sea-dev.fly.dev",
+    "http://localhost:4000",
+    "http://172.0.0.1:4000"
   ]
 
 # Runtime production configuration, including reading

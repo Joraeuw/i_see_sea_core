@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild"
+    "deploy": "TAILWIND_MODE=build NODE_ENV=production esbuild app.js --bundle --minify --target=es2017 --outdir=../priv/static/assets"
   },
   "dependencies": {
     "@tailwindcss/forms": "^0.5.9",
