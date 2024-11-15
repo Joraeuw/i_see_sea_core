@@ -17,7 +17,9 @@ defmodule ISeeSeaWeb.ForgotLive do
     ~H"""
     <div class="flex flex-col items-center rounded-t-lg">
       <.header locale={@locale} class="text-center">
-        <p class="text-[#189ab4] text-center my-1 mx-3">Please enter your E-mail Address:</p>
+        <p class="text-[#189ab4] text-center my-1 mx-3">
+          <%= translate(@locale, "forgot_password.title") %>
+        </p>
       </.header>
       <div class="w-full rounded-b-lg overflow-hidden">
         <.simple_form

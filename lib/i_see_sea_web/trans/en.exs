@@ -399,5 +399,17 @@
       pollution: "Pollution",
       other: "Other"
     ]
+  ],
+  change_password: [
+    title: "Change password",
+    prompt: "Please enter your new password:",
+    confirm: "Confirm your new password:",
+    show_password: "Show Password",
+    submit: "Change password",
+    passwords_not_matching: "Passwords do not match!"
+  ],
+  forgot_password: [
+    title: "Please enter your email address:",
+    send_email: "Send email"
   ]
 ]

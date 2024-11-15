@@ -393,5 +393,17 @@
       pollution: "Замърсяване",
       other: "Други"
     ]
+  ],
+  change_password: [
+    title: "Промени паролата си",
+    prompt: "Моля въведете новата си парола:",
+    confirm: "Моля повторете новата си парола:",
+    show_password: "Покажи парола",
+    submit: "Промени парола",
+    passwords_not_matching: "Паролите не съвпадат!"
+  ],
+  forgot_password: [
+    title: "Моля въведете имейл адреса си:",
+    send_email: "Изпрати имейл"
   ]
 ]

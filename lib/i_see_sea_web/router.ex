@@ -57,7 +57,7 @@ defmodule ISeeSeaWeb.Router do
       live "/reports-list", ReportsLive, :reports_index
 
       live "/forgot_password", ForgotLive, :index
-      live "/change_password", ChangeLive, :index
+      live "/change_password/:token", ChangeLive, :index
       live "/verify-email/:token", VerifyEmailLive, :index
     end
 

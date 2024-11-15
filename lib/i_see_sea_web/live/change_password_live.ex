@@ -1,9 +1,11 @@
 defmodule ISeeSeaWeb.ChangeLive do
+  alias ISeeSeaWeb.Accounts
   use ISeeSeaWeb, :live_view
 
   @impl true
-  def mount(_params, _session, socket) do
-    # Initialize form data and error handling
+  def mount(params, _session, socket) do
+    socket = assign_user_by_token(socket, params)
+
     {:ok,
      assign(socket,
        form_data: %{"new_password" => "", "confirm_password" => ""},
@@ -17,15 +19,14 @@ defmodule ISeeSeaWeb.ChangeLive do
         %{"new_password" => new_password, "confirm_password" => confirm_password},
         socket
       ) do
-    if new_password == confirm_password do
-      # Passwords match, reset the error and store the form data
+    if String.equivalent?(new_password, confirm_password) do
+      Accounts.reset_user_password(socket.assigns.user, new_password)
+
       {:noreply,
-       assign(socket,
-         password_error: false,
-         form_data: %{"new_password" => new_password, "confirm_password" => confirm_password}
-       )}
+       socket
+       |> put_flash(:info, "Password changed successfully!")
+       |> redirect(to: ~p"/login")}
     else
-      # Passwords do not match, show error message and store the form data
       {:noreply,
        assign(socket,
          password_error: true,
@@ -47,9 +48,13 @@ defmodule ISeeSeaWeb.ChangeLive do
           phx-submit="check_passwords"
           class="flex flex-col justify-between items-center w-full h-full rounded-lg bg-no-repeat bg-cover"
         >
-          <h1 class="text-[#189ab4] text-xl text-center my-3">Change password</h1>
+          <h1 class="text-[#189ab4] text-xl text-center my-3">
+            <%= translate(@locale, "change_password.title") %>
+          </h1>
 
-          <p class="text-[#189ab4]  text-lg text-center">Please enter your new password:</p>
+          <p class="text-[#189ab4]  text-lg text-center">
+            <%= translate(@locale, "change_password.prompt") %>
+          </p>
           <input
             id="new_password"
             class="my-3 imt-2 block w-7/12 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 border-zinc-300 focus:border-zinc-400"
@@ -58,7 +63,9 @@ defmodule ISeeSeaWeb.ChangeLive do
             value={@form_data["new_password"]}
           />
 
-          <p class="text-[#189ab4] text-lg text-center">Confirm your new password:</p>
+          <p class="text-[#189ab4] text-lg text-center">
+            <%= translate(@locale, "change_password.confirm") %>
+          </p>
           <input
             id="confirm_password"
             class="my-3  mt-2 block w-7/12 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6 phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400 border-zinc-300 focus:border-zinc-400"
@@ -69,16 +76,20 @@ defmodule ISeeSeaWeb.ChangeLive do
           <!-- Checkbox to toggle password visibility -->
           <div class="show-password-div my-3">
             <input id="show_password_checkbox" type="checkbox" onclick="togglePasswordVisibility()" />
-            <label for="show_password_checkbox" class="change_p text-lg">Show Passwords</label>
+            <label for="show_password_checkbox" class="change_p text-lg">
+              <%= translate(@locale, "change_password.show_password") %>
+            </label>
           </div>
           <!-- Conditionally render the error message -->
           <%= if @password_error do %>
             <div class="password-error">
-              Passwords do not match!
+              <%= translate(@locale, "change_password.passwords_not_matching") %>
             </div>
           <% end %>
           <!-- Submit button -->
-          <button class="btn mb-5 mt-2" type="submit">Send email</button>
+          <button class="btn mb-5 mt-2" type="submit">
+            <%= translate(@locale, "change_password.submit") %>
+          </button>
         </form>
       </div>
     </div>
@@ -99,5 +110,15 @@ defmodule ISeeSeaWeb.ChangeLive do
       }
     </script>
     """
+  end
+
+  defp assign_user_by_token(socket, %{"token" => token}) do
+    if user = Accounts.get_user_by_reset_password_token(token) do
+      assign(socket, user: user, token: token)
+    else
+      socket
+      |> put_flash(:error, "Reset password link is invalid or has expired.")
+      |> redirect(to: ~p"/")
+    end
   end
 end

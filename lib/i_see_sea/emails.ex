@@ -140,6 +140,6 @@ defmodule ISeeSea.Emails do
   end
 
   defp password_reset_url(token) do
-    "#{Environment.frontend_url()}/change_password/?t=#{token}"
+    "#{Environment.backend_url()}/change_password/#{token}"
   end
 end
