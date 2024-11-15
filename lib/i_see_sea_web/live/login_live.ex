@@ -9,11 +9,7 @@ defmodule ISeeSeaWeb.LoginLive do
         <%= translate(@locale, "login.log_in_to_account") %>
         <:subtitle>
           <%= translate(@locale, "login.no_account") %>
-          <.link
-            navigate={~p"/register"}
-            locale={@locale}
-            class="font-semibold text-brand hover:underline"
-          >
+          <.link navigate={~p"/register"} class="font-semibold text-brand hover:underline">
             <%= translate(@locale, "login.sign_up") %>
           </.link>
           <%= translate(@locale, "login.account_now") %>

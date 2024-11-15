@@ -14,6 +14,8 @@ defmodule ISeeSeaWeb.HomeComponents do
   attr :create_report_type, :string, required: true
   attr :current_user, :map, required: true
   attr :locale, :string, required: true
+  attr :is_selecting_location, :boolean
+  attr :user_selected_location, :any
 
   def report_toolbox(assigns) do
     ~H"""
@@ -68,6 +70,8 @@ defmodule ISeeSeaWeb.HomeComponents do
   attr :current_user, :map, required: true
   attr :locale, :string, required: true
   attr :data, :map
+  attr :filter_menu_is_open, :boolean
+  attr :filters, :any
 
   def stat_home(assigns) do
     ~H"""

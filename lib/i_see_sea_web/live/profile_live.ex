@@ -2,11 +2,7 @@ defmodule ISeeSeaWeb.ProfileLive do
   require ISeeSea.Constants.ReportType
   alias ISeeSea.Constants.ReportType
   alias ISeeSea.DB.Logic.ReportOperations
-  alias ISeeSea.DB.Models.BaseReport
   use ISeeSeaWeb, :live_view
-
-  import ISeeSeaWeb.Trans
-  import ISeeSeaWeb.Gettext
 
   alias ISeeSeaWeb.ProfileComponents
 
@@ -17,6 +13,7 @@ defmodule ISeeSeaWeb.ProfileLive do
     [my_profile_view(), my_reports_view()]
   end
 
+  @impl true
   def render(assigns) do
     ~H"""
     <ProfileComponents.index

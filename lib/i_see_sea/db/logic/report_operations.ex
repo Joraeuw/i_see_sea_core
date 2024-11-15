@@ -10,10 +10,8 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
   alias ISeeSea.DB.Models.PollutionReport
   alias ISeeSea.DB.Models.JellyfishReport
   alias ISeeSea.DB.Models.BaseReport
-  alias ISeeSea.DB.Models.PollutionType
 
   alias ISeeSea.Repo
-  alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Report
 
   def create(user, validated_params, picture_upload_function_refs) do
