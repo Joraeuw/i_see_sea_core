@@ -102,7 +102,7 @@ defmodule ISeeSea.Emails do
 
     new()
     |> to(user.email)
-    |> from(Environment.i_see_sea_mail())
+    |> from({"I See Sea Team", Environment.i_see_sea_mail()})
     |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
     |> html_body("""
     <p>Здравейте #{user.username},</p>
@@ -131,6 +131,69 @@ defmodule ISeeSea.Emails do
     #{reset_url}
 
     If you did not request this, please ignore this email.
+    """)
+    |> Mailer.deliver()
+  end
+
+  def contact_us_email(
+        %{
+          "email" => email,
+          "message" => message,
+          "name" => name
+        } = params
+      ) do
+    new()
+    |> to("joraeuw@gmail.com")
+    |> from({"Contact Form", Environment.i_see_sea_mail()})
+    |> subject("New Contact Form Submission")
+    |> html_body("""
+      <h1>Contact Form Submission</h1>
+      <p><strong>Name:</strong> #{name}</p>
+      <p><strong>Email:</strong> #{email}</p>
+      <p><strong>Phone:</strong> #{Map.get(params, "phone", "not provided")}</p>
+      <p><strong>Organization:</strong> #{Map.get(params, "organization", "not provided")}</p>
+      <p><strong>Message:</strong> #{message}</p>
+    """)
+    |> text_body("""
+      Contact Form Submission
+
+      Name: #{name}
+      Email: #{email}
+      Phone: #{Map.get(params, "phone", "not provided")}
+      Organization: #{Map.get(params, "organization", "not provided")}
+      Message: #{message}
+    """)
+    |> Mailer.deliver()
+
+    new()
+    |> to(email)
+    |> from(Environment.i_see_sea_mail())
+    |> subject("Потвърждение за получен сигнал / Issue Acknowledgment")
+    |> html_body("""
+      <p>Здравейте #{name},</p>
+      <p>Благодарим ви, че се свързахте с нас! Искаме да ви уверим, че вашият въпрос е получен и нашият екип вече работи по него. Ще се постараем да се свържем с вас възможно най-скоро със съответното решение.</p>
+      <p>Благодарим ви за търпението и разбирането.</p>
+
+      <hr>
+
+      <p>Hello #{name},</p>
+      <p>Thank you for reaching out to us! We want to let you know that we've received your inquiry, and our team is actively working on it. We will do our best to get back to you as soon as possible with a resolution.</p>
+      <p>We appreciate your patience and understanding.</p>
+    """)
+    |> text_body("""
+      Здравейте #{name},
+
+      Благодарим ви, че се свързахте с нас! Искаме да ви уверим, че вашият въпрос е получен и нашият екип вече работи по него. Ще се постараем да се свържем с вас възможно най-скоро със съответното решение.
+
+      Благодарим ви за търпението и разбирането.
+
+      ----------------------------------------
+
+      Hello #{name},
+
+      Thank you for reaching out to us! We want to let you know that we've received your inquiry, and our team is actively working on it. We will do our best to get back to you as soon as possible with a resolution.
+
+      We appreciate your patience and understanding.
     """)
     |> Mailer.deliver()
   end

@@ -86,12 +86,6 @@
     thank_you:
       "Thank you for your interest in our community! We invite you to join us in our mission to preserve the sea and protect the health of our planet!"
   ],
-  contacts: [
-    contact_with: "Contact with:",
-    iara1: "IARA - Fisheries and Aquaculture Executive Agency",
-    iara2: "IARA - contact form",
-    iara3: "IARA - contact form page"
-  ],
   p_p: [
     privacy_policy: "ICC - Privacy Policy",
     website1:
@@ -411,5 +405,18 @@
   forgot_password: [
     title: "Please enter your email address:",
     send_email: "Send email"
+  ],
+  contact_us: [
+    title: "Get in Touch",
+    submit: "Submit",
+    form: [
+      name: "Name",
+      email: "Email",
+      phone: "Phone",
+      organization: "Organization",
+      message: "Message"
+    ],
+    success: "Message has been sent...",
+    failure: "Something went wrong... Please try again later."
   ]
 ]

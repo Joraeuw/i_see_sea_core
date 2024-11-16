@@ -59,6 +59,7 @@ defmodule ISeeSeaWeb.Router do
       live "/forgot_password", ForgotLive, :index
       live "/change_password/:token", ChangeLive, :index
       live "/verify-email/:token", VerifyEmailLive, :index
+      live "/contact-us", ContactUsLive, :index
     end
 
     get "/privacy-policy", PageController, :privacy_policy
