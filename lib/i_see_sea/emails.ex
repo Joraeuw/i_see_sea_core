@@ -5,6 +5,7 @@ defmodule ISeeSea.Emails do
   alias ISeeSea.Mailer
   alias ISeeSea.DB.Models.User
   alias ISeeSea.Helpers.Environment
+  require Logger
   import Swoosh.Email
 
   def account_confirmation_email(%User{email: email, username: username}, confirmation_token) do
@@ -100,40 +101,49 @@ defmodule ISeeSea.Emails do
   def password_reset_email(user, token) do
     reset_url = password_reset_url(token)
 
-    new()
-    |> to(user.email)
-    |> from({"I See Sea Team", Environment.i_see_sea_mail()})
-    |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
-    |> html_body("""
-    <p>Здравейте #{user.username},</p>
-    <p>Можете да нулирате паролата си, като кликнете <a href="#{reset_url}">тук</a>.</p>
-    <p>Ако не сте заявили това, моля игнорирайте този имейл.</p>
+    email =
+      new()
+      |> to(user.email)
+      |> from({"I See Sea Team", Environment.i_see_sea_mail()})
+      |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
+      |> html_body("""
+      <p>Здравейте #{user.username},</p>
+      <p>Можете да нулирате паролата си, като кликнете <a href="#{reset_url}">тук</a>.</p>
+      <p>Ако не сте заявили това, моля игнорирайте този имейл.</p>
 
-    <hr>
+      <hr>
 
-    <p>Hello #{user.username},</p>
-    <p>You can reset your password by clicking <a href="#{reset_url}">here</a>.</p>
-    <p>If you did not request this, please ignore this email.</p>
-    """)
-    |> text_body("""
-    Здравейте #{user.username},
+      <p>Hello #{user.username},</p>
+      <p>You can reset your password by clicking <a href="#{reset_url}">here</a>.</p>
+      <p>If you did not request this, please ignore this email.</p>
+      """)
+      |> text_body("""
+      Здравейте #{user.username},
 
-    Можете да нулирате паролата си, като кликнете на следния линк:
-    #{reset_url}
+      Можете да нулирате паролата си, като кликнете на следния линк:
+      #{reset_url}
 
-    Ако не сте заявили това, моля игнорирайте този имейл.
+      Ако не сте заявили това, моля игнорирайте този имейл.
 
-    ----------------------------------------
+      ----------------------------------------
 
-    Hello #{user.username},
+      Hello #{user.username},
 
-    You can reset your password by clicking the link below:
-    #{reset_url}
+      You can reset your password by clicking the link below:
+      #{reset_url}
 
-    If you did not request this, please ignore this email.
-    """)
-    |> Mailer.deliver()
+      If you did not request this, please ignore this email.
+      """)
+
+    case Mailer.deliver(email) do
+      {:ok, _response} ->
+        Logger.info("Password reset email sent successfully to #{user.email}")
+
+      {:error, reason} ->
+        Logger.error("Failed to send password reset email to #{user.email}. Reason: #{inspect(reason)}")
+    end
   end
+
 
   def contact_us_email(
         %{

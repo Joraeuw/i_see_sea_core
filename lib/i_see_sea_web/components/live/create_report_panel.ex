@@ -4,7 +4,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   use ISeeSeaWeb, :live_component
 
   require ISeeSea.Constants.ReportType, as: ReportType
-
+  require Logger
   alias ISeeSeaWeb.CoreComponents
   alias ISeeSea.Constants
   alias ISeeSea.Constants.StormType
@@ -417,8 +417,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
       %Ecto.Changeset{valid?: true} ->
         images =
-          consume_uploaded_entries(socket, :pictures, fn %{path: path},
-                                                         %{client_type: content_type} ->
+          consume_uploaded_entries(socket, :pictures, fn %{path: path}, %{client_type: content_type} ->
             {img_binary, shape} = ReportOperations.retrieve_image_binary(path, content_type)
 
             upload_pictures_callback = fn report_id ->
@@ -440,6 +439,13 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         )
         |> case do
           {:ok, report} ->
+
+            Logger.info("""
+            Report created successfully.
+            User: #{socket.assigns.current_user.email}
+            Report Type: #{socket.assigns.report_type}
+            """)
+
             send(self(), {:update_flash, {:info, "Report created successfully!"}})
 
             socket =
@@ -463,6 +469,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         end
     end
   end
+
 
   def handle_event("verify_create_report_params", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
