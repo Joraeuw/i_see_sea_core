@@ -61,7 +61,7 @@ defmodule ISeeSeaWeb.ContactUsLive do
           <div class="flex justify-center mt-4">
             <button
               type="submit"
-              class="btn bg-teal-500 text-white rounded w-full md:w-auto px-4 py-2"
+              class="btn bg-teal-500 text-white rounded w-full md:w-auto px-4 py-2 md:mb-[50px]"
             >
               <%= translate(@locale, "contact_us.submit") %>
             </button>
@@ -72,15 +72,10 @@ defmodule ISeeSeaWeb.ContactUsLive do
       <div class="w-full lg:w-1/2 space-y-4 p-6">
         <h2 class="text-xl font-semibold"><%= translate(@locale, "contact_us.title") %></h2>
         <p>
-          If you have a general query about the Iliad project, you can get in touch with the project team using the contact form.
+          <%= translate(@locale ,"contact_us.general_query")%>
         </p>
         <p>
-          If your question is specific, please see our
-          <a href="/partners" class="text-blue-600 underline">partners page</a>
-          for individual contact details.
-        </p>
-        <p>
-          This project has received funding from the European Commission’s Horizon 2020 Research and Innovation programme under grant agreement No 101037643. The information and views of this website lie entirely with the authors. The European Commission is not responsible for any use that may be made of the information it contains.
+         <%= translate(@locale,"contact_us.this_project")%>
         </p>
       </div>
     </div>

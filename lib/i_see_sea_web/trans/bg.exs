@@ -358,7 +358,7 @@
       thick: "Гъста",
       moderate: "Средна",
       light: "Слаба",
-      no_fog: "Без мъгла"
+      no_fog: "Без мъгла",
     ],
     wind_type_id: [
       title: "Тип Вятър",
@@ -374,8 +374,32 @@
       moderate: "Средни вълни",
       weak: "Слаби вълни",
       no_waves: "Без вълни"
+    ],
+    fog_type: [
+      title: "Тип Мъгла",
+      very_thick: "Много гъста",
+      thick: "Гъста",
+      moderate: "Средна",
+      light: "Слаба",
+      no_fog: "Без мъгла",
+    ],
+    wind_type: [
+      title: "Тип Вятър",
+      hurricane: "Ураган",
+      strong: "Силен",
+      moderate: "Среден",
+      weak: "Слаб",
+      no_wind: "Без вятър"
+    ],
+    sea_swell_type: [
+      title: "Тип Вълнение",
+      strong: "Силни вълни",
+      moderate: "Средни вълни",
+      weak: "Слаби вълни",
+      no_waves: "Без вълни"
     ]
   ],
+
   pollution_report: [
     options: [oil: "Петрол", plastic: "Пластмаса", bio: "Биологично"]
   ],
@@ -411,6 +435,13 @@
       message: "Съобщение"
     ],
     success: "Съобщението беше изпратено...",
-    failure: "Нещо се обърка... Моля опитайте по-късно."
+    failure: "Нещо се обърка... Моля опитайте по-късно.",
+    general_query: "Ако имате някакво запитване, можете да се свържете с екипа на проекта чрез формата за контакт или да пишете на нашия имейл:
+iliad@tu-varna.bg",
+    question: "If your question is specific, please see our",
+    partners_page: "partners page",
+    details: "for individual contact details.",
+    this_project: " Този проект \"ILIAD - Integrated digital framework for comprehensivemaritime data and informationservices\" е получил финансиране от програмата за научни изследвания и иновации „Хоризонт 2020“ (H2020-LC-GD-2020) на Европейската комисия съгласно споразумение за безвъзмездна помощ № 101037643. Информацията и изгледите на този уебсайт принадлежат изцяло на авторите. Европейската комисия не носи отговорност за каквато и да е употреба на информацията, която съдържа."
+
   ]
 ]
