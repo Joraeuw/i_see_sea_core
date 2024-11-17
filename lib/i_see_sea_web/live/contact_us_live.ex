@@ -54,7 +54,7 @@ defmodule ISeeSeaWeb.ContactUsLive do
           <.input
             type="textarea"
             field={@changeset[:message]}
-            label="Message"
+            label={translate(@locale, "contact_us.form.message")}
             required
             class="w-full mt-0 h-32"
           />

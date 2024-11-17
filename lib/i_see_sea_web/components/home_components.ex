@@ -142,7 +142,7 @@ defmodule ISeeSeaWeb.HomeComponents do
           class="!bg-transparent absolute right-2 top-2 h-8 w-8"
           onclick="closeFullscreenModal()"
         >
-          <a class="leaflet-popup-close-button text-2xl" role="button">
+          <a class="leaflet-popup-close-button text-2xl z-50" role="button">
             <span arial-hidden="true">×</span>
           </a>
         </button>

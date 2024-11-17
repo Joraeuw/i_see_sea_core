@@ -113,6 +113,7 @@ defmodule ISeeSeaWeb.HomeLive do
           }
           data-pin-url="/images/marker-icons/pin.svg"
         />
+        <%!-- <img class="absolute top-2 right-3 w-8" src="/images/marker-icons/live.svg" /> --%>
       </div>
 
       <%!-- Desktop Design --%>
