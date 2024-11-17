@@ -72,10 +72,10 @@ defmodule ISeeSeaWeb.ContactUsLive do
       <div class="w-full lg:w-1/2 space-y-4 p-6">
         <h2 class="text-xl font-semibold"><%= translate(@locale, "contact_us.title") %></h2>
         <p>
-          <%= translate(@locale ,"contact_us.general_query")%>
+          <%= translate(@locale, "contact_us.general_query") %>
         </p>
         <p>
-         <%= translate(@locale,"contact_us.this_project")%>
+          <%= translate(@locale, "contact_us.this_project") %>
         </p>
       </div>
     </div>

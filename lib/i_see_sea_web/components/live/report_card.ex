@@ -95,14 +95,14 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
 
         socket =
           socket
-          |> put_flash(:info, "Report deleted successfully.")
+          |> put_flash(:info, translate(socket.assigns.locale, "common.report_deleted"))
 
         {:noreply, socket}
 
       {:error, :not_found, BaseReport} ->
         socket =
           socket
-          |> put_flash(:error, "Report not found.")
+          |> put_flash(:error, translate(socket.assigns.locale, "common.report_not_found"))
 
         {:noreply, socket}
     end

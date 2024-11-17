@@ -6,24 +6,26 @@ defmodule ISeeSeaWeb.SessionController do
   alias ISeeSea.Authentication.Auth
   alias ISeeSea.DB.Models.User
 
+  import ISeeSeaWeb.Trans
+
   @permission_scope "i_see_sea:sessions"
   plug(AssertPermissions, ["#{@permission_scope}:refresh"] when action == :refresh)
   plug(AssertPermissions, [] when action in [:register, :login, :logout])
   plug(EnsurePermitted)
 
-  def login(conn, %{"_action" => "registered", "user" => user_params}) do
-    login(conn, user_params, "Account created successfully!")
+  def login(conn, %{"_action" => "registered", "user" => user_params, "locale" => locale}) do
+    login(conn, user_params, translate(locale, "common.account_created"), locale)
   end
 
-  def login(conn, %{"_action" => "password_updated", "user" => user_params}) do
-    login(conn, user_params, "Password updated successfully!")
+  def login(conn, %{"_action" => "password_updated", "user" => user_params, "locale" => locale}) do
+    login(conn, user_params, translate(locale, "common.updated_password"), locale)
   end
 
-  def login(conn, %{"user" => user_params}) do
-    login(conn, user_params, "Welcome back!")
+  def login(conn, %{"user" => user_params, "locale" => locale}) do
+    login(conn, user_params, translate(locale, "common.welcome"), locale)
   end
 
-  def login(conn, params, push_message) do
+  def login(conn, params, push_message, locale) do
     %{"email" => email, "password" => password} = params
 
     with {:ok, user} <- User.get_by(%{email: email}),
@@ -34,15 +36,15 @@ defmodule ISeeSeaWeb.SessionController do
     else
       _ ->
         conn
-        |> put_flash(:error, "Invalid email or password")
+        |> put_flash(:error, translate(locale, "common.invalid_email"))
         |> put_flash(:email, String.slice(email, 0, 160))
         |> redirect(to: ~p"/login")
     end
   end
 
-  def logout(conn, _params) do
+  def logout(conn, %{"locale" => locale}) do
     conn
-    |> put_flash(:info, "Logged out successfully.")
+    |> put_flash(:info, translate(locale, "common.logged_out"))
     |> UserAuth.log_out_user()
   end
 

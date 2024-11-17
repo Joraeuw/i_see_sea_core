@@ -8,12 +8,15 @@ defmodule ISeeSeaWeb.VerifyEmailLive do
       case Accounts.confirm_user(token) do
         {:ok, _} ->
           socket
-          |> put_flash(:info, "Your email has been verified!")
+          |> put_flash(:info, translate(socket.assigns.locale, "common.email_verified"))
           |> redirect(to: ~p"/login")
 
         :error ->
           socket
-          |> put_flash(:error, "Something went wrong when verifying your email.")
+          |> put_flash(
+            :error,
+            translate(socket.assigns.locale, "something_went_wrong.verify_email")
+          )
           |> redirect(to: ~p"/login")
       end
 

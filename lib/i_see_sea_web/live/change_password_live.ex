@@ -24,7 +24,7 @@ defmodule ISeeSeaWeb.ChangeLive do
 
       {:noreply,
        socket
-       |> put_flash(:info, "Password changed successfully!")
+       |> put_flash(:info, translate(socket.assigns.locale, "common.changed_password"))
        |> redirect(to: ~p"/login")}
     else
       {:noreply,
@@ -117,7 +117,10 @@ defmodule ISeeSeaWeb.ChangeLive do
       assign(socket, user: user, token: token)
     else
       socket
-      |> put_flash(:error, "Reset password link is invalid or has expired.")
+      |> put_flash(
+        :error,
+        translate(socket.assigns.locale, "common.invalid_link")
+      )
       |> redirect(to: ~p"/")
     end
   end

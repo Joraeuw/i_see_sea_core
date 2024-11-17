@@ -418,10 +418,29 @@
     ],
     success: "Message has been sent...",
     failure: "Something went wrong... Please try again later.",
-    general_query: " If you have any query, you can contact the project team through the contact form or write to our email: iliad@tu-varna.bg",
+    general_query:
+      " If you have any query, you can contact the project team through the contact form or write to our email: iliad@tu-varna.bg",
     question: "If your question is specific, please see our",
     partners_page: "partners page",
     details: "for individual contact details.",
-    this_project: " This project \"ILIAD - Integrated digital framework for comprehensivemaritime data and information services\" has received funding from the Horizon 2020 research and innovation program (H2020-LC-GD-2020) of the European Commission under grant agreement No. 101037643. The information and views of this website belong entirely to the authors. The European Commission is not responsible for any use that may be made of the information it contains."
+    this_project:
+      " This project \"ILIAD - Integrated digital framework for comprehensivemaritime data and information services\" has received funding from the Horizon 2020 research and innovation program (H2020-LC-GD-2020) of the European Commission under grant agreement No. 101037643. The information and views of this website belong entirely to the authors. The European Commission is not responsible for any use that may be made of the information it contains."
+  ],
+  common: [
+    login_required: "You must log in to access this page.",
+    report_deleted: "Report deleted successfully.",
+    report_not_found: "Report not found.",
+    updated_password: "Password updated successfully!",
+    changed_password: "Password changed successfully!",
+    account_created: "Account created successfully!",
+    welcome: "Welcome back!",
+    invalid_email: "Invalid email or password",
+    logged_out: "Logged out successfully.",
+    invalid_link: "Reset password link is invalid or has expired.",
+    sent_reset_link: "If the email exists, a reset link has been sent.",
+    email_verified: "Your email has been verified."
+  ],
+  something_went_wrong: [
+    verify_email: "Something went wrong when verifying your email."
   ]
 ]

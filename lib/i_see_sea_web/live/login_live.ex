@@ -25,6 +25,7 @@ defmodule ISeeSeaWeb.LoginLive do
           class="flex flex-col items-center bg-[url('/images/auth_icons/waveLoginReg.svg')] bg-cover bg-center bg-no-repeat w-full h-full space-y-2 shadow-bottom"
           inner_class="w-12/12"
         >
+          <.input type="hidden" name="locale" value={@locale} />
           <.input
             field={@form[:email]}
             type="email"

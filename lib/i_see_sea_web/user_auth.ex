@@ -1,6 +1,7 @@
 defmodule ISeeSeaWeb.UserAuth do
   use ISeeSeaWeb, :verified_routes
 
+  import ISeeSeaWeb.Trans
   import Plug.Conn
   import Phoenix.Controller
 
@@ -110,7 +111,10 @@ defmodule ISeeSeaWeb.UserAuth do
       true ->
         socket =
           socket
-          |> Phoenix.LiveView.put_flash(:error, "You must log in to access this page.")
+          |> Phoenix.LiveView.put_flash(
+            :error,
+            translate(socket.assigns.locale, "common.login_required")
+          )
           |> Phoenix.LiveView.redirect(to: ~p"/login")
 
         {:halt, socket}

@@ -47,15 +47,20 @@ defmodule ISeeSeaWeb.ForgotLive do
   def handle_event("send_email", %{"user" => %{"email" => email}}, socket) do
     case Repo.get_by(User, email: email) do
       nil ->
-        {:noreply, socket |> put_flash(:info, "If the email exists, a reset link has been sent.")}
+        nil
 
       user ->
         {token, user_token} = UserToken.build_email_token(user, "reset_password")
         Repo.insert!(user_token)
 
         Emails.password_reset_email(user, token)
-
-        {:noreply, socket |> put_flash(:info, "If the email exists, a reset link has been sent.")}
     end
+
+    {:noreply,
+     socket
+     |> put_flash(
+       :info,
+       translate(socket.assigns.locale, "common.sent_reset_link")
+     )}
   end
 end
