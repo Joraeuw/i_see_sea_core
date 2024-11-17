@@ -393,7 +393,8 @@
       meteorological: "Meteorological",
       atypical_activity: "Extreme weather",
       pollution: "Pollution",
-      other: "Other"
+      other: "Other",
+      all: "All"
     ]
   ],
   change_password: [

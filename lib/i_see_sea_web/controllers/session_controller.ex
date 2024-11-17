@@ -13,16 +13,31 @@ defmodule ISeeSeaWeb.SessionController do
   plug(AssertPermissions, [] when action in [:register, :login, :logout])
   plug(EnsurePermitted)
 
-  def login(conn, %{"_action" => "registered", "user" => user_params, "locale" => locale}) do
-    login(conn, user_params, translate(locale, "common.account_created"), locale)
+  def login(conn, %{"_action" => "registered", "user" => user_params}) do
+    login(
+      conn,
+      user_params,
+      translate(conn.assigns.locale, "common.account_created"),
+      conn.assigns.locale
+    )
   end
 
-  def login(conn, %{"_action" => "password_updated", "user" => user_params, "locale" => locale}) do
-    login(conn, user_params, translate(locale, "common.updated_password"), locale)
+  def login(conn, %{"_action" => "password_updated", "user" => user_params}) do
+    login(
+      conn,
+      user_params,
+      translate(conn.assigns.locale, "common.updated_password"),
+      conn.assigns.locale
+    )
   end
 
-  def login(conn, %{"user" => user_params, "locale" => locale}) do
-    login(conn, user_params, translate(locale, "common.welcome"), locale)
+  def login(conn, %{"user" => user_params}) do
+    login(
+      conn,
+      user_params,
+      translate(conn.assigns.locale, "common.welcome"),
+      conn.assigns.locale
+    )
   end
 
   def login(conn, params, push_message, locale) do

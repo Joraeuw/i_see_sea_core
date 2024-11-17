@@ -110,7 +110,7 @@ defmodule ISeeSeaWeb.HomeComponents do
           </button>
           <!-- Stats Content -->
           <div class="stat">
-            <CommonComponents.filter_button filters={@filters} locale={@locale} />
+            <CommonComponents.filter_button locale={@locale} />
           </div>
           <div :if={User.is_admin?(@current_user)} class="stat">
             <div class="stat-title"><%= translate(@locale, "home.total_verified_users") %></div>

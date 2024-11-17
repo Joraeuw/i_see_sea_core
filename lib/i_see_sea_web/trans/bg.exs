@@ -410,7 +410,8 @@
       meteorological: "Метеорологични",
       atypical_activity: "Екстремно време",
       pollution: "Замърсяване",
-      other: "Други"
+      other: "Други",
+      all: "Всички"
     ]
   ],
   change_password: [

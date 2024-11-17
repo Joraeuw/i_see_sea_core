@@ -116,7 +116,7 @@ defmodule ISeeSeaWeb.CommonComponents do
             <CoreComponents.input
               type="select"
               field={@filters[:report_type]}
-              options={ReportType.filter_values()}
+              options={report_type_options(@locale)}
               value={@filters[:report_type].form.params["report_type"]}
             />
           </.filter_base>
@@ -149,5 +149,10 @@ defmodule ISeeSeaWeb.CommonComponents do
       </div>
     </div>
     """
+  end
+
+  defp report_type_options(locale) do
+    ReportType.filter_values()
+    |> Enum.map(&{translate(locale, "base_report.report_type.#{&1}"), &1})
   end
 end
