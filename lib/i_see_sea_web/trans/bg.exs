@@ -400,7 +400,9 @@
     ]
   ],
   pollution_report: [
-    options: [oil: "Петрол", plastic: "Пластмаса", bio: "Биологично"]
+    options: [oil: "Петрол", plastic: "Пластмаса", bio: "Биологично"],
+    yes: "Да",
+    no: "Не"
   ],
   base_report: [
     report_type: [

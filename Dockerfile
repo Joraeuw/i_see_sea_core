@@ -61,7 +61,7 @@ FROM ${RUNNER_IMAGE}
 
 # Install runtime dependencies
 RUN apt-get update -y && \
-  apt-get install -y libstdc++6 openssl libncurses5 locales ca-certificates && \
+  apt-get install -y libstdc++6 openssl libncurses5 locales ca-certificates dnsutils iputils-ping postgresql-client && \
   apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Set the locale

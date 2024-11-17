@@ -383,7 +383,9 @@
     ]
   ],
   pollution_report: [
-    options: [oil: "Oil", plastic: "Plastic", bio: "Biological"]
+    options: [oil: "Oil", plastic: "Plastic", bio: "Biological"],
+    yes: "Yes",
+    no: "No"
   ],
   base_report: [
     report_type: [
