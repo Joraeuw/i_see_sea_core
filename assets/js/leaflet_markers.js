@@ -173,13 +173,13 @@ const pollutionContent = ({
   <p class="p_card_name p_map_cards s"><b>${name}</b></p>
   ${slider}
   <div class="flex flex-col items-center justify-between w-full h-[210px] mt-3">
-  <p class="p_card_map p_map_cards"><b>Oil: </b> &nbsp; ${oil ? "Yes" : "No"}</p>
-  <p class="p_card_map p_map_cards"><b>Plastic: </b> &nbsp; ${plastic ? "Yes" : "No"}</p>
-  <p class="p_card_map p_map_cards"><b>Biological: </b> &nbsp; ${biological ? "Yes" : "No"}</p>
-  <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
-  <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Петролно замърсяване: " : "Oil: "}</b> &nbsp; ${oil ? "Yes" : "No"}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Замърсяване с пластмаса: " : "Plastic: "}</b> &nbsp; ${plastic ? "Yes" : "No"}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Биологично замърсяване: " : "Biological: "}</b> &nbsp; ${biological ? "Yes" : "No"}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "} </b> &nbsp;${latitude}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. д.: " : "Longitude: "}</b> &nbsp;${longitude}</p>
 <div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
-<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<p class="p_card_map_comment line-clamp-2"><b>${locale == "bg" ? "Коментар: " : "Comment: "} </b> &nbsp; ${comment}</p>
 </div>
   <p class="w-full text-end mt-6">${formattedDate}</p>
   </div>
@@ -204,11 +204,11 @@ const atypicalActivityContent = ({
    <p class="p_card_name p_map_cards s"><b>${name}</b></p>
   ${slider}
   <div class="flex flex-col items-center justify-between w-full h-[150px] mt-3">
-  <p class="p_card_map p_map_cards"><b>Storm type: </b> &nbsp; ${storm_type_id}</p>
-  <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
-  <p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Тип буря: " : "Storm type: "}</b> &nbsp; ${storm_type_id}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "} </b> &nbsp;${latitude}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. д.: " : "Longitude: "}</b> &nbsp;${longitude}</p>
 <div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
-<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<p class="p_card_map_comment line-clamp-2"><b>${locale == "bg" ? "Коментар: " : "Comment: "}</b> &nbsp; ${comment}</p>
 </div>
   <p class="w-full text-end mt-6">${formattedDate}</p>
   </div>
@@ -234,13 +234,13 @@ const meteorologicalContent = ({
  <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>
   ${slider}
  <div class="flex flex-col items-center justify-between w-full h-[210px] mt-3">
-<p class="p_card_map p_map_cards"><b>Fog type: </b> &nbsp;${fog_type}</p>
-<p class="p_card_map p_map_cards"><b>Wind type: </b> &nbsp;${wind_type}</p>
-<p class="p_card_map p_map_cards"><b>Sea swell type: </b> &nbsp;${sea_swell_type}</p>
-<p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
-<p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид мъгла: " : "Fog type: "}</b> &nbsp;${fog_type}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид вятър " : "Wind type: "}</b> &nbsp;${wind_type}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид морско вълнение: ":"Sea swell type: "}</b> &nbsp;${sea_swell_type}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "}</b> &nbsp;${latitude}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. д.: " : "Longitude: "}</b> &nbsp;${longitude}</p>
 <div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
-<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<p class="p_card_map_comment line-clamp-2"><b>${locale == "bg" ? "Коментар: " : "Comment: "}</b> &nbsp; ${comment}</p>
 </div>
 <p class="w-full text-end mt-6">${formattedDate}</p>
 </div>
@@ -264,10 +264,10 @@ const otherContent = ({
   <p class="p_card_name p_map_cards s line-clamp-1"><b>${name}</b></p>
   ${slider}
   <div class="flex flex-col items-center justify-between w-full h-[150px] mt-3">
-  <p class="p_card_map p_map_cards"><b>Latitude: </b> &nbsp;${latitude}</p>
-<p class="p_card_map p_map_cards"><b>Longitude: </b> &nbsp;${longitude}</p>
+  <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "} </b> &nbsp;${latitude}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. д.: " : "Longitude: "} </b> &nbsp;${longitude}</p>
 <div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">
-<p class="p_card_map_comment line-clamp-2"><b>Comment: </b> &nbsp; ${comment}</p>
+<p class="p_card_map_comment line-clamp-2"><b>${locale == "bg" ? "Коментар: " : "Comment: "}</b> &nbsp; ${comment}</p>
 </div>
  <p class="w-full text-end mt-6">${formattedDate}</p>
  </div>
