@@ -355,6 +355,13 @@
       rain: "Rain",
       hailstorm: "Hailstorm",
       no_storm: "No Storm"
+    ],
+    storm_type: [
+      title: "Storm Type",
+      thunderstorm: "Thunderstorm",
+      rain: "Rain",
+      hailstorm: "Hailstorm",
+      no_storm: "No Storm"
     ]
   ],
   meteorological_report: [
@@ -375,6 +382,29 @@
       no_wind: "No Wind"
     ],
     sea_swell_type_id: [
+      title: "Sea Swell Type",
+      strong: "Strong",
+      moderate: "Moderate",
+      weak: "Weak",
+      no_waves: "No Waves"
+    ],
+    fog_type: [
+      title: "Fog Type",
+      very_thick: "Very Thick",
+      thick: "Thick",
+      moderate: "Moderate",
+      light: "Light",
+      no_fog: "No Fog"
+    ],
+    wind_type: [
+      title: "Wind Type",
+      hurricane: "Hurricane",
+      strong: "Strong",
+      moderate: "Moderate",
+      weak: "Weak",
+      no_wind: "No Wind"
+    ],
+    sea_swell_type: [
       title: "Sea Swell Type",
       strong: "Strong",
       moderate: "Moderate",

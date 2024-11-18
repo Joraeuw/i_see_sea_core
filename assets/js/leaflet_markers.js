@@ -174,15 +174,15 @@ const pollutionContent = ({
   ${slider}
  <p class="p_card_map p_map_cards">
     <b>${locale == "bg" ? "Петролно замърсяване: " : "Oil: "}</b>
-    &nbsp; ${oil ? (locale == "bg" ? "Да" : "Yes") : (locale == "bg" ? "Не" : "No")}
+    &nbsp; ${oil ? (locale == "bg" ? "Да" : "Yes") : locale == "bg" ? "Не" : "No"}
   </p>
   <p class="p_card_map p_map_cards">
     <b>${locale == "bg" ? "Замърсяване с пластмаса: " : "Plastic: "}</b>
-    &nbsp; ${plastic ? (locale == "bg" ? "Да" : "Yes") : (locale == "bg" ? "Не" : "No")}
+    &nbsp; ${plastic ? (locale == "bg" ? "Да" : "Yes") : locale == "bg" ? "Не" : "No"}
   </p>
   <p class="p_card_map p_map_cards">
     <b>${locale == "bg" ? "Биологично замърсяване: " : "Biological: "}</b>
-    &nbsp; ${biological ? (locale == "bg" ? "Да" : "Yes") : (locale == "bg" ? "Не" : "No")}
+    &nbsp; ${biological ? (locale == "bg" ? "Да" : "Yes") : locale == "bg" ? "Не" : "No"}
   </p>
   <p class="p_card_map p_map_cards">
     <b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "}</b> &nbsp;${latitude}
@@ -250,7 +250,7 @@ const meteorologicalContent = ({
  <div class="flex flex-col items-center justify-between w-full h-[210px] mt-3">
 <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид мъгла: " : "Fog type: "}</b> &nbsp;${fog_type}</p>
 <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид вятър " : "Wind type: "}</b> &nbsp;${wind_type}</p>
-<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид морско вълнение: ":"Sea swell type: "}</b> &nbsp;${sea_swell_type}</p>
+<p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Вид морско вълнение: " : "Sea swell type: "}</b> &nbsp;${sea_swell_type}</p>
 <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. ш.: " : "Latitude: "}</b> &nbsp;${latitude}</p>
 <p class="p_card_map p_map_cards"><b>${locale == "bg" ? "Гео. д.: " : "Longitude: "}</b> &nbsp;${longitude}</p>
 <div class="tooltip p_card_map_comment text-left tooltip-secondary" data-tip="${comment}">

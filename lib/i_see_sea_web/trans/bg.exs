@@ -349,6 +349,13 @@
       rain: "Дъжд",
       hailstorm: "Градушка",
       no_storm: "Без буря"
+    ],
+    storm_type: [
+      title: "Тип Буря",
+      thunderstorm: "Гръмотевична буря",
+      rain: "Дъжд",
+      hailstorm: "Градушка",
+      no_storm: "Без буря"
     ]
   ],
   meteorological_report: [
