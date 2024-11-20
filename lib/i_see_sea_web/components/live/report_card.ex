@@ -158,7 +158,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
         storm_type_id = aar.storm_type_id || "unknown"
 
         storm_type_name =
-          translate(locale, "atypical_activity_report.storm_type.#{storm_type_id}")
+          translate(locale, "atypical_report.storm_type_id.#{storm_type_id}")
 
         ~H"""
         <div class="flex flex-col justify-around h-full w-full">
@@ -166,7 +166,7 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
             <% translate(@locale, "create_report.details") %>
           </div>
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
-            <img class="mr-[10px]" src="/images/report_icons/storm_type.svg" />
+            <img class="mr-[10px]" src="/images/report_icons/strorm_type.svg" />
             <p class="p_card">
               <%= storm_type_name %>
               <p class="opacity-50 text-[0.9em]"><% translate(@locale, "create_report.storm_type") %></p>
