@@ -330,7 +330,7 @@
       beroe_ovata: "Beroe Ovata",
       salp: "Salp",
       cassiopea_andromeda: "Cassiopea Andromeda",
-      cotylorhiza_erithrea: "Cotylorhiza Erithrea",
+      cotyllorhiza_erythrea: "Cotylorhiza Erithrea",
       marivagia_stellata: "Marivagia Stellata",
       cestus_veneris: "Cestus Veneris",
       porpita_porpita: "Porpita Porpita",

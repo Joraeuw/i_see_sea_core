@@ -324,7 +324,7 @@
       beroe_ovata: "Берое Овата",
       salp: "Салпа",
       cassiopea_andromeda: "Обърната медуза",
-      cotylorhiza_erithrea: "Котилорхиза Еритрея",
+      cotyllorhiza_erythrea: "Котилорхиза Еритрея",
       marivagia_stellata: "Маривагия Стеллата",
       cestus_veneris: "Венерин пояс",
       porpita_porpita: "Син бутон/Порпита порпита",

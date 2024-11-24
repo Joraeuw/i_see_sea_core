@@ -10,16 +10,8 @@ import { getMarkerContent } from "../leaflet_markers";
 
 const LeafletMap = {
   mounted() {
-    // const northEast = L.latLng(43.29818825605375, 27.59902954101563);
-    // const southWest = L.latLng(43.128774079271025, 28.251514434814457);
-    // const bounds = L.latLngBounds(southWest, northEast);
-
     window.map = L.map("map", {
-      zoomControl: false,
-      zoom: 13,
-      minZoom: 10,
-      maxZoom: 18,
-      // maxBounds: bounds,
+      zoom: 13
     }).setView([43.2041, 27.8788]);
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
