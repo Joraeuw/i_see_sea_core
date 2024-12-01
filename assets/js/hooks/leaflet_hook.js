@@ -11,6 +11,7 @@ import { getMarkerContent } from "../leaflet_markers";
 const LeafletMap = {
   mounted() {
     window.map = L.map("map", {
+      zoomControl: false,
       zoom: 13
     }).setView([43.2041, 27.8788]);
 

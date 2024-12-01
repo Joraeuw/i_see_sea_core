@@ -41,8 +41,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
     updated_form_params =
       if assigns.user_selected_location do
         Map.merge(form_params, %{
-          "latitude" => assigns.user_selected_location.lat,
-          "longitude" => assigns.user_selected_location.lon
+          "latitude" => form_params["latitude"] || assigns.user_selected_location.lat,
+          "longitude" => form_params["longitude"] || assigns.user_selected_location.lon
         })
       else
         form_params
@@ -405,6 +405,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   def handle_event("create_report", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
 
+    IO.inspect(params, label: __MODULE__)
+
     Report.changeset(changeset_signature, params)
     |> case do
       %Ecto.Changeset{valid?: false} = changeset ->
@@ -417,7 +419,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
       %Ecto.Changeset{valid?: true} ->
         images =
-          consume_uploaded_entries(socket, :pictures, fn %{path: path}, %{client_type: content_type} ->
+          consume_uploaded_entries(socket, :pictures, fn %{path: path},
+                                                         %{client_type: content_type} ->
             {img_binary, shape} = ReportOperations.retrieve_image_binary(path, content_type)
 
             upload_pictures_callback = fn report_id ->
@@ -439,7 +442,6 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         )
         |> case do
           {:ok, report} ->
-
             Logger.info("""
             Report created successfully.
             User: #{socket.assigns.current_user.email}
@@ -469,7 +471,6 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         end
     end
   end
-
 
   def handle_event("verify_create_report_params", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")

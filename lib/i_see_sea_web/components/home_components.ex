@@ -138,12 +138,9 @@ defmodule ISeeSeaWeb.HomeComponents do
     ~H"""
     <div id="modal_fullscreen_image_slider" class="modal">
       <div class="modal-box relative overflow-hidden">
-        <button
-          class="!bg-transparent absolute right-2 top-2 h-8 w-8"
-          onclick="closeFullscreenModal()"
-        >
+        <button class="absolute right-0.5 top-0.5 h-8 w-8 z-50" onclick="closeFullscreenModal()">
           <a class="leaflet-popup-close-button text-2xl z-50" role="button">
-            <span arial-hidden="true">×</span>
+            <span class="z-50" arial-hidden="true">×</span>
           </a>
         </button>
 

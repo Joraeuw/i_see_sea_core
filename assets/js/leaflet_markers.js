@@ -17,7 +17,7 @@ window.openFullscreenModal = (pictures, startingIndex = 0) => {
     .map(
       (picture) => `
     <div class="swiper-slide">
-      <img src="${picture}" alt="Large Picture" class="w-full h-auto"/>
+      <img src="${picture}" alt="Large Picture" class="w-full h-auto z-40"/>
     </div>
   `
     )

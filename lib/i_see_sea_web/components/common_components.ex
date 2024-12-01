@@ -93,7 +93,11 @@ defmodule ISeeSeaWeb.CommonComponents do
 
   def filter_dialog(assigns) do
     ~H"""
-    <dialog id="filter_modal" class="modal overflow-visible overflow-y-visible">
+    <dialog
+      id="filter_modal"
+      class="modal flex insert-0 items-center justify-center overflow-visible overflow-y-visible"
+      onclick="if (event.target === this) this.close()"
+    >
       <div class="modal-box fixed overflow-visible bg-white z-30">
         <CoreComponents.simple_form
           for={@filters}
@@ -130,9 +134,6 @@ defmodule ISeeSeaWeb.CommonComponents do
           </:actions>
         </CoreComponents.simple_form>
       </div>
-      <form method="dialog" class="modal-backdrop">
-        <button class="z-30">hidden button</button>
-      </form>
     </dialog>
     """
   end

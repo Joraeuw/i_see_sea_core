@@ -216,7 +216,8 @@ defmodule ISeeSeaWeb.HomeLive do
     {:noreply, assign(socket, :supports_touch, supports_touch)}
   end
 
-  def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon}, socket) do
+  def handle_event("user_selected_location", %{"latitude" => lat, "longitude" => lon} = p, socket) do
+    IO.inspect(p, label: :user_selected_location)
     {:noreply, assign(socket, :user_selected_location, %{lat: lat, lon: lon})}
   end
 
