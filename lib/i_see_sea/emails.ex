@@ -96,6 +96,18 @@ defmodule ISeeSea.Emails do
     The ICC Team
     """)
     |> Mailer.deliver()
+    |> case do
+      {:ok, _response} = response ->
+        Logger.info("Account confirmatrion link sent successfully to #{email}")
+        response
+
+      {:error, reason} = error ->
+        Logger.error(
+          "Failed to send account confirmatrion link to #{email}. Reason: #{inspect(reason)}"
+        )
+
+        error
+    end
   end
 
   def password_reset_email(user, token) do
@@ -136,14 +148,18 @@ defmodule ISeeSea.Emails do
       """)
 
     case Mailer.deliver(email) do
-      {:ok, _response} ->
+      {:ok, _response} = response ->
         Logger.info("Password reset email sent successfully to #{user.email}")
+        response
 
-      {:error, reason} ->
-        Logger.error("Failed to send password reset email to #{user.email}. Reason: #{inspect(reason)}")
+      {:error, reason} = error ->
+        Logger.error(
+          "Failed to send password reset email to #{user.email}. Reason: #{inspect(reason)}"
+        )
+
+        error
     end
   end
-
 
   def contact_us_email(
         %{

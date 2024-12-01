@@ -442,11 +442,9 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         )
         |> case do
           {:ok, report} ->
-            Logger.info("""
-            Report created successfully.
-            User: #{socket.assigns.current_user.email}
-            Report Type: #{socket.assigns.report_type}
-            """)
+            Logger.info(
+              "Report created successfully. User: #{socket.assigns.current_user.email}  Report Type: #{report.id}"
+            )
 
             send(self(), {:update_flash, {:info, "Report created successfully!"}})
 
@@ -459,7 +457,11 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
             {:noreply, socket}
 
-          _ ->
+          error ->
+            Logger.error(
+              "Failed to create a report for User: #{socket.assigns.current_user.email} Error: #{inspect(error)}"
+            )
+
             send(
               self(),
               {:update_flash,

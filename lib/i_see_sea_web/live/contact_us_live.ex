@@ -91,7 +91,7 @@ defmodule ISeeSeaWeb.ContactUsLive do
 
         {:error, reason} ->
           Logger.error(
-            "[#{__MODULE__}] An error occurred when sending a message. Reason: #{reason}"
+            "[#{__MODULE__}] An error occurred when sending a message. Reason: #{inspect(reason)}"
           )
 
           {:error, translate(socket.assigns.locale, "contact_us.failure")}

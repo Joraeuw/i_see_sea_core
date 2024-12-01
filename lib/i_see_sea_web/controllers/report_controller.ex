@@ -23,6 +23,10 @@ defmodule ISeeSeaWeb.ReportController do
              Filter.parse(filter_params),
              pagination_params
            ) do
+      Logger.info(
+        "Reports with ids: #{inspect(Enum.map(entries, & &1.id))} were retrieved with filters: #{inspect(Filter.parse(filter_params))} and pagination: #{inspect(pagination_params)}"
+      )
+
       success_paginated(conn, entries, pagination)
     else
       {:error, :invalid_report_type} ->
