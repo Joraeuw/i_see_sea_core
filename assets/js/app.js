@@ -60,6 +60,46 @@ let liveSocket = new LiveSocket("/live", Socket, {
   params: { _csrf_token: csrfToken, supports_touch: isTouchDevice() },
 });
 
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/sw.js').then(() => {
+    console.log('Service Worker Registered');
+  });
+}
+
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (event) => {
+  deferredPrompt = event;
+
+  const installButton = document.getElementById('install-button');
+  if (installButton) {
+    installButton.addEventListener('click', () => {
+      deferredPrompt.prompt();
+      
+      deferredPrompt.userChoice.then((choiceResult) => {
+        if (choiceResult.outcome === 'accepted') {
+          console.log('User accepted the install prompt');
+        } else {
+          console.log('User dismissed the install prompt');
+        }
+        deferredPrompt = null;
+      });
+    });
+  }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+  const installButton = document.getElementById("install-button");
+  const iosInstallModal = document.getElementById("ios-install-modal");
+
+  if (isIOS) {
+    installButton.addEventListener("click", () => {
+      iosInstallModal.showModal()
+    });
+  }
+});
+
 // Show progress bar on live navigation and form submits
 topbar.config({ barColors: { 0: "#29d" }, shadowColor: "rgba(0, 0, 0, .3)" });
 window.addEventListener("phx:page-loading-start", (_info) => topbar.show(300));

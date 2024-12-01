@@ -136,8 +136,6 @@ defmodule ISeeSeaWeb.HomeLive do
           locale={@locale}
         />
       </div>
-
-      <div :if={@is_selecting_location}>translate(@locale,"home.select_location")</div>
     </div>
     <HomeComponents.stat_home
       supports_touch={@supports_touch}
@@ -147,6 +145,27 @@ defmodule ISeeSeaWeb.HomeLive do
       data={@stats}
       locale={@locale}
     />
+
+    <dialog id="ios-install-modal" class="modal" onclick="if (event.target === this) this.close()">
+      <div class="modal-box">
+        <h3 class="font-bold text-lg"><%= translate(@locale, "home.install_title") %></h3>
+        <p>
+          <%= translate(@locale, "home.to_install") %><strong> <%= translate(@locale, "home.share") %></strong> <%= translate(
+            @locale,
+            "home.safari_select"
+          ) %> <strong><%= translate(@locale, "home.add_to_home_screen") %></strong>.
+        </p>
+        <div class="modal-action">
+          <button
+            class="btn"
+            id="close-modal"
+            onclick="document.getElementById('ios-install-modal').close()"
+          >
+            <%= translate(@locale, "home.close") %>
+          </button>
+        </div>
+      </div>
+    </dialog>
 
     <ISeeSeaWeb.HomeComponents.image_dialog />
     <ISeeSeaWeb.CommonComponents.filter_dialog filters={@filters} locale={@locale} />

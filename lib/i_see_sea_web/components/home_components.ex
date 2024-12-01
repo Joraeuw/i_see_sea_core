@@ -112,6 +112,12 @@ defmodule ISeeSeaWeb.HomeComponents do
           <div class="stat">
             <CommonComponents.filter_button locale={@locale} />
           </div>
+          <div class="stat">
+            <button class="btn" id="install-button">
+              <%= translate(@locale, "home.install_title") %>
+            </button>
+          </div>
+
           <div :if={User.is_admin?(@current_user)} class="stat">
             <div class="stat-title"><%= translate(@locale, "home.total_verified_users") %></div>
             <div class="stat-value"><%= @data.verified_users %></div>

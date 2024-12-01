@@ -21,7 +21,13 @@
     total_reports: "Общ брой доклади",
     filtered_reports: "Филтрирани доклади",
     drag_prompt: "Пуснете файловете си тук или натиснете текста за да изберете файлове",
-    creating_report: "Доклада се създава..."
+    creating_report: "Доклада се създава...",
+    add_to_home_screen: "'Добавяне на начален екран'",
+    install_title: "Инсталиранe",
+    to_install: "За да инсталирате това приложение на вашето iOS устройство, натиснете",
+    share: "Споделяне",
+    safari_select: " в Safari и изберете",
+    close: "Затвори"
   ],
   see_report: [details: "Детайли"],
   nav: [
