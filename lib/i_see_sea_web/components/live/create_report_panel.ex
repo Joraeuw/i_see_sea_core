@@ -152,49 +152,82 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
           disabled={!is_user_verified(@current_user)}
         />
         <div>
-          <div class="relative flex flex-col w-[320px]">
+          <div class="relative flex flex-col w-full sm:w-[320px]">
             <div
               phx-drop-target={@uploads.pictures.ref}
               id="picture_drop_container"
               phx-hook="DragAndDropHook"
               class={[
-                "flex flex-row items-center justify-center border-2 border-dashed border-gray-300 bg-white rounded-md p-4",
-                if(@is_dragging_over, do: "!bg-blue-100")
+                "flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-all duration-200 ease-in-out",
+                "bg-gradient-to-b from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200",
+                "border-blue-300 shadow-sm hover:shadow",
+                if(@is_dragging_over,
+                  do: "border-blue-500 scale-[1.02] shadow-md from-blue-100 to-blue-200"
+                )
               ]}
             >
-              <div class="flex flex-col items-center">
-                <label class="flex cursor-pointer size-6" for={@uploads.pictures.ref}>
-                  <img src="/images/drag-drop.svg" />
-                </label>
-                <label class="flex cursor-pointer w-40" for={@uploads.pictures.ref}>
-                  <span class="text-center text-base font-semibold text-gray-700 underline">
+              <div class="flex flex-col items-center mb-4">
+                <div class="mb-2 bg-white p-3 rounded-full shadow-sm">
+                  <label class="flex cursor-pointer w-10 h-10" for={@uploads.pictures.ref}>
+                    <img src="/images/drag-drop.svg" class="w-full h-full" />
+                  </label>
+                </div>
+                <label class="flex cursor-pointer" for={@uploads.pictures.ref}>
+                  <span class="text-center text-base font-medium text-blue-700">
                     <%= translate(@locale, "home.drag_prompt") %>
                   </span>
                 </label>
+                <p class="text-center text-xs text-blue-500 mt-1">
+                  PNG, JPG, JPEG • Max 10MB • Max 3 files
+                </p>
               </div>
 
-              <div class="flex flex-col space-y-1 items-end h-32 overflow-y-auto">
-                <%= for entry <- @uploads.pictures.entries do %>
-                  <article class="upload-entry">
-                    <figure class="relative align-middle justify-center group">
-                      <.live_img_preview entry={entry} class="relative h-10 z-0" />
-                      <button
-                        type="button"
-                        class="absolute z-10 h-10 w-10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ease-in-out top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2"
-                        phx-target={@myself}
-                        phx-click="cancel-upload"
-                        phx-value-ref={entry.ref}
-                        aria-label="cancel"
-                      >
-                        <img class="w-full h-full" src="/images/create-report/remove_image_icon.svg" />
-                      </button>
-                    </figure>
+              <div
+                :if={Enum.any?(@uploads.pictures.entries)}
+                class="w-full mt-4 pt-4 border-t border-blue-200"
+              >
+                <h3 class="text-sm font-semibold text-gray-700 mb-2">Selected Images:</h3>
+                <div class="grid grid-cols-3 gap-2">
+                  <%= for entry <- @uploads.pictures.entries do %>
+                    <div class="relative group">
+                      <div class="aspect-square rounded-lg overflow-hidden border border-gray-300 bg-white shadow-sm">
+                        <.live_img_preview entry={entry} class="w-full h-full object-cover" />
+                      </div>
 
-                    <%= for err <- upload_errors(@uploads.pictures, entry) do %>
-                      <p class="alert alert-danger"><%= error_to_string(err) %></p>
-                    <% end %>
-                  </article>
-                <% end %>
+                      <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-70 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg">
+                        <button
+                          type="button"
+                          class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 flex items-center justify-center shadow-md transition-transform duration-200 transform hover:scale-110"
+                          phx-target={@myself}
+                          phx-click="cancel-upload"
+                          phx-value-ref={entry.ref}
+                          aria-label="Remove image"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            class="h-8 w-8"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            stroke-width="3"
+                          >
+                            <path
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M6 18L18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </button>
+                      </div>
+
+                      <%= for err <- upload_errors(@uploads.pictures, entry) do %>
+                        <div class="mt-1 text-xs text-red-500 bg-red-100 rounded-md p-1 text-center">
+                          <%= error_to_string(err) %>
+                        </div>
+                      <% end %>
+                    </div>
+                  <% end %>
+                </div>
               </div>
             </div>
           </div>
