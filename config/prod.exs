@@ -25,8 +25,8 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
 config :phoenix, :logger, false
 
 config :i_see_sea,
-  backend_url: "iliad.vtmis.bg",
-  frontend_url: "iliad.vtmis.bg",
+  backend_url: "https://iliad.vtmis.bg",
+  frontend_url: "https://iliad.vtmis.bg",
   allowed_origins: [
     "iliad.vtmis.bg"
   ]
