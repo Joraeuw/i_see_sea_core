@@ -3,7 +3,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Report do
 
   alias ISeeSea.Constants.ReportType
 
-  alias AveratoWeb.Specs.Schemas.BadRequestErrorResponse
+  alias ISeeSeaWeb.ApiSpec.Schemas.Common.BadRequestErrorResponse
 
   alias ISeeSeaWeb.ApiSpec.QueryHelpers
 

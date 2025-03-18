@@ -6,7 +6,7 @@ defmodule ISeeSeaWeb.ApiSpec.Operations.Picture do
       use OpenApiSpex.ControllerSpecs
 
       alias OpenApiSpex.Schema
-      alias AveratoWeb.Specs.Schemas.NotFoundErrorResponse
+      alias ISeeSeaWeb.ApiSpec.Schemas.Common.NotFoundErrorResponse
 
       tags(["Picture"])
 

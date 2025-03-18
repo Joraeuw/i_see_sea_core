@@ -1,4 +1,4 @@
-defmodule AveratoWeb.Specs.Schemas.ForbiddenErrorResponse do
+defmodule ISeeSeaWeb.ApiSpec.Schemas.Common.ForbiddenErrorResponse do
   @moduledoc false
 
   alias OpenApiSpex.Schema

@@ -27,7 +27,9 @@
     to_install: "За да инсталирате това приложение на вашето iOS устройство, натиснете",
     share: "Споделяне",
     safari_select: " в Safari и изберете",
-    close: "Затвори"
+    close: "Затвори",
+    processing_upload: "Обработка на изображения, моля изчакайте...",
+    uploading: "Качване"
   ],
   see_report: [details: "Детайли"],
   nav: [

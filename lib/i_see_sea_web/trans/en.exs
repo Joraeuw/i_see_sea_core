@@ -22,13 +22,15 @@
     total_reports: "Total Reports",
     filtered_reports: "Filtered Reports",
     drag_prompt: "Drag an image to upload or click to choose an image",
-    creating_report: "Creating a report...",
+    creating_report: "Creating report...",
     add_to_home_screen: "'Add to Home Screen'",
     install_title: "Install App",
     to_install: "To install this app on your iOS device, tap the",
     share: "Share",
     safari_select: "button in Safari and select",
-    close: "Close"
+    close: "Close",
+    processing_upload: "Processing images, please wait...",
+    uploading: "Uploading"
   ],
   see_report: [details: "Details"],
   nav: [

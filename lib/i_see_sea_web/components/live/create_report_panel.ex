@@ -21,14 +21,17 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
       |> allow_upload(:pictures,
         accept: ~w(.jpg .jpeg .png),
         max_entries: 3,
-        max_file_size: 5_000_000
+        max_file_size: 10_000_000,
+        progress: &handle_progress/3
       )
       |> assign(
         form: to_form(%{}, as: "report_params"),
         report_type: ReportType.jellyfish(),
         check_errors: false,
         is_location_selected: false,
-        is_dragging_over: false
+        is_dragging_over: false,
+        upload_processing: false,
+        upload_progress: %{}
       )
 
     {:ok, socket}
@@ -106,6 +109,20 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         <.error :if={@check_errors}>
           <%= translate(@locale, "create_report.no_location") %>
         </.error>
+
+        <div
+          :if={@upload_processing || map_size(@upload_progress) > 0}
+          class="w-full flex flex-col items-center justify-center space-y-2"
+        >
+          <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+          <p class="text-sm text-gray-600">
+            <%= if map_size(@upload_progress) > 0 do %>
+              <%= translate(@locale, "home.uploading") %> <%= get_overall_progress(@upload_progress) %>%
+            <% else %>
+              <%= translate(@locale, "home.processing_upload") %>
+            <% end %>
+          </p>
+        </div>
 
         <CoreComponents.input field={@form[:report_type]} value={@report_type} type="hidden" />
         <CoreComponents.input field={@form[:longitude]} type="hidden" required />
@@ -405,8 +422,6 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
   def handle_event("create_report", %{"report_params" => params}, socket) do
     changeset_signature = String.to_atom("create_#{socket.assigns.report_type}_report")
 
-    IO.inspect(params, label: __MODULE__)
-
     Report.changeset(changeset_signature, params)
     |> case do
       %Ecto.Changeset{valid?: false} = changeset ->
@@ -418,6 +433,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
          )}
 
       %Ecto.Changeset{valid?: true} ->
+        socket = assign(socket, upload_processing: true)
+
         images =
           consume_uploaded_entries(socket, :pictures, fn %{path: path},
                                                          %{client_type: content_type} ->
@@ -442,18 +459,39 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
         )
         |> case do
           {:ok, report} ->
+            report_id =
+              Map.get(report, :id) ||
+                (Map.get(report, :base_report) && Map.get(report.base_report, :id)) || "unknown"
+
             Logger.info(
-              "Report created successfully. User: #{socket.assigns.current_user.email}  Report Type: #{report.id}"
+              "Report created successfully. User: #{socket.assigns.current_user.email}  Report Type: #{report_id}"
             )
 
             send(self(), {:update_flash, {:info, "Report created successfully!"}})
 
             socket =
               socket
-              |> assign(form: to_form(%{}, as: "report_params"))
+              |> assign(form: to_form(%{}, as: "report_params"), upload_processing: false)
               |> push_event("report_created", %{})
 
-            Broadcaster.broadcast!("reports:updates", "add_marker", report, translate: true)
+            # Ensure report has the necessary id field for broadcasting
+            # The JellyfishReport doesn't have an id field, but the base_report does
+            report_for_broadcast =
+              case report do
+                %{id: id} ->
+                  Map.put_new(report, :report_id, id)
+
+                _ ->
+                  base_report_id = report.base_report.id
+
+                  report
+                  |> Map.put(:id, base_report_id)
+                  |> Map.put(:report_id, base_report_id)
+              end
+
+            Broadcaster.broadcast!("reports:updates", "add_marker", report_for_broadcast,
+              translate: true
+            )
 
             {:noreply, socket}
 
@@ -469,7 +507,8 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
                 "Something went wrong when creating your report. Please try again. If the error persist contact us."}}
             )
 
-            {:noreply, assign(socket, form: to_form(%{}, as: "report_params"))}
+            {:noreply,
+             assign(socket, form: to_form(%{}, as: "report_params"), upload_processing: false)}
         end
     end
   end
@@ -515,6 +554,27 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
 
   def handle_event("file-dragging", %{"over" => over}, socket) do
     {:noreply, assign(socket, :is_dragging_over, over)}
+  end
+
+  defp handle_progress(:pictures, entry, socket) do
+    if entry.done? do
+      upload_progress = Map.delete(socket.assigns.upload_progress, entry.ref)
+      {:noreply, assign(socket, :upload_progress, upload_progress)}
+    else
+      upload_progress = Map.put(socket.assigns.upload_progress, entry.ref, entry.progress)
+      {:noreply, assign(socket, :upload_progress, upload_progress)}
+    end
+  end
+
+  defp get_overall_progress(progress_map) do
+    if map_size(progress_map) == 0 do
+      0
+    else
+      progress_map
+      |> Map.values()
+      |> Enum.sum()
+      |> then(fn total -> div(total, map_size(progress_map)) end)
+    end
   end
 
   defp jellyfish_species_options(locale) do

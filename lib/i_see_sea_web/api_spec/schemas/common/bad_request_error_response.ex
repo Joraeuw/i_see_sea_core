@@ -1,4 +1,4 @@
-defmodule AveratoWeb.Specs.Schemas.BadRequestErrorResponse do
+defmodule ISeeSeaWeb.ApiSpec.Schemas.Common.BadRequestErrorResponse do
   @moduledoc false
 
   alias OpenApiSpex.Schema

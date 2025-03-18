@@ -194,7 +194,8 @@ defmodule ISeeSeaWeb.ReportsLive do
   @impl true
   def handle_info(%{event: "delete_marker", payload: %{report_id: deleted_report_id}}, socket) do
     reports =
-      Enum.reject(socket.assigns.reports, fn %{id: report_id} ->
+      Enum.reject(socket.assigns.reports, fn report ->
+        report_id = report[:id] || report[:report_id]
         report_id === String.to_integer(deleted_report_id)
       end)
 
