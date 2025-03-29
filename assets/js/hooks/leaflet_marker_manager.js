@@ -3,10 +3,12 @@ import "leaflet.markercluster";
 
 import { markerIconByReportType } from "../leaflet_icons";
 import { getMarkerContent } from "../leaflet_markers";
+import { standardPopupOptions, clusterOptions } from "../leaflet_config";
 
 const LeafletMarkerManager = {
   mounted() {
-    this.markerClusterGroup = L.markerClusterGroup();
+    this.markerClusterGroup = L.markerClusterGroup(clusterOptions);
+    this.map = window.leafletMap || this.el.map;
     this.map.addLayer(this.markerClusterGroup);
     this.markers = {};
 
@@ -32,7 +34,8 @@ const LeafletMarkerManager = {
     if (!this.markers[report_id]) {
       const marker = L.marker([latitude, longitude], {
         icon: markerIconByReportType(report_type),
-      }).bindPopup(getMarkerContent(markerData));
+      }).bindPopup(getMarkerContent(markerData), standardPopupOptions);
+      
       this.markerClusterGroup.addLayer(marker);
       this.markers[report_id] = marker;
     }

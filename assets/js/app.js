@@ -98,6 +98,35 @@ document.addEventListener("DOMContentLoaded", () => {
       iosInstallModal.showModal()
     });
   }
+  
+  initFilterModal();
+});
+
+function initFilterModal() {
+  const filterButtons = document.querySelectorAll("[onclick*='filter_modal.showModal()']");
+  
+  filterButtons.forEach(button => {
+    const originalOnclick = button.getAttribute('onclick');
+    button.removeAttribute('onclick');
+    
+    button.addEventListener('click', function(e) {
+      const filterModal = document.getElementById("filter_modal");
+      if (filterModal) {
+        try {
+          filterModal.showModal();
+        } catch (error) {
+          console.error("Error showing filter modal, trying alternative approach:", error);
+          
+          filterModal.setAttribute('open', '');
+          filterModal.style.display = 'flex';
+        }
+      }
+    });
+  });
+}
+
+window.addEventListener('error', function(event) {
+  console.error('Global error caught:', event.error || event.message);
 });
 
 // Show progress bar on live navigation and form submits

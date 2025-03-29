@@ -125,14 +125,22 @@
   @apply flex-1 z-20 text-center text-lg font-extrabold text-[rgb(212,241,244)] rounded-lg shadow-lg px-2 py-2 bg-[rgb(255,20,60)] transition duration-100 hover:bg-[rgb(255,65,95)] active:translate-y-1 active:shadow-none;
 }
 .leaflet-popup-content-wrapper {
-  @apply bg-base-100;
+  @apply bg-transparent shadow-none border-none;
 }
 
 .leaflet-popup-tip {
-  @apply bg-base-100;
+  @apply bg-white;
 }
 .leaflet-popup-content {
-  width: 200px;
+  width: 260px !important;
+  height: auto !important;
+  max-height: 350px !important;
+  max-width: 90vw;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.leaflet-popup-close-button {
+  display: none !important;
 }
 .p_card_map {
   @apply flex my-0 mx-0 items-center bg-accent px-1 py-1 w-full rounded-md;
@@ -145,4 +153,668 @@
 }
 .leaflet-popup-content p {
   margin: 0;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border-radius: 0.5rem;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 0;
+  width: 80%;
+}
+
+/* Make the popup shadow more subtle */
+.custom-popup {
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+}
+
+/* Handle popup tip better */
+.custom-popup .leaflet-popup-tip-container {
+  margin-top: -1px;
+}
+
+/* Custom styles for user location popup */
+.user-location-popup {
+  padding: 10px;
+  text-align: center;
+  position: relative;
+}
+
+.user-location-content {
+  background: linear-gradient(135deg, #4a90e2, #63d3ff);
+  border-radius: 12px;
+  color: white;
+  padding: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.user-location-content h3 {
+  margin: 0 0 10px 0;
+  font-weight: 600;
+  font-size: 18px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.user-location-content p {
+  margin: 5px 0;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+/* Pulsing animation for the user's location */
+.leaflet-marker-icon.user-location {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.7);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(74, 144, 226, 0);
+    transform: scale(1.1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 144, 226, 0);
+    transform: scale(1);
+  }
+}
+
+/* Custom popup styling for user location */
+.user-location-popup-responsive {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.user-location-popup-responsive .leaflet-popup-content-wrapper {
+  background: transparent;
+  border-radius: 12px;
+  padding: 0;
+  overflow: hidden;
+  box-shadow: none;
+}
+
+.user-location-popup-responsive .leaflet-popup-content {
+  margin: 0;
+  width: auto !important;
+}
+
+.user-location-popup-responsive .leaflet-popup-tip {
+  background: #4a90e2;
+  box-shadow: none;
+}
+
+/* Pulse animation element */
+.pulse-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 50px;
+  height: 50px;
+  background: rgba(74, 144, 226, 0.3);
+  border-radius: 50%;
+  animation: pulse-ring 3s infinite;
+  z-index: -1;
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0.7;
+  }
+  50% {
+    transform: translate(-50%, -50%) scale(1.2);
+    opacity: 0.3;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(0.7);
+    opacity: 0.7;
+  }
+}
+
+/* User location marker styles */
+.user-location-marker {
+  background: transparent;
+  border: none;
+}
+
+.user-location-marker-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.user-location-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  background: #4a90e2;
+  border: 2px solid white;
+  border-radius: 50%;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+.user-location-pulse {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 40px;
+  height: 40px;
+  background: rgba(74, 144, 226, 0.4);
+  border-radius: 50%;
+  z-index: 1;
+  animation: location-pulse 2s infinite;
+}
+
+@keyframes location-pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+
+/* Enhanced Modal and Image Slider Styles - PREMIUM VERSION */
+
+/* Fullscreen modal styling */
+.modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  background-color: rgba(0, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.modal-open {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  visibility: visible;
+  animation: fadeInScale 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-box {
+  position: relative;
+  width: 95%;
+  max-width: 1200px;
+  height: 85vh;
+  max-height: 900px;
+  border-radius: 16px;
+  overflow: hidden;
+  background-color: transparent;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  animation: appearFromBottom 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes appearFromBottom {
+  from {
+    transform: translateY(30px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* Close button styling */
+.modal-close-btn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.modal-close-btn:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  transform: scale(1.1) rotate(90deg);
+  opacity: 1;
+  box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+}
+
+/* UI controls animation */
+.modal-open .swiper-button-next,
+.modal-open .swiper-button-prev,
+.modal-open .swiper-pagination,
+.modal-open .modal-close-btn,
+.modal-open .modal-image-counter,
+.modal-open .modal-controls {
+  animation: fadeInControls 0.5s 0.2s both cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes fadeInControls {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Swiper container styling */
+.modal .swiper-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.modal .swiper-slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background-color: transparent;
+  overflow: hidden;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal .slide-content {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal .slide-content img {
+  /* Modified for high-quality image display */
+  width: auto !important;
+  height: auto !important;
+  max-width: 90% !important;
+  max-height: 90% !important;
+  object-fit: contain;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.6);
+  border-radius: 8px;
+  transform-origin: center;
+  image-rendering: high-quality;
+}
+
+/* Zoom effect */
+.modal .swiper-slide-zoomed .slide-content img {
+  cursor: grabbing;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+.modal .swiper-zoom-container {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Image counter */
+.modal-image-counter {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  font-size: 14px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  z-index: 100;
+  font-weight: 500;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.modal-image-counter svg {
+  width: 16px;
+  height: 16px;
+  opacity: 0.8;
+}
+
+/* Navigation buttons - make them more visible and clickable */
+.modal .swiper-button-next,
+.modal .swiper-button-prev {
+  color: white;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  margin: 0 20px;
+  opacity: 0.9;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  z-index: 100 !important;
+}
+
+.modal .swiper-button-next:hover,
+.modal .swiper-button-prev:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+  opacity: 1;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  border-color: white;
+}
+
+.modal .swiper-button-next:after,
+.modal .swiper-button-prev:after {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+/* Make sure the button is always visible and clickable */
+.modal .swiper-button-disabled {
+  opacity: 0.5 !important;
+  pointer-events: auto !important;
+}
+
+/* Pagination styling */
+.modal .swiper-pagination {
+  position: absolute;
+  bottom: 20px;
+  width: auto !important;
+  left: 50% !important;
+  transform: translateX(-50%);
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 30px;
+  padding: 8px 12px;
+  display: flex;
+  gap: 10px;
+}
+
+.modal .swiper-pagination-bullet {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.5);
+  opacity: 0.7;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  margin: 0 !important;
+}
+
+.modal .swiper-pagination-bullet-active {
+  background-color: #fff;
+  opacity: 1;
+  transform: scale(1.2);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* Bottom controls bar */
+.modal-controls {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.5));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  pointer-events: none;
+}
+
+/* Enhanced Image Thumbnail Styles */
+.image-thumbnail {
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  height: auto;
+  max-height: 60px;
+}
+
+.image-thumbnail:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.image-thumbnail img {
+  border-radius: 6px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.image-thumbnail:hover img {
+  transform: scale(1.05);
+  filter: brightness(1.05);
+}
+
+.gallery-count {
+  position: absolute;
+  bottom: 6px;
+  right: 6px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 3px 7px;
+  border-radius: 12px;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.image-thumbnail:hover .gallery-count {
+  background-color: rgba(0, 0, 0, 0.8);
+  transform: scale(1.05);
+}
+
+.gallery-count svg {
+  width: 10px;
+  height: 10px;
+  opacity: 0.8;
+}
+
+/* Improved fullscreen modal image handling */
+.modal .swiper-zoom-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.modal .swiper-slide-zoomed {
+  cursor: move;
+}
+
+.modal .error-image {
+  opacity: 0.7;
+  filter: grayscale(30%);
+  max-width: 80%;
+  max-height: 80%;
+}
+
+/* Make open modal button more obvious as clickable */
+.open-modal-button {
+  position: relative;
+  cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.2s ease;
+}
+
+.open-modal-button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(117, 230, 218, 0.5);
+}
+
+.open-modal-button:active {
+  transform: scale(0.98);
+}
+
+/* No image placeholder */
+.image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #f5f7fa, #e9ecef);
+  border-radius: 8px;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.05);
+  padding: 10px;
+  min-height: 80px;
+  transition: all 0.2s ease;
+}
+
+.image-placeholder img {
+  opacity: 0.6;
+  transition: all 0.2s ease;
+  filter: grayscale(30%);
+}
+
+.image-placeholder:hover img {
+  opacity: 0.8;
+  transform: scale(1.05);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-box {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+    border-radius: 0;
+  }
+  
+  .modal-close-btn {
+    top: 15px;
+    right: 15px;
+    width: 40px;
+    height: 40px;
+  }
+  
+  .modal .swiper-button-next,
+  .modal .swiper-button-prev {
+    width: 44px;
+    height: 44px;
+    margin: 0 10px;
+  }
+  
+  .modal-image-counter {
+    top: 15px;
+    left: 15px;
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+}
+
+/* Fix status indicator colors */
+.text-\[rgb\(7\,204\,73\)\] {
+  color: rgb(7, 204, 73) !important; /* Fixed green color for OK responses */
+}
+
+.text-\[rgb\(255\,20\,60\)\] {
+  color: rgb(255, 20, 60) !important; /* Fixed red color for not-OK responses */
+}
+
+/* Added to make sure color overrides work */
+.pollution-status-ok {
+  color: rgb(7, 204, 73) !important;
+}
+
+.pollution-status-notok {
+  color: rgb(255, 20, 60) !important;
+}
+
+/* Specific styles for the filter modal to avoid conflicts */
+#filter_modal {
+  background-color: rgba(0, 0, 0, 0.5);
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+#filter_modal:not([open]) {
+  display: none;
+}
+
+#filter_modal .modal-box {
+  background-color: white;
+  border-radius: 8px;
+  padding: 20px;
+  width: auto;
+  max-width: 480px;
+  height: auto;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  animation: filterModalAppear 0.3s ease-out;
+  position: relative;
+}
+
+@keyframes filterModalAppear {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -5,16 +5,19 @@ import { userLocationMarkerIcon, newReportMarkerIcon } from "../leaflet_icons";
 
 const LeafletUserLocation = {
   mounted() {
-    this.map = window.map;
+    this.map = window.leafletMap;
+    
+    if (!this.map) {
+      console.error("Map not found! User location will not be displayed.");
+      return;
+    }
+    
     this.hasDetectedUserLocation();
     this.addMarkerOnClick();
   },
 
   addMarkerOnClick() {
     this.handleEvent("enable_pin_mode", () => {
-      // if (!this.hasDetectedUserLocation()) {
-      // }
-
       this.map.on("click", this.onMapClick.bind(this));
       this.map.on("touch", this.onMapClick.bind(this));
     });
@@ -25,20 +28,33 @@ const LeafletUserLocation = {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
-          L.marker([latitude, longitude], {
+          const pulsingMarker = L.marker([latitude, longitude], {
             icon: userLocationMarkerIcon,
-          })
-            .addTo(this.map)
-            .bindPopup("You are here!");
-
+            zIndexOffset: 1000
+          }).addTo(this.map);
+          
+          const accuracyCircle = L.circle([latitude, longitude], {
+            radius: 100,
+            color: '#4A90E2',
+            fillColor: '#4A90E2',
+            fillOpacity: 0.2,
+            weight: 1
+          }).addTo(this.map);
+          
+          this.userLocationMarker = pulsingMarker;
+          this.accuracyCircle = accuracyCircle;
+          
           this.pushEvent("user_selected_location", { latitude, longitude });
+          
           return true;
         },
         (error) => {
+          console.error("Error getting user location:", error.message);
           return false;
         }
       );
     } else {
+      console.warn("Geolocation not supported in this browser");
       return false;
     }
   },

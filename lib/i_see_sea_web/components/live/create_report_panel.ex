@@ -159,10 +159,11 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
               phx-hook="DragAndDropHook"
               class={[
                 "flex flex-col items-center justify-center border-2 border-dashed rounded-lg p-6 transition-all duration-200 ease-in-out",
-                "bg-gradient-to-b from-blue-50 to-blue-100 hover:from-blue-100 hover:to-blue-200",
-                "border-blue-300 shadow-sm hover:shadow",
+                "bg-gradient-to-b from-[rgba(212,241,244,0.3)] to-[rgba(212,241,244,0.5)] hover:from-[rgba(212,241,244,0.5)] hover:to-[rgba(212,241,244,0.7)]",
+                "border-[rgb(24,158,180)] shadow-sm hover:shadow",
                 if(@is_dragging_over,
-                  do: "border-blue-500 scale-[1.02] shadow-md from-blue-100 to-blue-200"
+                  do:
+                    "border-[rgb(117,230,218)] scale-[1.02] shadow-md from-[rgba(212,241,244,0.5)] to-[rgba(212,241,244,0.7)]"
                 )
               ]}
             >
@@ -173,20 +174,20 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
                   </label>
                 </div>
                 <label class="flex cursor-pointer" for={@uploads.pictures.ref}>
-                  <span class="text-center text-base font-medium text-blue-700">
+                  <span class="text-center text-base font-medium text-[rgb(24,158,180)]">
                     <%= translate(@locale, "home.drag_prompt") %>
                   </span>
                 </label>
-                <p class="text-center text-xs text-blue-500 mt-1">
+                <p class="text-center text-xs text-[rgb(117,230,218)] mt-1">
                   PNG, JPG, JPEG • Max 10MB • Max 3 files
                 </p>
               </div>
 
               <div
                 :if={Enum.any?(@uploads.pictures.entries)}
-                class="w-full mt-4 pt-4 border-t border-blue-200"
+                class="w-full mt-4 pt-4 border-t border-[rgb(117,230,218)] border-opacity-30"
               >
-                <h3 class="text-sm font-semibold text-gray-700 mb-2">Selected Images:</h3>
+                <h3 class="text-sm font-semibold text-[rgb(24,158,180)] mb-2">Selected Images:</h3>
                 <div class="grid grid-cols-3 gap-2">
                   <%= for entry <- @uploads.pictures.entries do %>
                     <div class="relative group">
@@ -197,7 +198,7 @@ defmodule ISeeSeaWeb.Live.CreateReportPanel do
                       <div class="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-70 md:opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-lg">
                         <button
                           type="button"
-                          class="bg-red-500 hover:bg-red-600 text-white rounded-full p-2 flex items-center justify-center shadow-md transition-transform duration-200 transform hover:scale-110"
+                          class="bg-[rgb(255,20,60)] hover:bg-[rgb(255,65,95)] text-white rounded-full p-2 flex items-center justify-center shadow-md transition-transform duration-200 transform hover:scale-110"
                           phx-target={@myself}
                           phx-click="cancel-upload"
                           phx-value-ref={entry.ref}

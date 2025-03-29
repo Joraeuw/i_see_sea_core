@@ -56,12 +56,17 @@ const markerIconByReportType = iconBuilder(
   markerIconByReportTypeHighOrder
 );
 
-const userLocationMarkerIcon = iconBuilder(
-  3131,
-  3940,
-  28,
-  userLocationMarkerIconHighOrder
-);
+const userLocationMarkerIcon = L.divIcon({
+  className: 'user-location-marker',
+  html: `
+    <div class="user-location-marker-inner">
+      <div class="user-location-dot"></div>
+      <div class="user-location-pulse"></div>
+    </div>
+  `,
+  iconSize: [24, 24],
+  iconAnchor: [12, 12]
+});
 
 const newReportMarkerIcon = iconBuilder(
   3118,

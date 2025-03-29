@@ -7,21 +7,23 @@ import {
   newReportMarkerIcon,
 } from "../leaflet_icons";
 import { getMarkerContent } from "../leaflet_markers";
+import { 
+  standardPopupOptions, 
+  clusterOptions, 
+  mapOptions, 
+  tileLayerOptions
+} from "../leaflet_config";
 
 const LeafletMap = {
   mounted() {
-    window.map = L.map("map", {
-      zoomControl: false,
-      zoom: 13
-    }).setView([43.2041, 27.8788]);
+    this.map = L.map(this.el, mapOptions).setView([43.2041, 27.8788], 13);
+    window.leafletMap = this.map;
+    
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", tileLayerOptions)
+      .addTo(this.map);
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-    }).addTo(window.map);
-
-    this.markerClusterGroup = L.markerClusterGroup();
-    window.map.addLayer(this.markerClusterGroup);
+    this.markerClusterGroup = L.markerClusterGroup(clusterOptions);
+    this.map.addLayer(this.markerClusterGroup);
 
     this.markers = {};
 
@@ -55,11 +57,11 @@ const LeafletMap = {
     });
 
     this.handleEvent("report_created", () =>
-      window.map.removeLayer(this.lastSelectedLocation)
+      this.map.removeLayer(this.lastSelectedLocation)
     );
 
     setTimeout(() => {
-      window.map.invalidateSize();
+      this.map.invalidateSize();
     }, 100);
   },
 
@@ -69,7 +71,8 @@ const LeafletMap = {
     if (!this.markers[report_id]) {
       const marker = L.marker([latitude, longitude], {
         icon: markerIconByReportType(report_type),
-      }).bindPopup(getMarkerContent(markerData));
+      }).bindPopup(getMarkerContent(markerData), standardPopupOptions);
+      
       this.markerClusterGroup.addLayer(marker);
       this.markers[report_id] = marker;
     }
@@ -88,7 +91,8 @@ const LeafletMap = {
       const { report_id, report_type, latitude, longitude } = markerData;
       const marker = L.marker([latitude, longitude], {
         icon: markerIconByReportType(report_type),
-      }).bindPopup(getMarkerContent(markerData));
+      }).bindPopup(getMarkerContent(markerData), standardPopupOptions);
+      
       this.markerClusterGroup.addLayer(marker);
       this.markers[report_id] = marker;
     });

@@ -144,20 +144,47 @@ defmodule ISeeSeaWeb.HomeComponents do
     ~H"""
     <div id="modal_fullscreen_image_slider" class="modal">
       <div class="modal-box relative overflow-hidden">
-        <button class="absolute right-0.5 top-0.5 h-8 w-8 z-50" onclick="closeFullscreenModal()">
-          <a class="leaflet-popup-close-button text-2xl z-50" role="button">
-            <span class="z-50" arial-hidden="true">×</span>
-          </a>
+        <button class="modal-close-btn" onclick="closeFullscreenModal()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
         </button>
 
+        <div class="modal-image-counter">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-4 w-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          <span id="modal-counter">1/1</span>
+        </div>
         <div class="swiper-container">
-          <div class="swiper-wrapper space-x-3" id="modal_fullscreen_image_slider_container">
-            <!-- Slides will be injected here by JavaScript -->
-          </div>
+          <div class="swiper-wrapper" id="modal_fullscreen_image_slider_container"></div>
           <div class="swiper-button-next"></div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-pagination"></div>
         </div>
+        <div class="modal-controls"></div>
       </div>
     </div>
     """
