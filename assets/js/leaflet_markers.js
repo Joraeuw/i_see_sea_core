@@ -447,7 +447,7 @@ const createLocationSection = (latitude, longitude, locale) => {
   return `
   <div class="bg-white shadow rounded-lg p-2">
     <div class="flex items-center">
-      <svg class="w-4 h-4 text-[rgb(24,158,180)] flex-shrink-0 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg class="w-4 h-4 text-[rgb(24,158,180)] flex-shrink-0 mr-2" fill="none" viewBox="0 0 24 24" stroke="black">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
           d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -472,7 +472,7 @@ const createCommentSection = (comment, locale) => {
   return `
   <div class="bg-white shadow rounded-lg p-2">
     <div class="flex items-start">
-      <svg class="w-4 h-4 text-[rgb(24,158,180)] mt-0.5 flex-shrink-0 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <svg class="w-4 h-4 text-[rgb(24,158,180)] mt-0.5 flex-shrink-0 mr-2" fill="none" viewBox="0 0 24 24" stroke="black">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
           d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z" />
       </svg>
@@ -506,10 +506,7 @@ const jellyfishContent = ({
     <div class="space-y-1.5">
       <div class="bg-white shadow rounded-lg p-1.5 flex items-center">
         <div class="bg-[rgba(24,158,180,0.2)] p-1 rounded-full mr-1.5">
-          <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14" />
-          </svg>
+          <img class="w-3.5 h-3.5 text-[rgb(24,158,180)]" src="/images/report_icons/jelly_icon.svg" />
         </div>
         <div class="overflow-hidden">
           <div class="text-xs text-gray-500 font-medium leading-tight">${locale == "bg" ? "Вид" : "Species"}</div>
@@ -519,10 +516,7 @@ const jellyfishContent = ({
       
       <div class="bg-white shadow rounded-lg p-1.5 flex items-center">
         <div class="bg-[rgba(24,158,180,0.2)] p-1 rounded-full mr-1.5">
-          <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z" />
-          </svg>
+         <img class="w-3.5 h-3.5 text-[rgb(24,158,180)]" src="/images/report_icons/quintity_icon.svg" />
         </div>
         <div class="overflow-hidden">
           <div class="text-xs text-gray-500 font-medium leading-tight">${locale == "bg" ? "Количество" : "Quantity"}</div>
@@ -641,7 +635,7 @@ const atypicalActivityContent = ({
   const content = `
     <div class="bg-white shadow rounded-lg p-1.5 flex items-center">
       <div class="bg-[rgba(24,158,180,0.2)] p-1 rounded-full mr-1.5">
-        <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="black">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
             d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
@@ -686,10 +680,7 @@ const meteorologicalContent = ({
     <div class="space-y-1.5">
       <div class="bg-white shadow rounded-lg p-1.5 flex items-center">
         <div class="bg-[rgba(24,158,180,0.2)] p-1 rounded-full mr-1.5">
-          <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
-          </svg>
+          <img class="w-3.5 h-3.5 text-[rgb(24,158,180)]" src="/images/report_icons/fog_type.svg" />
         </div>
         <div class="overflow-hidden">
           <div class="text-xs text-gray-500 font-medium leading-tight">${locale == "bg" ? "Вид мъгла" : "Fog type"}</div>
@@ -699,10 +690,7 @@ const meteorologicalContent = ({
       
       <div class="bg-white shadow rounded-lg p-1.5 flex items-center">
         <div class="bg-[rgba(24,158,180,0.2)] p-1 rounded-full mr-1.5">
-          <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" />
-          </svg>
+          <img class="w-3.5 h-3.5 text-[rgb(24,158,180)]" src="/images/report_icons/wind_type.svg" />
         </div>
         <div class="overflow-hidden">
           <div class="text-xs text-gray-500 font-medium leading-tight">${locale == "bg" ? "Вид вятър" : "Wind type"}</div>
@@ -712,10 +700,7 @@ const meteorologicalContent = ({
       
       <div class="bg-white shadow rounded-lg p-1.5 flex items-center">
         <div class="bg-[rgba(24,158,180,0.2)] p-1 rounded-full mr-1.5">
-          <svg class="w-3.5 h-3.5 text-[rgb(24,158,180)]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-              d="M13 10V3L4 14h7v7l9-11h-7z" />
-          </svg>
+          <img class="w-3.5 h-3.5 text-[rgb(24,158,180)]" src="/images/report_icons/sea_swell.svg" />
         </div>
         <div class="overflow-hidden">
           <div class="text-xs text-gray-500 font-medium leading-tight">${locale == "bg" ? "Вид морско вълнение" : "Sea swell"}</div>
