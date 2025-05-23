@@ -261,11 +261,11 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[5px] bg-cover" src="/images/report_icons/oil_icon.svg" />
             <p class="p_card">
-            <%= if has_oil do %>
+              <%= if has_oil do %>
                 <%= translate(locale, "pollution_report.yes") %>
-            <% else %>
+              <% else %>
                 <%= translate(locale, "pollution_report.no") %>
-            <% end %>
+              <% end %>
               <p class="opacity-50 text-[0.9em]">
                 <% translate(@locale, "create_report.oil_pollution") %>
               </p>
@@ -274,11 +274,11 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[5px] bg-cover" src="/images/report_icons/plastic_icon.svg" />
             <p class="p_card">
-            <%= if has_plastic do %>
+              <%= if has_plastic do %>
                 <%= translate(locale, "pollution_report.yes") %>
-            <% else %>
+              <% else %>
                 <%= translate(locale, "pollution_report.no") %>
-            <% end %>
+              <% end %>
 
               <p class="opacity-50 text-[0.9em]">
                 <% translate(@locale, "create_report.plastic_pollution") %>
@@ -288,11 +288,11 @@ defmodule ISeeSeaWeb.ReportCardLiveComponent do
           <div class="flex flex-row items-center p-3 w-11/12 ml-[10px] bg-accent rounded-xl">
             <img class="mr-[10px]" src="/images/report_icons/biological_icon.svg" />
             <p class="p_card">
-            <%= if has_biological do %>
+              <%= if has_biological do %>
                 <%= translate(locale, "pollution_report.yes") %>
-            <% else %>
+              <% else %>
                 <%= translate(locale, "pollution_report.no") %>
-            <% end %>
+              <% end %>
               <p class="opacity-50 text-[0.9em]">
                 <% translate(@locale, "create_report.biological_pollution") %>
               </p>

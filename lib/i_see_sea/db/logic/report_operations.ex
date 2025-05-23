@@ -221,4 +221,6 @@ defmodule ISeeSea.DB.Logic.ReportOperations do
       {binary, shape}
     end
   end
+
+  defp attach_pictures(_, _), do: :ok
 end
