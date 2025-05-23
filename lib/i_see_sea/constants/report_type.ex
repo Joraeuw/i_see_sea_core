@@ -8,6 +8,7 @@ defmodule ISeeSea.Constants.ReportType do
   @atypical_activity "atypical_activity"
   @pollution "pollution"
   @other "other"
+  @all "all"
 
   @values [@jellyfish, @meteorological, @atypical_activity, @pollution, @other]
 
@@ -15,7 +16,11 @@ defmodule ISeeSea.Constants.ReportType do
     @values
   end
 
+  def filter_values do
+    [@all | @values]
+  end
+
   Enum.each(@values, fn value ->
-    def unquote(:"#{value}")(), do: unquote(value)
+    defmacro unquote(:"#{value}")(), do: unquote(value)
   end)
 end

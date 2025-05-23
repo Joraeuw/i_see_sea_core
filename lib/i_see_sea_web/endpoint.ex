@@ -26,7 +26,7 @@ defmodule ISeeSeaWeb.Endpoint do
   plug Plug.Static,
     at: "/",
     from: :i_see_sea,
-    gzip: false,
+    gzip: true,
     only: ISeeSeaWeb.static_paths()
 
   # Code reloading can be explicitly enabled under the

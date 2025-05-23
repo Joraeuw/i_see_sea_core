@@ -33,20 +33,25 @@ defmodule ISeeSea.DB.Models.JellyfishReport do
 
     def view(
           %{base_report: base, species_id: species} = jellyfish_report,
-          %Lens{view: Lens.expanded()} = lens
+          %Lens{view: Lens.expanded(), translate: translate} = lens
         ) do
       jellyfish_report
       |> Map.from_struct()
       |> Map.take([:quantity, :report_id])
-      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
       |> Map.merge(%{species: species})
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "jellyfish_report")
+      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
 
-    def view(%{species_id: species} = jellyfish_report, %Lens{view: Lens.from_base()}) do
+    def view(%{species_id: species} = jellyfish_report, %Lens{
+          view: Lens.from_base(),
+          translate: translate
+        }) do
       jellyfish_report
       |> Map.from_struct()
       |> Map.take([:quantity, :report_id])
       |> Map.merge(%{species: species})
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "jellyfish_report")
     end
   end
 end

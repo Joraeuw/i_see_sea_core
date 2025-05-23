@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    depends_on:
+      - database 
+    environment:
+      DATABASE_URL: "postgres://ede7byx74ext7ih:IvjPRkjPUX74Tb5@database:5432/i_see_sea_prod"
+      SECRET_KEY_BASE: "szUqrbT7YXtxgd1mN6BOay6nIuAjI9Ulc4iOfP7piv2qORC3UeoryPKXIy1C8zxY"
+      ECTO_IPV6: "false" 
+      PHX_HOST: "iliad.vtmis.bg"
+      PHX_SERVER: "true"
+      SMTP_PASSWORD: "123456Iliad"
+      PORT: 4000
+        # command: ["sh", "-c", "sleep infinity"]
+      command: sh -c "/app/bin/i_see_sea eval \"ISeeSea.Release.migrate\" && /app/bin/server"
+    restart:
+     unless-stopped 
+    networks:
+      - public
+      - internal
+
+  database:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ede7byx74ext7ih
+      POSTGRES_PASSWORD: IvjPRkjPUX74Tb5
+      POSTGRES_DB: i_see_sea_prod 
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    restart: 
+      unless-stopped
+    networks:
+      - internal
+      - public
+
+  nginx:
+    image: nginx:latest
+    container_name: i_see_sea_nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./certbot/www:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/nginx/ssl/:ro
+    depends_on:
+      - app
+    networks:
+      - public
+      - internal
+
+  certbot:
+    image: certbot/certbot:latest
+    container_name: i_see_sea_certbot
+    volumes:
+      - ./certbot/conf/:/etc/letsencrypt/:rw
+      - ./certbot/www/:/var/www/certbot/:rw
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do sleep 6h & wait $${!}; certbot renew --webroot --webroot-path=/var/www/certbot && nginx -s reload; done;'"
+    networks:
+      - public
+
+volumes:
+  db_data:
+
+networks: 
+  internal: 
+    internal: true
+  public:
+    driver: bridge

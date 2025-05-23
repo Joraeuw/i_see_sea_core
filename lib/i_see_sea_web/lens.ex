@@ -3,7 +3,7 @@ defmodule ISeeSeaWeb.Lens do
   Lens add additional security level to the app.
   No variable or entity shall be exposed unless it is specified.
   """
-  defstruct user: nil, view: :expanded
+  defstruct user: nil, view: :expanded, translate: false
 
   defmacro expanded do
     quote do

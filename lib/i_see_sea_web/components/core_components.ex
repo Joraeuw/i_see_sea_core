@@ -17,6 +17,8 @@ defmodule ISeeSeaWeb.CoreComponents do
   use Phoenix.Component
 
   alias Phoenix.LiveView.JS
+
+  import ISeeSeaWeb.Trans
   import ISeeSeaWeb.Gettext
 
   @doc """
@@ -147,29 +149,29 @@ defmodule ISeeSeaWeb.CoreComponents do
   def flash_group(assigns) do
     ~H"""
     <div id={@id}>
-      <.flash kind={:info} title={gettext("Success!")} flash={@flash} />
-      <.flash kind={:error} title={gettext("Error!")} flash={@flash} />
+      <.flash kind={:info} title={translate(@locale, "home.success")} flash={@flash} />
+      <.flash kind={:error} title={translate(@locale, "home.error")} flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
-        title={gettext("We can't find the internet")}
+        title={translate(@locale, "home.no_internet")}
         phx-disconnected={show(".phx-client-error #client-error")}
         phx-connected={hide("#client-error")}
         hidden
       >
-        <%= gettext("Attempting to reconnect") %>
+        <%= translate(@locale, "home.attempt_to_reconnect") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
 
       <.flash
         id="server-error"
         kind={:error}
-        title={gettext("Something went wrong!")}
+        title={translate(@locale, "home.sth_went_wrong")}
         phx-disconnected={show(".phx-server-error #server-error")}
         phx-connected={hide("#server-error")}
         hidden
       >
-        <%= gettext("Hang in there while we get back on track") %>
+        <%= translate(@locale, "home.back_on_track") %>
         <.icon name="hero-arrow-path" class="ml-1 h-3 w-3 animate-spin" />
       </.flash>
     </div>
@@ -191,6 +193,9 @@ defmodule ISeeSeaWeb.CoreComponents do
   """
   attr :for, :any, required: true, doc: "the datastructure for the form"
   attr :as, :any, default: nil, doc: "the server side parameter to collect all input under"
+  attr :class, :string, default: nil
+  attr :form_class, :string, default: nil
+  attr :inner_class, :string, default: ""
 
   attr :rest, :global,
     include: ~w(autocomplete name rel action enctype method novalidate target multipart),
@@ -198,13 +203,17 @@ defmodule ISeeSeaWeb.CoreComponents do
 
   slot :inner_block, required: true
   slot :actions, doc: "the slot for form actions, such as a submit button"
+  attr :locale, :string, default: "bg"
 
   def simple_form(assigns) do
     ~H"""
-    <.form :let={f} for={@for} as={@as} {@rest}>
-      <div class="mt-10 space-y-8 bg-white">
+    <.form :let={f} for={@for} as={@as} {@rest} class={@form_class}>
+      <div class={@class || "mt-10 space-y-8 bg-white"}>
         <%= render_slot(@inner_block, f) %>
-        <div :for={action <- @actions} class="mt-2 flex items-center justify-between gap-6">
+        <div
+          :for={action <- @actions}
+          class={["mt-2 flex items-center justify-between gap-6 w-8/12 w-[90%]", @inner_class]}
+        >
           <%= render_slot(action, f) %>
         </div>
       </div>
@@ -223,18 +232,18 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :type, :string, default: nil
   attr :class, :string, default: nil
   attr :rest, :global, include: ~w(disabled form name value)
-
   slot :inner_block, required: true
 
   def button(assigns) do
     ~H"""
     <button
       type={@type}
-      class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
-        @class
-      ]}
+      class={
+        @class ||
+          [
+            "btn w-[250px] mb-2"
+          ]
+      }
       {@rest}
     >
       <%= render_slot(@inner_block) %>
@@ -271,6 +280,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   attr :name, :any
   attr :label, :string, default: nil
   attr :value, :any
+  attr :class, :any, default: nil
 
   attr :type, :string,
     default: "text",
@@ -307,20 +317,30 @@ defmodule ISeeSeaWeb.CoreComponents do
         Phoenix.HTML.Form.normalize_value("checkbox", assigns[:value])
       end)
 
+    #   <div class="form-control">
+    #   <label class="cursor-pointer label">
+    #     <span class="label-text mr-2"><%= @text %></span>
+    #     <input type="checkbox" checked="checked" class="checkbox checkbox-secondary" />
+    #   </label>
+    # </div>
     ~H"""
     <div phx-feedback-for={@name}>
       <label class="flex items-center gap-4 text-sm leading-6 text-zinc-600">
         <input type="hidden" name={@name} value="false" />
-        <input
-          type="checkbox"
-          id={@id}
-          name={@name}
-          value="true"
-          checked={@checked}
-          class="rounded border-zinc-300 text-zinc-900 focus:ring-0"
-          {@rest}
-        />
-        <%= @label %>
+        <div class="form-control">
+          <label class="cursor-pointer label">
+            <span class="label-text mr-2"><%= @label %></span>
+            <input
+              type="checkbox"
+              id={@id}
+              name={@name}
+              value="true"
+              checked={@checked}
+              class="checkbox checkbox-secondary"
+              {@rest}
+            />
+          </label>
+        </div>
       </label>
       <.error :for={msg <- @errors}><%= msg %></.error>
     </div>
@@ -334,11 +354,14 @@ defmodule ISeeSeaWeb.CoreComponents do
       <select
         id={@id}
         name={@name}
-        class="mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        class={
+          @class ||
+            "mt-2 block w-full rounded-md border border-gray-300 bg-white shadow-sm focus:border-zinc-400 focus:ring-0 sm:text-sm"
+        }
         multiple={@multiple}
         {@rest}
       >
-        <option :if={@prompt} value=""><%= @prompt %></option>
+        <option :if={@prompt} value="" disabled selected><%= @prompt %></option>
         <%= Phoenix.HTML.Form.options_for_select(@options, @value) %>
       </select>
       <.error :for={msg <- @errors}><%= msg %></.error>
@@ -353,12 +376,15 @@ defmodule ISeeSeaWeb.CoreComponents do
       <textarea
         id={@id}
         name={@name}
-        class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
-          "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
-          @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
-        ]}
+        class={
+          @class ||
+            [
+              "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+              "min-h-[6rem] phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
+              @errors == [] && "border-zinc-300 focus:border-zinc-400",
+              @errors != [] && "border-rose-400 focus:border-rose-400"
+            ]
+        }
         {@rest}
       ><%= Phoenix.HTML.Form.normalize_value("textarea", @value) %></textarea>
       <.error :for={msg <- @errors}><%= msg %></.error>
@@ -366,10 +392,18 @@ defmodule ISeeSeaWeb.CoreComponents do
     """
   end
 
+  def input(%{type: "hidden"} = assigns) do
+    ~H"""
+    <div phx-feedback-for={@name} class="none hidden">
+      <input type="hidden" class="none hidden" value={@value} id={@id} name={@name} {@rest} />
+    </div>
+    """
+  end
+
   # All other inputs text, datetime-local, url, password, etc. are handled here...
   def input(assigns) do
     ~H"""
-    <div phx-feedback-for={@name}>
+    <div phx-feedback-for={@name} class="w-full flex flex-col items-center">
       <.label for={@id}><%= @label %></.label>
       <input
         type={@type}
@@ -377,10 +411,11 @@ defmodule ISeeSeaWeb.CoreComponents do
         id={@id}
         value={Phoenix.HTML.Form.normalize_value(@type, @value)}
         class={[
-          "mt-2 block w-full rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
+          "mt-2 block w-11/12 rounded-lg text-zinc-900 focus:ring-0 sm:text-sm sm:leading-6",
           "phx-no-feedback:border-zinc-300 phx-no-feedback:focus:border-zinc-400",
           @errors == [] && "border-zinc-300 focus:border-zinc-400",
-          @errors != [] && "border-rose-400 focus:border-rose-400"
+          @errors != [] && "border-rose-400 focus:border-rose-400",
+          @class
         ]}
         {@rest}
       />
@@ -397,7 +432,10 @@ defmodule ISeeSeaWeb.CoreComponents do
 
   def label(assigns) do
     ~H"""
-    <label for={@for} class="block text-sm font-semibold leading-6 text-zinc-800">
+    <label
+      for={@for}
+      class="flex flex-row w-11/12 items-start text-sm font-semibold leading-6 text-primary"
+    >
       <%= render_slot(@inner_block) %>
     </label>
     """
@@ -421,6 +459,7 @@ defmodule ISeeSeaWeb.CoreComponents do
   Renders a header with title.
   """
   attr :class, :string, default: nil
+  attr :locale, :string, default: "bg"
 
   slot :inner_block, required: true
   slot :subtitle
@@ -433,7 +472,7 @@ defmodule ISeeSeaWeb.CoreComponents do
         <h1 class="text-lg font-semibold leading-8 text-zinc-800">
           <%= render_slot(@inner_block) %>
         </h1>
-        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-zinc-600">
+        <p :if={@subtitle != []} class="mt-2 text-sm leading-6 text-primary">
           <%= render_slot(@subtitle) %>
         </p>
       </div>
@@ -480,7 +519,7 @@ defmodule ISeeSeaWeb.CoreComponents do
           <tr>
             <th :for={col <- @col} class="p-0 pb-4 pr-6 font-normal"><%= col[:label] %></th>
             <th :if={@action != []} class="relative p-0 pb-4">
-              <span class="sr-only"><%= gettext("Actions") %></span>
+              <span class="sr-only"><%= translate(@locale, "home.actions") %></span>
             </th>
           </tr>
         </thead>
@@ -671,5 +710,107 @@ defmodule ISeeSeaWeb.CoreComponents do
   """
   def translate_errors(errors, field) when is_list(errors) do
     for {^field, {msg, opts}} <- errors, do: translate_error({msg, opts})
+  end
+
+  @min_date ~D[2024-01-01]
+
+  attr(:id, :string, required: true)
+
+  attr(:start_date_field, :any,
+    doc: "a %Phoenix.HTML.Form{}/field name tuple, for example: @form[:start_date]"
+  )
+
+  attr(:end_date_field, :any,
+    doc: "a %Phoenix.HTML.Form{}/field name tuple, for example: @form[:end_date]"
+  )
+
+  attr(:required, :boolean, default: false)
+  attr(:readonly, :boolean, default: false)
+  attr(:min, :any, default: @min_date, doc: "the earliest date that can be set")
+  attr(:errors, :list, default: [])
+  attr(:class, :string, default: nil)
+  attr(:form, :any)
+
+  def date_range_picker(assigns) do
+    ~H"""
+    <.live_component
+      module={ISeeSeaWeb.DateRangePicker}
+      id={@id}
+      form={@form}
+      start_date_field={@start_date_field}
+      end_date_field={@end_date_field}
+      required={@required}
+      readonly={@readonly}
+      is_range?
+      min={@min}
+      class={@class}
+    />
+    <div phx-feedback-for={@start_date_field.name}>
+      <.error :for={msg <- @start_date_field.errors}><%= format_form_error(msg) %></.error>
+    </div>
+    <div phx-feedback-for={@end_date_field.name}>
+      <.error :for={msg <- @end_date_field.errors}><%= format_form_error(msg) %></.error>
+    </div>
+    """
+  end
+
+  attr(:id, :string, required: true)
+
+  attr(:start_date_field, :any,
+    doc: "a %Phoenix.HTML.Form{}/field name tuple, for example: @form[:start_date]"
+  )
+
+  attr(:required, :boolean, default: false)
+  attr(:readonly, :boolean, default: false)
+  attr(:min, :any, default: @min_date, doc: "the earliest date that can be set")
+  attr(:errors, :list, default: [])
+  attr(:form, :any)
+
+  def date_picker(assigns) do
+    ~H"""
+    <.live_component
+      module={ISeeSeaWeb.DateRangePicker}
+      id={@id}
+      form={@form}
+      start_date_field={@start_date_field}
+      required={@required}
+      readonly={@readonly}
+      is_range?={false}
+      min={@min}
+    />
+    <div phx-feedback-for={@start_date_field.name}>
+      <.error :for={msg <- @start_date_field.form.errors}><%= format_form_error(msg) %></.error>
+    </div>
+    """
+  end
+
+  defp format_form_error({_key, {msg, _type}}), do: msg
+  defp format_form_error({msg, _type}), do: msg
+
+  attr :options, :list, required: true
+  attr :display_text, :string, required: true
+
+  def selection(assigns) do
+    ~H"""
+    <select class="select w-full max-w-xs">
+      <option disabled selected><%= @display_text %></option>
+      <%= for option <- @options do %>
+        <option><%= option %></option>
+      <% end %>
+    </select>
+    """
+  end
+
+  attr :text, :string, required: true
+
+  def checkbox(assigns) do
+    ~H"""
+    <div class="form-control">
+      <label class="cursor-pointer label">
+        <span class="label-text mr-2"><%= @text %></span>
+        <input type="checkbox" checked="checked" class="checkbox checkbox-secondary" />
+      </label>
+    </div>
+    """
   end
 end

@@ -2,6 +2,7 @@ defmodule ISeeSeaWeb.ConstantsController do
   @moduledoc false
 
   use ISeeSeaWeb, :controller
+  use ISeeSeaWeb.ApiSpec.Operations.Constants
 
   alias ISeeSea.DB.Models.JellyfishSpecies
   alias ISeeSea.DB.Models.PollutionType

@@ -28,21 +28,23 @@ defmodule ISeeSea.DB.Models.AtypicalActivityReport do
 
     def view(
           %{base_report: base, storm_type_id: storm_type} = atypical_activity_report,
-          %Lens{view: Lens.expanded()} = lens
+          %Lens{view: Lens.expanded(), translate: translate} = lens
         ) do
       atypical_activity_report
       |> Map.from_struct()
       |> Map.take([:report_id])
-      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
       |> Map.merge(%{
         storm_type: storm_type
       })
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "atypical_report")
+      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
 
-    def view(atypical_activity_report, %Lens{view: Lens.from_base()}) do
+    def view(atypical_activity_report, %Lens{view: Lens.from_base(), translate: translate}) do
       atypical_activity_report
       |> Map.from_struct()
       |> Map.take([:report_id, :storm_type_id])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "atypical_report")
     end
   end
 end

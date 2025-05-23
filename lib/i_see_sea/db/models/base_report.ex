@@ -15,17 +15,18 @@ defmodule ISeeSea.DB.Models.BaseReport do
   use ISeeSea.DB.DefaultModel,
     default_preloads: [
       :jellyfish_report,
-      :pollution_report,
       :meteorological_report,
       :atypical_activity_report,
       :other_report,
       :pictures,
-      :user
+      :user,
+      pollution_report: :pollution_types
     ]
 
   @derive {Flop.Schema,
    filterable: [
      :name,
+     :user_id,
      :quantity,
      :species,
      :pollution_types,
@@ -172,6 +173,14 @@ defmodule ISeeSea.DB.Models.BaseReport do
     _ in Ecto.QueryError -> {:error, :bad_request}
   end
 
+  def total_reports do
+    from(br in __MODULE__,
+      where: br.deleted == false,
+      select: %{total_entries: count(br.id), beginning_of_time: min(br.report_date)}
+    )
+    |> Repo.one()
+  end
+
   defp determine_query(initial_from, "jellyfish") do
     q =
       initial_from
@@ -239,7 +248,7 @@ defmodule ISeeSea.DB.Models.BaseReport do
             pictures: pictures,
             user: %User{email: email}
           } = base,
-          %Lens{view: Lens.expanded()} = lens
+          %Lens{view: Lens.expanded(), translate: translate} = lens
         ) do
       lens = %Lens{lens | view: Lens.from_base()}
 
@@ -254,6 +263,9 @@ defmodule ISeeSea.DB.Models.BaseReport do
         :comment,
         :inserted_at
       ])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "base_report",
+        ignore: [:name, :comment, :report_type]
+      )
       |> Map.merge(%{
         pictures: Enum.map(pictures, &Picture.get_uri!/1),
         user_email: email

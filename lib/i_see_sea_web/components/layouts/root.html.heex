@@ -1,17 +1,256 @@
 <!DOCTYPE html>
-<html lang="en" class="[scrollbar-gutter:stable]">
+<html data-theme="base" lang="en" class="bg-white">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content={get_csrf_token()} />
-    <.live_title suffix=" · Phoenix Framework">
+    <.live_title suffix=" · Lets Keep The Sea Clean">
       <%= assigns[:page_title] || "ISeeSea" %>
     </.live_title>
     <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="manifest" href="/manifest.json" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.5.3/MarkerCluster.Default.css"
+      rel="stylesheet"
+    />
     <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
     </script>
   </head>
-  <body class="bg-white antialiased">
-    <%= @inner_content %>
+  <body class="bg-white h-screen w-screen">
+    <nav class="flex relative pb-0.5 w-full shadow-md mb-4">
+      <!-- SVG for wave background -->
+      <svg
+        class="absolute z-0"
+        width="100%"
+        height="180px"
+        viewBox="0 0 100 25"
+        preserveAspectRatio="none"
+      >
+        <g transform="scale(-1, 1) translate(-100, 0)">
+          <path
+            d="M0 0 V10
+        Q13 15 50 8
+        Q14 15 50 8
+        Q15 15 50 8
+        Q16 15 50 8
+        Q17 15 50 8
+        Q18 15 50 8
+        Q19 15 50 8
+        Q20 15 50 8
+        T100 8.5 V0z"
+            fill="rgb(212, 241, 244)"
+            opacity="1"
+          />
+          <path
+            d="M0 0 V10
+        Q18 13 53 6.5 
+        Q19 13 53 6.5 
+        Q20 13 53 6.5 
+        Q21 13 53 6.5 
+        Q22 13 53 6.5 
+        Q23 13 53 6.5 
+        Q24 13 53 6.5 
+        Q25 13 53 6.5 
+        T100 6 V0z"
+            fill="rgb(117, 230, 218)"
+            opacity="0.4"
+          />
+          <path
+            d="M0 0 V9 
+        Q16 12 45 6 
+        Q9 12 45 6 
+        Q10 12 45 6 
+        Q11 12 45 6 
+        Q12 12 45 6 
+        Q13 12 45 6 
+        Q14 12 45 6 
+        Q15 12 45 6 
+        T100 4 V0z"
+            fill="rgb(24, 154, 180)"
+            opacity="0.9"
+          />
+        </g>
+      </svg>
+      <!-- Navigation bar content -->
+      <div class="flex justify-end items-end px-30 w-10/12 md:w-10/12">
+        <div class="flex w-full justify-between items-baseline">
+          <!-- Logo -->
+          <div class="relative w-28 top-2 left-2 sm:w-16 md:w-24 lg:w-28">
+            <.link class="z-10" navigate={~p"/"}>
+              <img class="z-10 w-full h-auto" src="/images/home-icons/ICC-logo.png" />
+            </.link>
+          </div>
+
+          <div class="flex w-4/5 justify-around mb-2">
+            <!-- Buttons for larger screens -->
+            <div class="hidden sm:flex w-5/5 justify-around space-x-1">
+              <.link class="z-10" navigate={~p"/"}>
+                <button class="btn md:min-w-32">
+                  <%= translate(@locale, "nav.home") %>
+                </button>
+              </.link>
+              <.link class="z-10" navigate={~p"/profile"}>
+                <button class="btn md:min-w-32">
+                  <%= translate(@locale, "nav.profile") %>
+                </button>
+              </.link>
+              <.link class="z-10" navigate={~p"/reports-list"}>
+                <button class="btn md:min-w-32">
+                  <%= translate(@locale, "nav.reports") %>
+                </button>
+              </.link>
+              <div class="dropdown dropdown-bottom">
+                <div tabindex="0" role="button" class="btn flex-1 md:min-w-32">
+                  <%= translate(@locale, "nav.more") %>
+                </div>
+                <ul
+                  tabindex="0"
+                  class="dropdown-content menu bg-base-100 rounded-box z-50 w-52 p-2 shadow"
+                >
+                  <li>
+                    <.link class="z-10" navigate={~p"/terms-and-conditions"}>
+                      <%= translate(@locale, "nav.terms_of_use") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/about"}>
+                      <%= translate(@locale, "nav.our_purpose") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/contact-us"}>
+                      <%= translate(@locale, "nav.contacts") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-10" navigate={~p"/privacy-policy"}>
+                      <%= translate(@locale, "nav.privacy_and_policy") %>
+                    </.link>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <!-- Mobile Menu Button -->
+            <div class="flex w-4/5 align-baseline justify-center mr-4 sm:hidden">
+              <details class="dropdown w-8/12 z-50">
+                <summary class="btn m-1 w-[130px]"><%= translate(@locale, "nav.menu") %></summary>
+                <ul class="menu dropdown-content bg-base-100 rounded-box z-[1] w-36 p-2 shadow">
+                  <li>
+                    <.link class="z-50 " navigate={~p"/"}>
+                      <%= translate(@locale, "nav.home") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/profile"}>
+                      <%= translate(@locale, "nav.profile") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/reports-list"}>
+                      <%= translate(@locale, "nav.reports") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/about"}>
+                      <%= translate(@locale, "nav.our_purpose") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/terms-and-conditions"}>
+                      <%= translate(@locale, "nav.terms_of_use") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/privacy-policy"}>
+                      <%= translate(@locale, "nav.privacy_policy") %>
+                    </.link>
+                  </li>
+                  <li>
+                    <.link class="z-50 " navigate={~p"/contact-us"}>
+                      <%= translate(@locale, "nav.contacts") %>
+                    </.link>
+                  </li>
+                </ul>
+              </details>
+              <!-- The slider itself -->
+                
+                 
+               
+                <!-- Right arrow -->
+            </div>
+          </div>
+          <!-- User and login images -->
+        </div>
+      </div>
+      <div class="flex flex-row justify-start w-3/12 mb-2 md:w-2/12 items-end">
+        <!-- Language Button -->
+        <div id="locale-handler" hidden></div>
+
+        <button
+          :if={@locale == "bg"}
+          onclick="changeLocale('en')"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
+          <img
+            src="/images/home-icons/british flag transparent.png"
+            class="w-full h-full"
+            alt="Switch to English"
+          />
+        </button>
+
+        <button
+          :if={@locale == "en"}
+          onclick="changeLocale('bg')"
+          class="z-20 w-[30px] h-[20px] sm:w-[40px] sm:h-[30px] md:w-[57px] md:h-[47px]"
+        >
+          <img
+            src="/images/home-icons/bulgarian_flag_transparent.png"
+            class="w-full h-full"
+            alt="Switch to Bulgarian"
+          />
+        </button>
+
+        <script>
+          function changeLocale(locale) {
+            localStorage.setItem('locale', locale);
+            document.cookie = "locale=" + locale + "; path=/";
+            window.location.reload();
+          }
+        </script>
+        <!-- Login Button -->
+        <%= if is_user_logged(assigns[:current_user]) do %>
+          <.link
+            class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+            href={~p"/logout?locale=#{@locale}"}
+            method="delete"
+          >
+            <img src="/images/auth_icons/logout.svg" class="object-cover" alt="Logout" />
+          </.link>
+        <% else %>
+          <.link
+            class="z-10 w-[30px] h-[23px] sm:w-[40px] sm:h-[33px] md:w-[57px] md:h-[50px]"
+            navigate={~p"/login"}
+          >
+            <img src="/images/auth_icons/login.svg" class="object-cover" alt="Login" />
+          </.link>
+        <% end %>
+      </div>
+    </nav>
+    <div class="relative bg-white w-full h-4/6">
+      <%= @inner_content %>
+    </div>
   </body>
 </html>

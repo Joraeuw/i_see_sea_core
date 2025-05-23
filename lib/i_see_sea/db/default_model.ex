@@ -64,15 +64,15 @@ defmodule ISeeSea.DB.DefaultModel do
 
       def get_with_filter(
             params,
-            bindings,
+            bindings \\ unquote(default_preloads),
             pagination,
-            initial_from \\ unquote(__MODULE__),
+            initial_from \\ __MODULE__,
             preloads \\ unquote(default_preloads)
           ) do
         pagination = Map.merge(%{page: 1, page_size: 10}, pagination)
 
         bindings
-        |> Enum.reduce(initial_from, &process_binding/2)
+        |> Enum.reduce(distinct(initial_from, true), &process_binding/2)
         |> ISeeSea.Flop.validate_and_run(Map.merge(params, pagination), for: __MODULE__)
         |> case do
           {:ok, {entries, %Flop.Meta{total_count: total_count}}} ->
@@ -125,6 +125,23 @@ defmodule ISeeSea.DB.DefaultModel do
         end
       end
 
+      def soft_delete(id_str) when is_binary(id_str), do: soft_delete(String.to_integer(id_str))
+
+      def soft_delete(id) when is_integer(id) do
+        case Repo.get(__MODULE__, id) do
+          nil ->
+            {:error, :not_found, __MODULE__}
+
+          entry ->
+            changeset = changeset(entry, %{deleted: true})
+
+            case Repo.update(changeset) do
+              {:ok, entry} -> {:ok, entry}
+              {:error, changeset} -> {:error, changeset}
+            end
+        end
+      end
+
       def soft_delete(entry) do
         changeset = changeset(entry, %{deleted: true})
 
@@ -132,6 +149,19 @@ defmodule ISeeSea.DB.DefaultModel do
           {:ok, entry} -> {:ok, entry}
           {:error, changeset} -> {:error, changeset}
         end
+      end
+
+      defp process_binding({:pollution_report, :pollution_types}, q) do
+        join(
+          q,
+          :left,
+          [br],
+          entity in assoc(br, :pollution_report),
+          as: :pollution_report
+        )
+        |> join(:left, [pollution_report: pr], rt in assoc(pr, :pollution_types),
+          as: :pollution_types
+        )
       end
 
       defp process_binding(current_binding, q) do

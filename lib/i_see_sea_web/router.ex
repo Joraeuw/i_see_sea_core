@@ -1,6 +1,8 @@
 defmodule ISeeSeaWeb.Router do
   use ISeeSeaWeb, :router
 
+  import ISeeSeaWeb.UserAuth
+
   pipeline :browser do
     plug :accepts, ["html"]
     plug :fetch_session
@@ -8,6 +10,8 @@ defmodule ISeeSeaWeb.Router do
     plug :put_root_layout, html: {ISeeSeaWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug :fetch_current_user
+    plug ISeeSeaWeb.Plug.SetLocale
   end
 
   pipeline :api do
@@ -27,9 +31,42 @@ defmodule ISeeSeaWeb.Router do
   end
 
   scope "/", ISeeSeaWeb do
-    pipe_through :browser
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
 
-    get "/", PageController, :home
+    live_session :sign_up,
+      on_mount: [
+        {ISeeSeaWeb.Plug.SetLocale, :mount_locale}
+      ] do
+      live "/register", RegisterLive, :index
+      live "/login", LoginLive, :index
+    end
+
+    post "/login", SessionController, :login
+  end
+
+  scope "/", ISeeSeaWeb do
+    pipe_through [:browser]
+
+    live_session :current_user,
+      on_mount: [
+        {ISeeSeaWeb.Plug.SetLocale, :mount_locale},
+        {ISeeSeaWeb.UserAuth, {:maybe_ensure_authenticated, %{authorize: [:profile_index]}}}
+      ] do
+      live "/", HomeLive, :home_index
+      live "/profile", ProfileLive, :profile_index
+      live "/reports-list", ReportsLive, :reports_index
+
+      live "/forgot_password", ForgotLive, :index
+      live "/change_password/:token", ChangeLive, :index
+      live "/verify-email/:token", VerifyEmailLive, :index
+      live "/contact-us", ContactUsLive, :index
+    end
+
+    get "/privacy-policy", PageController, :privacy_policy
+    get "/terms-and-conditions", PageController, :terms_and_conditions
+    get "/about", PageController, :about
+
+    delete "/logout", SessionController, :logout
   end
 
   scope "/api" do
@@ -41,15 +78,6 @@ defmodule ISeeSeaWeb.Router do
 
   scope "/api", ISeeSeaWeb do
     pipe_through :api
-
-    post "/login", SessionController, :login
-    post "/register", SessionController, :register
-    get "/verify-email/:token", UserController, :verify_email
-
-    scope "/users" do
-      post "/forgot-password", UserController, :forgot_password
-      post "/reset-password/:token", UserController, :reset_password
-    end
 
     ## Constants
     scope "/constants" do
@@ -71,27 +99,6 @@ defmodule ISeeSeaWeb.Router do
 
     scope "/pictures" do
       get "/:picture_id", PictureController, :show
-    end
-  end
-
-  scope "/api", ISeeSeaWeb do
-    pipe_through :authenticated
-
-    get "/refresh", SessionController, :refresh
-
-    ## Users
-    scope "/users" do
-      get "/me", UserController, :user_info
-      get "/reports/:report_type", UserController, :list_reports
-    end
-
-    ## Reports
-    scope "/reports" do
-      delete "/delete/:report_id", ReportController, :delete_report
-
-      pipe_through :image_uploading
-
-      post "/create/:report_type", ReportController, :create_report
     end
   end
 

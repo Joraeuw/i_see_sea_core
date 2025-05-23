@@ -43,17 +43,18 @@ defmodule ISeeSea.DB.Models.MeteorologicalReport do
             wind_type_id: wind_type,
             sea_swell_type_id: sea_swell_type
           } = pollution_report,
-          %Lens{view: Lens.expanded()} = lens
+          %Lens{view: Lens.expanded(), translate: translate} = lens
         ) do
       pollution_report
       |> Map.from_struct()
       |> Map.take([:report_id])
-      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
       |> Map.merge(%{
         fog_type: fog_type,
         wind_type: wind_type,
         sea_swell_type: sea_swell_type
       })
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "meteorological_report")
+      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
 
     def view(
@@ -62,7 +63,7 @@ defmodule ISeeSea.DB.Models.MeteorologicalReport do
             wind_type_id: wind_type,
             sea_swell_type_id: sea_swell_type
           } = pollution_report,
-          %Lens{view: Lens.from_base()}
+          %Lens{view: Lens.from_base(), translate: translate}
         ) do
       pollution_report
       |> Map.from_struct()
@@ -72,6 +73,7 @@ defmodule ISeeSea.DB.Models.MeteorologicalReport do
         wind_type: wind_type,
         sea_swell_type: sea_swell_type
       })
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "meteorological_report")
     end
   end
 end

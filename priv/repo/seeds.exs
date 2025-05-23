@@ -18,6 +18,8 @@ defmodule ISeeSea.Seeder do
   alias ISeeSea.Repo
   alias ISeeSea.Factory
 
+  require Constants.SeaSwellType
+
   def seed do
     Repo.transaction(fn ->
       {:ok, %{id: admin_id}} = Role.get(:admin)
