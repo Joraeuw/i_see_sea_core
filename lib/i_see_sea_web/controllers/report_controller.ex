@@ -2,42 +2,16 @@ defmodule ISeeSeaWeb.ReportController do
   @moduledoc false
 
   use ISeeSeaWeb, :controller
+  use ISeeSeaWeb.ApiSpec.Operations.Report
 
-  alias ISeeSea.DB.Models.User
   alias ISeeSea.Helpers.With
   alias ISeeSeaWeb.Params.Filter
   alias ISeeSea.DB.Models.BaseReport
-  alias ISeeSea.DB.Logic.ReportOperations
 
   alias ISeeSea.Constants.ReportType
 
-  @permission_scope "i_see_sea:reports"
-  plug(AssertPermissions, ["#{@permission_scope}:create"] when action == :create_report)
-  plug(AssertPermissions, [] when action in [:index, :delete_report])
-  plug(EnsurePermitted)
-
-  def create_report(%{assigns: %{user: user}} = conn, params) do
-    with {:ok, validated_base} <- validate(:create_base_report, params),
-         {:ok, report} <- ReportOperations.create(user, validated_base, params) do
-      success(conn, report)
-    else
-      {:error, :failed_to_attach_pollution_type} ->
-        error(conn, {:error, :unprocessable_entity})
-
-      {:error, :image_not_uploaded} ->
-        error(
-          conn,
-          {:error, :bad_request,
-           "At least one of your image types is unsupported! Supported image types are: jpg, png and webp."}
-        )
-
-      error ->
-        error(conn, error)
-    end
-  end
-
   def index(conn, params) do
-    with {:ok, %{report_type: report_type}} <- validate(:index, params),
+    with {:ok, %{report_type: report_type}} <- Params.Report.validate(:index, params),
          #! Issue with Goal Library. Report_type isn't handled and is always led to pass.
          #! The line bellow ensures correct behaviour
          :ok <- With.check(report_type in ["all" | ReportType.values()], :invalid_report_type),
@@ -49,6 +23,10 @@ defmodule ISeeSeaWeb.ReportController do
              Filter.parse(filter_params),
              pagination_params
            ) do
+      Logger.info(
+        "Reports with ids: #{inspect(Enum.map(entries, & &1.id))} were retrieved with filters: #{inspect(Filter.parse(filter_params))} and pagination: #{inspect(pagination_params)}"
+      )
+
       success_paginated(conn, entries, pagination)
     else
       {:error, :invalid_report_type} ->
@@ -71,23 +49,4 @@ defmodule ISeeSeaWeb.ReportController do
         error(conn, error)
     end
   end
-
-  def delete_report(%{assigns: %{user: user}} = conn, params) do
-    with {:ok, %{report_id: report_id}} <- validate(:delete_report, params),
-         {:ok, %{user_id: user_id} = report} <- BaseReport.get(report_id),
-         :ok <- With.check(allow_action?(user, user_id), :forbidden),
-         {:ok, _} <- BaseReport.soft_delete(report) do
-      success_empty(conn)
-    else
-      {:error, :forbidden} ->
-        error(conn, {:error, :forbidden})
-
-      error ->
-        error(conn, error)
-    end
-  end
-
-  defp allow_action?(%User{role: %{name: "admin"}}, _), do: true
-  defp allow_action?(%User{id: user_id}, user_id), do: true
-  defp allow_action?(_, _), do: false
 end

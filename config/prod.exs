@@ -25,10 +25,10 @@ config :i_see_sea, ISeeSeaWeb.PromEx,
 config :phoenix, :logger, false
 
 config :i_see_sea,
-  backend_url: "https://i-see-sea.fly.dev",
-  frontend_url: "https://i-see-sea-frontend.fly.dev",
+  backend_url: "https://iliad.vtmis.bg",
+  frontend_url: "https://iliad.vtmis.bg",
   allowed_origins: [
-    "https://i-see-sea-frontend.fly.dev"
+    "iliad.vtmis.bg"
   ]
 
 # Runtime production configuration, including reading

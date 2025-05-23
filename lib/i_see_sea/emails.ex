@@ -5,6 +5,7 @@ defmodule ISeeSea.Emails do
   alias ISeeSea.Mailer
   alias ISeeSea.DB.Models.User
   alias ISeeSea.Helpers.Environment
+  require Logger
   import Swoosh.Email
 
   def account_confirmation_email(%User{email: email, username: username}, confirmation_token) do
@@ -95,51 +96,139 @@ defmodule ISeeSea.Emails do
     The ICC Team
     """)
     |> Mailer.deliver()
+    |> case do
+      {:ok, _response} = response ->
+        Logger.info("Account confirmatrion link sent successfully to #{email}")
+        response
+
+      {:error, reason} = error ->
+        Logger.error(
+          "Failed to send account confirmatrion link to #{email}. Reason: #{inspect(reason)}"
+        )
+
+        error
+    end
   end
 
   def password_reset_email(user, token) do
     reset_url = password_reset_url(token)
 
+    email =
+      new()
+      |> to(user.email)
+      |> from({"I See Sea Team", Environment.i_see_sea_mail()})
+      |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
+      |> html_body("""
+      <p>Здравейте #{user.username},</p>
+      <p>Можете да нулирате паролата си, като кликнете <a href="#{reset_url}">тук</a>.</p>
+      <p>Ако не сте заявили това, моля игнорирайте този имейл.</p>
+
+      <hr>
+
+      <p>Hello #{user.username},</p>
+      <p>You can reset your password by clicking <a href="#{reset_url}">here</a>.</p>
+      <p>If you did not request this, please ignore this email.</p>
+      """)
+      |> text_body("""
+      Здравейте #{user.username},
+
+      Можете да нулирате паролата си, като кликнете на следния линк:
+      #{reset_url}
+
+      Ако не сте заявили това, моля игнорирайте този имейл.
+
+      ----------------------------------------
+
+      Hello #{user.username},
+
+      You can reset your password by clicking the link below:
+      #{reset_url}
+
+      If you did not request this, please ignore this email.
+      """)
+
+    case Mailer.deliver(email) do
+      {:ok, _response} = response ->
+        Logger.info("Password reset email sent successfully to #{user.email}")
+        response
+
+      {:error, reason} = error ->
+        Logger.error(
+          "Failed to send password reset email to #{user.email}. Reason: #{inspect(reason)}"
+        )
+
+        error
+    end
+  end
+
+  def contact_us_email(
+        %{
+          "email" => email,
+          "message" => message,
+          "name" => name
+        } = params
+      ) do
     new()
-    |> to(user.email)
-    |> from(Environment.i_see_sea_mail())
-    |> subject("Инструкции за нулиране на парола / Reset Password Instructions")
+    |> to("joraeuw@gmail.com")
+    |> from({"Contact Form", Environment.i_see_sea_mail()})
+    |> subject("New Contact Form Submission")
     |> html_body("""
-    <p>Здравейте #{user.username},</p>
-    <p>Можете да нулирате паролата си, като кликнете <a href="#{reset_url}">тук</a>.</p>
-    <p>Ако не сте заявили това, моля игнорирайте този имейл.</p>
-
-    <hr>
-
-    <p>Hello #{user.username},</p>
-    <p>You can reset your password by clicking <a href="#{reset_url}">here</a>.</p>
-    <p>If you did not request this, please ignore this email.</p>
+      <h1>Contact Form Submission</h1>
+      <p><strong>Name:</strong> #{name}</p>
+      <p><strong>Email:</strong> #{email}</p>
+      <p><strong>Phone:</strong> #{Map.get(params, "phone", "not provided")}</p>
+      <p><strong>Organization:</strong> #{Map.get(params, "organization", "not provided")}</p>
+      <p><strong>Message:</strong> #{message}</p>
     """)
     |> text_body("""
-    Здравейте #{user.username},
+      Contact Form Submission
 
-    Можете да нулирате паролата си, като кликнете на следния линк:
-    #{reset_url}
+      Name: #{name}
+      Email: #{email}
+      Phone: #{Map.get(params, "phone", "not provided")}
+      Organization: #{Map.get(params, "organization", "not provided")}
+      Message: #{message}
+    """)
+    |> Mailer.deliver()
 
-    Ако не сте заявили това, моля игнорирайте този имейл.
+    new()
+    |> to(email)
+    |> from(Environment.i_see_sea_mail())
+    |> subject("Потвърждение за получен сигнал / Issue Acknowledgment")
+    |> html_body("""
+      <p>Здравейте #{name},</p>
+      <p>Благодарим ви, че се свързахте с нас! Искаме да ви уверим, че вашият въпрос е получен и нашият екип вече работи по него. Ще се постараем да се свържем с вас възможно най-скоро със съответното решение.</p>
+      <p>Благодарим ви за търпението и разбирането.</p>
 
-    ----------------------------------------
+      <hr>
 
-    Hello #{user.username},
+      <p>Hello #{name},</p>
+      <p>Thank you for reaching out to us! We want to let you know that we've received your inquiry, and our team is actively working on it. We will do our best to get back to you as soon as possible with a resolution.</p>
+      <p>We appreciate your patience and understanding.</p>
+    """)
+    |> text_body("""
+      Здравейте #{name},
 
-    You can reset your password by clicking the link below:
-    #{reset_url}
+      Благодарим ви, че се свързахте с нас! Искаме да ви уверим, че вашият въпрос е получен и нашият екип вече работи по него. Ще се постараем да се свържем с вас възможно най-скоро със съответното решение.
 
-    If you did not request this, please ignore this email.
+      Благодарим ви за търпението и разбирането.
+
+      ----------------------------------------
+
+      Hello #{name},
+
+      Thank you for reaching out to us! We want to let you know that we've received your inquiry, and our team is actively working on it. We will do our best to get back to you as soon as possible with a resolution.
+
+      We appreciate your patience and understanding.
     """)
     |> Mailer.deliver()
   end
 
   defp confirmation_url(token) do
-    "#{Environment.backend_url()}/api/verify-email/#{token}"
+    "#{Environment.backend_url()}/verify-email/#{token}"
   end
 
   defp password_reset_url(token) do
-    "#{Environment.frontend_url()}/change-password/?t=#{token}"
+    "#{Environment.backend_url()}/change_password/#{token}"
   end
 end

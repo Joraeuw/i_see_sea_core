@@ -1,0 +1,33 @@
+{
+  "name": "I See Sea",
+  "short_name": "ISeeSea",
+  "icons": [
+    {
+      "src": "/images/icon-192x192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/images/icon-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "screenshots": [
+  {
+    "src": "/images/screenshots/desktop-screenshot.png",
+    "sizes": "3378x1876",
+    "type": "image/png",
+    "form_factor": "wide"
+  },
+  {
+    "src": "/images/screenshots/mobile-screenshot.png",
+    "sizes": "1290x2796",
+    "type": "image/png"
+  }
+],
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000"
+}

@@ -1,5 +1,15 @@
 {
   "scripts": {
-    "deploy": "cd .. && mix assets.deploy && rm -f _build/esbuild"
+    "deploy": "TAILWIND_MODE=build NODE_ENV=production esbuild app.js --bundle --minify --target=es2017 --outdir=../priv/static/assets"
+  },
+  "dependencies": {
+    "@tailwindcss/forms": "^0.5.9",
+    "@tailwindcss/line-clamp": "^0.4.4",
+    "daisyui": "^4.12.13",
+    "esbuild": "^0.17.19",
+    "leaflet": "^1.9.4",
+    "leaflet.markercluster": "^1.5.3",
+    "swiper": "^11.1.14",
+    "tailwindcss": "^3.4.14"
   }
 }

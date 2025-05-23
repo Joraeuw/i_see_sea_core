@@ -17,7 +17,7 @@ defmodule ISeeSeaWeb do
   those modules here.
   """
 
-  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
+  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt sw.js manifest.json)
 
   def router do
     quote do
@@ -33,6 +33,10 @@ defmodule ISeeSeaWeb do
   def channel do
     quote do
       use Phoenix.Channel
+
+      require ISeeSeaWeb.Lens
+      alias ISeeSeaWeb.Focus
+      alias ISeeSeaWeb.Lens
     end
   end
 
@@ -43,10 +47,10 @@ defmodule ISeeSeaWeb do
         layouts: [html: ISeeSeaWeb.Layouts]
 
       import Plug.Conn
-      import ISeeSeaWeb.Gettext
-      import ISeeSeaWeb.Responses
+      use Gettext.Backend, otp_app: :i_see_sea
 
-      use ISeeSeaWeb.Utils.EnsureRequiredModules, __MODULE__
+      import ISeeSeaWeb.Responses
+      alias ISeeSeaWeb.Params
 
       alias ISeeSeaWeb.Plug.AssertPermissions
       alias ISeeSeaWeb.Plug.EnsurePermitted
@@ -65,6 +69,13 @@ defmodule ISeeSeaWeb do
     quote do
       use Phoenix.LiveView,
         layout: {ISeeSeaWeb.Layouts, :app}
+
+      require ISeeSeaWeb.Lens
+
+      import ISeeSeaWeb.CoreComponents
+
+      alias ISeeSeaWeb.Focus
+      alias ISeeSeaWeb.Lens
 
       unquote(html_helpers())
     end
@@ -97,7 +108,9 @@ defmodule ISeeSeaWeb do
       import Phoenix.HTML
       # Core UI components and translation
       import ISeeSeaWeb.CoreComponents
+      import ISeeSeaWeb.Trans
       import ISeeSeaWeb.Gettext
+      import ISeeSeaWeb.Utils.UserUtils
 
       # Shortcut for generating JS commands
       alias Phoenix.LiveView.JS
@@ -106,6 +119,7 @@ defmodule ISeeSeaWeb do
 
       alias ISeeSeaWeb.Utils.Validation
 
+      alias ISeeSeaWeb.Router.Helpers, as: Routes
       # Routes generation with the ~p sigil
       unquote(verified_routes())
     end

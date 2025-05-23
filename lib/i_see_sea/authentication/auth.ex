@@ -1,15 +1,17 @@
 defmodule ISeeSea.Authentication.Auth do
   @moduledoc false
 
-  alias ISeeSea.DB.Models.Role
+  alias ISeeSea.Repo
+  alias ISeeSea.DB.Models.UserToken
   alias ISeeSea.Authentication.Tokenizer
   alias ISeeSea.DB.Models.User
 
   def authenticate(%{password: password, email: email}) do
-    with {:ok, %User{role: %Role{name: role}} = user} <- User.get_by(%{email: email}),
+    with {:ok, user} <- User.get_by(%{email: email}),
          {:ok, :valid_credentials} <- validate_password(user, password),
-         {:ok, token, _claims} <- Tokenizer.encode_and_sign(user, %{id: user.id, role: role}) do
-      {:ok, %{user: user, token: token}}
+         {token, %UserToken{} = user_token} <- UserToken.build_session_token(user),
+         {:ok, _} <- Repo.insert(user_token) do
+      {:ok, token}
     else
       {:error, :account_not_verified} ->
         {:error, :unauthorized, "Account is not verified."}

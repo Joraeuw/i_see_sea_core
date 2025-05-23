@@ -31,28 +31,36 @@ defmodule ISeeSea.DB.Models.PollutionReport do
     alias ISeeSeaWeb.Lens
 
     def view(
-          %{base_report: base, pollution_types: pollution_types} = pollution_report,
-          %Lens{view: Lens.expanded()} = lens
+          pollution_report,
+          %Lens{view: Lens.expanded(), translate: translate} = lens
         ) do
+      %{base_report: base, pollution_types: pollution_types} =
+        Repo.preload(pollution_report, :pollution_types)
+
       pollution_report
       |> Map.from_struct()
-      |> Map.take([:pollution_types, :report_id])
-      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
+      |> Map.take([:report_id])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "pollution_report")
       |> Map.merge(%{
         pollution_types:
           pollution_types
           |> ISeeSeaWeb.Focus.view(lens)
           |> Enum.map(fn %{name: name} -> name end)
       })
+      |> Map.merge(ISeeSeaWeb.Focus.view(base, lens))
     end
 
     def view(
-          %{pollution_types: pollution_types} = pollution_report,
-          %Lens{view: Lens.from_base()} = lens
+          pollution_report,
+          %Lens{view: Lens.from_base(), translate: translate} = lens
         ) do
+      %{pollution_types: pollution_types} =
+        Repo.preload(pollution_report, :pollution_types)
+
       pollution_report
       |> Map.from_struct()
-      |> Map.take([:pollution_types, :report_id])
+      |> Map.take([:report_id])
+      |> ISeeSeaWeb.Trans.maybe_translate_entity(translate, "pollution_report")
       |> Map.merge(%{
         pollution_types:
           pollution_types

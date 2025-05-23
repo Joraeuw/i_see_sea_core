@@ -3,13 +3,11 @@ defmodule ISeeSea.Factory do
   Data and Entity generator.
   """
 
-  require ISeeSea.Constants.PictureTypes
-
   alias ISeeSea.Constants
-  alias ISeeSea.Constants.JellyfishQuantityRange
-  alias ISeeSea.Constants.PictureTypes
-  alias ISeeSea.Constants.ReportType
-  alias ISeeSea.Constants.StormType
+  require ISeeSea.Constants.JellyfishQuantityRange, as: JellyfishQuantityRange
+  require ISeeSea.Constants.PictureTypes, as: PictureTypes
+  require ISeeSea.Constants.ReportType, as: ReportType
+  require ISeeSea.Constants.StormType, as: StormType
 
   alias ISeeSea.Repo
 
@@ -95,6 +93,14 @@ defmodule ISeeSea.Factory do
 
     %Models.OtherReport{
       base_report: base
+    }
+  end
+
+  def build(:user_token) do
+    %Models.UserToken{
+      token: "token",
+      user: build(:user),
+      context: "session"
     }
   end
 

@@ -4,7 +4,7 @@ defmodule ISeeSea.MixProject do
   def project do
     [
       app: :i_see_sea,
-      version: "0.1.0",
+      version: "2.0.0",
       elixir: "~> 1.16",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -43,7 +43,7 @@ defmodule ISeeSea.MixProject do
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.8", runtime: Mix.env() == :dev},
-      {:tailwind, "~> 0.2", runtime: Mix.env() == :dev},
+      {:tailwind, "~> 0.2.4", runtime: Mix.env() == :dev},
       {:heroicons,
        github: "tailwindlabs/heroicons",
        tag: "v2.1.1",
@@ -68,7 +68,7 @@ defmodule ISeeSea.MixProject do
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
       {:logger_json, "~> 5.1.4"},
       {:excoveralls, "~> 0.18.1", only: :test},
-      {:goal, "~> 0.3.3"},
+      {:goal, "~> 1.0.2"},
       {:faker, "~> 0.18", only: [:dev, :test]},
       {:flop, "~> 0.25.0"},
       {:image, "~> 0.46.0"},
@@ -76,7 +76,10 @@ defmodule ISeeSea.MixProject do
       {:uuid, "~> 1.1.8"},
       {:oban, "~> 2.17.10"},
       {:timex, "~> 3.7.11"},
-      {:gen_smtp, "~> 1.0"}
+      {:gen_smtp, "~> 1.0"},
+      {:httpoison, "~> 1.8"},
+      {:ex_utils, "~> 0.1.7"},
+      {:linguist, "~> 0.4"}
     ]
   end
 
@@ -93,10 +96,9 @@ defmodule ISeeSea.MixProject do
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.build": ["tailwind i_see_sea", "esbuild i_see_sea"],
+      "assets.build": ["esbuild i_see_sea", "tailwind i_see_sea"],
       "assets.deploy": [
-        "tailwind i_see_sea --minify",
-        "esbuild i_see_sea --minify",
+        "tailwind default --minify",
         "phx.digest"
       ],
       spec: ["openapi.spec.json --spec ISeeSeaWeb.ApiSpec"]

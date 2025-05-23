@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "daisyui": "^4.12.10"
+  },
+  "devDependencies": {
+    "esbuild": "^0.24.0"
+  }
+}

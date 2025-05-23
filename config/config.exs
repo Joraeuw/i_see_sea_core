@@ -7,6 +7,8 @@
 # General application configuration
 import Config
 
+config :linguist, pluralization_key: :count
+
 config :i_see_sea,
   ecto_repos: [ISeeSea.Repo],
   generators: [timestamp_type: :utc_datetime]
@@ -16,7 +18,8 @@ config :i_see_sea,
   frontend_url: "http://127.0.0.1:3000",
   allowed_origins: [
     "http://localhost:3000",
-    "http://127.0.0.1:3000"
+    "http://127.0.0.1:3000",
+    "http://127.0.0.1:4000"
   ]
 
 # Configures the endpoint
@@ -26,6 +29,9 @@ config :i_see_sea, ISeeSeaWeb.Endpoint,
   render_errors: [
     formats: [html: ISeeSeaWeb.ErrorHTML, json: ISeeSeaWeb.ErrorJSON],
     layout: false
+  ],
+  http: [
+    http_options: [log_protocol_errors: false]
   ],
   pubsub_server: ISeeSea.PubSub,
   live_view: [signing_salt: "FEWjgVlX"]
@@ -65,7 +71,7 @@ config :esbuild,
 
 # Configure tailwind (the version is required)
 config :tailwind,
-  version: "3.4.0",
+  version: "3.4.6",
   i_see_sea: [
     args: ~w(
       --config=tailwind.config.js
@@ -85,7 +91,8 @@ config :phoenix, :json_library, Jason
 
 # Goal regex config
 config :goal,
-  phone_regex: ~r/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/
+  phone_regex: ~r/^(\+\d{1,2}\s?)?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/,
+  email_regex: ~r/^[^\s]+@[^\s]+$/
 
 config :i_see_sea, ISeeSea.Mailer,
   adapter: Swoosh.Adapters.SMTP,

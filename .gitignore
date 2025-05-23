@@ -1,6 +1,6 @@
 # The directory Mix will write compiled artifacts to.
 /_build/
-
+/node_modules
 # Ingore stress testing page
 /stress_tests/report
 /stress_tests/jmeter.log
@@ -41,4 +41,12 @@ npm-debug.log
 
 # OpenAPI generated file
 openapi.json
+
+# Additional build files to ignore
+/priv/static/js/
+/priv/static/css/
+.DS_Store
+*.map
+*.min.js
+*.min.css
 

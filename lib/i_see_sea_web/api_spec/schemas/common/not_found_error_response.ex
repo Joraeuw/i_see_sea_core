@@ -1,4 +1,4 @@
-defmodule AveratoWeb.Specs.Schemas.NotFoundErrorResponse do
+defmodule ISeeSeaWeb.ApiSpec.Schemas.Common.NotFoundErrorResponse do
   @moduledoc false
 
   alias OpenApiSpex.Schema

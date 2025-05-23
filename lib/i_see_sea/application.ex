@@ -10,7 +10,7 @@ defmodule ISeeSea.Application do
     children = [
       ISeeSeaWeb.Telemetry,
       ISeeSea.Repo,
-      {DNSCluster, query: Application.get_env(:i_see_sea, :dns_cluster_query) || :ignore},
+      # {DNSCluster, query: Application.get_env(:i_see_sea, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: ISeeSea.PubSub},
       # Start the Finch HTTP client for sending emails
       {Finch, name: ISeeSea.Finch},
