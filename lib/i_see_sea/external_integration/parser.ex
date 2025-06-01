@@ -18,7 +18,7 @@ defmodule ISeeSea.ExternalIntegration.Parser do
          } = base_report
        ) do
     if "oil" in Enum.map(pollution_types, fn type -> String.downcase(type.name) end) do
-      "SPILL,#{base_report.latitude},#{base_report.longitude},2,O\r\n"
+      "$SPILL,#{base_report.latitude},#{base_report.longitude},2,O\r\n"
     else
       nil
     end
@@ -30,7 +30,7 @@ defmodule ISeeSea.ExternalIntegration.Parser do
            jellyfish_report: %JellyfishReport{quantity: quantity}
          } = base_report
        ) do
-    "SPILL,#{base_report.latitude},#{base_report.longitude},#{quantity_to_meters(quantity)},J\r\n"
+    "$SPILL,#{base_report.latitude},#{base_report.longitude},#{quantity_to_meters(quantity)},J\r\n"
   end
 
   defp parse_report(_), do: nil
