@@ -92,6 +92,10 @@ defmodule ISeeSeaWeb.Router do
       get("/storm_type", ConstantsController, :storm_type)
     end
 
+    scope "/external-integration" do
+      get("/reports", ExternalIntegrationController, :get_reports)
+    end
+
     ## Reports
     scope "/reports" do
       get "/:report_type", ReportController, :index
