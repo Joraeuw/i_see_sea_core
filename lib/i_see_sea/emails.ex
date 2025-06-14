@@ -169,7 +169,7 @@ defmodule ISeeSea.Emails do
         } = params
       ) do
     new()
-    |> to("joraeuw@gmail.com")
+    |> to(["joraeuw@gmail.com", "iliad.support@tu-varna.bg"])
     |> from({"Contact Form", Environment.i_see_sea_mail()})
     |> subject("New Contact Form Submission")
     |> html_body("""

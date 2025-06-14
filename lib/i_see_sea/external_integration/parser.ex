@@ -14,11 +14,12 @@ defmodule ISeeSea.ExternalIntegration.Parser do
   defp parse_report(
          %BaseReport{
            report_type: ReportType.pollution(),
-           pollution_report: %PollutionReport{pollution_types: pollution_types}
+           pollution_report: %PollutionReport{pollution_types: pollution_types},
+           inserted_at: inserted_at
          } = base_report
        ) do
     if "oil" in Enum.map(pollution_types, fn type -> String.downcase(type.name) end) do
-      "$SPILL,#{base_report.latitude},#{base_report.longitude},2,O\r\n"
+      "$SPILL,#{parse_date(inserted_at)},#{base_report.latitude},#{base_report.longitude},2,O\r\n"
     else
       nil
     end
@@ -27,10 +28,11 @@ defmodule ISeeSea.ExternalIntegration.Parser do
   defp parse_report(
          %BaseReport{
            report_type: ReportType.jellyfish(),
-           jellyfish_report: %JellyfishReport{quantity: quantity}
+           jellyfish_report: %JellyfishReport{quantity: quantity},
+           inserted_at: inserted_at
          } = base_report
        ) do
-    "$SPILL,#{base_report.latitude},#{base_report.longitude},#{quantity_to_meters(quantity)},J\r\n"
+    "$SPILL,#{parse_date(inserted_at)},#{base_report.latitude},#{base_report.longitude},#{quantity_to_meters(quantity)},J\r\n"
   end
 
   defp parse_report(_), do: nil
@@ -43,5 +45,11 @@ defmodule ISeeSea.ExternalIntegration.Parser do
       "11 to 99" -> 8
       "100+" -> 10
     end
+  end
+
+  defp parse_date(%NaiveDateTime{} = date) do
+    date
+    |> DateTime.from_naive!("Etc/UTC")
+    |> DateTime.to_iso8601()
   end
 end
